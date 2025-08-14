@@ -571,8 +571,12 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Heart className="w-8 h-8" />
+              <div className="flex items-center space-x-3 mb-4">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fc711f463c22d41959919669aa4ee5149%2F512ad61a260e4819863aa241ea5d9cd5?format=webp&width=800"
+                  alt="Clínica Bem Cuidar Logo"
+                  className="w-10 h-10 object-contain filter brightness-0 invert"
+                />
                 <div>
                   <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
                   <p className="text-blue-100">Centro Médico</p>
