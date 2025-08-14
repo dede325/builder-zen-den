@@ -71,15 +71,16 @@ export const handleContactSubmission: RequestHandler = async (req, res) => {
 
 export const getContactSubmissions: RequestHandler = async (req, res) => {
   try {
-    const submissions = await database.getContactSubmissions();
-    
+    const submissions = await contactStorage.getSubmissions();
+
     res.json({
       success: true,
-      data: submissions
+      data: submissions,
+      count: submissions.length
     });
   } catch (error) {
     console.error("Error fetching contact submissions:", error);
-    
+
     res.status(500).json({
       success: false,
       message: "Erro ao buscar mensagens de contato"
