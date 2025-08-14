@@ -235,7 +235,7 @@ export default function Index() {
               />
               <div>
                 <h1 className="text-xl font-bold text-primary">Clínica Bem Cuidar</h1>
-                <p className="text-xs text-muted-foreground">Centro Médico</p>
+                <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
               </div>
             </div>
 
