@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleContactSubmission, getContactSubmissions, updateContactStatus } from "./routes/contact";
+import { testEmailConnection, sendTestEmail } from "./routes/email-test";
 
 export function createServer() {
   const app = express();
