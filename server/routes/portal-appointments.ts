@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
-import { CreateAppointmentRequest, ApiResponse } from "@shared/portal";
+import { CreateAppointmentRequest, ApiResponse } from "../types";
 import { z } from "zod";
 
 const CreateAppointmentSchema = z.object({
