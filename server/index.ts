@@ -26,5 +26,11 @@ export function createServer() {
   app.get("/api/contact/submissions", getContactSubmissions);
   app.patch("/api/contact/submissions/:id", updateContactStatus);
 
+  // Email test routes (development only)
+  if (process.env.NODE_ENV === 'development') {
+    app.get("/api/email/test-connection", testEmailConnection);
+    app.post("/api/email/send-test", sendTestEmail);
+  }
+
   return app;
 }
