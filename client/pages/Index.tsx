@@ -107,13 +107,118 @@ export default function Index() {
     { name: 'Medicina do Trabalho', icon: Users, description: 'Saúde ocupacional' }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{9,}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      errors.name = 'Nome é obrigatório';
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Nome deve ter pelo menos 2 caracteres';
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = 'E-mail é obrigatório';
+    } else if (!validateEmail(formData.email)) {
+      errors.email = 'Formato de e-mail inválido';
+    }
+
+    if (!formData.phone.trim()) {
+      errors.phone = 'Telefone é obrigatório';
+    } else if (!validatePhone(formData.phone)) {
+      errors.phone = 'Formato de telefone inválido (mínimo 9 dígitos)';
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = 'Mensagem é obrigatória';
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Mensagem deve ter pelo menos 10 caracteres';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we'll implement the form submission logic
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', phone: '', subject: 'consulta', message: '' });
-    alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+
+    // Clear previous status
+    setSubmitStatus({ type: null, message: '' });
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: result.message || 'Mensagem enviada com sucesso! Entraremos em contato em breve.'
+        });
+
+        // Reset form on success
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: 'consulta',
+          message: ''
+        });
+        setFormErrors({});
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: result.message || 'Erro ao enviar mensagem. Tente novamente.'
+        });
+
+        // Handle field-specific errors
+        if (result.errors) {
+          setFormErrors(result.errors);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Erro de conexão. Verifique sua internet e tente novamente.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+
+    // Clear field error when user starts typing
+    if (formErrors[field]) {
+      setFormErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   return (
