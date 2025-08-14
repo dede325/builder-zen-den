@@ -39,6 +39,8 @@ export function createServer() {
     app.post("/api/email/send-test", sendTestEmail);
   }
 
+  // Portal routes temporarily commented
+  /*
   // Portal authentication routes
   app.post("/api/portal/auth/login", handleLogin);
   app.post("/api/portal/auth/logout", handleLogout);
@@ -67,6 +69,7 @@ export function createServer() {
   app.get("/api/portal/permissions/user", requireAuth, getUserPermissions);
   app.get("/api/portal/permissions/role/:role", getRolePermissions);
   app.post("/api/portal/permissions/validate", requireAuth, validateAction);
+  */
 
   return app;
 }
