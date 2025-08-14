@@ -18,7 +18,7 @@ export default function Admin() {
               />
               <div>
                 <h1 className="text-xl font-bold text-primary">Painel Administrativo</h1>
-                <p className="text-xs text-muted-foreground">Clínica Bem Cuidar</p>
+                <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
               </div>
             </div>
             <Link to="/">
