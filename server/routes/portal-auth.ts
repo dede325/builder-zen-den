@@ -91,7 +91,20 @@ export const requireAuth: RequestHandler = (req, res, next) => {
     });
   }
   
-  // Attach patient to request object
+  // Create user object with permissions for patients
+  const user = {
+    id: patient.id,
+    name: patient.name,
+    email: patient.email,
+    role: UserRole.PATIENT,
+    permissions: PermissionManager.getPermissionsForRole(UserRole.PATIENT),
+    isActive: true,
+    createdAt: patient.createdAt || new Date().toISOString(),
+    updatedAt: patient.updatedAt || new Date().toISOString()
+  };
+
+  // Attach both patient and user objects to request
   (req as any).patient = patient;
+  (req as any).user = user;
   next();
 };
