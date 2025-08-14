@@ -57,6 +57,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        clinic: {
+          primary: "hsl(var(--clinic-primary))",
+          secondary: "hsl(var(--clinic-secondary))",
+          accent: "hsl(var(--clinic-accent))",
+          light: "hsl(var(--clinic-light))",
+        },
+      },
+      backgroundImage: {
+        'clinic-gradient': 'linear-gradient(to bottom, rgb(14 116 144), rgb(30 64 175), rgb(30 58 138))',
+        'clinic-hero': 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
       },
       borderRadius: {
         lg: "var(--radius)",
