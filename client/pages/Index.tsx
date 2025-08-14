@@ -166,26 +166,116 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section id="inicio" className="relative py-20 lg:py-32 bg-clinic-hero">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
-              Cuidamos da sua <span className="text-clinic-accent">saúde</span> com humanização e excelência
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Diagnóstico rápido, atendimento humanizado e foco no seu bem-estar. 
-              Na Clínica Bem Cuidar, sua saúde é nossa prioridade.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-clinic-gradient hover:opacity-90">
-                <Calendar className="w-5 h-5 mr-2" />
-                Agendar Consulta
-              </Button>
-              <Button variant="outline" size="lg">
-                <Phone className="w-5 h-5 mr-2" />
-                Entrar em Contato
-              </Button>
+      {/* Hero Section with Slider */}
+      <section id="inicio" className="relative h-screen overflow-hidden">
+        <div className="absolute inset-0">
+          {heroImages.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img
+                src={image.url}
+                alt={image.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+            </div>
+          ))}
+        </div>
+
+        {/* Slider Controls */}
+        <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={prevSlide}
+            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+        </div>
+
+        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={nextSlide}
+            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Play/Pause Control */}
+        <div className="absolute bottom-4 right-4 z-20">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+          >
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+          </Button>
+        </div>
+
+        {/* Slide Indicators */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentSlide
+                  ? 'bg-white'
+                  : 'bg-white/50 hover:bg-white/75'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Hero Content */}
+        <div className="absolute inset-0 flex items-center z-10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <div className="text-white">
+                <div className="mb-4">
+                  <h3 className="text-xl lg:text-2xl font-medium mb-2 opacity-90">
+                    {heroImages[currentSlide].title}
+                  </h3>
+                  <p className="text-lg opacity-75">
+                    {heroImages[currentSlide].subtitle}
+                  </p>
+                </div>
+
+                <h1 className="text-4xl lg:text-7xl font-bold mb-6 leading-tight">
+                  Cuidamos da sua <span className="text-cyan-400">saúde</span><br />
+                  com humanização<br />
+                  e excelência
+                </h1>
+
+                <p className="text-xl lg:text-2xl mb-8 max-w-2xl opacity-90 leading-relaxed">
+                  Diagnóstico rápido, atendimento humanizado e foco no seu bem-estar.
+                  Na Clínica Bem Cuidar, sua saúde é nossa prioridade.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button size="lg" className="bg-cyan-600 hover:bg-cyan-700 text-white border-0">
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Agendar Consulta
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-white/30 text-white hover:bg-white/10"
+                  >
+                    <Phone className="w-5 h-5 mr-2" />
+                    Entrar em Contato
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
