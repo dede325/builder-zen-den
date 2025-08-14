@@ -34,6 +34,8 @@ import {
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,6 +43,47 @@ export default function Index() {
     subject: 'consulta',
     message: ''
   });
+
+  const heroImages = [
+    {
+      url: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      title: "Tecnologia Médica Avançada",
+      subtitle: "Equipamentos modernos para diagnósticos precisos"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
+      title: "Atendimento Humanizado",
+      subtitle: "Cuidado personalizado e acolhedor"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2086&q=80",
+      title: "Especialistas Qualificados",
+      subtitle: "Equipe médica experiente e dedicada"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      title: "Ambiente Moderno",
+      subtitle: "Instalações confortáveis e seguras"
+    }
+  ];
+
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, heroImages.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+  };
 
   const specialties = [
     { name: 'Cardiologia', icon: Heart, description: 'Cuidados especializados do coração' },
