@@ -408,7 +408,16 @@ export default function Index() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="bg-clinic-gradient hover:opacity-90 text-white border-0">
+                  <Button
+                    size="lg"
+                    className="bg-clinic-gradient hover:opacity-90 text-white border-0"
+                    onClick={() => {
+                      // Scroll to contact form
+                      document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+                      // Pre-fill form with consultation subject
+                      setFormData(prev => ({ ...prev, subject: 'consulta' }));
+                    }}
+                  >
                     <Calendar className="w-5 h-5 mr-2" />
                     Agendar Consulta
                   </Button>
@@ -416,6 +425,10 @@ export default function Index() {
                     variant="outline"
                     size="lg"
                     className="border-white/30 text-white hover:bg-white/10"
+                    onClick={() => {
+                      // Scroll to contact form
+                      document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
                   >
                     <span style={{ color: 'rgb(40, 89, 78)' }}>
                       Entrar em Contato
