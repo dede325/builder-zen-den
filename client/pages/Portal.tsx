@@ -695,8 +695,337 @@ export default function Portal() {
             )}
           </TabsContent>
 
-          {/* Other tabs content will be similar - implementing key functionality */}
-          
+          {/* Exams Tab */}
+          <TabsContent value="exams" className="space-y-6">
+            <h2 className="text-2xl font-bold">Meus Exames</h2>
+
+            {isLoadingExams ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin" />
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {examResults.map((exam) => (
+                  <Card key={exam.id}>
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-semibold">{exam.name}</h3>
+                            <Badge variant={
+                              exam.status === 'ready' ? 'default' :
+                              exam.status === 'viewed' ? 'secondary' : 'outline'
+                            }>
+                              {exam.status === 'ready' ? 'Disponível' :
+                               exam.status === 'viewed' ? 'Visualizado' : 'Pendente'}
+                            </Badge>
+                          </div>
+                          <p className="text-muted-foreground">{exam.type}</p>
+                          <p className="text-sm text-muted-foreground">
+                            📅 {new Date(exam.date).toLocaleDateString('pt-BR')}
+                          </p>
+                          {exam.notes && (
+                            <p className="text-sm bg-gray-50 p-2 rounded">{exam.notes}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          {exam.status === 'ready' && (
+                            <>
+                              <Button
+                                size="sm"
+                                className="bg-clinic-gradient hover:opacity-90"
+                                onClick={() => markExamAsViewed(exam.id)}
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Visualizar
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => downloadExam(exam.id)}
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Baixar PDF
+                              </Button>
+                            </>
+                          )}
+                          {exam.status === 'viewed' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => downloadExam(exam.id)}
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Baixar PDF
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {examResults.length === 0 && (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <p className="text-muted-foreground">Nenhum exame encontrado</p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Profile Tab */}
+          <TabsContent value="profile" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Meu Perfil</h2>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditingProfile(!isEditingProfile)}
+                disabled={isSavingProfile}
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                {isEditingProfile ? 'Cancelar' : 'Editar'}
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Dados Pessoais</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {isEditingProfile ? (
+                  <>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Nome Completo</Label>
+                        <Input
+                          value={profileData?.name || ''}
+                          onChange={(e) => setProfileData(prev => prev ? {...prev, name: e.target.value} : null)}
+                          disabled={isSavingProfile}
+                        />
+                      </div>
+                      <div>
+                        <Label>E-mail</Label>
+                        <Input
+                          value={profileData?.email || ''}
+                          disabled={true}
+                          className="bg-gray-50"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">E-mail não pode ser alterado</p>
+                      </div>
+                      <div>
+                        <Label>Telefone</Label>
+                        <Input
+                          value={profileData?.phone || ''}
+                          onChange={(e) => setProfileData(prev => prev ? {...prev, phone: e.target.value} : null)}
+                          disabled={isSavingProfile}
+                        />
+                      </div>
+                      <div>
+                        <Label>Data de Nascimento</Label>
+                        <Input
+                          type="date"
+                          value={profileData?.birthDate || ''}
+                          disabled={true}
+                          className="bg-gray-50"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">Data de nascimento não pode ser alterada</p>
+                      </div>
+                      <div>
+                        <Label>CPF</Label>
+                        <Input
+                          value={profileData?.cpf || ''}
+                          disabled={true}
+                          className="bg-gray-50"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">CPF não pode ser alterado</p>
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Endereço</Label>
+                      <Textarea
+                        value={profileData?.address || ''}
+                        onChange={(e) => setProfileData(prev => prev ? {...prev, address: e.target.value} : null)}
+                        disabled={isSavingProfile}
+                      />
+                    </div>
+                    <Button
+                      onClick={saveProfile}
+                      className="bg-clinic-gradient hover:opacity-90"
+                      disabled={isSavingProfile}
+                    >
+                      {isSavingProfile ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Salvando...
+                        </>
+                      ) : (
+                        'Salvar Alterações'
+                      )}
+                    </Button>
+                  </>
+                ) : (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-muted-foreground">Nome Completo</Label>
+                      <p className="font-medium">{currentUser?.name}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">E-mail</Label>
+                      <p className="font-medium">{currentUser?.email}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">Telefone</Label>
+                      <p className="font-medium">{currentUser?.phone}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">Data de Nascimento</Label>
+                      <p className="font-medium">{currentUser?.birthDate ? new Date(currentUser.birthDate).toLocaleDateString('pt-BR') : '-'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">CPF</Label>
+                      <p className="font-medium">{currentUser?.cpf}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-muted-foreground">Endereço</Label>
+                      <p className="font-medium">{currentUser?.address}</p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <h2 className="text-2xl font-bold">Configurações</h2>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Notificações</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">E-mail de lembrete</p>
+                    <p className="text-sm text-muted-foreground">Receber lembretes de consultas por e-mail</p>
+                  </div>
+                  <Button
+                    variant={notificationSettings.emailReminders ? "default" : "outline"}
+                    size="sm"
+                    onClick={async () => {
+                      const newSettings = { ...notificationSettings, emailReminders: !notificationSettings.emailReminders };
+                      try {
+                        await apiCall('/api/portal/notifications', {
+                          method: 'PATCH',
+                          body: JSON.stringify(newSettings),
+                        });
+                        setNotificationSettings(newSettings);
+                        toast({
+                          title: "Sucesso",
+                          description: "Configuração atualizada",
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Erro",
+                          description: "Erro ao atualizar configuração",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    {notificationSettings.emailReminders ? 'Ativado' : 'Desativado'}
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">SMS de lembrete</p>
+                    <p className="text-sm text-muted-foreground">Receber lembretes de consultas por SMS</p>
+                  </div>
+                  <Button
+                    variant={notificationSettings.smsReminders ? "default" : "outline"}
+                    size="sm"
+                    onClick={async () => {
+                      const newSettings = { ...notificationSettings, smsReminders: !notificationSettings.smsReminders };
+                      try {
+                        await apiCall('/api/portal/notifications', {
+                          method: 'PATCH',
+                          body: JSON.stringify(newSettings),
+                        });
+                        setNotificationSettings(newSettings);
+                        toast({
+                          title: "Sucesso",
+                          description: "Configuração atualizada",
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Erro",
+                          description: "Erro ao atualizar configuração",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    {notificationSettings.smsReminders ? 'Ativado' : 'Desativado'}
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">Resultados de exames</p>
+                    <p className="text-sm text-muted-foreground">Notificar quando resultados estiverem disponíveis</p>
+                  </div>
+                  <Button
+                    variant={notificationSettings.examNotifications ? "default" : "outline"}
+                    size="sm"
+                    onClick={async () => {
+                      const newSettings = { ...notificationSettings, examNotifications: !notificationSettings.examNotifications };
+                      try {
+                        await apiCall('/api/portal/notifications', {
+                          method: 'PATCH',
+                          body: JSON.stringify(newSettings),
+                        });
+                        setNotificationSettings(newSettings);
+                        toast({
+                          title: "Sucesso",
+                          description: "Configuração atualizada",
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Erro",
+                          description: "Erro ao atualizar configuração",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    {notificationSettings.examNotifications ? 'Ativado' : 'Desativado'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Segurança</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button variant="outline" className="w-full justify-start">
+                  <Lock className="w-4 h-4 mr-2" />
+                  Alterar Senha
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Baixar Dados Pessoais
+                </Button>
+                <Button variant="destructive" className="w-full justify-start">
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Excluir Conta
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
         </Tabs>
       </div>
     </div>
