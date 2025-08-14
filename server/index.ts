@@ -20,5 +20,10 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Contact form routes
+  app.post("/api/contact", handleContactSubmission);
+  app.get("/api/contact/submissions", getContactSubmissions);
+  app.patch("/api/contact/submissions/:id", updateContactStatus);
+
   return app;
 }
