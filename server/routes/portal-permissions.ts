@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { PermissionManager, Permission, UserRole } from "@shared/permissions";
+import { PermissionManager, Permission, UserRole } from "../types";
 
 export const checkPermissions: RequestHandler = async (req, res) => {
   try {
