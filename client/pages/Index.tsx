@@ -262,7 +262,7 @@ export default function Index() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="bg-cyan-600 hover:bg-cyan-700 text-white border-0">
+                  <Button size="lg" className="bg-clinic-gradient hover:opacity-90 text-white border-0">
                     <Calendar className="w-5 h-5 mr-2" />
                     Agendar Consulta
                   </Button>
