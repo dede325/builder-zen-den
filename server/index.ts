@@ -38,5 +38,28 @@ export function createServer() {
     app.post("/api/email/send-test", sendTestEmail);
   }
 
+  // Portal authentication routes
+  app.post("/api/portal/auth/login", handleLogin);
+  app.post("/api/portal/auth/logout", handleLogout);
+
+  // Portal patient routes (protected)
+  app.get("/api/portal/profile", requireAuth, getProfile);
+  app.patch("/api/portal/profile", requireAuth, updateProfile);
+  app.get("/api/portal/notifications", requireAuth, getNotificationSettings);
+  app.patch("/api/portal/notifications", requireAuth, updateNotificationSettings);
+
+  // Portal appointment routes (protected)
+  app.get("/api/portal/appointments", requireAuth, getAppointments);
+  app.post("/api/portal/appointments", requireAuth, createAppointment);
+  app.patch("/api/portal/appointments/:id", requireAuth, updateAppointment);
+  app.delete("/api/portal/appointments/:id", requireAuth, cancelAppointment);
+
+  // Portal exam routes (protected)
+  app.get("/api/portal/exams", requireAuth, getExamResults);
+  app.patch("/api/portal/exams/:id/viewed", requireAuth, markExamAsViewed);
+  app.get("/api/portal/exams/:id/download", requireAuth, downloadExamResult);
+  app.get("/api/portal/exams/:id/download-file", requireAuth, downloadExamFile);
+  app.get("/api/portal/exams/statistics", requireAuth, getExamStatistics);
+
   return app;
 }
