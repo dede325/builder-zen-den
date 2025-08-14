@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { ContactSubmission } from './database';
+import { ContactSubmission } from './storage';
 
 export interface EmailConfig {
   host: string;
