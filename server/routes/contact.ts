@@ -100,15 +100,22 @@ export const updateContactStatus: RequestHandler = async (req, res) => {
       });
     }
 
-    await database.updateSubmissionStatus(parseInt(id), status);
-    
+    const updated = await contactStorage.updateSubmissionStatus(parseInt(id), status);
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: "Submissão não encontrada"
+      });
+    }
+
     res.json({
       success: true,
       message: "Status atualizado com sucesso"
     });
   } catch (error) {
     console.error("Error updating contact status:", error);
-    
+
     res.status(500).json({
       success: false,
       message: "Erro ao atualizar status"
