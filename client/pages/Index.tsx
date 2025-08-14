@@ -264,12 +264,46 @@ export default function Index() {
           {isMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
               <div className="flex flex-col space-y-4">
-                <a href="#inicio" className="text-foreground hover:text-primary transition-colors">Início</a>
-                <a href="#especialidades" className="text-foreground hover:text-primary transition-colors">Especialidades</a>
-                <a href="#exames" className="text-foreground hover:text-primary transition-colors">Exames</a>
-                <a href="#sobre" className="text-foreground hover:text-primary transition-colors">Sobre</a>
-                <a href="#contato" className="text-foreground hover:text-primary transition-colors">Contato</a>
-                <Link to="/portal" className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity w-fit">
+                <a
+                  href="#inicio"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Início
+                </a>
+                <a
+                  href="#especialidades"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Especialidades
+                </a>
+                <a
+                  href="#exames"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Exames
+                </a>
+                <a
+                  href="#sobre"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sobre
+                </a>
+                <a
+                  href="#contato"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Contato
+                </a>
+                <Link
+                  to="/portal"
+                  className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity w-fit"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Portal do Paciente
                 </Link>
               </div>
