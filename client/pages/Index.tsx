@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,12 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { 
-  Heart, 
-  Clock, 
-  MapPin, 
-  Phone, 
-  Mail, 
+import {
+  Heart,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
   Calendar,
   Shield,
   Users,
@@ -26,7 +26,10 @@ import {
   CheckCircle,
   ChevronRight,
   Menu,
-  X
+  X,
+  ChevronLeft,
+  Play,
+  Pause
 } from 'lucide-react';
 
 export default function Index() {
@@ -457,7 +460,7 @@ export default function Index() {
             </div>
 
             <div>
-              <h5 className="font-semibold mb-4">Links ��teis</h5>
+              <h5 className="font-semibold mb-4">Links Úteis</h5>
               <div className="space-y-2">
                 <Link to="/portal" className="block text-blue-100 hover:text-white transition-colors">
                   Portal do Paciente
