@@ -125,8 +125,29 @@ class PortalStorage {
   // Patient methods
   authenticatePatient(email: string, password: string): Patient | null {
     const data = this.loadData();
-    // Simple authentication - in production, use proper password hashing
-    const patient = data.patients.find(p => p.email === email);
+    // Simple authentication for demo - accepts any email/password combination
+    // In production, use proper password hashing and verification
+    let patient = data.patients.find(p => p.email === email);
+
+    // If patient not found, create a demo patient
+    if (!patient && email && password) {
+      patient = {
+        id: Date.now().toString(),
+        name: email.split('@')[0].replace(/[^a-zA-Z]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Usuário Demo',
+        email: email,
+        phone: '+244 945 123 456',
+        birthDate: '1990-01-01',
+        cpf: '000.000.000-00',
+        address: 'Endereço demo, Luanda',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Add to patients list
+      data.patients.push(patient);
+      this.saveData(data);
+    }
+
     return patient || null;
   }
   
