@@ -611,66 +611,125 @@ export default function Index() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {/* Status Messages */}
+                {submitStatus.type && (
+                  <div className={`mb-4 p-4 rounded-lg ${
+                    submitStatus.type === 'success'
+                      ? 'bg-green-100 text-green-800 border border-green-200'
+                      : 'bg-red-100 text-red-800 border border-red-200'
+                  }`}>
+                    <div className="flex items-center">
+                      {submitStatus.type === 'success' ? (
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                      ) : (
+                        <X className="w-5 h-5 mr-2" />
+                      )}
+                      {submitStatus.message}
+                    </div>
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Nome Completo</Label>
+                    <Label htmlFor="name">Nome Completo *</Label>
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      className={formErrors.name ? 'border-red-500' : ''}
+                      disabled={isSubmitting}
                     />
+                    {formErrors.name && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="email">E-mail</Label>
+                    <Label htmlFor="email">E-mail *</Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      className={formErrors.email ? 'border-red-500' : ''}
+                      disabled={isSubmitting}
+                      placeholder="exemplo@email.com"
                     />
+                    {formErrors.email && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="phone">Telefone</Label>
+                    <Label htmlFor="phone">Telefone *</Label>
                     <Input
                       id="phone"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      required
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      className={formErrors.phone ? 'border-red-500' : ''}
+                      disabled={isSubmitting}
+                      placeholder="+244 XXX XXX XXX"
                     />
+                    {formErrors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="subject">Assunto</Label>
+                    <Label htmlFor="subject">Assunto *</Label>
                     <select
                       id="subject"
                       value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full p-2 border border-input rounded-md bg-background"
+                      onChange={(e) => handleInputChange('subject', e.target.value)}
+                      className="w-full p-2 border border-input rounded-md bg-background disabled:opacity-50"
+                      disabled={isSubmitting}
                     >
                       <option value="consulta">Consulta</option>
                       <option value="duvida">Dúvida</option>
                       <option value="sugestao">Sugestão</option>
                     </select>
+                    {formErrors.subject && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.subject}</p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="message">Mensagem</Label>
+                    <Label htmlFor="message">Mensagem *</Label>
                     <Textarea
                       id="message"
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) => handleInputChange('message', e.target.value)}
                       rows={4}
-                      required
+                      className={formErrors.message ? 'border-red-500' : ''}
+                      disabled={isSubmitting}
+                      placeholder="Descreva sua dúvida ou necessidade..."
                     />
+                    {formErrors.message && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.message}</p>
+                    )}
                   </div>
-                  
-                  <Button type="submit" className="w-full bg-clinic-gradient hover:opacity-90">
-                    Enviar Mensagem
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-clinic-gradient hover:opacity-90 disabled:opacity-50"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <Mail className="w-4 h-4 mr-2" />
+                        Enviar Mensagem
+                      </>
+                    )}
                   </Button>
+
+                  <p className="text-sm text-muted-foreground text-center">
+                    * Campos obrigatórios
+                  </p>
                 </form>
               </CardContent>
             </Card>
