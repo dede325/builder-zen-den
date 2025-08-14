@@ -544,8 +544,84 @@ export default function Index() {
         </div>
       </section>
 
+      {/* About Section */}
+      <section id="sobre" className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-foreground mb-4">Sobre a Clínica Bem Cuidar</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              H�� mais de uma década cuidando da sua saúde com dedicação e humanização
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-2xl font-semibold mb-4 text-clinic-primary">Nossa História</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  A Clínica Bem Cuidar nasceu com o propósito de oferecer atendimento médico de qualidade,
+                  combinando tecnologia avançada com cuidado humanizado. Nossa equipe multidisciplinar
+                  trabalha incansavelmente para proporcionar a melhor experiência de cuidado à saúde.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-2xl font-semibold mb-4 text-clinic-primary">Nossa Missão</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  Promover saúde e bem-estar através de atendimento médico humanizado, utilizando
+                  tecnologia de ponta e profissionais altamente qualificados, sempre priorizando
+                  o conforto e a confiança dos nossos pacientes.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <h5 className="font-semibold mb-2">1000+</h5>
+                  <p className="text-sm text-muted-foreground">Pacientes Atendidos</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <h5 className="font-semibold mb-2">15+</h5>
+                  <p className="text-sm text-muted-foreground">Anos de Experiência</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Stethoscope className="w-8 h-8 text-white" />
+                  </div>
+                  <h5 className="font-semibold mb-2">12</h5>
+                  <p className="text-sm text-muted-foreground">Especialidades</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h5 className="font-semibold mb-2">100%</h5>
+                  <p className="text-sm text-muted-foreground">Satisfação</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Schedule Section */}
-      <section className="py-20">
+      <section className="py-20 bg-clinic-light/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold text-foreground mb-4">Horário de Funcionamento</h3>
