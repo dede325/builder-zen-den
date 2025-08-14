@@ -65,8 +65,8 @@ export default {
         },
       },
       backgroundImage: {
-        'clinic-gradient': 'linear-gradient(to bottom, rgb(14 116 144), rgb(30 64 175), rgb(30 58 138))',
-        'clinic-hero': 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
+        'clinic-gradient': 'linear-gradient(to bottom, rgb(121 203 203), rgb(86 98 100))',
+        'clinic-hero': 'linear-gradient(135deg, rgba(121, 203, 203, 0.1) 0%, rgba(86, 98, 100, 0.1) 100%)',
       },
       borderRadius: {
         lg: "var(--radius)",
