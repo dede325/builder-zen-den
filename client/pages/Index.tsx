@@ -251,7 +251,7 @@ export default function Index() {
                 </div>
 
                 <h1 className="text-4xl lg:text-7xl font-bold mb-6 leading-tight">
-                  Cuidamos da sua <span className="text-cyan-400">saúde</span><br />
+                  Cuidamos da sua <span className="text-[#79cbcb]">saúde</span><br />
                   com humanização<br />
                   e excelência
                 </h1>
