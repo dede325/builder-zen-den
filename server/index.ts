@@ -10,6 +10,7 @@ import { handleLogin, handleLogout, requireAuth } from "./routes/portal-auth";
 import { getProfile, updateProfile, getNotificationSettings, updateNotificationSettings } from "./routes/portal-patients";
 import { getAppointments, createAppointment, updateAppointment, cancelAppointment } from "./routes/portal-appointments";
 import { getExamResults, markExamAsViewed, downloadExamResult, downloadExamFile, getExamStatistics } from "./routes/portal-exams";
+import { checkPermissions, getUserPermissions, getRolePermissions, validateAction } from "./routes/portal-permissions";
 
 export function createServer() {
   const app = express();
