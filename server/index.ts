@@ -5,6 +5,12 @@ import { handleDemo } from "./routes/demo";
 import { handleContactSubmission, getContactSubmissions, updateContactStatus } from "./routes/contact";
 import { testEmailConnection, sendTestEmail } from "./routes/email-test";
 
+// Portal routes
+import { handleLogin, handleLogout, requireAuth } from "./routes/portal-auth";
+import { getProfile, updateProfile, getNotificationSettings, updateNotificationSettings } from "./routes/portal-patients";
+import { getAppointments, createAppointment, updateAppointment, cancelAppointment } from "./routes/portal-appointments";
+import { getExamResults, markExamAsViewed, downloadExamResult, downloadExamFile, getExamStatistics } from "./routes/portal-exams";
+
 export function createServer() {
   const app = express();
 
