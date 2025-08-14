@@ -396,13 +396,13 @@ export default function Index() {
                   </p>
                 </div>
 
-                <h1 className="text-4xl lg:text-7xl font-bold mb-6 leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-7xl font-bold mb-6 leading-tight">
                   Cuidamos da sua <span className="text-[#79cbcb]">saúde</span><br />
-                  com humanização<br />
+                  com humanização<br className="hidden sm:block" />
                   e excelência
                 </h1>
 
-                <p className="text-xl lg:text-2xl mb-8 max-w-2xl opacity-90 leading-relaxed">
+                <p className="text-lg sm:text-xl lg:text-2xl mb-8 max-w-2xl opacity-90 leading-relaxed">
                   Diagnóstico rápido, atendimento humanizado e foco no seu bem-estar.
                   Na Clínica Bem Cuidar, sua saúde é nossa prioridade.
                 </p>
