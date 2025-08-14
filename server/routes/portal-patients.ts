@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
-import { UpdateProfileRequest, ApiResponse } from "@shared/portal";
+import { UpdateProfileRequest, ApiResponse } from "../types";
 import { z } from "zod";
 
 const UpdateProfileSchema = z.object({
