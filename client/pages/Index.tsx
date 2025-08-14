@@ -750,7 +750,7 @@ export default function Index() {
                 />
                 <div>
                   <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
-                  <p className="text-blue-100">Centro Médico</p>
+                  <p className="text-blue-100">Cuidar é Amar</p>
                 </div>
               </div>
               <p className="text-blue-100">
