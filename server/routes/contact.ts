@@ -49,8 +49,7 @@ export const handleContactSubmission: RequestHandler = async (req, res) => {
       })
       .catch((error) => {
         console.error(`Failed to send email for submission ID: ${submissionId}`, error);
-        // Update status to indicate email failure (optional)
-        database.updateSubmissionStatus(submissionId, 'pending').catch(console.error);
+        // Keep status as pending if email fails
       });
 
     // Return immediate success response
