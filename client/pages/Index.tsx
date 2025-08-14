@@ -383,8 +383,9 @@ export default function Index() {
                     size="lg"
                     className="border-white/30 text-white hover:bg-white/10"
                   >
-                    <Phone className="w-5 h-5 mr-2" />
-                    Entrar em Contato
+                    <span style={{ color: 'rgb(40, 89, 78)' }}>
+                      Entrar em Contato
+                    </span>
                   </Button>
                 </div>
               </div>
