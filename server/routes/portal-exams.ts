@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
-import { ApiResponse } from "@shared/portal";
+import { ApiResponse } from "../types";
 
 export const getExamResults: RequestHandler = async (req, res) => {
   try {
