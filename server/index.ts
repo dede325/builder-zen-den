@@ -62,5 +62,11 @@ export function createServer() {
   app.get("/api/portal/exams/:id/download-file", requireAuth, downloadExamFile);
   app.get("/api/portal/exams/statistics", requireAuth, getExamStatistics);
 
+  // Portal permission routes (protected)
+  app.get("/api/portal/permissions/check", requireAuth, checkPermissions);
+  app.get("/api/portal/permissions/user", requireAuth, getUserPermissions);
+  app.get("/api/portal/permissions/role/:role", getRolePermissions);
+  app.post("/api/portal/permissions/validate", requireAuth, validateAction);
+
   return app;
 }
