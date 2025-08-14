@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { Patient, Appointment, ExamResult, NotificationSettings } from '@shared/portal';
+import { Patient, Appointment, ExamResult, NotificationSettings } from './types';
 
 interface PortalData {
   patients: Patient[];
