@@ -10,3 +10,33 @@
 export interface DemoResponse {
   message: string;
 }
+
+/**
+ * Contact form data structure
+ */
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  subject: 'consulta' | 'duvida' | 'sugestao';
+  message: string;
+}
+
+/**
+ * Contact form submission response
+ */
+export interface ContactSubmissionResponse {
+  success: boolean;
+  message: string;
+  submissionId?: number;
+  errors?: Record<string, string[]>;
+}
+
+/**
+ * Contact submission with metadata
+ */
+export interface ContactSubmission extends ContactFormData {
+  id: number;
+  submitted_at: string;
+  status: 'pending' | 'responded' | 'archived';
+}
