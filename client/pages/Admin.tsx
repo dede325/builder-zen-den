@@ -34,8 +34,12 @@ export default function Admin() {
       {/* Coming Soon Content */}
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="w-24 h-24 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-8">
-            <BarChart3 className="w-12 h-12 text-white" />
+          <div className="w-24 h-24 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-8 p-4">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Fc711f463c22d41959919669aa4ee5149%2F512ad61a260e4819863aa241ea5d9cd5?format=webp&width=800"
+              alt="Clínica Bem Cuidar Logo"
+              className="w-full h-full object-contain filter brightness-0 invert"
+            />
           </div>
           
           <h1 className="text-4xl font-bold text-foreground mb-4">
