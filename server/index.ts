@@ -5,12 +5,12 @@ import { handleDemo } from "./routes/demo";
 import { handleContactSubmission, getContactSubmissions, updateContactStatus } from "./routes/contact";
 import { testEmailConnection, sendTestEmail } from "./routes/email-test";
 
-// Portal routes - temporarily commented to resolve startup issue
-// import { handleLogin, handleLogout, requireAuth } from "./routes/portal-auth";
-// import { getProfile, updateProfile, getNotificationSettings, updateNotificationSettings } from "./routes/portal-patients";
-// import { getAppointments, createAppointment, updateAppointment, cancelAppointment } from "./routes/portal-appointments";
-// import { getExamResults, markExamAsViewed, downloadExamResult, downloadExamFile, getExamStatistics } from "./routes/portal-exams";
-// import { checkPermissions, getUserPermissions, getRolePermissions, validateAction } from "./routes/portal-permissions";
+// Portal routes
+import { handleLogin, handleLogout, requireAuth } from "./routes/portal-auth";
+import { getProfile, updateProfile, getNotificationSettings, updateNotificationSettings } from "./routes/portal-patients";
+import { getAppointments, createAppointment, updateAppointment, cancelAppointment } from "./routes/portal-appointments";
+import { getExamResults, markExamAsViewed, downloadExamResult, downloadExamFile, getExamStatistics } from "./routes/portal-exams";
+import { checkPermissions, getUserPermissions, getRolePermissions, validateAction } from "./routes/portal-permissions";
 
 export function createServer() {
   const app = express();
