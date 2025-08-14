@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { database, ContactSubmission } from "../database";
+import { contactStorage, ContactSubmission } from "../storage";
 import { emailService } from "../email";
 import { z } from "zod";
 
