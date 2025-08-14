@@ -29,8 +29,8 @@ export const handleContactSubmission: RequestHandler = async (req, res) => {
 
     const formData = validationResult.data;
 
-    // Save to database
-    const submissionId = await database.insertContactSubmission(formData);
+    // Save to local storage
+    const submissionId = await contactStorage.addSubmission(formData);
     
     console.log(`Contact submission saved with ID: ${submissionId}`);
 
