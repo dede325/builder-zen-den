@@ -269,7 +269,7 @@ export default function Index() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Início
+                  In��cio
                 </a>
                 <a
                   href="#especialidades"
@@ -501,7 +501,7 @@ export default function Index() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {specialties.map((specialty, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
                 <CardContent className="p-6">
