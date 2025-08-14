@@ -14,7 +14,7 @@ class EmailService {
 
   constructor() {
     // Configure with environment variables or use a default test configuration
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'localhost',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_SECURE === 'true',
