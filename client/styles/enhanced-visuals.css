@@ -232,14 +232,18 @@ body {
 
 .specialty-card-premium {
   @apply group relative;
-  @apply bg-white/90;
-  @apply border border-clinic-accent/20;
+  background-color: rgba(255, 255, 255, 0.9);
+  @apply border border-clinic-accent border-opacity-20;
   @apply rounded-2xl p-6;
   @apply shadow-lg hover:shadow-2xl;
   @apply transition-all duration-500 ease-out;
   @apply cursor-pointer;
-  @apply hover:scale-105 hover:border-clinic-accent/40;
+  @apply hover:scale-105;
   backdrop-filter: blur(8px);
+}
+
+.specialty-card-premium:hover {
+  @apply border-clinic-accent border-opacity-40;
 }
 
 .specialty-card-premium::before {
