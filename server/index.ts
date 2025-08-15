@@ -153,8 +153,17 @@ export function createServer() {
   app.get("/api/messaging/contacts", requireAuth, getMessagingContacts);
 
   // File upload routes (protected)
-  app.post("/api/files/upload", requireAuth, upload.array('files', 5), uploadFiles, handleUploadError);
-  app.post("/api/files/upload/profile", requireAuth, upload.single('profile'), uploadProfilePicture, handleUploadError);
+  if (upload) {
+    app.post("/api/files/upload", requireAuth, upload.array('files', 5), uploadFiles, handleUploadError);
+    app.post("/api/files/upload/profile", requireAuth, upload.single('profile'), uploadProfilePicture, handleUploadError);
+  } else {
+    app.post("/api/files/upload", requireAuth, (req, res) => {
+      res.status(503).json({ success: false, message: 'File upload not available in this environment' });
+    });
+    app.post("/api/files/upload/profile", requireAuth, (req, res) => {
+      res.status(503).json({ success: false, message: 'File upload not available in this environment' });
+    });
+  }
   app.get("/api/files/:fileId", requireAuth, getFile);
   app.get("/api/files/:fileId/compressed", requireAuth, getCompressedFile);
   app.get("/api/files/:fileId/thumbnail", requireAuth, getThumbnail);
