@@ -40,7 +40,7 @@ class PortalStorage {
         {
           id: '1',
           name: 'João Silva',
-          email: 'joao@email.com',
+          email: 'paciente@bemcuidar.co.ao',
           phone: '+244 945 123 456',
           birthDate: '1985-06-15',
           cpf: '123.456.789-00',
@@ -56,6 +56,50 @@ class PortalStorage {
           birthDate: '1990-03-22',
           cpf: '987.654.321-00',
           address: 'Rua das Flores, 456, Luanda',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '3',
+          name: 'Dr. António Silva',
+          email: 'medico@bemcuidar.co.ao',
+          phone: '+244 945 111 222',
+          birthDate: '1978-03-10',
+          cpf: '111.222.333-44',
+          address: 'Rua dos Médicos, 789, Luanda',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '4',
+          name: 'Ana Costa',
+          email: 'enfermeira@bemcuidar.co.ao',
+          phone: '+244 945 333 444',
+          birthDate: '1988-07-22',
+          cpf: '222.333.444-55',
+          address: 'Av. dos Enfermeiros, 456, Luanda',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '5',
+          name: 'Carlos Mendes',
+          email: 'admin@bemcuidar.co.ao',
+          phone: '+244 945 555 666',
+          birthDate: '1975-12-08',
+          cpf: '333.444.555-66',
+          address: 'Rua da Administração, 321, Luanda',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '6',
+          name: 'Sofia Lima',
+          email: 'recepcao@bemcuidar.co.ao',
+          phone: '+244 945 777 888',
+          birthDate: '1992-04-18',
+          cpf: '444.555.666-77',
+          address: 'Av. da Recepção, 654, Luanda',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }
@@ -154,7 +198,7 @@ class PortalStorage {
           date: '2024-01-10',
           status: 'viewed',
           resultUrl: '/exam-result-6.pdf',
-          notes: 'Campos pulmonares livres. Silhueta cardíaca normal. Ausência de alterações pleuropulmonares.',
+          notes: 'Campos pulmonares livres. Silhueta cardíaca normal. Ausência de alteraç��es pleuropulmonares.',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         },
