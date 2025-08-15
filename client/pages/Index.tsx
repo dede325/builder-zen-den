@@ -312,7 +312,7 @@ export default function Index() {
         "Infiltrações",
         "Artroscopia",
         "Cirurgia de coluna",
-        "Próteses articulares",
+        "Pr��teses articulares",
         "Fisioterapia",
       ],
       imageUrl:
@@ -663,12 +663,11 @@ export default function Index() {
                 <Search className="w-4 h-4 mr-2" />
                 Buscar
               </Button>
-              <Link
-                to="/portal"
-                className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
-              >
-                Portal do Paciente
-              </Link>
+              <Button asChild className="bg-clinic-gradient hover:opacity-90 text-white border-0">
+                <Link to="/portal">
+                  Portal do Paciente
+                </Link>
+              </Button>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -751,13 +750,11 @@ export default function Index() {
                   <Search className="w-4 h-4 mr-2" />
                   Buscar
                 </Button>
-                <Link
-                  to="/portal"
-                  className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity w-fit"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Portal do Paciente
-                </Link>
+                <Button asChild className="bg-clinic-gradient hover:opacity-90 text-white border-0 w-fit">
+                  <Link to="/portal" onClick={() => setIsMenuOpen(false)}>
+                    Portal do Paciente
+                  </Link>
+                </Button>
               </div>
             </nav>
           )}
@@ -790,7 +787,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={prevSlide}
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -801,7 +798,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={nextSlide}
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -813,7 +810,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm"
           >
             {isPlaying ? (
               <Pause className="w-4 h-4" />
@@ -879,11 +876,9 @@ export default function Index() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="border-white/30 text-white hover:bg-white/10"
+                      className="border-white/50 text-white hover:bg-white hover:text-primary backdrop-blur-sm"
                     >
-                      <span style={{ color: "rgb(40, 89, 78)" }}>
-                        Entrar em Contato
-                      </span>
+                      Entrar em Contato
                     </Button>
                   </Link>
                 </div>
