@@ -116,15 +116,22 @@ export const downloadExamFile: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const patient = (req as any).patient;
-    
+
     // Verify exam belongs to patient
     const examResults = portalStorage.getPatientExamResults(patient.id);
     const exam = examResults.find(e => e.id === id);
-    
+
     if (!exam) {
       return res.status(404).json({
         success: false,
         message: "Resultado de exame não encontrado"
+      });
+    }
+
+    if (exam.status === 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: "Resultado ainda não disponível"
       });
     }
 
@@ -133,31 +140,20 @@ export const downloadExamFile: RequestHandler = async (req, res) => {
       portalStorage.updateExamResult(id, { status: 'viewed' });
     }
 
-    // In a real app, this would serve the actual PDF file
-    // For demo purposes, we'll create a simple text response
-    const mockPdfContent = `
-Clínica Bem Cuidar
-Resultado de Exame
+    // Generate PDF content
+    const pdfContent = PDFGenerator.generateExamPDF({ patient, exam });
+    const fileName = PDFGenerator.generatePDFFileName(exam, patient);
 
-Paciente: ${patient.name}
-Exame: ${exam.name}
-Tipo: ${exam.type}
-Data: ${new Date(exam.date).toLocaleDateString('pt-BR')}
+    // Set headers for PDF download
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName.replace('.pdf', '.html')}"`);
 
-${exam.notes || 'Resultado dentro dos parâmetros normais.'}
-
---
-Este é um documento de demonstração.
-Em produção, seria um arquivo PDF real.
-    `;
-
-    res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Disposition', `attachment; filename="${exam.name.replace(/\s+/g, '_')}.txt"`);
-    res.send(mockPdfContent);
+    // Send the HTML content (in production, this would be converted to PDF)
+    res.send(pdfContent);
 
   } catch (error) {
     console.error("Error downloading exam file:", error);
-    
+
     res.status(500).json({
       success: false,
       message: "Erro ao baixar arquivo do exame"
