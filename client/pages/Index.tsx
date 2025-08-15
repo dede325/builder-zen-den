@@ -51,6 +51,8 @@ export default function Index() {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+  const [selectedSpecialty, setSelectedSpecialty] = useState<SpecialtyInfo | null>(null);
+  const [isSpecialtyModalOpen, setIsSpecialtyModalOpen] = useState(false);
 
   const heroImages = [
     {
