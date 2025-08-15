@@ -506,9 +506,35 @@ export default function Portal() {
                     'Entrar'
                   )}
                 </Button>
-                <p className="text-sm text-muted-foreground text-center">
-                  Para demo, use qualquer e-mail e senha
-                </p>
+                <div className="mt-6 border-t pt-6">
+                  <h3 className="font-semibold mb-4 text-center">Usuários para Teste</h3>
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {loginHints.map((hint, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                        onClick={() => setLoginData({ email: hint.email, password: hint.password })}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <p className="font-semibold text-sm">{hint.displayName}</p>
+                            <p className="text-xs text-muted-foreground mb-1">{hint.description}</p>
+                            <div className="flex space-x-4 text-xs">
+                              <span className="text-blue-600">📧 {hint.email}</span>
+                              <span className="text-green-600">🔑 {hint.password}</span>
+                            </div>
+                          </div>
+                          <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded capitalize">
+                            {hint.role}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground text-center mt-3">
+                    Clique em qualquer usuário para preencher automaticamente
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>
