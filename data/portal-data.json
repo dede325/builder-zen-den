@@ -133,6 +133,11 @@
       "emailReminders": true,
       "smsReminders": false,
       "examNotifications": true
+    },
+    "1755249043413": {
+      "emailReminders": false,
+      "smsReminders": false,
+      "examNotifications": false
     }
   }
 }
