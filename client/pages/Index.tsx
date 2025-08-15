@@ -418,7 +418,7 @@ export default function Index() {
       icon: Activity,
       description: "Sistema digestivo",
       detailedDescription:
-        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, f��gado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
+        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, fígado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
       conditions: [
         "Gastrite",
         "Úlcera péptica",
@@ -1000,7 +1000,7 @@ export default function Index() {
             {specialties.map((specialty, index) => (
               <Card
                 key={index}
-                className="specialty-card-hover cursor-pointer group focus-ring-enhanced"
+                className="specialty-card-premium cursor-pointer group focus-ring-enhanced"
                 onClick={() => handleSpecialtyClick(specialty)}
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -1069,7 +1069,7 @@ export default function Index() {
                 <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4" />
                 <h4 className="text-lg font-semibold mb-2">Ecocardiograma</h4>
                 <p className="text-muted-foreground text-sm sm:text-base">
-                  Ultrassom do coração para diagnóstico detalhado
+                  Ultrassom do coração para diagn��stico detalhado
                 </p>
               </CardContent>
             </Card>
