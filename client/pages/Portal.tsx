@@ -290,13 +290,17 @@ export default function Portal() {
   return (
     <Routes>
       {/* Rota de login */}
-      <Route 
-        path="/" 
+      <Route
+        path="/"
         element={
-          isAuthenticated ? 
-            <Navigate to="/portal/dashboard" replace /> : 
+          isAuthenticated ?
+            <Navigate to={
+              useAuthStore.getState().user?.role === 'doctor' ?
+              '/portal/doctor/dashboard' :
+              '/portal/dashboard'
+            } replace /> :
             <LoginForm />
-        } 
+        }
       />
       
       {/* Rotas protegidas do dashboard */}
