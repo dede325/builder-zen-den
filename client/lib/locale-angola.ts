@@ -1,435 +1,441 @@
-/**
- * Sistema de Localização para Angola (pt-AO)
- * Clínica Bem Cuidar
- *
- * Implementa formatação específica para:
- * - Datas e horários
- * - Números de telefone (+244)
- * - Moeda (Kwanza - Kz)
- * - Endereços angolanos
- * - Feriados nacionais
- * - Nomenclatura médica local
- */
+// Angola Locale Utilities for Clínica Bem Cuidar
+// Comprehensive localization for pt-AO with legal compliance
 
-// Configurações base do locale
-export const LOCALE_CONFIG = {
-  locale: "pt-AO",
-  country: "AO",
-  currency: "AOA",
-  timezone: "Africa/Luanda",
-  phoneCountryCode: "+244",
-  language: "pt",
-  region: "AO",
-} as const;
+export const ANGOLA_LOCALE = 'pt-AO';
+export const ANGOLA_TIMEZONE = 'Africa/Luanda';
+export const ANGOLA_CURRENCY = 'AOA';
+export const ANGOLA_PHONE_PREFIX = '+244';
 
-// Províncias de Angola
-export const PROVINCES = [
-  "Bengo",
-  "Benguela",
-  "Bié",
-  "Cabinda",
-  "Cuando Cubango",
-  "Cuanza Norte",
-  "Cuanza Sul",
-  "Cunene",
-  "Huambo",
-  "Huíla",
-  "Luanda",
-  "Lunda Norte",
-  "Lunda Sul",
-  "Malanje",
-  "Moxico",
-  "Namibe",
-  "Uíge",
-  "Zaire",
-] as const;
+// Angola provinces and municipalities for address validation
+export const ANGOLA_PROVINCES = [
+  'Bengo', 'Benguela', 'Bié', 'Cabinda', 'Cuando Cubango', 'Cuanza Norte',
+  'Cuanza Sul', 'Cunene', 'Huambo', 'Huíla', 'Luanda', 'Lunda Norte',
+  'Lunda Sul', 'Malanje', 'Moxico', 'Namibe', 'Uíge', 'Zaire'
+];
 
-// Municípios principais de Luanda
-export const LUANDA_MUNICIPALITIES = [
-  "Belas",
-  "Cacuaco",
-  "Cazenga",
-  "Icolo e Bengo",
-  "Luanda",
-  "Quiçama",
-  "Talatona",
-  "Viana",
-] as const;
+export const MAJOR_MUNICIPALITIES = {
+  'Luanda': ['Belas', 'Cacuaco', 'Cazenga', 'Ingombota', 'Kilamba Kiaxi', 'Maianga', 'Rangel', 'Sambizanga', 'Samba', 'Viana'],
+  'Benguela': ['Benguela', 'Baía Farta', 'Bocoio', 'Caimbambo', 'Catumbela', 'Chongorói', 'Cubal', 'Ganda', 'Lobito', 'Balombo'],
+  'Huambo': ['Huambo', 'Bailundo', 'Cachiungo', 'Caála', 'Ecunha', 'Londuimbali', 'Longonjo', 'Mungo', 'Tchicala-Tcholoanga', 'Tchindjenje', 'Ukuma'],
+  'Huíla': ['Lubango', 'Caconda', 'Cacula', 'Caluquembe', 'Chiange', 'Chibia', 'Chicomba', 'Chipindo', 'Cuvango', 'Humpata', 'Jamba', 'Matala', 'Quilengues', 'Quipungo']
+};
 
-// Feriados nacionais de Angola (2024/2025)
-export const NATIONAL_HOLIDAYS = [
-  { date: "2024-01-01", name: "Ano Novo", type: "national" },
-  {
-    date: "2024-02-04",
-    name: "Dia do Início da Luta Armada",
-    type: "national",
+// Medical terminology in Portuguese (Angola)
+export const MEDICAL_TERMS = {
+  // Specialties
+  'cardiology': 'Cardiologia',
+  'pediatrics': 'Pediatria',
+  'general_surgery': 'Cirurgia Geral',
+  'dermatology': 'Dermatologia',
+  'neurology': 'Neurologia',
+  'gynecology': 'Ginecologia-Obstetrícia',
+  'orthopedics': 'Ortopedia',
+  'otolaryngology': 'Otorrinolaringologia',
+  'urology': 'Urologia',
+  'endocrinology': 'Endocrinologia',
+  'gastroenterology': 'Gastroenterologia',
+  'occupational_medicine': 'Medicina do Trabalho',
+  
+  // Common terms
+  'appointment': 'Marcação',
+  'consultation': 'Consulta',
+  'examination': 'Exame',
+  'prescription': 'Receita',
+  'diagnosis': 'Diagnóstico',
+  'treatment': 'Tratamento',
+  'surgery': 'Cirurgia',
+  'emergency': 'Urgência',
+  'patient': 'Paciente',
+  'doctor': 'Médico',
+  'nurse': 'Enfermeiro/a',
+  'clinic': 'Clínica',
+  'hospital': 'Hospital',
+  'pharmacy': 'Farmácia',
+  
+  // Time-related
+  'morning': 'Manhã',
+  'afternoon': 'Tarde',
+  'evening': 'Noite',
+  'today': 'Hoje',
+  'tomorrow': 'Amanhã',
+  'yesterday': 'Ontem',
+  'this_week': 'Esta Semana',
+  'next_week': 'Próxima Semana',
+  'schedule': 'Horário',
+  'available': 'Disponível',
+  'busy': 'Ocupado',
+  'closed': 'Fechado'
+};
+
+// Angola public holidays (for appointment scheduling)
+export const ANGOLA_HOLIDAYS = [
+  { date: '01-01', name: 'Ano Novo' },
+  { date: '01-04', name: 'Dia do Início da Luta Armada de Libertação Nacional' },
+  { date: '04-04', name: 'Dia da Paz e Reconciliação Nacional' },
+  { date: '05-01', name: 'Dia do Trabalhador' },
+  { date: '09-17', name: 'Dia do Fundador da Nação e do Herói Nacional' },
+  { date: '11-02', name: 'Dia dos Finados' },
+  { date: '11-11', name: 'Dia da Independência Nacional' },
+  { date: '12-25', name: 'Natal' }
+  // Note: Some holidays vary by year (Easter-related)
+];
+
+// Business configuration for Angola
+export const BUSINESS_CONFIG = {
+  weekdays: {
+    monday: { start: '07:00', end: '19:00' },
+    tuesday: { start: '07:00', end: '19:00' },
+    wednesday: { start: '07:00', end: '19:00' },
+    thursday: { start: '07:00', end: '19:00' },
+    friday: { start: '07:00', end: '19:00' }
   },
-  { date: "2024-03-08", name: "Dia Internacional da Mulher", type: "national" },
-  { date: "2024-03-29", name: "Sexta-feira Santa", type: "religious" },
-  { date: "2024-04-04", name: "Dia da Paz", type: "national" },
-  { date: "2024-05-01", name: "Dia do Trabalhador", type: "national" },
-  { date: "2024-09-17", name: "Dia do Herói Nacional", type: "national" },
-  { date: "2024-11-02", name: "Dia dos Finados", type: "religious" },
-  { date: "2024-11-11", name: "Dia da Independência", type: "national" },
-  { date: "2024-12-25", name: "Dia de Natal", type: "religious" },
-  // 2025
-  { date: "2025-01-01", name: "Ano Novo", type: "national" },
-  {
-    date: "2025-02-04",
-    name: "Dia do Início da Luta Armada",
-    type: "national",
-  },
-  { date: "2025-03-08", name: "Dia Internacional da Mulher", type: "national" },
-  { date: "2025-04-18", name: "Sexta-feira Santa", type: "religious" },
-  { date: "2025-04-04", name: "Dia da Paz", type: "national" },
-  { date: "2025-05-01", name: "Dia do Trabalhador", type: "national" },
-  { date: "2025-09-17", name: "Dia do Herói Nacional", type: "national" },
-  { date: "2025-11-02", name: "Dia dos Finados", type: "religious" },
-  { date: "2025-11-11", name: "Dia da Independência", type: "national" },
-  { date: "2025-12-25", name: "Dia de Natal", type: "religious" },
-] as const;
+  saturday: { start: '07:00', end: '13:00' },
+  sunday: 'closed',
+  lunch_break: { start: '12:00', end: '13:00' },
+  emergency_24h: true
+};
 
-// Nomenclatura médica específica de Angola
-export const MEDICAL_TERMINOLOGY = {
-  // Especialidades
-  cardiology: "Cardiologia",
-  pediatrics: "Pediatria",
-  gynecology: "Ginecologia e Obstetrícia",
-  orthopedics: "Ortopedia e Traumatologia",
-  dermatology: "Dermatologia",
-  neurology: "Neurologia",
-  psychiatry: "Psiquiatria",
-  urology: "Urologia",
-  ophthalmology: "Oftalmologia",
-  otolaryngology: "Otorrinolaringologia",
-  endocrinology: "Endocrinologia",
-  gastroenterology: "Gastroenterologia",
-  pulmonology: "Pneumologia",
-  nephrology: "Nefrologia",
-  oncology: "Oncologia",
-  anesthesiology: "Anestesiologia",
-  radiology: "Radiologia",
-  pathology: "Anatomia Patológica",
+export class AngolaLocaleFormatter {
+  private locale = ANGOLA_LOCALE;
+  private timezone = ANGOLA_TIMEZONE;
 
-  // Termos gerais
-  appointment: "Marcação",
-  consultation: "Consulta",
-  examination: "Exame",
-  diagnosis: "Diagnóstico",
-  treatment: "Tratamento",
-  prescription: "Receita Médica",
-  vaccine: "Vacina",
-  surgery: "Cirurgia",
-  emergency: "Urgência",
-  hospitalization: "Internamento",
-  discharge: "Alta Médica",
-  referral: "Referenciação",
+  // Date formatting
+  formatDate(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    const defaultOptions: Intl.DateTimeFormatOptions = {
+      timeZone: this.timezone,
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    };
 
-  // Profissionais
-  doctor: "Médico",
-  nurse: "Enfermeiro/a",
-  pharmacist: "Farmacêutico",
-  technician: "Técnico de Saúde",
-  receptionist: "Recepcionista",
+    return new Intl.DateTimeFormat(this.locale, { ...defaultOptions, ...options }).format(dateObj);
+  }
 
-  // Documentos
-  medical_record: "Processo Clínico",
-  health_card: "Cartão de Saúde",
-  insurance_card: "Cartão de Seguro",
-  identity_document: "Bilhete de Identidade",
-  birth_certificate: "Certidão de Nascimento",
-} as const;
+  // Time formatting (24h format for Angola)
+  formatTime(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    const defaultOptions: Intl.DateTimeFormatOptions = {
+      timeZone: this.timezone,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
 
-/**
- * Formatar data no padrão angolano (dd/MM/yyyy)
- */
-export function formatDate(date: Date | string): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date;
+    return new Intl.DateTimeFormat(this.locale, { ...defaultOptions, ...options }).format(dateObj);
+  }
 
-  return new Intl.DateTimeFormat("pt-AO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: LOCALE_CONFIG.timezone,
-  }).format(dateObj);
-}
+  // DateTime formatting
+  formatDateTime(date: Date | string): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    return new Intl.DateTimeFormat(this.locale, {
+      timeZone: this.timezone,
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(dateObj);
+  }
 
-/**
- * Formatar data e hora no padrão angolano
- */
-export function formatDateTime(date: Date | string): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date;
+  // Relative time formatting (pt-AO)
+  formatRelativeTime(date: Date | string): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return 'Agora mesmo';
+    if (diffInSeconds < 3600) return `Há ${Math.floor(diffInSeconds / 60)} minutos`;
+    if (diffInSeconds < 86400) return `Há ${Math.floor(diffInSeconds / 3600)} horas`;
+    if (diffInSeconds < 604800) return `Há ${Math.floor(diffInSeconds / 86400)} dias`;
+    
+    return this.formatDate(dateObj);
+  }
 
-  return new Intl.DateTimeFormat("pt-AO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: LOCALE_CONFIG.timezone,
-  }).format(dateObj);
-}
-
-/**
- * Formatar apenas hora no padrão angolano (24h)
- */
-export function formatTime(date: Date | string): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date;
-
-  return new Intl.DateTimeFormat("pt-AO", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: LOCALE_CONFIG.timezone,
-  }).format(dateObj);
-}
-
-/**
- * Formatar moeda angolana (Kwanza)
- */
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("pt-AO", {
-    style: "currency",
-    currency: "AOA",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-    .format(amount)
-    .replace("AOA", "Kz");
-}
-
-/**
- * Formatar número no padrão angolano
- */
-export function formatNumber(number: number): string {
-  return new Intl.NumberFormat("pt-AO", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(number);
-}
-
-/**
- * Validar e formatar número de telefone angolano
- */
-export function formatPhoneNumber(phone: string): string {
-  // Remove todos os caracteres não numéricos
-  const cleaned = phone.replace(/\D/g, "");
-
-  // Verifica se começa com 244 (código do país)
-  if (cleaned.startsWith("244")) {
-    const number = cleaned.substring(3);
-    if (number.length === 9) {
-      return `+244 ${number.substring(0, 3)} ${number.substring(3, 6)} ${number.substring(6)}`;
+  // Phone number formatting for Angola
+  formatPhone(phone: string): string {
+    if (!phone) return '';
+    
+    // Remove all non-digits
+    const cleaned = phone.replace(/\D/g, '');
+    
+    // Handle different input formats
+    if (cleaned.length === 9) {
+      // Local format: 923 123 456
+      return `${ANGOLA_PHONE_PREFIX} ${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
+    } else if (cleaned.length === 12 && cleaned.startsWith('244')) {
+      // International format: 244923123456
+      const localNumber = cleaned.slice(3);
+      return `${ANGOLA_PHONE_PREFIX} ${localNumber.slice(0, 3)} ${localNumber.slice(3, 6)} ${localNumber.slice(6)}`;
+    } else if (cleaned.length === 13 && cleaned.startsWith('244')) {
+      // Extended format
+      const localNumber = cleaned.slice(3);
+      return `${ANGOLA_PHONE_PREFIX} ${localNumber.slice(0, 3)} ${localNumber.slice(3, 6)} ${localNumber.slice(6)}`;
     }
+    
+    return phone; // Return original if no pattern matches
   }
 
-  // Se tem 9 dígitos, assume que é número nacional
-  if (cleaned.length === 9) {
-    return `+244 ${cleaned.substring(0, 3)} ${cleaned.substring(3, 6)} ${cleaned.substring(6)}`;
+  // Validate Angola phone number
+  isValidAngolaPhone(phone: string): boolean {
+    const cleaned = phone.replace(/\D/g, '');
+    
+    // Valid patterns:
+    // 9 digits: local mobile
+    // 12 digits starting with 244: international
+    return (cleaned.length === 9 && cleaned[0] === '9') ||
+           (cleaned.length === 12 && cleaned.startsWith('244'));
   }
 
-  return phone; // Retorna original se não conseguir formatar
-}
-
-/**
- * Validar número de telefone angolano
- */
-export function validatePhoneNumber(phone: string): boolean {
-  const cleaned = phone.replace(/\D/g, "");
-
-  // Verifica se tem 9 dígitos (nacional) ou 12 dígitos (com código 244)
-  if (cleaned.length === 9) {
-    // Números móveis começam com 9
-    // Números fixos começam com 2
-    return /^[29]/.test(cleaned);
+  // Currency formatting for Angola (Kwanza)
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat(this.locale, {
+      style: 'currency',
+      currency: ANGOLA_CURRENCY,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
   }
 
-  if (cleaned.length === 12 && cleaned.startsWith("244")) {
-    const number = cleaned.substring(3);
-    return /^[29]/.test(number);
+  // Alternative currency formatting with Kz symbol
+  formatKwanza(amount: number): string {
+    const formatted = new Intl.NumberFormat(this.locale, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+    
+    return `Kz ${formatted}`;
   }
 
-  return false;
-}
-
-/**
- * Verificar se uma data é feriado nacional
- */
-export function isNationalHoliday(date: Date | string): {
-  isHoliday: boolean;
-  holiday?: (typeof NATIONAL_HOLIDAYS)[0];
-} {
-  const dateStr =
-    typeof date === "string" ? date : date.toISOString().split("T")[0];
-  const holiday = NATIONAL_HOLIDAYS.find((h) => h.date === dateStr);
-
-  return {
-    isHoliday: !!holiday,
-    holiday,
-  };
-}
-
-/**
- * Obter próximos feriados
- */
-export function getUpcomingHolidays(
-  limit: number = 3,
-): typeof NATIONAL_HOLIDAYS {
-  const today = new Date().toISOString().split("T")[0];
-
-  return NATIONAL_HOLIDAYS.filter((holiday) => holiday.date >= today).slice(
-    0,
-    limit,
-  );
-}
-
-/**
- * Formatar endereço angolano
- */
-export function formatAddress(address: {
-  street?: string;
-  number?: string;
-  neighborhood?: string;
-  municipality?: string;
-  province?: string;
-  postalCode?: string;
-}): string {
-  const parts = [];
-
-  if (address.street && address.number) {
-    parts.push(`${address.street}, Nº ${address.number}`);
-  } else if (address.street) {
-    parts.push(address.street);
+  // Number formatting for Angola
+  formatNumber(number: number): string {
+    return new Intl.NumberFormat(this.locale).format(number);
   }
 
-  if (address.neighborhood) {
-    parts.push(address.neighborhood);
+  // Address formatting for Angola
+  formatAddress(address: {
+    street?: string;
+    number?: string;
+    neighborhood?: string;
+    municipality?: string;
+    province?: string;
+    postalCode?: string;
+  }): string {
+    const parts = [];
+    
+    if (address.street && address.number) {
+      parts.push(`${address.street}, Nº ${address.number}`);
+    } else if (address.street) {
+      parts.push(address.street);
+    }
+    
+    if (address.neighborhood) {
+      parts.push(address.neighborhood);
+    }
+    
+    if (address.municipality) {
+      parts.push(address.municipality);
+    }
+    
+    if (address.province) {
+      parts.push(address.province);
+    }
+    
+    if (address.postalCode) {
+      parts.push(address.postalCode);
+    }
+    
+    parts.push('Angola');
+    
+    return parts.join(', ');
   }
 
-  if (address.municipality) {
-    parts.push(address.municipality);
+  // Day of week names in Portuguese
+  getDayNames(): string[] {
+    return ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   }
 
-  if (address.province) {
-    parts.push(address.province);
+  // Month names in Portuguese
+  getMonthNames(): string[] {
+    return [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
   }
 
-  if (address.postalCode) {
-    parts.push(address.postalCode);
+  // Get current Angola time
+  getCurrentAngolaTime(): Date {
+    return new Date(new Date().toLocaleString("en-US", { timeZone: this.timezone }));
   }
 
-  return parts.join(", ");
-}
-
-/**
- * Obter horário de funcionamento localizado
- */
-export function getWorkingHours(): {
-  weekdays: string;
-  saturday: string;
-  sunday: string;
-  emergency: string;
-} {
-  return {
-    weekdays: "Segunda a Sexta: 07:00 - 19:00",
-    saturday: "Sábado: 07:00 - 13:00",
-    sunday: "Domingo: Fechado",
-    emergency: "Urgências: 24 horas",
-  };
-}
-
-/**
- * Obter saudação baseada no horário local
- */
-export function getLocalGreeting(): string {
-  const now = new Date();
-  const hour = now.getHours();
-
-  if (hour < 12) {
-    return "Bom dia";
-  } else if (hour < 18) {
-    return "Boa tarde";
-  } else {
-    return "Boa noite";
-  }
-}
-
-/**
- * Verificar se está em horário comercial
- */
-export function isBusinessHours(): boolean {
-  const now = new Date();
-  const day = now.getDay(); // 0 = domingo, 6 = sábado
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const currentTime = hour * 60 + minute;
-
-  // Domingo - fechado
-  if (day === 0) return false;
-
-  // Sábado - 07:00 às 13:00
-  if (day === 6) {
-    return currentTime >= 7 * 60 && currentTime < 13 * 60;
+  // Check if date is Angola holiday
+  isAngolaHoliday(date: Date): boolean {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateString = `${month}-${day}`;
+    
+    return ANGOLA_HOLIDAYS.some(holiday => holiday.date === dateString);
   }
 
-  // Segunda a sexta - 07:00 às 19:00
-  return currentTime >= 7 * 60 && currentTime < 19 * 60;
-}
+  // Get holiday name if date is holiday
+  getHolidayName(date: Date): string | null {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateString = `${month}-${day}`;
+    
+    const holiday = ANGOLA_HOLIDAYS.find(holiday => holiday.date === dateString);
+    return holiday ? holiday.name : null;
+  }
 
-/**
- * Obter próximo horário de funcionamento
- */
-export function getNextBusinessHour(): { date: Date; message: string } {
-  const now = new Date();
-  const day = now.getDay();
-  const hour = now.getHours();
-  const minute = now.getMinutes();
+  // Business hours utilities
+  isBusinessDay(date: Date): boolean {
+    const day = date.getDay();
+    return day >= 1 && day <= 6; // Monday to Saturday
+  }
 
-  // Se está em horário comercial
-  if (isBusinessHours()) {
-    return {
-      date: now,
-      message: "Estamos abertos agora!",
+  isBusinessHours(date: Date = new Date()): boolean {
+    const angolaTime = new Date(date.toLocaleString("en-US", { timeZone: this.timezone }));
+    const day = angolaTime.getDay();
+    const timeString = this.formatTime(angolaTime);
+    
+    if (day === 0) return false; // Sunday
+    if (this.isAngolaHoliday(angolaTime)) return false;
+    
+    if (day === 6) { // Saturday
+      return timeString >= BUSINESS_CONFIG.saturday.start && 
+             timeString <= BUSINESS_CONFIG.saturday.end;
+    }
+    
+    // Weekdays (Monday-Friday)
+    const mondayConfig = BUSINESS_CONFIG.weekdays.monday;
+    return timeString >= mondayConfig.start && timeString <= mondayConfig.end;
+  }
+
+  // Get business status message
+  getBusinessStatus(): string {
+    const now = this.getCurrentAngolaTime();
+    
+    if (this.isAngolaHoliday(now)) {
+      const holidayName = this.getHolidayName(now);
+      return `Fechado - ${holidayName}`;
+    }
+    
+    if (this.isBusinessHours(now)) {
+      return 'Aberto';
+    }
+    
+    const day = now.getDay();
+    if (day === 0) return 'Fechado - Domingo';
+    
+    return 'Fechado';
+  }
+
+  // Format appointment time slots
+  formatTimeSlot(startTime: string, endTime: string): string {
+    return `${startTime} - ${endTime}`;
+  }
+
+  // Generate time slots for appointments
+  generateTimeSlots(startHour: number = 7, endHour: number = 19, intervalMinutes: number = 30): string[] {
+    const slots: string[] = [];
+    
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minute = 0; minute < 60; minute += intervalMinutes) {
+        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        
+        // Skip lunch break
+        if (time >= BUSINESS_CONFIG.lunch_break.start && 
+            time < BUSINESS_CONFIG.lunch_break.end) {
+          continue;
+        }
+        
+        slots.push(time);
+      }
+    }
+    
+    return slots;
+  }
+
+  // Validate Angola postal code (if applicable)
+  isValidPostalCode(code: string): boolean {
+    // Angola doesn't have a standardized postal code system yet
+    // This can be updated when system is implemented
+    return true;
+  }
+
+  // Emergency contact formatting
+  formatEmergencyContact(service: 'police' | 'fire' | 'medical'): string {
+    const numbers = {
+      police: '112',
+      fire: '115', 
+      medical: '113'
     };
+    
+    return numbers[service] || '112';
   }
-
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(7, 0, 0, 0);
-
-  const nextMonday = new Date(now);
-  nextMonday.setDate(nextMonday.getDate() + ((8 - day) % 7));
-  nextMonday.setHours(7, 0, 0, 0);
-
-  // Domingo ou após horário de sábado
-  if (day === 0 || (day === 6 && hour >= 13)) {
-    return {
-      date: nextMonday,
-      message: `Abrimos na ${formatDateTime(nextMonday)}`,
-    };
-  }
-
-  // Após horário comercial em dia útil
-  if (day >= 1 && day <= 5 && hour >= 19) {
-    return {
-      date: tomorrow,
-      message: `Abrimos amanhã às ${formatTime(tomorrow)}`,
-    };
-  }
-
-  // Antes do horário comercial
-  const today = new Date(now);
-  today.setHours(7, 0, 0, 0);
-
-  return {
-    date: today,
-    message: `Abrimos hoje às ${formatTime(today)}`,
-  };
 }
 
-// Exportar tipos para TypeScript
-export type Province = (typeof PROVINCES)[number];
-export type LuandaMunicipality = (typeof LUANDA_MUNICIPALITIES)[number];
-export type MedicalTerm = keyof typeof MEDICAL_TERMINOLOGY;
-export type Holiday = (typeof NATIONAL_HOLIDAYS)[number];
+// Export singleton instance
+export const angolaFormatter = new AngolaLocaleFormatter();
+
+// Utility functions for form validation
+export const AngolaValidation = {
+  phone: (phone: string): boolean => angolaFormatter.isValidAngolaPhone(phone),
+  
+  province: (province: string): boolean => ANGOLA_PROVINCES.includes(province),
+  
+  municipality: (municipality: string, province?: string): boolean => {
+    if (!province) return Object.values(MAJOR_MUNICIPALITIES).flat().includes(municipality);
+    return MAJOR_MUNICIPALITIES[province]?.includes(municipality) || false;
+  },
+  
+  businessHours: (date: Date): boolean => angolaFormatter.isBusinessHours(date),
+  
+  workingDay: (date: Date): boolean => angolaFormatter.isBusinessDay(date) && !angolaFormatter.isAngolaHoliday(date)
+};
+
+// Input masks for Angola-specific formats
+export const AngolaInputMasks = {
+  phone: '+244 ### ### ###',
+  date: 'DD/MM/AAAA',
+  currency: 'Kz #.###,##'
+};
+
+// Form field labels in Portuguese (Angola)
+export const FormLabels = {
+  name: 'Nome Completo',
+  firstName: 'Primeiro Nome',
+  lastName: 'Apelido',
+  email: 'Endereço de E-mail',
+  phone: 'Número de Telefone',
+  mobile: 'Telemóvel',
+  address: 'Endereço',
+  street: 'Rua/Avenida',
+  number: 'Número',
+  neighborhood: 'Bairro',
+  municipality: 'Município',
+  province: 'Província',
+  postalCode: 'Código Postal',
+  birthDate: 'Data de Nascimento',
+  gender: 'Sexo',
+  maritalStatus: 'Estado Civil',
+  occupation: 'Profissão',
+  idNumber: 'Número do Bilhete de Identidade',
+  insurance: 'Seguro de Saúde',
+  emergencyContact: 'Contacto de Emergência',
+  appointment: 'Marcação',
+  specialty: 'Especialidade',
+  preferredTime: 'Horário Preferido',
+  symptoms: 'Sintomas',
+  message: 'Mensagem',
+  notes: 'Observações'
+};
+
+export default angolaFormatter;
+
+console.log('[Locale] Angola locale utilities loaded');
