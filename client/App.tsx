@@ -30,6 +30,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/portal" element={<Portal />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/sobre" element={<Sobre />} />
+          <Route path="/exames" element={<Exames />} />
+
+          {/* Specialty Routes */}
+          <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
+          <Route path="/especialidades/pediatria" element={<Pediatria />} />
+          <Route path="/especialidades/dermatologia" element={<Dermatologia />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
