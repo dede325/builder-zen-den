@@ -688,6 +688,20 @@ export default function Index() {
                   Especialidades
                 </a>
                 <Link
+                  to="/galeria"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Galeria
+                </Link>
+                <Link
+                  to="/equipe"
+                  className="text-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Equipe
+                </Link>
+                <Link
                   to="/exames"
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
