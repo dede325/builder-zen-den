@@ -131,8 +131,17 @@ function LoginForm() {
         description: 'Bem-vindo ao Portal do Paciente.',
       });
       
-      // Redirecionar para a página desejada ou dashboard
-      const from = (location.state as any)?.from?.pathname || '/portal/dashboard';
+      // Redirecionar para o dashboard apropriado baseado no role do usuário
+      const user = useAuthStore.getState().user;
+      let redirectPath = '/portal/dashboard';
+
+      if (user?.role === 'doctor') {
+        redirectPath = '/portal/doctor/dashboard';
+      } else if (user?.role === 'admin') {
+        redirectPath = '/portal/admin/dashboard';
+      }
+
+      const from = (location.state as any)?.from?.pathname || redirectPath;
       navigate(from, { replace: true });
     } else {
       toast({
