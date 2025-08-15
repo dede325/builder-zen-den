@@ -1,0 +1,344 @@
+/* Hover states e animações acessíveis */
+
+/* Estados base para elementos interativos */
+.interactive-element {
+  @apply transition-all duration-200 ease-in-out;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  @apply hover:shadow-accessible-lg;
+}
+
+/* Hover states para botões */
+.btn-hover-lift {
+  @apply transition-all duration-200 ease-out;
+  transform: translateY(0) scale(1);
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-2px) scale(1.02);
+  @apply shadow-accessible-lg;
+}
+
+.btn-hover-lift:active {
+  transform: translateY(0) scale(0.98);
+  @apply shadow-accessible;
+}
+
+/* Hover state para cards */
+.card-hover {
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:shadow-accessible-xl hover:scale-[1.02];
+  @apply focus-within:shadow-accessible-xl focus-within:scale-[1.02];
+}
+
+/* Hover state suave para links */
+.link-hover {
+  @apply relative transition-all duration-200 ease-in-out;
+  @apply hover:text-accent focus-visible:text-accent;
+}
+
+.link-hover::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-current;
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.link-hover:hover::after,
+.link-hover:focus-visible::after {
+  @apply w-full;
+}
+
+/* Hover state para navegação */
+.nav-item-hover {
+  @apply relative transition-all duration-200 ease-in-out;
+  @apply hover:bg-accent hover:text-accent-foreground;
+  @apply focus-visible:bg-accent focus-visible:text-accent-foreground;
+  @apply rounded-lg px-3 py-2;
+}
+
+.nav-item-hover.active {
+  @apply bg-primary text-primary-foreground;
+  @apply shadow-accessible;
+}
+
+.nav-item-hover.active::before {
+  content: '';
+  @apply absolute left-0 top-1/2 w-1 h-6 bg-primary-foreground rounded-r;
+  transform: translateY(-50%);
+}
+
+/* Hover state para ícones */
+.icon-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:text-accent hover:scale-110;
+  @apply focus-visible:text-accent focus-visible:scale-110;
+}
+
+/* Hover state para imagens */
+.image-hover {
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:scale-105 hover:shadow-accessible-lg;
+  @apply focus-within:scale-105 focus-within:shadow-accessible-lg;
+}
+
+/* Hover state para inputs */
+.input-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:border-accent hover:shadow-accessible;
+  @apply focus:border-ring focus:shadow-focus-ring;
+}
+
+/* Estados de hover para sidebar */
+.sidebar-item-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+  @apply focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground;
+  @apply rounded-lg;
+}
+
+.sidebar-item-hover.active {
+  @apply bg-sidebar-primary text-sidebar-primary-foreground;
+  @apply shadow-accessible;
+}
+
+/* Hover state para badges */
+.badge-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:scale-105 hover:shadow-accessible;
+}
+
+/* Hover state para specialty cards */
+.specialty-card-hover {
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:shadow-accessible-xl hover:scale-105;
+  @apply hover:border-accent;
+  @apply focus-within:shadow-accessible-xl focus-within:scale-105;
+  @apply focus-within:border-accent;
+}
+
+.specialty-card-hover .specialty-icon {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.specialty-card-hover:hover .specialty-icon {
+  @apply bg-clinic-gradient text-white scale-110;
+}
+
+.specialty-card-hover:focus-within .specialty-icon {
+  @apply bg-clinic-gradient text-white scale-110;
+}
+
+/* Hover state para testimonials */
+.testimonial-hover {
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:shadow-accessible-lg hover:-translate-y-1;
+  @apply focus-within:shadow-accessible-lg focus-within:-translate-y-1;
+}
+
+/* Hover state para form elements */
+.form-element-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:border-accent;
+  @apply focus:border-ring focus:ring-2 focus:ring-ring focus:ring-offset-2;
+}
+
+/* Hover state para floating action buttons */
+.fab-hover {
+  @apply transition-all duration-300 ease-out;
+  @apply hover:shadow-accessible-xl hover:scale-110;
+  @apply hover:bg-primary/90;
+  @apply focus-visible:shadow-accessible-xl focus-visible:scale-110;
+  @apply active:scale-95;
+}
+
+/* Hover state para headers */
+.header-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:bg-background/80 hover:backdrop-blur-lg;
+}
+
+/* Animações de entrada */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* Keyframes para animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hover states específicos para modo escuro */
+.dark .card-hover:hover {
+  @apply shadow-accessible-xl;
+  box-shadow: 0 8px 32px 0 hsl(var(--background) / 0.3);
+}
+
+.dark .btn-hover-lift:hover {
+  box-shadow: 0 4px 16px 0 hsl(var(--primary) / 0.3);
+}
+
+/* Estados de loading com animação suave */
+.loading-state {
+  @apply relative overflow-hidden;
+}
+
+.loading-state::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-transparent via-background/50 to-transparent;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Estados de hover para elementos de navegação mobile */
+.mobile-nav-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:bg-accent hover:text-accent-foreground;
+  @apply focus-visible:bg-accent focus-visible:text-accent-foreground;
+  @apply active:scale-95;
+  @apply min-h-[44px] flex items-center;
+}
+
+/* Hover state para dropdown items */
+.dropdown-item-hover {
+  @apply transition-all duration-150 ease-in-out;
+  @apply hover:bg-accent hover:text-accent-foreground;
+  @apply focus:bg-accent focus:text-accent-foreground;
+  @apply focus:outline-none;
+}
+
+/* Estados de hover para controles de slide */
+.slide-control-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:bg-black/60 hover:scale-105;
+  @apply focus-visible:bg-black/60 focus-visible:scale-105;
+  @apply active:scale-95;
+}
+
+/* Hover state para indicadores de slide */
+.slide-indicator-hover {
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:scale-125 hover:bg-white;
+  @apply focus-visible:scale-125 focus-visible:bg-white;
+  @apply focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50;
+}
+
+/* Estados para preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .interactive-element,
+  .btn-hover-lift,
+  .card-hover,
+  .link-hover,
+  .nav-item-hover,
+  .icon-hover,
+  .image-hover,
+  .input-hover,
+  .sidebar-item-hover,
+  .badge-hover,
+  .specialty-card-hover,
+  .testimonial-hover,
+  .form-element-hover,
+  .fab-hover,
+  .header-hover,
+  .mobile-nav-hover,
+  .dropdown-item-hover,
+  .slide-control-hover,
+  .slide-indicator-hover {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .fade-in,
+  .slide-in-up,
+  .slide-in-left,
+  .slide-in-right,
+  .scale-in {
+    animation: none !important;
+  }
+}
+
+/* Estados de hover para high contrast mode */
+@media (prefers-contrast: high) {
+  .interactive-element:hover {
+    @apply border-2 border-foreground;
+  }
+
+  .btn-hover-lift:hover {
+    @apply border-2 border-background;
+  }
+
+  .link-hover:hover {
+    @apply underline decoration-2 underline-offset-4;
+  }
+}
