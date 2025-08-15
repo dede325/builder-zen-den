@@ -425,7 +425,7 @@ export default function Index() {
         "Refluxo gastroesofágico",
         "Síndrome do intestino irritável",
         "Hepatite",
-        "Doença de Crohn",
+        "Doen��a de Crohn",
       ],
       procedures: [
         "Endoscopia digestiva",
@@ -1464,7 +1464,7 @@ export default function Index() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-clinic-gradient hover:opacity-90 disabled:opacity-50 min-h-[48px]"
+                    className="btn-clinic-premium w-full min-h-[48px]"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
