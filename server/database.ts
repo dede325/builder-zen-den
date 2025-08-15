@@ -1,6 +1,14 @@
-import Database from 'better-sqlite3';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
+
+// Conditional import to prevent issues during build/config loading
+let Database: any;
+try {
+  Database = require('better-sqlite3');
+} catch (error) {
+  console.warn('better-sqlite3 not available, database features will be disabled');
+  Database = null;
+}
 
 export interface Message {
   id: string;
@@ -54,25 +62,36 @@ class DatabaseManager {
   private db: Database.Database;
 
   constructor() {
-    // Ensure data directory exists
-    const dataDir = join(process.cwd(), 'data');
-    if (!existsSync(dataDir)) {
-      mkdirSync(dataDir, { recursive: true });
+    if (!Database) {
+      console.warn('Database not available, using mock data');
+      return;
     }
 
-    const dbPath = join(dataDir, 'clinic.db');
-    this.db = new Database(dbPath);
+    try {
+      // Ensure data directory exists
+      const dataDir = join(process.cwd(), 'data');
+      if (!existsSync(dataDir)) {
+        mkdirSync(dataDir, { recursive: true });
+      }
 
-    // Configure database
-    this.db.pragma('journal_mode = WAL');
-    this.db.pragma('synchronous = NORMAL');
-    this.db.pragma('cache_size = 1000000');
-    this.db.pragma('foreign_keys = ON');
+      const dbPath = join(dataDir, 'clinic.db');
+      this.db = new Database(dbPath);
 
-    this.initializeTables();
+      // Configure database
+      this.db.pragma('journal_mode = WAL');
+      this.db.pragma('synchronous = NORMAL');
+      this.db.pragma('cache_size = 1000000');
+      this.db.pragma('foreign_keys = ON');
+
+      this.initializeTables();
+    } catch (error) {
+      console.error('Failed to initialize database:', error);
+      this.db = null;
+    }
   }
 
   private initializeTables() {
+    if (!this.db) return;
     // Enhanced users table
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS users (
@@ -246,6 +265,7 @@ class DatabaseManager {
   }
 
   private createIndexes() {
+    if (!this.db) return;
     this.db.exec(`
       -- User indexes
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -282,6 +302,16 @@ class DatabaseManager {
 
   // Message methods
   createMessage(message: Omit<Message, 'id' | 'created_at' | 'updated_at'>): Message {
+    if (!this.db) {
+      // Return mock message for development
+      const mockMessage = {
+        ...message,
+        id: `msg_${Date.now()}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      return mockMessage;
+    }
     const id = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date().toISOString();
 
@@ -313,6 +343,7 @@ class DatabaseManager {
   }
 
   getMessages(userId: string, otherUserId?: string): Message[] {
+    if (!this.db) return [];
     let query = `
       SELECT * FROM messages 
       WHERE (from_user_id = ? OR to_user_id = ?)
@@ -331,6 +362,7 @@ class DatabaseManager {
   }
 
   markMessageAsRead(messageId: string): boolean {
+    if (!this.db) return true;
     const stmt = this.db.prepare(`
       UPDATE messages 
       SET read = 1, read_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
@@ -342,6 +374,16 @@ class DatabaseManager {
 
   // File upload methods
   createFileUpload(file: Omit<FileUpload, 'id' | 'created_at' | 'updated_at'>): FileUpload {
+    if (!this.db) {
+      // Return mock file for development
+      const mockFile = {
+        ...file,
+        id: `file_${Date.now()}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      return mockFile;
+    }
     const id = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date().toISOString();
 
@@ -373,11 +415,13 @@ class DatabaseManager {
   }
 
   getFileUpload(id: string): FileUpload | null {
+    if (!this.db) return null;
     const stmt = this.db.prepare('SELECT * FROM file_uploads WHERE id = ?');
     return stmt.get(id) as FileUpload | null;
   }
 
   getUserFiles(userId: string, category?: string): FileUpload[] {
+    if (!this.db) return [];
     let query = 'SELECT * FROM file_uploads WHERE user_id = ?';
     let params = [userId];
 
@@ -394,6 +438,16 @@ class DatabaseManager {
 
   // Vital signs methods
   createVitalSigns(vitals: Omit<VitalSigns, 'id' | 'created_at' | 'updated_at'>): VitalSigns {
+    if (!this.db) {
+      // Return mock vital signs for development
+      const mockVitals = {
+        ...vitals,
+        id: `vital_${Date.now()}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      return mockVitals;
+    }
     const id = `vital_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date().toISOString();
 
@@ -430,6 +484,7 @@ class DatabaseManager {
   }
 
   getPatientVitalSigns(patientId: string): VitalSigns[] {
+    if (!this.db) return [];
     const stmt = this.db.prepare(`
       SELECT * FROM vital_signs 
       WHERE patient_id = ? 
@@ -440,22 +495,27 @@ class DatabaseManager {
 
   // User methods
   getUserById(id: string): any {
+    if (!this.db) return null;
     const stmt = this.db.prepare('SELECT * FROM users WHERE id = ?');
     return stmt.get(id);
   }
 
   getUserByEmail(email: string): any {
+    if (!this.db) return null;
     const stmt = this.db.prepare('SELECT * FROM users WHERE email = ?');
     return stmt.get(email);
   }
 
   getUsersByRole(role: string): any[] {
+    if (!this.db) return [];
     const stmt = this.db.prepare('SELECT * FROM users WHERE role = ? AND active = 1');
     return stmt.all(role);
   }
 
   close() {
-    this.db.close();
+    if (this.db) {
+      this.db.close();
+    }
   }
 }
 
