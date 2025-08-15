@@ -1,10 +1,11 @@
-# Fusionarium: Sistema de Clínica Completo 
+# Fusionarium: Sistema de Clínica Completo
 
 ## 🎯 Funcionalidades Implementadas
 
 ### ✅ Dashboards Aprimorados
 
 #### 1. Dashboard da Enfermeira
+
 - **Funcionalidades específicas:**
   - Gestão de sinais vitais dos pacientes
   - Acompanhamento de consultas do dia
@@ -13,6 +14,7 @@
   - Gestão de exames e procedimentos
 
 #### 2. Dashboard da Secretária/Recepcionista
+
 - **Funcionalidades específicas:**
   - Sistema de agendamentos completo
   - Check-in de pacientes
@@ -23,6 +25,7 @@
 ### ✅ Estrutura SQLite Completa
 
 #### Base de Dados Aprimorada
+
 ```sql
 - users (com roles: patient, doctor, nurse, receptionist, admin)
 - messages (sistema de mensagens em tempo real)
@@ -35,6 +38,7 @@
 ```
 
 #### Funcionalidades de Base de Dados
+
 - **Índices otimizados** para performance
 - **Chaves estrangeiras** para integridade referencial
 - **Configuração WAL** para melhor concorrência
@@ -43,6 +47,7 @@
 ### ✅ WebSocket para Mensagens em Tempo Real
 
 #### Sistema de Mensagens
+
 - **Chat em tempo real** entre todos os utilizadores
 - **Indicadores de digitação** (typing indicators)
 - **Status de leitura** (read receipts)
@@ -50,6 +55,7 @@
 - **Gestão de contactos** baseada em funções
 
 #### Funcionalidades WebSocket
+
 - **Reconnection automática** em caso de desconexão
 - **Heartbeat/Ping-Pong** para manter conexões vivas
 - **Gestão de utilizadores online** em tempo real
@@ -58,6 +64,7 @@
 ### ✅ Upload de Arquivos com Compressão
 
 #### Sistema de Upload
+
 - **Drag & Drop** interface amigável
 - **Compressão automática** de imagens (Sharp.js)
 - **Geração de miniaturas** para pré-visualização
@@ -65,12 +72,14 @@
 - **Limite de tamanho** configurável (10MB)
 
 #### Tipos de Arquivo Suportados
+
 - **Imagens**: JPEG, PNG, GIF, WebP
 - **Documentos**: PDF, DOC, DOCX, TXT
 - **Planilhas**: XLS, XLSX
 - **Resultados de exames**: Todos os formatos médicos
 
 #### Organização de Arquivos
+
 - **Categorização automática**: documento, imagem, exame, foto de perfil
 - **Estrutura de pastas** organizada
 - **URLs de acesso** seguras e otimizadas
@@ -79,6 +88,7 @@
 ### ✅ Autenticação e Autorização Aprimorada
 
 #### Sistema de Funções (Roles)
+
 ```typescript
 - Patient: Acesso ao próprio perfil e dados médicos
 - Doctor: Gestão de pacientes, consultas e exames
@@ -88,6 +98,7 @@
 ```
 
 #### Permissões Granulares
+
 - **Role-based Access Control** (RBAC)
 - **Middleware de autenticação** em todas as rotas
 - **Validação de permissões** por funcionalidade
@@ -96,6 +107,7 @@
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend
+
 - **Node.js + Express**: Servidor robusto
 - **SQLite + Better-SQLite3**: Base de dados performante
 - **WebSocket (ws)**: Comunicação em tempo real
@@ -104,6 +116,7 @@
 - **JWT**: Autenticação segura
 
 ### Frontend
+
 - **React 18**: Interface moderna e reativa
 - **TypeScript**: Código type-safe
 - **TailwindCSS**: Styling responsivo
@@ -112,6 +125,7 @@
 - **React Query**: Cache de dados
 
 ### Ferramentas de Desenvolvimento
+
 - **Vite**: Build tool rápido
 - **ESLint + Prettier**: Qualidade de código
 - **Vitest**: Testes unitários
@@ -120,6 +134,7 @@
 ## 🚀 Funcionalidades por Utilizador
 
 ### 👨‍⚕️ Médico
+
 - Dashboard com estatísticas de pacientes
 - Agenda de consultas personalizada
 - Histórico médico completo dos pacientes
@@ -127,6 +142,7 @@
 - Relatórios e estatísticas médicas
 
 ### 👩‍⚕️ Enfermeira
+
 - **Registo de sinais vitais** com validação
 - **Preparação de pacientes** para consultas
 - **Gestão de medicações** e procedimentos
@@ -134,6 +150,7 @@
 - **Acompanhamento de exames** laboratoriais
 
 ### 👩‍💼 Secretária/Recepcionista
+
 - **Sistema de agendamentos** completo
 - **Check-in automático** de pacientes
 - **Gestão de fila de espera** em tempo real
@@ -141,6 +158,7 @@
 - **Atendimento telefónico** integrado
 
 ### 🧑‍💼 Administrador
+
 - **Dashboard executivo** com KPIs
 - **Gestão de utilizadores** e permissões
 - **Relatórios financeiros** e operacionais
@@ -148,6 +166,7 @@
 - **Auditoria e logs** de segurança
 
 ### 🧑‍🤒 Paciente
+
 - **Portal pessoal** com dados médicos
 - **Agendamento de consultas** online
 - **Resultados de exames** digitais
@@ -157,6 +176,7 @@
 ## 📱 Interface Responsiva
 
 ### Design System
+
 - **Tema claro/escuro** com persistência
 - **Componentes reutilizáveis** e consistentes
 - **Iconografia** do Lucide React
@@ -164,6 +184,7 @@
 - **Feedback visual** em tempo real
 
 ### Funcionalidades UX
+
 - **Loading states** em todas as operações
 - **Error handling** gracioso
 - **Notificações toast** informativas
@@ -173,6 +194,7 @@
 ## 🔒 Segurança e Compliance
 
 ### Segurança de Dados
+
 - **Encriptação** de dados sensíveis
 - **Sanitização** de inputs
 - **Rate limiting** para APIs
@@ -180,6 +202,7 @@
 - **Headers de segurança** implementados
 
 ### Compliance Médico
+
 - **LGPD** - Proteção de dados pessoais
 - **Auditoria completa** de acessos
 - **Backup automático** de dados críticos
@@ -189,6 +212,7 @@
 ## 🚀 Como Executar
 
 ### Desenvolvimento
+
 ```bash
 # Instalar dependências
 pnpm install
@@ -201,6 +225,7 @@ pnpm dev
 ```
 
 ### Produção
+
 ```bash
 # Build da aplicação
 pnpm build
@@ -210,6 +235,7 @@ pnpm start
 ```
 
 ### Testes
+
 ```bash
 # Executar testes
 pnpm test
@@ -221,12 +247,14 @@ pnpm typecheck
 ## 📊 Métricas de Performance
 
 ### Backend
+
 - **Resposta média**: < 100ms
 - **WebSocket latência**: < 50ms
 - **Upload de arquivos**: Até 10MB
 - **Compressão de imagens**: 70-80% redução
 
 ### Frontend
+
 - **First Contentful Paint**: < 1.5s
 - **Largest Contentful Paint**: < 2.5s
 - **Time to Interactive**: < 3s
@@ -235,6 +263,7 @@ pnpm typecheck
 ## 🔮 Roadmap Futuro
 
 ### Funcionalidades Planejadas
+
 - [ ] **Integração com equipamentos médicos**
 - [ ] **Telemedicina** com vídeo chamadas
 - [ ] **IA para diagnósticos** assistidos
@@ -242,6 +271,7 @@ pnpm typecheck
 - [ ] **Integração com laboratórios** externos
 
 ### Melhorias Técnicas
+
 - [ ] **Microservices** architecture
 - [ ] **Redis** para cache distribuído
 - [ ] **PostgreSQL** para dados relacionais
@@ -251,6 +281,7 @@ pnpm typecheck
 ## 📞 Suporte
 
 Para questões técnicas ou suporte, contacte:
+
 - **Email**: suporte@bemcuidar.co.ao
 - **Telefone**: +244 923 456 789
 - **Website**: https://bemcuidar.co.ao

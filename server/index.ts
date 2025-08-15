@@ -52,7 +52,7 @@ import {
   sendMessage,
   markMessageAsRead,
   getConversation,
-  getMessagingContacts
+  getMessagingContacts,
 } from "./routes/messaging";
 import {
   uploadFiles,
@@ -63,7 +63,7 @@ import {
   deleteFile,
   uploadProfilePicture,
   getStorageStats,
-  handleUploadError
+  handleUploadError,
 } from "./routes/file-upload";
 import {
   createVitalSigns,
@@ -71,7 +71,7 @@ import {
   getTodayVitalSigns,
   getVitalSignsStats,
   updateVitalSigns,
-  getVitalSignsAlerts
+  getVitalSignsAlerts,
 } from "./routes/vital-signs";
 import {
   getNotificationTemplates,
@@ -80,7 +80,7 @@ import {
   getNotificationPreferences,
   updateNotificationPreferences,
   sendBulkNotifications,
-  getNotificationStats
+  getNotificationStats,
 } from "./routes/notifications";
 import { upload } from "./file-upload";
 import { initializeWebSocket } from "./websocket";
@@ -157,20 +157,50 @@ export function createServer() {
   // Messaging routes (protected)
   app.get("/api/messaging/messages", requireAuth, getMessages);
   app.post("/api/messaging/messages", requireAuth, sendMessage);
-  app.patch("/api/messaging/messages/:messageId/read", requireAuth, markMessageAsRead);
-  app.get("/api/messaging/conversation/:userId/:otherUserId", requireAuth, getConversation);
+  app.patch(
+    "/api/messaging/messages/:messageId/read",
+    requireAuth,
+    markMessageAsRead,
+  );
+  app.get(
+    "/api/messaging/conversation/:userId/:otherUserId",
+    requireAuth,
+    getConversation,
+  );
   app.get("/api/messaging/contacts", requireAuth, getMessagingContacts);
 
   // File upload routes (protected)
   if (upload) {
-    app.post("/api/files/upload", requireAuth, upload.array('files', 5), uploadFiles, handleUploadError);
-    app.post("/api/files/upload/profile", requireAuth, upload.single('profile'), uploadProfilePicture, handleUploadError);
+    app.post(
+      "/api/files/upload",
+      requireAuth,
+      upload.array("files", 5),
+      uploadFiles,
+      handleUploadError,
+    );
+    app.post(
+      "/api/files/upload/profile",
+      requireAuth,
+      upload.single("profile"),
+      uploadProfilePicture,
+      handleUploadError,
+    );
   } else {
     app.post("/api/files/upload", requireAuth, (req, res) => {
-      res.status(503).json({ success: false, message: 'File upload not available in this environment' });
+      res
+        .status(503)
+        .json({
+          success: false,
+          message: "File upload not available in this environment",
+        });
     });
     app.post("/api/files/upload/profile", requireAuth, (req, res) => {
-      res.status(503).json({ success: false, message: 'File upload not available in this environment' });
+      res
+        .status(503)
+        .json({
+          success: false,
+          message: "File upload not available in this environment",
+        });
     });
   }
   app.get("/api/files/:fileId", requireAuth, getFile);
@@ -182,19 +212,35 @@ export function createServer() {
 
   // Vital signs routes (protected)
   app.post("/api/vital-signs", requireAuth, createVitalSigns);
-  app.get("/api/vital-signs/patient/:patientId", requireAuth, getPatientVitalSigns);
+  app.get(
+    "/api/vital-signs/patient/:patientId",
+    requireAuth,
+    getPatientVitalSigns,
+  );
   app.get("/api/vital-signs/today", requireAuth, getTodayVitalSigns);
   app.get("/api/vital-signs/stats/:nurseId", requireAuth, getVitalSignsStats);
   app.patch("/api/vital-signs/:vitalId", requireAuth, updateVitalSigns);
   app.get("/api/vital-signs/alerts", requireAuth, getVitalSignsAlerts);
 
   // Notification routes (protected)
-  app.get("/api/notifications/templates", requireAuth, getNotificationTemplates);
+  app.get(
+    "/api/notifications/templates",
+    requireAuth,
+    getNotificationTemplates,
+  );
   app.post("/api/notifications/send", requireAuth, sendNotification);
   app.post("/api/notifications/send-bulk", requireAuth, sendBulkNotifications);
   app.get("/api/notifications/logs", requireAuth, getNotificationLogs);
-  app.get("/api/notifications/preferences/:userId", requireAuth, getNotificationPreferences);
-  app.put("/api/notifications/preferences/:userId", requireAuth, updateNotificationPreferences);
+  app.get(
+    "/api/notifications/preferences/:userId",
+    requireAuth,
+    getNotificationPreferences,
+  );
+  app.put(
+    "/api/notifications/preferences/:userId",
+    requireAuth,
+    updateNotificationPreferences,
+  );
   app.get("/api/notifications/stats", requireAuth, getNotificationStats);
 
   return { app, server };

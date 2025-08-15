@@ -1,6 +1,6 @@
-import { WebSocketServer, WebSocket } from 'ws';
-import { IncomingMessage } from 'http';
-import { database } from './database';
+import { WebSocketServer, WebSocket } from "ws";
+import { IncomingMessage } from "http";
+import { database } from "./database";
 
 interface WebSocketClient extends WebSocket {
   userId?: string;
@@ -9,7 +9,7 @@ interface WebSocketClient extends WebSocket {
 }
 
 interface WebSocketMessage {
-  type: 'message' | 'typing' | 'read' | 'connect' | 'disconnect';
+  type: "message" | "typing" | "read" | "connect" | "disconnect";
   data: any;
 }
 
@@ -18,9 +18,9 @@ export class WebSocketManager {
   private clients: Map<string, WebSocketClient> = new Map();
 
   constructor(server: any) {
-    this.wss = new WebSocketServer({ 
+    this.wss = new WebSocketServer({
       server,
-      path: '/ws'
+      path: "/ws",
     });
 
     this.setupWebSocketServer();
@@ -28,32 +28,34 @@ export class WebSocketManager {
   }
 
   private setupWebSocketServer() {
-    this.wss.on('connection', (ws: WebSocketClient, req: IncomingMessage) => {
-      console.log('New WebSocket connection');
+    this.wss.on("connection", (ws: WebSocketClient, req: IncomingMessage) => {
+      console.log("New WebSocket connection");
 
       ws.isAlive = true;
 
       // Handle pong responses for heartbeat
-      ws.on('pong', () => {
+      ws.on("pong", () => {
         ws.isAlive = true;
       });
 
       // Handle incoming messages
-      ws.on('message', async (data: Buffer) => {
+      ws.on("message", async (data: Buffer) => {
         try {
           const message: WebSocketMessage = JSON.parse(data.toString());
           await this.handleMessage(ws, message);
         } catch (error) {
-          console.error('Error processing WebSocket message:', error);
-          ws.send(JSON.stringify({
-            type: 'error',
-            message: 'Invalid message format'
-          }));
+          console.error("Error processing WebSocket message:", error);
+          ws.send(
+            JSON.stringify({
+              type: "error",
+              message: "Invalid message format",
+            }),
+          );
         }
       });
 
       // Handle connection close
-      ws.on('close', () => {
+      ws.on("close", () => {
         if (ws.userId) {
           this.clients.delete(ws.userId);
           console.log(`User ${ws.userId} disconnected`);
@@ -61,32 +63,32 @@ export class WebSocketManager {
       });
 
       // Handle errors
-      ws.on('error', (error) => {
-        console.error('WebSocket error:', error);
+      ws.on("error", (error) => {
+        console.error("WebSocket error:", error);
       });
     });
   }
 
   private async handleMessage(ws: WebSocketClient, message: WebSocketMessage) {
     switch (message.type) {
-      case 'connect':
+      case "connect":
         await this.handleConnect(ws, message.data);
         break;
 
-      case 'message':
+      case "message":
         await this.handleChatMessage(ws, message.data);
         break;
 
-      case 'typing':
+      case "typing":
         this.handleTyping(ws, message.data);
         break;
 
-      case 'read':
+      case "read":
         await this.handleMessageRead(ws, message.data);
         break;
 
       default:
-        console.log('Unknown message type:', message.type);
+        console.log("Unknown message type:", message.type);
     }
   }
 
@@ -97,10 +99,12 @@ export class WebSocketManager {
     // For now, just check if user exists
     const user = database.getUserById(userId);
     if (!user) {
-      ws.send(JSON.stringify({
-        type: 'error',
-        message: 'Invalid user'
-      }));
+      ws.send(
+        JSON.stringify({
+          type: "error",
+          message: "Invalid user",
+        }),
+      );
       ws.close();
       return;
     }
@@ -109,24 +113,35 @@ export class WebSocketManager {
     ws.userRole = user.role;
     this.clients.set(userId, ws);
 
-    ws.send(JSON.stringify({
-      type: 'connected',
-      data: { userId, status: 'connected' }
-    }));
+    ws.send(
+      JSON.stringify({
+        type: "connected",
+        data: { userId, status: "connected" },
+      }),
+    );
 
     console.log(`User ${user.name} (${userId}) connected via WebSocket`);
   }
 
   private async handleChatMessage(ws: WebSocketClient, data: any) {
     if (!ws.userId) {
-      ws.send(JSON.stringify({
-        type: 'error',
-        message: 'Not authenticated'
-      }));
+      ws.send(
+        JSON.stringify({
+          type: "error",
+          message: "Not authenticated",
+        }),
+      );
       return;
     }
 
-    const { to_user_id, message, type = 'text', file_url, file_name, file_size } = data;
+    const {
+      to_user_id,
+      message,
+      type = "text",
+      file_url,
+      file_name,
+      file_size,
+    } = data;
 
     try {
       // Save message to database
@@ -138,30 +153,35 @@ export class WebSocketManager {
         file_url,
         file_name,
         file_size,
-        read: false
+        read: false,
       });
 
       // Send to recipient if online
       const recipientWs = this.clients.get(to_user_id);
       if (recipientWs && recipientWs.readyState === WebSocket.OPEN) {
-        recipientWs.send(JSON.stringify({
-          type: 'message',
-          data: savedMessage
-        }));
+        recipientWs.send(
+          JSON.stringify({
+            type: "message",
+            data: savedMessage,
+          }),
+        );
       }
 
       // Send confirmation to sender
-      ws.send(JSON.stringify({
-        type: 'message_sent',
-        data: savedMessage
-      }));
-
+      ws.send(
+        JSON.stringify({
+          type: "message_sent",
+          data: savedMessage,
+        }),
+      );
     } catch (error) {
-      console.error('Error saving message:', error);
-      ws.send(JSON.stringify({
-        type: 'error',
-        message: 'Failed to send message'
-      }));
+      console.error("Error saving message:", error);
+      ws.send(
+        JSON.stringify({
+          type: "error",
+          message: "Failed to send message",
+        }),
+      );
     }
   }
 
@@ -170,15 +190,17 @@ export class WebSocketManager {
 
     const { to_user_id, typing } = data;
     const recipientWs = this.clients.get(to_user_id);
-    
+
     if (recipientWs && recipientWs.readyState === WebSocket.OPEN) {
-      recipientWs.send(JSON.stringify({
-        type: 'typing',
-        data: {
-          from_user_id: ws.userId,
-          typing
-        }
-      }));
+      recipientWs.send(
+        JSON.stringify({
+          type: "typing",
+          data: {
+            from_user_id: ws.userId,
+            typing,
+          },
+        }),
+      );
     }
   }
 
@@ -189,15 +211,17 @@ export class WebSocketManager {
 
     try {
       const success = database.markMessageAsRead(message_id);
-      
+
       if (success) {
-        ws.send(JSON.stringify({
-          type: 'message_read',
-          data: { message_id }
-        }));
+        ws.send(
+          JSON.stringify({
+            type: "message_read",
+            data: { message_id },
+          }),
+        );
       }
     } catch (error) {
-      console.error('Error marking message as read:', error);
+      console.error("Error marking message as read:", error);
     }
   }
 
@@ -216,7 +240,7 @@ export class WebSocketManager {
       });
     }, 30000); // 30 seconds
 
-    this.wss.on('close', () => {
+    this.wss.on("close", () => {
       clearInterval(interval);
     });
   }

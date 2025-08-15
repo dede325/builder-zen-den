@@ -1,5 +1,5 @@
-import { RequestHandler } from 'express';
-import { database } from '../database';
+import { RequestHandler } from "express";
+import { database } from "../database";
 
 // Create new vital signs record
 export const createVitalSigns: RequestHandler = (req, res) => {
@@ -16,13 +16,13 @@ export const createVitalSigns: RequestHandler = (req, res) => {
       height,
       oxygen_saturation,
       respiratory_rate,
-      notes
+      notes,
     } = req.body;
 
     if (!patient_id || !recorded_by_user_id) {
       return res.status(400).json({
         success: false,
-        message: 'Patient ID and recorded by user ID are required'
+        message: "Patient ID and recorded by user ID are required",
       });
     }
 
@@ -38,19 +38,19 @@ export const createVitalSigns: RequestHandler = (req, res) => {
       height,
       oxygen_saturation,
       respiratory_rate,
-      notes
+      notes,
     });
 
     res.json({
       success: true,
       data: vitalSigns,
-      message: 'Vital signs recorded successfully'
+      message: "Vital signs recorded successfully",
     });
   } catch (error) {
-    console.error('Error creating vital signs:', error);
+    console.error("Error creating vital signs:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to record vital signs'
+      message: "Failed to record vital signs",
     });
   }
 };
@@ -64,13 +64,13 @@ export const getPatientVitalSigns: RequestHandler = (req, res) => {
 
     res.json({
       success: true,
-      data: vitalSigns
+      data: vitalSigns,
     });
   } catch (error) {
-    console.error('Error fetching vital signs:', error);
+    console.error("Error fetching vital signs:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch vital signs'
+      message: "Failed to fetch vital signs",
     });
   }
 };
@@ -80,17 +80,17 @@ export const getTodayVitalSigns: RequestHandler = (req, res) => {
   try {
     // This would require a more complex query joining appointments and vital signs
     // For now, return mock data structure
-    const today = new Date().toISOString().split('T')[0];
-    
+    const today = new Date().toISOString().split("T")[0];
+
     // Mock data - in real implementation, you'd query the database
     const todayVitalSigns = [
       {
-        id: 'vital_1',
-        patient_id: 'patient-1',
-        patient_name: 'João Silva',
-        appointment_id: 'apt_1',
-        appointment_time: '09:00',
-        recorded_by_user_id: 'nurse-1',
+        id: "vital_1",
+        patient_id: "patient-1",
+        patient_name: "João Silva",
+        appointment_id: "apt_1",
+        appointment_time: "09:00",
+        recorded_by_user_id: "nurse-1",
         blood_pressure_systolic: 120,
         blood_pressure_diastolic: 80,
         heart_rate: 72,
@@ -99,30 +99,30 @@ export const getTodayVitalSigns: RequestHandler = (req, res) => {
         height: 175,
         oxygen_saturation: 98,
         respiratory_rate: 16,
-        notes: 'Paciente apresentando sinais vitais normais',
-        status: 'completed',
-        created_at: new Date().toISOString()
+        notes: "Paciente apresentando sinais vitais normais",
+        status: "completed",
+        created_at: new Date().toISOString(),
       },
       {
-        id: 'vital_pending_1',
-        patient_id: 'patient-2',
-        patient_name: 'Maria Santos',
-        appointment_id: 'apt_2',
-        appointment_time: '10:30',
-        status: 'pending',
-        created_at: new Date().toISOString()
-      }
+        id: "vital_pending_1",
+        patient_id: "patient-2",
+        patient_name: "Maria Santos",
+        appointment_id: "apt_2",
+        appointment_time: "10:30",
+        status: "pending",
+        created_at: new Date().toISOString(),
+      },
     ];
 
     res.json({
       success: true,
-      data: todayVitalSigns
+      data: todayVitalSigns,
     });
   } catch (error) {
-    console.error('Error fetching today vital signs:', error);
+    console.error("Error fetching today vital signs:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch today vital signs'
+      message: "Failed to fetch today vital signs",
     });
   }
 };
@@ -131,36 +131,36 @@ export const getTodayVitalSigns: RequestHandler = (req, res) => {
 export const getVitalSignsStats: RequestHandler = (req, res) => {
   try {
     const { nurseId } = req.params;
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
 
     // Mock statistics - in real implementation, query the database
     const stats = {
       today: {
         recorded: 5,
         pending: 3,
-        total_appointments: 8
+        total_appointments: 8,
       },
       this_week: {
         recorded: 28,
         pending: 7,
-        total_appointments: 35
+        total_appointments: 35,
       },
       alerts: {
         high_blood_pressure: 2,
         fever: 1,
-        low_oxygen: 0
-      }
+        low_oxygen: 0,
+      },
     };
 
     res.json({
       success: true,
-      data: stats
+      data: stats,
     });
   } catch (error) {
-    console.error('Error fetching vital signs stats:', error);
+    console.error("Error fetching vital signs stats:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch vital signs statistics'
+      message: "Failed to fetch vital signs statistics",
     });
   }
 };
@@ -175,13 +175,13 @@ export const updateVitalSigns: RequestHandler = (req, res) => {
     // For now, return success message
     res.json({
       success: true,
-      message: 'Vital signs updated successfully'
+      message: "Vital signs updated successfully",
     });
   } catch (error) {
-    console.error('Error updating vital signs:', error);
+    console.error("Error updating vital signs:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update vital signs'
+      message: "Failed to update vital signs",
     });
   }
 };
@@ -192,38 +192,38 @@ export const getVitalSignsAlerts: RequestHandler = (req, res) => {
     // Mock alerts - in real implementation, query for abnormal vital signs
     const alerts = [
       {
-        id: 'alert_1',
-        patient_id: 'patient-3',
-        patient_name: 'Pedro Oliveira',
-        type: 'high_blood_pressure',
-        value: '160/95',
-        threshold: '140/90',
-        severity: 'moderate',
+        id: "alert_1",
+        patient_id: "patient-3",
+        patient_name: "Pedro Oliveira",
+        type: "high_blood_pressure",
+        value: "160/95",
+        threshold: "140/90",
+        severity: "moderate",
         recorded_at: new Date().toISOString(),
-        appointment_id: 'apt_3'
+        appointment_id: "apt_3",
       },
       {
-        id: 'alert_2',
-        patient_id: 'patient-4',
-        patient_name: 'Ana Costa',
-        type: 'fever',
-        value: '38.5°C',
-        threshold: '37.5°C',
-        severity: 'mild',
+        id: "alert_2",
+        patient_id: "patient-4",
+        patient_name: "Ana Costa",
+        type: "fever",
+        value: "38.5°C",
+        threshold: "37.5°C",
+        severity: "mild",
         recorded_at: new Date().toISOString(),
-        appointment_id: 'apt_4'
-      }
+        appointment_id: "apt_4",
+      },
     ];
 
     res.json({
       success: true,
-      data: alerts
+      data: alerts,
     });
   } catch (error) {
-    console.error('Error fetching vital signs alerts:', error);
+    console.error("Error fetching vital signs alerts:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch vital signs alerts'
+      message: "Failed to fetch vital signs alerts",
     });
   }
 };

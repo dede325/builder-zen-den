@@ -188,10 +188,11 @@ export default function Exames() {
                   Voltar ao Início
                 </Button>
               </Link>
-              <Button asChild className="bg-clinic-gradient text-white hover:opacity-90 border-0">
-                <Link to="/portal">
-                  Portal do Paciente
-                </Link>
+              <Button
+                asChild
+                className="bg-clinic-gradient text-white hover:opacity-90 border-0"
+              >
+                <Link to="/portal">Portal do Paciente</Link>
               </Button>
             </div>
           </div>

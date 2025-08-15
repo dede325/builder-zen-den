@@ -1,18 +1,18 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import MessagingComponent from '../messaging/MessagingComponent';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import MessagingComponent from "../messaging/MessagingComponent";
 
 // Mock the auth store
-vi.mock('@/store/auth', () => ({
+vi.mock("@/store/auth", () => ({
   useAuthStore: vi.fn(() => ({
     user: {
-      id: 'user-1',
-      name: 'Test User',
-      email: 'test@example.com',
-      role: 'patient'
-    }
-  }))
+      id: "user-1",
+      name: "Test User",
+      email: "test@example.com",
+      role: "patient",
+    },
+  })),
 }));
 
 // Mock WebSocket
@@ -32,20 +32,20 @@ class MockWebSocket {
     setTimeout(() => {
       this.readyState = MockWebSocket.OPEN;
       if (this.onopen) {
-        this.onopen(new Event('open'));
+        this.onopen(new Event("open"));
       }
     }, 100);
   }
 
   send(data: string) {
     // Mock sending data
-    console.log('Mock WebSocket send:', data);
+    console.log("Mock WebSocket send:", data);
   }
 
   close() {
     this.readyState = MockWebSocket.CLOSED;
     if (this.onclose) {
-      this.onclose(new CloseEvent('close'));
+      this.onclose(new CloseEvent("close"));
     }
   }
 }
@@ -56,12 +56,10 @@ global.WebSocket = MockWebSocket as any;
 global.fetch = vi.fn();
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>
-    {children}
-  </BrowserRouter>
+  <BrowserRouter>{children}</BrowserRouter>
 );
 
-describe('MessagingComponent', () => {
+describe("MessagingComponent", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -70,90 +68,92 @@ describe('MessagingComponent', () => {
     vi.restoreAllMocks();
   });
 
-  it('should render messaging interface', () => {
+  it("should render messaging interface", () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
-    expect(screen.getByText('Mensagens')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Buscar contatos...')).toBeInTheDocument();
+    expect(screen.getByText("Mensagens")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Buscar contatos..."),
+    ).toBeInTheDocument();
   });
 
-  it('should display contacts list', async () => {
+  it("should display contacts list", async () => {
     const mockContacts = [
       {
-        id: 'contact-1',
-        name: 'Dr. António Silva',
-        email: 'antonio@bemcuidar.co.ao',
-        role: 'doctor',
-        online: true
+        id: "contact-1",
+        name: "Dr. António Silva",
+        email: "antonio@bemcuidar.co.ao",
+        role: "doctor",
+        online: true,
       },
       {
-        id: 'contact-2',
-        name: 'Enfermeira Ana',
-        email: 'ana@bemcuidar.co.ao',
-        role: 'nurse',
-        online: false
-      }
+        id: "contact-2",
+        name: "Enfermeira Ana",
+        email: "ana@bemcuidar.co.ao",
+        role: "nurse",
+        online: false,
+      },
     ];
 
     (fetch as any).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ success: true, data: mockContacts })
+      json: async () => ({ success: true, data: mockContacts }),
     });
 
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Dr. António Silva')).toBeInTheDocument();
-      expect(screen.getByText('Enfermeira Ana')).toBeInTheDocument();
+      expect(screen.getByText("Dr. António Silva")).toBeInTheDocument();
+      expect(screen.getByText("Enfermeira Ana")).toBeInTheDocument();
     });
   });
 
-  it('should filter contacts when searching', async () => {
+  it("should filter contacts when searching", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
-    const searchInput = screen.getByPlaceholderText('Buscar contatos...');
-    fireEvent.change(searchInput, { target: { value: 'Dr. António' } });
+    const searchInput = screen.getByPlaceholderText("Buscar contatos...");
+    fireEvent.change(searchInput, { target: { value: "Dr. António" } });
 
     // Test would check filtered results
-    expect(searchInput).toHaveValue('Dr. António');
+    expect(searchInput).toHaveValue("Dr. António");
   });
 
-  it('should send message when form is submitted', async () => {
+  it("should send message when form is submitted", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Mock selecting a contact first
     // Then test message sending
-    const messageInput = screen.getByPlaceholderText('Digite sua mensagem...');
-    fireEvent.change(messageInput, { target: { value: 'Hello, Doctor!' } });
+    const messageInput = screen.getByPlaceholderText("Digite sua mensagem...");
+    fireEvent.change(messageInput, { target: { value: "Hello, Doctor!" } });
 
-    const sendButton = screen.getByRole('button', { name: /send/i });
+    const sendButton = screen.getByRole("button", { name: /send/i });
     fireEvent.click(sendButton);
 
     // Verify message was sent
-    expect(messageInput).toHaveValue('');
+    expect(messageInput).toHaveValue("");
   });
 
-  it('should display typing indicator', async () => {
+  it("should display typing indicator", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Simulate typing indicator from WebSocket
@@ -161,15 +161,19 @@ describe('MessagingComponent', () => {
     expect(true).toBe(true); // Placeholder
   });
 
-  it('should handle file upload', async () => {
+  it("should handle file upload", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
-    const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    const fileInput = screen.getByLabelText(/file input/i) || document.querySelector('input[type="file"]');
+    const file = new File(["test content"], "test.pdf", {
+      type: "application/pdf",
+    });
+    const fileInput =
+      screen.getByLabelText(/file input/i) ||
+      document.querySelector('input[type="file"]');
 
     if (fileInput) {
       fireEvent.change(fileInput, { target: { files: [file] } });
@@ -179,28 +183,28 @@ describe('MessagingComponent', () => {
     expect(true).toBe(true); // Placeholder for actual file upload test
   });
 
-  it('should mark messages as read when viewed', async () => {
+  it("should mark messages as read when viewed", async () => {
     const mockMessages = [
       {
-        id: 'msg-1',
-        from_user_id: 'contact-1',
-        to_user_id: 'user-1',
-        message: 'Hello there!',
-        type: 'text',
+        id: "msg-1",
+        from_user_id: "contact-1",
+        to_user_id: "user-1",
+        message: "Hello there!",
+        type: "text",
         read: false,
-        created_at: new Date().toISOString()
-      }
+        created_at: new Date().toISOString(),
+      },
     ];
 
     (fetch as any).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ success: true, data: mockMessages })
+      json: async () => ({ success: true, data: mockMessages }),
     });
 
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Test marking message as read
@@ -209,30 +213,30 @@ describe('MessagingComponent', () => {
     });
   });
 
-  it('should handle WebSocket connection errors', async () => {
+  it("should handle WebSocket connection errors", async () => {
     // Mock WebSocket error
-    const mockWebSocket = new MockWebSocket('ws://localhost/ws');
+    const mockWebSocket = new MockWebSocket("ws://localhost/ws");
     mockWebSocket.onerror = vi.fn();
 
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Simulate WebSocket error
     if (mockWebSocket.onerror) {
-      mockWebSocket.onerror(new Event('error'));
+      mockWebSocket.onerror(new Event("error"));
     }
 
     expect(true).toBe(true); // Placeholder for error handling test
   });
 
-  it('should reconnect WebSocket when connection is lost', async () => {
+  it("should reconnect WebSocket when connection is lost", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Test WebSocket reconnection logic
@@ -240,11 +244,11 @@ describe('MessagingComponent', () => {
     expect(true).toBe(true); // Placeholder
   });
 
-  it('should display message status indicators', async () => {
+  it("should display message status indicators", async () => {
     render(
       <TestWrapper>
         <MessagingComponent />
-      </TestWrapper>
+      </TestWrapper>,
     );
 
     // Test for read receipts, delivery status, etc.

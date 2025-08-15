@@ -663,10 +663,11 @@ export default function Index() {
                 <Search className="w-4 h-4 mr-2" />
                 Buscar
               </Button>
-              <Button asChild className="bg-clinic-gradient hover:opacity-90 text-white border-0">
-                <Link to="/portal">
-                  Portal do Paciente
-                </Link>
+              <Button
+                asChild
+                className="bg-clinic-gradient hover:opacity-90 text-white border-0"
+              >
+                <Link to="/portal">Portal do Paciente</Link>
               </Button>
             </nav>
 
@@ -750,7 +751,10 @@ export default function Index() {
                   <Search className="w-4 h-4 mr-2" />
                   Buscar
                 </Button>
-                <Button asChild className="bg-clinic-gradient hover:opacity-90 text-white border-0 w-fit">
+                <Button
+                  asChild
+                  className="bg-clinic-gradient hover:opacity-90 text-white border-0 w-fit"
+                >
                   <Link to="/portal" onClick={() => setIsMenuOpen(false)}>
                     Portal do Paciente
                   </Link>

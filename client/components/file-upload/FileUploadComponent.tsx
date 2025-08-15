@@ -1,16 +1,16 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useRef, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Upload,
   File,
@@ -24,9 +24,9 @@ import {
   AlertCircle,
   Plus,
   FolderOpen,
-} from 'lucide-react';
-import { useAuthStore } from '@/store/auth';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { useAuthStore } from "@/store/auth";
+import { cn } from "@/lib/utils";
 
 interface UploadedFile {
   id: string;
@@ -41,7 +41,7 @@ interface UploadedFile {
 }
 
 interface FileUploadProps {
-  category?: 'document' | 'image' | 'exam_result' | 'profile_picture' | 'other';
+  category?: "document" | "image" | "exam_result" | "profile_picture" | "other";
   accept?: string;
   maxFiles?: number;
   maxFileSize?: number; // in MB
@@ -50,17 +50,19 @@ interface FileUploadProps {
 }
 
 export default function FileUploadComponent({
-  category = 'other',
-  accept = 'image/*,application/pdf,.doc,.docx,.xls,.xlsx',
+  category = "other",
+  accept = "image/*,application/pdf,.doc,.docx,.xls,.xlsx",
   maxFiles = 5,
   maxFileSize = 10,
   onUploadComplete,
-  showFileList = true
+  showFileList = true,
 }: FileUploadProps) {
   const { user } = useAuthStore();
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
+    {},
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [userFiles, setUserFiles] = useState<UploadedFile[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -77,16 +79,16 @@ export default function FileUploadComponent({
     try {
       const response = await fetch(`/api/files/user/${user?.id}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setUserFiles(data.data || []);
       }
     } catch (error) {
-      console.error('Error loading user files:', error);
+      console.error("Error loading user files:", error);
     }
   };
 
@@ -103,7 +105,7 @@ export default function FileUploadComponent({
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = Array.from(e.dataTransfer.files);
     handleFileSelection(files);
   }, []);
@@ -121,7 +123,9 @@ export default function FileUploadComponent({
     }
 
     // Validate file sizes
-    const oversizedFiles = files.filter(file => file.size > maxFileSize * 1024 * 1024);
+    const oversizedFiles = files.filter(
+      (file) => file.size > maxFileSize * 1024 * 1024,
+    );
     if (oversizedFiles.length > 0) {
       alert(`Alguns arquivos excedem o limite de ${maxFileSize}MB`);
       return;
@@ -135,43 +139,43 @@ export default function FileUploadComponent({
 
     setIsUploading(true);
     const formData = new FormData();
-    
-    selectedFiles.forEach(file => {
-      formData.append('files', file);
+
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
     });
-    
-    formData.append('userId', user.id);
-    formData.append('category', category);
+
+    formData.append("userId", user.id);
+    formData.append("category", category);
 
     try {
-      const response = await fetch('/api/files/upload', {
-        method: 'POST',
+      const response = await fetch("/api/files/upload", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: formData
+        body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
         const newFiles = data.data || [];
-        
-        setUploadedFiles(prev => [...prev, ...newFiles]);
+
+        setUploadedFiles((prev) => [...prev, ...newFiles]);
         setSelectedFiles([]);
-        
+
         if (showFileList) {
           await loadUserFiles();
         }
-        
+
         if (onUploadComplete) {
           onUploadComplete(newFiles);
         }
       } else {
-        throw new Error('Upload failed');
+        throw new Error("Upload failed");
       }
     } catch (error) {
-      console.error('Error uploading files:', error);
-      alert('Erro ao fazer upload dos arquivos');
+      console.error("Error uploading files:", error);
+      alert("Erro ao fazer upload dos arquivos");
     } finally {
       setIsUploading(false);
     }
@@ -180,44 +184,44 @@ export default function FileUploadComponent({
   const deleteFile = async (fileId: string) => {
     try {
       const response = await fetch(`/api/files/${fileId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: user?.id })
+        body: JSON.stringify({ userId: user?.id }),
       });
 
       if (response.ok) {
-        setUserFiles(prev => prev.filter(file => file.id !== fileId));
-        setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
+        setUserFiles((prev) => prev.filter((file) => file.id !== fileId));
+        setUploadedFiles((prev) => prev.filter((file) => file.id !== fileId));
       }
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="w-6 h-6" />;
-    if (mimeType === 'application/pdf') return <FileText className="w-6 h-6" />;
+    if (mimeType.startsWith("image/")) return <Image className="w-6 h-6" />;
+    if (mimeType === "application/pdf") return <FileText className="w-6 h-6" />;
     return <File className="w-6 h-6" />;
   };
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      document: 'bg-blue-100 text-blue-800',
-      image: 'bg-green-100 text-green-800',
-      exam_result: 'bg-purple-100 text-purple-800',
-      profile_picture: 'bg-pink-100 text-pink-800',
-      other: 'bg-gray-100 text-gray-800'
+      document: "bg-blue-100 text-blue-800",
+      image: "bg-green-100 text-green-800",
+      exam_result: "bg-purple-100 text-purple-800",
+      profile_picture: "bg-pink-100 text-pink-800",
+      other: "bg-gray-100 text-gray-800",
     };
     return colors[category as keyof typeof colors] || colors.other;
   };
@@ -241,7 +245,7 @@ export default function FileUploadComponent({
               "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
               isDragOver
                 ? "border-blue-500 bg-blue-50"
-                : "border-gray-300 hover:border-gray-400"
+                : "border-gray-300 hover:border-gray-400",
             )}
           >
             <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -274,18 +278,27 @@ export default function FileUploadComponent({
               <h4 className="font-medium mb-3">Arquivos Selecionados</h4>
               <div className="space-y-2">
                 {selectedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       {getFileIcon(file.type)}
                       <div>
                         <p className="font-medium text-sm">{file.name}</p>
-                        <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                        <p className="text-xs text-gray-500">
+                          {formatFileSize(file.size)}
+                        </p>
                       </div>
                     </div>
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => setSelectedFiles(prev => prev.filter((_, i) => i !== index))}
+                      onClick={() =>
+                        setSelectedFiles((prev) =>
+                          prev.filter((_, i) => i !== index),
+                        )
+                      }
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -300,11 +313,8 @@ export default function FileUploadComponent({
                 >
                   Cancelar
                 </Button>
-                <Button
-                  onClick={uploadFiles}
-                  disabled={isUploading}
-                >
-                  {isUploading ? 'Enviando...' : 'Enviar Arquivos'}
+                <Button onClick={uploadFiles} disabled={isUploading}>
+                  {isUploading ? "Enviando..." : "Enviar Arquivos"}
                 </Button>
               </div>
             </div>
@@ -335,23 +345,23 @@ export default function FileUploadComponent({
               </TabsContent>
 
               <TabsContent value="image" className="mt-4">
-                <FileList 
-                  files={userFiles.filter(f => f.category === 'image')} 
-                  onDelete={deleteFile} 
+                <FileList
+                  files={userFiles.filter((f) => f.category === "image")}
+                  onDelete={deleteFile}
                 />
               </TabsContent>
 
               <TabsContent value="document" className="mt-4">
-                <FileList 
-                  files={userFiles.filter(f => f.category === 'document')} 
-                  onDelete={deleteFile} 
+                <FileList
+                  files={userFiles.filter((f) => f.category === "document")}
+                  onDelete={deleteFile}
                 />
               </TabsContent>
 
               <TabsContent value="exam_result" className="mt-4">
-                <FileList 
-                  files={userFiles.filter(f => f.category === 'exam_result')} 
-                  onDelete={deleteFile} 
+                <FileList
+                  files={userFiles.filter((f) => f.category === "exam_result")}
+                  onDelete={deleteFile}
                 />
               </TabsContent>
             </Tabs>
@@ -378,33 +388,33 @@ function FileList({ files, onDelete }: FileListProps) {
   }
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="w-6 h-6" />;
-    if (mimeType === 'application/pdf') return <FileText className="w-6 h-6" />;
+    if (mimeType.startsWith("image/")) return <Image className="w-6 h-6" />;
+    if (mimeType === "application/pdf") return <FileText className="w-6 h-6" />;
     return <File className="w-6 h-6" />;
   };
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      document: 'bg-blue-100 text-blue-800',
-      image: 'bg-green-100 text-green-800',
-      exam_result: 'bg-purple-100 text-purple-800',
-      profile_picture: 'bg-pink-100 text-pink-800',
-      other: 'bg-gray-100 text-gray-800'
+      document: "bg-blue-100 text-blue-800",
+      image: "bg-green-100 text-green-800",
+      exam_result: "bg-purple-100 text-purple-800",
+      profile_picture: "bg-pink-100 text-pink-800",
+      other: "bg-gray-100 text-gray-800",
     };
     return colors[category as keyof typeof colors] || colors.other;
   };
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {files.map(file => (
+      {files.map((file) => (
         <Card key={file.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-start justify-between mb-3">
@@ -425,14 +435,17 @@ function FileList({ files, onDelete }: FileListProps) {
                 {file.category}
               </Badge>
             </div>
-            
-            <h4 className="font-medium text-sm mb-1 truncate" title={file.originalName}>
+
+            <h4
+              className="font-medium text-sm mb-1 truncate"
+              title={file.originalName}
+            >
               {file.originalName}
             </h4>
             <p className="text-xs text-gray-500 mb-3">
               {formatFileSize(file.fileSize)}
             </p>
-            
+
             <div className="flex items-center justify-between">
               <div className="flex space-x-1">
                 <Button size="sm" variant="ghost" asChild>

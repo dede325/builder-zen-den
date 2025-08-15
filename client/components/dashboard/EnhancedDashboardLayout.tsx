@@ -268,10 +268,9 @@ export default function EnhancedDashboardLayout() {
       ],
     };
 
-    return [
-      ...baseNavigation,
-      ...(roleSpecificNavigation[role] || []),
-    ].filter(item => !item.roles || item.roles.includes(role));
+    return [...baseNavigation, ...(roleSpecificNavigation[role] || [])].filter(
+      (item) => !item.roles || item.roles.includes(role),
+    );
   };
 
   const navigation = user ? getNavigationForRole(user.role) : [];

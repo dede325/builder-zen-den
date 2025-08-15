@@ -1,12 +1,14 @@
-import { existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { existsSync, mkdirSync } from "fs";
+import { join } from "path";
 
 // Conditional import to prevent issues during build/config loading
 let Database: any;
 try {
-  Database = require('better-sqlite3');
+  Database = require("better-sqlite3");
 } catch (error) {
-  console.warn('better-sqlite3 not available, database features will be disabled');
+  console.warn(
+    "better-sqlite3 not available, database features will be disabled",
+  );
   Database = null;
 }
 
@@ -15,7 +17,7 @@ export interface Message {
   from_user_id: string;
   to_user_id: string;
   message: string;
-  type: 'text' | 'file' | 'image' | 'document';
+  type: "text" | "file" | "image" | "document";
   file_url?: string;
   file_name?: string;
   file_size?: number;
@@ -33,7 +35,7 @@ export interface FileUpload {
   file_path: string;
   file_size: number;
   mime_type: string;
-  category: 'document' | 'image' | 'exam_result' | 'profile_picture' | 'other';
+  category: "document" | "image" | "exam_result" | "profile_picture" | "other";
   compressed_path?: string;
   thumbnail_path?: string;
   created_at: string;
@@ -63,29 +65,29 @@ class DatabaseManager {
 
   constructor() {
     if (!Database) {
-      console.warn('Database not available, using mock data');
+      console.warn("Database not available, using mock data");
       return;
     }
 
     try {
       // Ensure data directory exists
-      const dataDir = join(process.cwd(), 'data');
+      const dataDir = join(process.cwd(), "data");
       if (!existsSync(dataDir)) {
         mkdirSync(dataDir, { recursive: true });
       }
 
-      const dbPath = join(dataDir, 'clinic.db');
+      const dbPath = join(dataDir, "clinic.db");
       this.db = new Database(dbPath);
 
       // Configure database
-      this.db.pragma('journal_mode = WAL');
-      this.db.pragma('synchronous = NORMAL');
-      this.db.pragma('cache_size = 1000000');
-      this.db.pragma('foreign_keys = ON');
+      this.db.pragma("journal_mode = WAL");
+      this.db.pragma("synchronous = NORMAL");
+      this.db.pragma("cache_size = 1000000");
+      this.db.pragma("foreign_keys = ON");
 
       this.initializeTables();
     } catch (error) {
-      console.error('Failed to initialize database:', error);
+      console.error("Failed to initialize database:", error);
       this.db = null;
     }
   }
@@ -301,14 +303,16 @@ class DatabaseManager {
   }
 
   // Message methods
-  createMessage(message: Omit<Message, 'id' | 'created_at' | 'updated_at'>): Message {
+  createMessage(
+    message: Omit<Message, "id" | "created_at" | "updated_at">,
+  ): Message {
     if (!this.db) {
       // Return mock message for development
       const mockMessage = {
         ...message,
         id: `msg_${Date.now()}`,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
       return mockMessage;
     }
@@ -331,14 +335,14 @@ class DatabaseManager {
       message.file_name || null,
       message.file_size || null,
       message.read ? 1 : 0,
-      message.read_at || null
+      message.read_at || null,
     );
 
     return {
       ...message,
       id,
       created_at: now,
-      updated_at: now
+      updated_at: now,
     };
   }
 
@@ -368,19 +372,21 @@ class DatabaseManager {
       SET read = 1, read_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-    
+
     return stmt.run(messageId).changes > 0;
   }
 
   // File upload methods
-  createFileUpload(file: Omit<FileUpload, 'id' | 'created_at' | 'updated_at'>): FileUpload {
+  createFileUpload(
+    file: Omit<FileUpload, "id" | "created_at" | "updated_at">,
+  ): FileUpload {
     if (!this.db) {
       // Return mock file for development
       const mockFile = {
         ...file,
         id: `file_${Date.now()}`,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
       return mockFile;
     }
@@ -403,48 +409,50 @@ class DatabaseManager {
       file.mime_type,
       file.category,
       file.compressed_path || null,
-      file.thumbnail_path || null
+      file.thumbnail_path || null,
     );
 
     return {
       ...file,
       id,
       created_at: now,
-      updated_at: now
+      updated_at: now,
     };
   }
 
   getFileUpload(id: string): FileUpload | null {
     if (!this.db) return null;
-    const stmt = this.db.prepare('SELECT * FROM file_uploads WHERE id = ?');
+    const stmt = this.db.prepare("SELECT * FROM file_uploads WHERE id = ?");
     return stmt.get(id) as FileUpload | null;
   }
 
   getUserFiles(userId: string, category?: string): FileUpload[] {
     if (!this.db) return [];
-    let query = 'SELECT * FROM file_uploads WHERE user_id = ?';
+    let query = "SELECT * FROM file_uploads WHERE user_id = ?";
     let params = [userId];
 
     if (category) {
-      query += ' AND category = ?';
+      query += " AND category = ?";
       params.push(category);
     }
 
-    query += ' ORDER BY created_at DESC';
+    query += " ORDER BY created_at DESC";
 
     const stmt = this.db.prepare(query);
     return stmt.all(...params) as FileUpload[];
   }
 
   // Vital signs methods
-  createVitalSigns(vitals: Omit<VitalSigns, 'id' | 'created_at' | 'updated_at'>): VitalSigns {
+  createVitalSigns(
+    vitals: Omit<VitalSigns, "id" | "created_at" | "updated_at">,
+  ): VitalSigns {
     if (!this.db) {
       // Return mock vital signs for development
       const mockVitals = {
         ...vitals,
         id: `vital_${Date.now()}`,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
       return mockVitals;
     }
@@ -472,14 +480,14 @@ class DatabaseManager {
       vitals.height || null,
       vitals.oxygen_saturation || null,
       vitals.respiratory_rate || null,
-      vitals.notes || null
+      vitals.notes || null,
     );
 
     return {
       ...vitals,
       id,
       created_at: now,
-      updated_at: now
+      updated_at: now,
     };
   }
 
@@ -496,19 +504,21 @@ class DatabaseManager {
   // User methods
   getUserById(id: string): any {
     if (!this.db) return null;
-    const stmt = this.db.prepare('SELECT * FROM users WHERE id = ?');
+    const stmt = this.db.prepare("SELECT * FROM users WHERE id = ?");
     return stmt.get(id);
   }
 
   getUserByEmail(email: string): any {
     if (!this.db) return null;
-    const stmt = this.db.prepare('SELECT * FROM users WHERE email = ?');
+    const stmt = this.db.prepare("SELECT * FROM users WHERE email = ?");
     return stmt.get(email);
   }
 
   getUsersByRole(role: string): any[] {
     if (!this.db) return [];
-    const stmt = this.db.prepare('SELECT * FROM users WHERE role = ? AND active = 1');
+    const stmt = this.db.prepare(
+      "SELECT * FROM users WHERE role = ? AND active = 1",
+    );
     return stmt.all(role);
   }
 
