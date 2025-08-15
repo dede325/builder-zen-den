@@ -27,17 +27,27 @@ export const handleContactSubmission: RequestHandler = async (req, res) => {
       });
     }
 
-    const formData = validationResult.data;
+    const formData = validationResult.data as {
+      name: string;
+      email: string;
+      phone: string;
+      subject: 'consulta' | 'duvida' | 'sugestao';
+      message: string;
+    };
 
     // Save to local storage
     const submissionId = await contactStorage.addSubmission(formData);
-    
+
     console.log(`Contact submission saved with ID: ${submissionId}`);
 
     // Prepare submission object for email
     const submission: ContactSubmission = {
       id: submissionId,
-      ...formData,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.subject,
+      message: formData.message,
       submitted_at: new Date().toISOString(),
       status: 'pending'
     };

@@ -10,6 +10,14 @@ import Index from "./pages/Index";
 import Portal from "./pages/Portal";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Sobre from "./pages/Sobre";
+import Exames from "./pages/Exames";
+import Contato from "./pages/Contato";
+
+// Specialty pages
+import Cardiologia from "./pages/specialties/Cardiologia";
+import Pediatria from "./pages/specialties/Pediatria";
+import Dermatologia from "./pages/specialties/Dermatologia";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +31,18 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/portal" element={<Portal />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/sobre" element={<Sobre />} />
+          <Route path="/exames" element={<Exames />} />
+          <Route path="/contato" element={<Contato />} />
+
+          {/* Specialty Routes */}
+          <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
+          <Route path="/especialidades/pediatria" element={<Pediatria />} />
+          <Route
+            path="/especialidades/dermatologia"
+            element={<Dermatologia />}
+          />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
