@@ -109,6 +109,7 @@ const authenticateUser = async (email: string, password: string): Promise<User |
   const validPasswords: { [key: string]: string } = {
     'paciente@example.com': '123456',
     'carlos@example.com': '123456',
+    'medico@bemcuidar.co.ao': 'medico123',
     'admin@bemcuidar.co.ao': 'admin123'
   };
   
