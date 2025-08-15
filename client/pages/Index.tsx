@@ -1490,7 +1490,7 @@ export default function Index() {
         </div>
       </section>
 
-      <Footer />
+      <EnhancedFooter />
 
       {/* Floating Action Buttons */}
       <FloatingActionButtons />
