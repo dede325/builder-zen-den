@@ -418,7 +418,7 @@ export default function Index() {
       icon: Activity,
       description: "Sistema digestivo",
       detailedDescription:
-        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, fígado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
+        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, f��gado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
       conditions: [
         "Gastrite",
         "Úlcera péptica",
@@ -881,10 +881,10 @@ export default function Index() {
                   </p>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 leading-tight">
+                <h1 className="heading-premium text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 leading-tight">
                   Cuidamos da sua <span className="text-[#79cbcb]">saúde</span>
                   <br />
-                  com humaniza��ão
+                  com humanização
                   <br className="hidden sm:block" /> e excelência
                 </h1>
 
