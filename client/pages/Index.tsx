@@ -1064,9 +1064,9 @@ export default function Index() {
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="card-medical-premium text-center">
               <CardContent className="p-4 sm:p-6">
-                <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4" />
+                <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4 equipment-hover" />
                 <h4 className="text-lg font-semibold mb-2">Ecocardiograma</h4>
                 <p className="text-muted-foreground text-sm sm:text-base">
                   Ultrassom do coração para diagnóstico detalhado
