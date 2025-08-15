@@ -15,7 +15,7 @@ export interface User {
   emergencyContact?: string;
   insuranceProvider?: string;
   insuranceNumber?: string;
-  role: "patient" | "doctor" | "receptionist" | "admin";
+  role: "patient" | "doctor" | "nurse" | "receptionist" | "admin";
   active: boolean;
   avatar?: string;
   createdAt: string;
@@ -99,6 +99,34 @@ const mockUsers: User[] = [
     createdAt: "2023-01-01T00:00:00Z",
     updatedAt: "2024-12-20T00:00:00Z",
   },
+  {
+    id: "nurse-1",
+    email: "enfermeira@bemcuidar.co.ao",
+    name: "Enfermeira Ana Costa",
+    phone: "+244 934 567 890",
+    document: "789123456BA004",
+    documentType: "BI",
+    role: "nurse",
+    active: true,
+    avatar:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    createdAt: "2023-02-15T08:00:00Z",
+    updatedAt: "2024-12-20T10:00:00Z",
+  },
+  {
+    id: "receptionist-1",
+    email: "secretaria@bemcuidar.co.ao",
+    name: "Secretária Sofia Lima",
+    phone: "+244 945 678 901",
+    document: "123789456BA005",
+    documentType: "BI",
+    role: "receptionist",
+    active: true,
+    avatar:
+      "https://images.unsplash.com/photo-1494790108755-2616b15ad0e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    createdAt: "2023-03-01T08:00:00Z",
+    updatedAt: "2024-12-20T10:00:00Z",
+  },
 ];
 
 // Simular autenticação
@@ -117,6 +145,8 @@ const authenticateUser = async (
     "carlos@example.com": "123456",
     "medico@bemcuidar.co.ao": "medico123",
     "admin@bemcuidar.co.ao": "admin123",
+    "enfermeira@bemcuidar.co.ao": "enfermeira123",
+    "secretaria@bemcuidar.co.ao": "secretaria123",
   };
 
   if (user && validPasswords[email] === password) {
