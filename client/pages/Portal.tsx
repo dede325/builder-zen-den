@@ -469,7 +469,7 @@ export default function Portal() {
                     type="password"
                     value={loginData.password}
                     onChange={(e) => setLoginData(prev => ({...prev, password: e.target.value}))}
-                    placeholder="••••••••"
+                    placeholder="•���••••••"
                     disabled={isLoggingIn}
                     onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                   />
@@ -547,6 +547,34 @@ export default function Portal() {
 
           {/* Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
+            {/* Quick Actions */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('appointments')}>
+                <CardContent className="p-6 text-center">
+                  <Calendar className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">Agendar Consulta</h3>
+                  <p className="text-sm text-muted-foreground">Agende sua próxima consulta rapidamente</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('exams')}>
+                <CardContent className="p-6 text-center">
+                  <FileText className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">Ver Exames</h3>
+                  <p className="text-sm text-muted-foreground">Acesse seus resultados de exames</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('profile')}>
+                <CardContent className="p-6 text-center">
+                  <User className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">Atualizar Dados</h3>
+                  <p className="text-sm text-muted-foreground">Mantenha suas informações atualizadas</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Statistics Cards */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardContent className="p-6">
@@ -554,6 +582,11 @@ export default function Portal() {
                     <div>
                       <p className="text-sm text-muted-foreground">Próxima Consulta</p>
                       <p className="text-2xl font-bold">{stats.nextAppointment}</p>
+                      {appointments.filter(a => a.status === 'scheduled')[0] && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {appointments.filter(a => a.status === 'scheduled')[0].specialty}
+                        </p>
+                      )}
                     </div>
                     <Calendar className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -564,8 +597,9 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Exames Pendentes</p>
+                      <p className="text-sm text-muted-foreground">Exames Disponíveis</p>
                       <p className="text-2xl font-bold">{stats.pendingExams}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Prontos para download</p>
                     </div>
                     <FileText className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -578,6 +612,7 @@ export default function Portal() {
                     <div>
                       <p className="text-sm text-muted-foreground">Consultas Este Mês</p>
                       <p className="text-2xl font-bold">{stats.thisMonthAppointments}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Realizadas/Agendadas</p>
                     </div>
                     <CheckCircle className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -588,8 +623,9 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Notificações</p>
-                      <p className="text-2xl font-bold">{stats.notifications}</p>
+                      <p className="text-sm text-muted-foreground">Total de Exames</p>
+                      <p className="text-2xl font-bold">{examResults.length}</p>
+                      <p className="text-xs text-muted-foreground mt-1">No histórico</p>
                     </div>
                     <Bell className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -598,33 +634,117 @@ export default function Portal() {
             </div>
 
             {/* Recent Activity */}
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    Próximas Consultas
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setActiveTab('appointments')}
+                    >
+                      Ver Todas
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {appointments.filter(a => a.status === 'scheduled').slice(0, 3).map(appointment => (
+                      <div key={appointment.id} className="flex items-center space-x-4 p-3 bg-blue-50 rounded-lg">
+                        <Calendar className="w-8 h-8 text-blue-500" />
+                        <div className="flex-1">
+                          <p className="font-medium">{appointment.specialty}</p>
+                          <p className="text-sm text-muted-foreground">{appointment.doctor}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(appointment.date).toLocaleDateString('pt-BR')} às {appointment.time}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                    {appointments.filter(a => a.status === 'scheduled').length === 0 && (
+                      <p className="text-muted-foreground text-center py-4">
+                        Nenhuma consulta agendada
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    Exames Recentes
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setActiveTab('exams')}
+                    >
+                      Ver Todos
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {examResults.filter(e => e.status === 'ready').slice(0, 3).map(exam => (
+                      <div key={exam.id} className="flex items-center space-x-4 p-3 bg-green-50 rounded-lg">
+                        <FileText className="w-8 h-8 text-green-500" />
+                        <div className="flex-1">
+                          <p className="font-medium">{exam.name}</p>
+                          <p className="text-sm text-muted-foreground">{exam.type}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(exam.date).toLocaleDateString('pt-BR')}
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => downloadExam(exam.id)}
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    {examResults.filter(e => e.status === 'ready').length === 0 && (
+                      <p className="text-muted-foreground text-center py-4">
+                        Nenhum exame disponível
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Health Summary */}
             <Card>
               <CardHeader>
-                <CardTitle>Atividade Recente</CardTitle>
+                <CardTitle>Resumo de Saúde</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {examResults.filter(e => e.status === 'ready').slice(0, 3).map(exam => (
-                    <div key={exam.id} className="flex items-center space-x-4">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Resultado de exame disponível</p>
-                        <p className="text-sm text-muted-foreground">{exam.name} - {new Date(exam.date).toLocaleDateString('pt-BR')}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {appointments.filter(a => a.status === 'scheduled').slice(0, 2).map(appointment => (
-                    <div key={appointment.id} className="flex items-center space-x-4">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Consulta agendada</p>
-                        <p className="text-sm text-muted-foreground">{appointment.specialty} - {new Date(appointment.date).toLocaleDateString('pt-BR')}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {appointments.length === 0 && examResults.length === 0 && (
-                    <p className="text-muted-foreground text-center py-4">Nenhuma atividade recente</p>
-                  )}
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <h4 className="font-semibold text-blue-700">Última Consulta</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {appointments.filter(a => a.status === 'completed')[0] ?
+                        new Date(appointments.filter(a => a.status === 'completed')[0].date).toLocaleDateString('pt-BR') :
+                        'Nenhuma consulta realizada'
+                      }
+                    </p>
+                  </div>
+
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <h4 className="font-semibold text-green-700">Exames Realizados</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {examResults.filter(e => e.status !== 'pending').length} exames completos
+                    </p>
+                  </div>
+
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <h4 className="font-semibold text-purple-700">Histórico</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Paciente desde {new Date(currentUser?.createdAt || '').toLocaleDateString('pt-BR')}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
