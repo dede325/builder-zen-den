@@ -87,6 +87,7 @@ export default function Portal() {
     smsReminders: false,
     examNotifications: true
   });
+  const [loginHints, setLoginHints] = useState<any[]>([]);
   
   // Loading states
   const [isLoadingAppointments, setIsLoadingAppointments] = useState(false);
