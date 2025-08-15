@@ -298,8 +298,7 @@ export const legalCompliance = {
     os seus dados pessoais serão tratados com confidencialidade e utilizados exclusivamente 
     para fins médicos e administrativos da Clínica Bem Cuidar.`,
     
-    retentionPeriod: 'Os dados médicos são conservados por um período mínimo de 10 anos, 
-    conforme determinado pela legislação sanitária nacional.',
+    retentionPeriod: 'Os dados médicos são conservados por um período mínimo de 10 anos, conforme determinado pela legislação sanit��ria nacional.',
     
     patientRights: [
       'Direito de acesso aos seus dados pessoais',
