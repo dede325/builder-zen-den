@@ -626,31 +626,31 @@ export default function Index() {
             <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
               <a
                 href="#inicio"
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="link-hover nav-item-hover font-medium"
               >
                 Início
               </a>
               <a
                 href="#especialidades"
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="link-hover nav-item-hover font-medium"
               >
                 Especialidades
               </a>
               <Link
                 to="/exames"
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="link-hover nav-item-hover font-medium"
               >
                 Exames
               </Link>
               <Link
                 to="/sobre"
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="link-hover nav-item-hover font-medium"
               >
                 Sobre
               </Link>
               <Link
                 to="/contato"
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="link-hover nav-item-hover font-medium"
               >
                 Contato
               </Link>
@@ -658,7 +658,7 @@ export default function Index() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="mr-2 xl:mr-4 hidden xl:flex"
+                className="mr-2 xl:mr-4 hidden xl:flex btn-hover-lift"
               >
                 <Search className="w-4 h-4 mr-2" />
                 Buscar
@@ -667,14 +667,15 @@ export default function Index() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="mr-2 xl:hidden p-2"
+                className="mr-2 xl:hidden p-2 btn-hover-lift"
               >
                 <Search className="w-4 h-4" />
               </Button>
               <Button
                 asChild
+                variant="clinic"
                 size="sm"
-                className="bg-clinic-gradient hover:opacity-90 text-white border-0 px-3 xl:px-4"
+                className="px-3 xl:px-4 btn-hover-lift"
               >
                 <Link to="/portal">Portal</Link>
               </Button>
