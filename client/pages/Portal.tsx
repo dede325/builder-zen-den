@@ -179,8 +179,8 @@ export default function Portal() {
           description: "Login realizado com sucesso",
         });
 
-        // Load initial data
-        loadData();
+        // Load initial data with the new token
+        loadData(response.token);
       } else {
         toast({
           title: "Erro",
