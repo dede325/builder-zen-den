@@ -19,7 +19,7 @@
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
-    "db:setup": "node scripts/setup-sqlite.js",
+    "db:setup": "node scripts/setup-sqlite.cjs",
     "db:reset": "rm -f data/clinic.db && npm run db:setup",
     "db:backup": "cp data/clinic.db data/clinic-backup-$(date +%Y%m%d-%H%M%S).db",
     "db:inspect": "sqlite3 data/clinic.db",
@@ -28,13 +28,11 @@
   "dependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/nodemailer": "^6.4.17",
-    "better-sqlite3": "^12.2.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "fs-extra": "^11.3.1",
     "nodemailer": "^7.0.5",
-    "zod": "^3.25.76",
-    "zustand": "^5.0.7"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@hookform/resolvers": "^5.2.1",
