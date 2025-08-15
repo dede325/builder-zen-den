@@ -75,6 +75,19 @@ const mockUsers: User[] = [
     updatedAt: '2024-12-19T09:15:00Z'
   },
   {
+    id: 'doctor-1',
+    email: 'medico@bemcuidar.co.ao',
+    name: 'Dr. António Silva',
+    phone: '+244 923 456 789',
+    document: '456789123BA003',
+    documentType: 'BI',
+    role: 'doctor',
+    active: true,
+    avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
+    createdAt: '2023-02-01T08:00:00Z',
+    updatedAt: '2024-12-20T10:00:00Z'
+  },
+  {
     id: 'admin-1',
     email: 'admin@bemcuidar.co.ao',
     name: 'Administrador Sistema',
