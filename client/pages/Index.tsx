@@ -95,6 +95,22 @@ export default function Index() {
     return () => clearInterval(interval);
   }, [isPlaying, heroImages.length]);
 
+  // Fetch current year from server
+  useEffect(() => {
+    const fetchServerDate = async () => {
+      try {
+        const response = await fetch('/api/server-date');
+        const data = await response.json();
+        setCurrentYear(data.year);
+      } catch (error) {
+        console.warn('Failed to fetch server date, using client date:', error);
+        setCurrentYear(new Date().getFullYear());
+      }
+    };
+
+    fetchServerDate();
+  }, []);
+
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroImages.length);
   };
