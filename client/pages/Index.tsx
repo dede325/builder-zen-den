@@ -1286,10 +1286,10 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-medical-premium">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start space-x-4">
-                    <Phone className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
+                    <Phone className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0 equipment-hover" />
                     <div>
                       <h4 className="font-semibold mb-2 text-sm sm:text-base">
                         Telefone
