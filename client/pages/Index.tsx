@@ -995,13 +995,22 @@ export default function Index() {
             {specialties.map((specialty, index) => (
               <Card
                 key={index}
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105"
+                className="specialty-card-hover cursor-pointer group focus-ring-enhanced"
                 onClick={() => handleSpecialtyClick(specialty)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSpecialtyClick(specialty);
+                  }
+                }}
+                role="button"
+                aria-label={`Ver detalhes da especialidade ${specialty.name}`}
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center group-hover:bg-clinic-gradient transition-all duration-300">
-                      <specialty.icon className="w-5 h-5 text-clinic-accent group-hover:text-white transition-colors" />
+                    <div className="specialty-icon w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center">
+                      <specialty.icon className="w-5 h-5 text-clinic-accent icon-hover" />
                     </div>
                     <h4 className="font-semibold text-foreground group-hover:text-clinic-primary transition-colors text-sm sm:text-base">
                       {specialty.name}
@@ -1010,7 +1019,7 @@ export default function Index() {
                   <p className="text-xs sm:text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     {specialty.description}
                   </p>
-                  <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-3 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
                     <p className="text-xs text-clinic-accent font-medium">
                       Clique para mais informações →
                     </p>
