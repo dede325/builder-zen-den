@@ -1,4 +1,4 @@
-import { ExamResult, Patient } from './types';
+import { ExamResult, Patient } from "./types";
 
 interface PDFGeneratorOptions {
   patient: Patient;
@@ -9,30 +9,30 @@ export class PDFGenerator {
   private static getLogoBase64(): string {
     // Base64 do logotipo da clínica (simplificado para demo)
     // Em produção, seria carregado de um arquivo real
-    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+    return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
   }
 
   private static formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   }
 
   private static formatDateTime(dateString: string): string {
-    return new Date(dateString).toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
 
   static generateExamPDF({ patient, exam }: PDFGeneratorOptions): string {
-    const currentDate = new Date().toLocaleString('pt-BR');
-    
+    const currentDate = new Date().toLocaleString("pt-BR");
+
     // HTML template para o PDF
     const htmlTemplate = `
     <!DOCTYPE html>
@@ -253,8 +253,13 @@ export class PDFGenerator {
                     <span class="info-label">Status:</span>
                     <span class="info-value">
                         <span class="status-badge status-${exam.status}">
-                            ${exam.status === 'ready' ? 'Disponível' : 
-                              exam.status === 'viewed' ? 'Visualizado' : 'Pendente'}
+                            ${
+                              exam.status === "ready"
+                                ? "Disponível"
+                                : exam.status === "viewed"
+                                  ? "Visualizado"
+                                  : "Pendente"
+                            }
                         </span>
                     </span>
                 </div>
@@ -267,7 +272,7 @@ export class PDFGenerator {
             <div class="result-section">
                 <div class="result-title">Resultado e Interpretação</div>
                 <div class="result-content">
-                    ${exam.notes || 'Resultado dentro dos parâmetros normais.'}
+                    ${exam.notes || "Resultado dentro dos parâmetros normais."}
                 </div>
                 
                 ${this.getSpecificContent(exam)}
@@ -288,7 +293,7 @@ export class PDFGenerator {
 
   private static getSpecificContent(exam: ExamResult): string {
     switch (exam.type) {
-      case 'Análise Clínica':
+      case "Análise Clínica":
         return `
         <div class="reference-values">
             <strong>Valores de Referência:</strong><br>
@@ -299,7 +304,7 @@ export class PDFGenerator {
             • Colesterol Total: < 200 mg/dL
         </div>
         `;
-      case 'Cardiologia':
+      case "Cardiologia":
         return `
         <div class="reference-values">
             <strong>Parâmetros Avaliados:</strong><br>
@@ -310,7 +315,7 @@ export class PDFGenerator {
             • Intervalos: PR, QRS, QT
         </div>
         `;
-      case 'Radiologia':
+      case "Radiologia":
         return `
         <div class="reference-values">
             <strong>Estruturas Avaliadas:</strong><br>
@@ -333,10 +338,10 @@ export class PDFGenerator {
   }
 
   static generatePDFFileName(exam: ExamResult, patient: Patient): string {
-    const date = new Date(exam.date).toISOString().split('T')[0];
-    const examName = exam.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
-    const patientName = patient.name.split(' ')[0].toLowerCase();
-    
+    const date = new Date(exam.date).toISOString().split("T")[0];
+    const examName = exam.name.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+    const patientName = patient.name.split(" ")[0].toLowerCase();
+
     return `resultado_${examName}_${patientName}_${date}.pdf`;
   }
 }

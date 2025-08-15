@@ -38,7 +38,10 @@ const App = () => (
           {/* Specialty Routes */}
           <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
           <Route path="/especialidades/pediatria" element={<Pediatria />} />
-          <Route path="/especialidades/dermatologia" element={<Dermatologia />} />
+          <Route
+            path="/especialidades/dermatologia"
+            element={<Dermatologia />}
+          />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

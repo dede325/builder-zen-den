@@ -1,18 +1,24 @@
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  ArrowLeft, 
-  Calendar, 
-  Phone, 
-  Clock, 
-  MapPin, 
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowLeft,
+  Calendar,
+  Phone,
+  Clock,
+  MapPin,
   CheckCircle,
   Users,
   Award,
-  Stethoscope
-} from 'lucide-react';
+  Stethoscope,
+} from "lucide-react";
 
 interface Doctor {
   name: string;
@@ -44,7 +50,9 @@ interface SpecialtyTemplateProps {
   specialty: SpecialtyInfo;
 }
 
-export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps) {
+export default function SpecialtyTemplate({
+  specialty,
+}: SpecialtyTemplateProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -58,7 +66,9 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h1 className="text-xl font-bold text-primary">Clínica Bem Cuidar</h1>
+                <h1 className="text-xl font-bold text-primary">
+                  Clínica Bem Cuidar
+                </h1>
                 <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
               </div>
             </div>
@@ -87,17 +97,20 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
             <div className="w-20 h-20 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-6">
               <specialty.icon className="w-10 h-10 text-white" />
             </div>
-            
+
             <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
               {specialty.name}
             </h1>
-            
+
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
               {specialty.description}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-clinic-gradient hover:opacity-90 text-white">
+              <Button
+                size="lg"
+                className="bg-clinic-gradient hover:opacity-90 text-white"
+              >
                 <Calendar className="w-5 h-5 mr-2" />
                 Agendar Consulta
               </Button>
@@ -186,11 +199,19 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
                     <div className="w-20 h-20 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                       <Users className="w-10 h-10 text-white" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-1">{doctor.name}</h3>
-                    <p className="text-clinic-accent font-medium mb-2">{doctor.credentials}</p>
-                    <p className="text-sm text-muted-foreground mb-2">{doctor.experience}</p>
+                    <h3 className="font-semibold text-lg mb-1">
+                      {doctor.name}
+                    </h3>
+                    <p className="text-clinic-accent font-medium mb-2">
+                      {doctor.credentials}
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {doctor.experience}
+                    </p>
                     {doctor.specialization && (
-                      <p className="text-xs text-muted-foreground">{doctor.specialization}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {doctor.specialization}
+                      </p>
                     )}
                   </CardContent>
                 </Card>
@@ -226,11 +247,17 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
                     )}
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-3">{procedure.description}</p>
+                    <p className="text-muted-foreground mb-3">
+                      {procedure.description}
+                    </p>
                     {procedure.preparation && (
                       <div className="bg-clinic-light/50 p-3 rounded-lg">
-                        <h4 className="font-medium text-sm mb-1">Preparação:</h4>
-                        <p className="text-sm text-muted-foreground">{procedure.preparation}</p>
+                        <h4 className="font-medium text-sm mb-1">
+                          Preparação:
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {procedure.preparation}
+                        </p>
                       </div>
                     )}
                   </CardContent>
@@ -276,15 +303,20 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
               Pronto para cuidar da sua saúde?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Agende sua consulta em {specialty.name} e tenha o melhor atendimento médico
+              Agende sua consulta em {specialty.name} e tenha o melhor
+              atendimento médico
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary">
                 <Calendar className="w-5 h-5 mr-2" />
                 Agendar Consulta
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-clinic-primary">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-clinic-primary"
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 (244) 945 344 650
               </Button>
@@ -321,29 +353,48 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
                 </div>
               </div>
               <p className="text-gray-300">
-                Cuidamos da sua saúde com humanização, tecnologia e excelência médica.
+                Cuidamos da sua saúde com humanização, tecnologia e excelência
+                médica.
               </p>
             </div>
 
             <div>
               <h5 className="font-semibold mb-4">Contato</h5>
               <div className="space-y-2 text-gray-300">
-                <p><MapPin className="w-4 h-4 inline mr-2" />Av. 21 de Janeiro, 351, Benfica</p>
-                <p><Phone className="w-4 h-4 inline mr-2" />+244 945 344 650</p>
-                <p><Clock className="w-4 h-4 inline mr-2" />recepcao@bemcuidar.co.ao</p>
+                <p>
+                  <MapPin className="w-4 h-4 inline mr-2" />
+                  Av. 21 de Janeiro, 351, Benfica
+                </p>
+                <p>
+                  <Phone className="w-4 h-4 inline mr-2" />
+                  +244 945 344 650
+                </p>
+                <p>
+                  <Clock className="w-4 h-4 inline mr-2" />
+                  recepcao@bemcuidar.co.ao
+                </p>
               </div>
             </div>
 
             <div>
               <h5 className="font-semibold mb-4">Links Úteis</h5>
               <div className="space-y-2">
-                <Link to="/portal" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/portal"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Portal do Paciente
                 </Link>
-                <Link to="/sobre" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/sobre"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Sobre a Clínica
                 </Link>
-                <Link to="/contato" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/contato"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Contato
                 </Link>
               </div>
@@ -352,7 +403,7 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
 
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
             <p>
-              &copy; 2024 Clínica Bem Cuidar. Desenvolvido por{' '}
+              &copy; 2024 Clínica Bem Cuidar. Desenvolvido por{" "}
               <a
                 href="https://bestservices.ao"
                 target="_blank"
@@ -360,8 +411,8 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
                 className="text-white hover:text-gray-100 font-semibold underline transition-colors"
               >
                 Kaijhe
-              </a>
-              {' '}- Todos os direitos reservados.
+              </a>{" "}
+              - Todos os direitos reservados.
             </p>
           </div>
         </div>

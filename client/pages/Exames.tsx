@@ -1,13 +1,19 @@
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  ArrowLeft, 
-  Activity, 
-  Heart, 
-  Eye, 
-  Brain, 
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowLeft,
+  Activity,
+  Heart,
+  Eye,
+  Brain,
   Stethoscope,
   FileText,
   Clock,
@@ -16,141 +22,141 @@ import {
   Calendar,
   Phone,
   MapPin,
-  Mail
-} from 'lucide-react';
+  Mail,
+} from "lucide-react";
 
 const exams = [
   {
-    category: 'Cardiologia',
+    category: "Cardiologia",
     icon: Heart,
-    color: 'text-red-500',
+    color: "text-red-500",
     exams: [
       {
-        name: 'Eletrocardiograma (ECG)',
-        duration: '15 min',
-        preparation: 'Nenhuma preparação especial',
-        description: 'Registra a atividade elétrica do coração'
+        name: "Eletrocardiograma (ECG)",
+        duration: "15 min",
+        preparation: "Nenhuma preparação especial",
+        description: "Registra a atividade elétrica do coração",
       },
       {
-        name: 'Ecocardiograma',
-        duration: '30 min',
-        preparation: 'Jejum de 2 horas',
-        description: 'Ultrassom do coração para avaliar estrutura e função'
+        name: "Ecocardiograma",
+        duration: "30 min",
+        preparation: "Jejum de 2 horas",
+        description: "Ultrassom do coração para avaliar estrutura e função",
       },
       {
-        name: 'Teste de Esforço',
-        duration: '45 min',
-        preparation: 'Roupas confortáveis, evitar cafeína',
-        description: 'Avalia resposta cardiovascular ao exercício'
+        name: "Teste de Esforço",
+        duration: "45 min",
+        preparation: "Roupas confortáveis, evitar cafeína",
+        description: "Avalia resposta cardiovascular ao exercício",
       },
       {
-        name: 'Holter 24h',
-        duration: '24 horas',
-        preparation: 'Banho antes da colocação',
-        description: 'Monitoramento contínuo do ritmo cardíaco'
-      }
-    ]
+        name: "Holter 24h",
+        duration: "24 horas",
+        preparation: "Banho antes da colocação",
+        description: "Monitoramento contínuo do ritmo cardíaco",
+      },
+    ],
   },
   {
-    category: 'Neurologia',
+    category: "Neurologia",
     icon: Brain,
-    color: 'text-purple-500',
+    color: "text-purple-500",
     exams: [
       {
-        name: 'Eletroencefalograma (EEG)',
-        duration: '60 min',
-        preparation: 'Cabelo limpo, sem produtos',
-        description: 'Registra atividade elétrica cerebral'
+        name: "Eletroencefalograma (EEG)",
+        duration: "60 min",
+        preparation: "Cabelo limpo, sem produtos",
+        description: "Registra atividade elétrica cerebral",
       },
       {
-        name: 'Eletromiografia',
-        duration: '45 min',
-        preparation: 'Evitar cremes na pele',
-        description: 'Avalia função muscular e nervosa'
-      }
-    ]
+        name: "Eletromiografia",
+        duration: "45 min",
+        preparation: "Evitar cremes na pele",
+        description: "Avalia função muscular e nervosa",
+      },
+    ],
   },
   {
-    category: 'Oftalmologia',
+    category: "Oftalmologia",
     icon: Eye,
-    color: 'text-blue-500',
+    color: "text-blue-500",
     exams: [
       {
-        name: 'Teste de Acuidade Visual',
-        duration: '20 min',
-        preparation: 'Trazer óculos se usar',
-        description: 'Avalia capacidade de enxergar nitidamente'
+        name: "Teste de Acuidade Visual",
+        duration: "20 min",
+        preparation: "Trazer óculos se usar",
+        description: "Avalia capacidade de enxergar nitidamente",
       },
       {
-        name: 'Tonometria',
-        duration: '15 min',
-        preparation: 'Remover lentes de contato',
-        description: 'Mede pressão intraocular'
+        name: "Tonometria",
+        duration: "15 min",
+        preparation: "Remover lentes de contato",
+        description: "Mede pressão intraocular",
       },
       {
-        name: 'Fundoscopia',
-        duration: '25 min',
-        preparation: 'Pode necessitar dilatação pupilar',
-        description: 'Exame do fundo do olho'
-      }
-    ]
+        name: "Fundoscopia",
+        duration: "25 min",
+        preparation: "Pode necessitar dilatação pupilar",
+        description: "Exame do fundo do olho",
+      },
+    ],
   },
   {
-    category: 'Análises Clínicas',
+    category: "Análises Clínicas",
     icon: Activity,
-    color: 'text-green-500',
+    color: "text-green-500",
     exams: [
       {
-        name: 'Hemograma Completo',
-        duration: '10 min',
-        preparation: 'Jejum de 8 horas',
-        description: 'Análise completa das células sanguíneas'
+        name: "Hemograma Completo",
+        duration: "10 min",
+        preparation: "Jejum de 8 horas",
+        description: "Análise completa das células sanguíneas",
       },
       {
-        name: 'Perfil Lipídico',
-        duration: '10 min',
-        preparation: 'Jejum de 12 horas',
-        description: 'Avalia níveis de colesterol e triglicerídeos'
+        name: "Perfil Lipídico",
+        duration: "10 min",
+        preparation: "Jejum de 12 horas",
+        description: "Avalia níveis de colesterol e triglicerídeos",
       },
       {
-        name: 'Glicemia de Jejum',
-        duration: '10 min',
-        preparation: 'Jejum de 8-12 horas',
-        description: 'Mede níveis de glicose no sangue'
+        name: "Glicemia de Jejum",
+        duration: "10 min",
+        preparation: "Jejum de 8-12 horas",
+        description: "Mede níveis de glicose no sangue",
       },
       {
-        name: 'TSH e T4 Livre',
-        duration: '10 min',
-        preparation: 'Jejum de 4 horas',
-        description: 'Avalia função da tireoide'
+        name: "TSH e T4 Livre",
+        duration: "10 min",
+        preparation: "Jejum de 4 horas",
+        description: "Avalia função da tireoide",
       },
       {
-        name: 'PSA (Homens >40 anos)',
-        duration: '10 min',
-        preparation: 'Evitar relações 48h antes',
-        description: 'Rastreamento de câncer de próstata'
-      }
-    ]
+        name: "PSA (Homens >40 anos)",
+        duration: "10 min",
+        preparation: "Evitar relações 48h antes",
+        description: "Rastreamento de câncer de próstata",
+      },
+    ],
   },
   {
-    category: 'Pneumologia',
+    category: "Pneumologia",
     icon: Stethoscope,
-    color: 'text-teal-500',
+    color: "text-teal-500",
     exams: [
       {
-        name: 'Espirometria',
-        duration: '30 min',
-        preparation: 'Evitar broncodilatadores 6h antes',
-        description: 'Avalia função pulmonar'
+        name: "Espirometria",
+        duration: "30 min",
+        preparation: "Evitar broncodilatadores 6h antes",
+        description: "Avalia função pulmonar",
       },
       {
-        name: 'Radiografia de Tórax',
-        duration: '15 min',
-        preparation: 'Remover objetos metálicos',
-        description: 'Imagem dos pulmões e estruturas torácicas'
-      }
-    ]
-  }
+        name: "Radiografia de Tórax",
+        duration: "15 min",
+        preparation: "Remover objetos metálicos",
+        description: "Imagem dos pulmões e estruturas torácicas",
+      },
+    ],
+  },
 ];
 
 export default function Exames() {
@@ -167,7 +173,9 @@ export default function Exames() {
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h1 className="text-xl font-bold text-primary">Clínica Bem Cuidar</h1>
+                <h1 className="text-xl font-bold text-primary">
+                  Clínica Bem Cuidar
+                </h1>
                 <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
               </div>
             </div>
@@ -196,14 +204,17 @@ export default function Exames() {
             <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
               Exames e <span className="text-clinic-accent">Diagnósticos</span>
             </h1>
-            
+
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-              Tecnologia moderna e precisão diagnóstica para cuidar da sua saúde 
+              Tecnologia moderna e precisão diagnóstica para cuidar da sua saúde
               com exames rápidos e confiáveis.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-clinic-gradient hover:opacity-90 text-white">
+              <Button
+                size="lg"
+                className="bg-clinic-gradient hover:opacity-90 text-white"
+              >
                 <Calendar className="w-5 h-5 mr-2" />
                 Agendar Exame
               </Button>
@@ -228,8 +239,8 @@ export default function Exames() {
                   </div>
                   <h3 className="text-xl font-bold mb-4">Resultados Rápidos</h3>
                   <p className="text-muted-foreground">
-                    Resultados disponíveis no mesmo dia para a maioria dos exames. 
-                    Acesso online através do Portal do Paciente.
+                    Resultados disponíveis no mesmo dia para a maioria dos
+                    exames. Acesso online através do Portal do Paciente.
                   </p>
                 </CardContent>
               </Card>
@@ -239,9 +250,11 @@ export default function Exames() {
                   <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold mb-4">Equipamentos Modernos</h3>
+                  <h3 className="text-xl font-bold mb-4">
+                    Equipamentos Modernos
+                  </h3>
                   <p className="text-muted-foreground">
-                    Tecnologia de ponta e equipamentos calibrados regularmente 
+                    Tecnologia de ponta e equipamentos calibrados regularmente
                     para garantir a precisão dos diagnósticos.
                   </p>
                 </CardContent>
@@ -252,10 +265,12 @@ export default function Exames() {
                   <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-6">
                     <FileText className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold mb-4">Laudos Especializados</h3>
+                  <h3 className="text-xl font-bold mb-4">
+                    Laudos Especializados
+                  </h3>
                   <p className="text-muted-foreground">
-                    Todos os exames são analisados por médicos especialistas 
-                    com laudos detalhados e orientações específicas.
+                    Todos os exames são analisados por médicos especialistas com
+                    laudos detalhados e orientações específicas.
                   </p>
                 </CardContent>
               </Card>
@@ -281,15 +296,22 @@ export default function Exames() {
               {exams.map((category, categoryIndex) => (
                 <div key={categoryIndex}>
                   <div className="flex items-center mb-8">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${category.color} bg-opacity-10`}>
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${category.color} bg-opacity-10`}
+                    >
                       <category.icon className={`w-6 h-6 ${category.color}`} />
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground">{category.category}</h3>
+                    <h3 className="text-2xl font-bold text-foreground">
+                      {category.category}
+                    </h3>
                   </div>
 
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {category.exams.map((exam, examIndex) => (
-                      <Card key={examIndex} className="hover:shadow-lg transition-shadow">
+                      <Card
+                        key={examIndex}
+                        className="hover:shadow-lg transition-shadow"
+                      >
                         <CardHeader>
                           <CardTitle className="text-lg">{exam.name}</CardTitle>
                           <div className="flex items-center space-x-2">
@@ -303,13 +325,17 @@ export default function Exames() {
                           <p className="text-muted-foreground mb-4 text-sm">
                             {exam.description}
                           </p>
-                          
+
                           <div className="bg-clinic-light/50 p-3 rounded-lg">
                             <div className="flex items-start space-x-2">
                               <AlertCircle className="w-4 h-4 text-clinic-accent mt-0.5 flex-shrink-0" />
                               <div>
-                                <h4 className="font-medium text-sm mb-1">Preparação:</h4>
-                                <p className="text-xs text-muted-foreground">{exam.preparation}</p>
+                                <h4 className="font-medium text-sm mb-1">
+                                  Preparação:
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {exam.preparation}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -392,13 +418,17 @@ export default function Exames() {
             <p className="text-xl mb-8 opacity-90">
               Agende agora e tenha resultados rápidos e precisos
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary">
                 <Calendar className="w-5 h-5 mr-2" />
                 Agendar Exame
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-clinic-primary">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-clinic-primary"
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 (244) 945 344 650
               </Button>
@@ -429,29 +459,48 @@ export default function Exames() {
                 </div>
               </div>
               <p className="text-gray-300">
-                Cuidamos da sua saúde com humanização, tecnologia e excelência médica.
+                Cuidamos da sua saúde com humanização, tecnologia e excelência
+                médica.
               </p>
             </div>
 
             <div>
               <h5 className="font-semibold mb-4">Contato</h5>
               <div className="space-y-2 text-gray-300">
-                <p><MapPin className="w-4 h-4 inline mr-2" />Av. 21 de Janeiro, 351, Benfica</p>
-                <p><Phone className="w-4 h-4 inline mr-2" />+244 945 344 650</p>
-                <p><Mail className="w-4 h-4 inline mr-2" />recepcao@bemcuidar.co.ao</p>
+                <p>
+                  <MapPin className="w-4 h-4 inline mr-2" />
+                  Av. 21 de Janeiro, 351, Benfica
+                </p>
+                <p>
+                  <Phone className="w-4 h-4 inline mr-2" />
+                  +244 945 344 650
+                </p>
+                <p>
+                  <Mail className="w-4 h-4 inline mr-2" />
+                  recepcao@bemcuidar.co.ao
+                </p>
               </div>
             </div>
 
             <div>
               <h5 className="font-semibold mb-4">Links Úteis</h5>
               <div className="space-y-2">
-                <Link to="/portal" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/portal"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Portal do Paciente
                 </Link>
-                <Link to="/sobre" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/sobre"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Sobre a Clínica
                 </Link>
-                <Link to="/contato" className="block text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/contato"
+                  className="block text-gray-300 hover:text-white transition-colors"
+                >
                   Contato
                 </Link>
               </div>

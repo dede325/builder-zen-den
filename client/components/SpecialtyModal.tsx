@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { LucideIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export interface SpecialtyInfo {
   name: string;
@@ -27,7 +27,11 @@ interface SpecialtyModalProps {
   onClose: () => void;
 }
 
-export default function SpecialtyModal({ specialty, isOpen, onClose }: SpecialtyModalProps) {
+export default function SpecialtyModal({
+  specialty,
+  isOpen,
+  onClose,
+}: SpecialtyModalProps) {
   if (!specialty) return null;
 
   const IconComponent = specialty.icon;
@@ -64,7 +68,9 @@ export default function SpecialtyModal({ specialty, isOpen, onClose }: Specialty
 
           {/* Descrição detalhada */}
           <div>
-            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">Sobre a Especialidade</h4>
+            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">
+              Sobre a Especialidade
+            </h4>
             <p className="text-muted-foreground leading-relaxed">
               {specialty.detailedDescription}
             </p>
@@ -72,10 +78,15 @@ export default function SpecialtyModal({ specialty, isOpen, onClose }: Specialty
 
           {/* Condições tratadas */}
           <div>
-            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">Principais Condições Tratadas</h4>
+            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">
+              Principais Condições Tratadas
+            </h4>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {specialty.conditions.map((condition, index) => (
-                <li key={index} className="flex items-center text-sm text-muted-foreground">
+                <li
+                  key={index}
+                  className="flex items-center text-sm text-muted-foreground"
+                >
                   <div className="w-2 h-2 bg-clinic-accent rounded-full mr-2" />
                   {condition}
                 </li>
@@ -85,10 +96,15 @@ export default function SpecialtyModal({ specialty, isOpen, onClose }: Specialty
 
           {/* Procedimentos */}
           <div>
-            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">Principais Procedimentos</h4>
+            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">
+              Principais Procedimentos
+            </h4>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {specialty.procedures.map((procedure, index) => (
-                <li key={index} className="flex items-center text-sm text-muted-foreground">
+                <li
+                  key={index}
+                  className="flex items-center text-sm text-muted-foreground"
+                >
                   <div className="w-2 h-2 bg-clinic-accent rounded-full mr-2" />
                   {procedure}
                 </li>
@@ -98,7 +114,9 @@ export default function SpecialtyModal({ specialty, isOpen, onClose }: Specialty
 
           {/* Especialistas */}
           <div>
-            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">Nossa Equipe</h4>
+            <h4 className="text-lg font-semibold mb-3 text-clinic-primary">
+              Nossa Equipe
+            </h4>
             <div className="flex flex-wrap gap-2">
               {specialty.specialists.map((specialist, index) => (
                 <span

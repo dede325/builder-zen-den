@@ -1,5 +1,5 @@
-import { UserRole, Permission, PermissionManager } from './types';
-import { Patient } from './types';
+import { UserRole, Permission, PermissionManager } from "./types";
+import { Patient } from "./types";
 
 export interface UserTypeInfo {
   role: UserRole;
@@ -10,48 +10,51 @@ export interface UserTypeInfo {
 }
 
 export const USER_SEEDS: Record<string, UserTypeInfo> = {
-  'paciente@bemcuidar.co.ao': {
+  "paciente@bemcuidar.co.ao": {
     role: UserRole.PATIENT,
     permissions: PermissionManager.getPermissionsForRole(UserRole.PATIENT),
-    password: '123456',
-    description: 'Acesso completo ao portal do paciente',
-    displayName: 'Paciente (João Silva)'
+    password: "123456",
+    description: "Acesso completo ao portal do paciente",
+    displayName: "Paciente (João Silva)",
   },
-  'medico@bemcuidar.co.ao': {
+  "medico@bemcuidar.co.ao": {
     role: UserRole.DOCTOR,
     permissions: PermissionManager.getPermissionsForRole(UserRole.DOCTOR),
-    password: 'medico123',
-    description: 'Acesso médico com visualização de pacientes',
-    displayName: 'Médico (Dr. António Silva)'
+    password: "medico123",
+    description: "Acesso médico com visualização de pacientes",
+    displayName: "Médico (Dr. António Silva)",
   },
-  'enfermeira@bemcuidar.co.ao': {
+  "enfermeira@bemcuidar.co.ao": {
     role: UserRole.NURSE,
     permissions: PermissionManager.getPermissionsForRole(UserRole.NURSE),
-    password: 'enfermeira123',
-    description: 'Acesso de enfermagem com funções limitadas',
-    displayName: 'Enfermeira (Ana Costa)'
+    password: "enfermeira123",
+    description: "Acesso de enfermagem com funções limitadas",
+    displayName: "Enfermeira (Ana Costa)",
   },
-  'admin@bemcuidar.co.ao': {
+  "admin@bemcuidar.co.ao": {
     role: UserRole.ADMIN,
     permissions: PermissionManager.getPermissionsForRole(UserRole.ADMIN),
-    password: 'admin123',
-    description: 'Acesso total ao sistema',
-    displayName: 'Administrador (Carlos Mendes)'
+    password: "admin123",
+    description: "Acesso total ao sistema",
+    displayName: "Administrador (Carlos Mendes)",
   },
-  'recepcao@bemcuidar.co.ao': {
+  "recepcao@bemcuidar.co.ao": {
     role: UserRole.RECEPTIONIST,
     permissions: PermissionManager.getPermissionsForRole(UserRole.RECEPTIONIST),
-    password: 'recepcao123',
-    description: 'Acesso de recepção para agendamentos',
-    displayName: 'Recepcionista (Sofia Lima)'
-  }
+    password: "recepcao123",
+    description: "Acesso de recepção para agendamentos",
+    displayName: "Recepcionista (Sofia Lima)",
+  },
 };
 
 export function getUserTypeByEmail(email: string): UserTypeInfo | null {
   return USER_SEEDS[email] || null;
 }
 
-export function validateUserCredentials(email: string, password: string): boolean {
+export function validateUserCredentials(
+  email: string,
+  password: string,
+): boolean {
   const userType = getUserTypeByEmail(email);
   return userType ? userType.password === password : false;
 }
@@ -81,6 +84,6 @@ export function getLoginHints(): LoginHint[] {
     password: info.password,
     role: info.role,
     description: info.description,
-    displayName: info.displayName
+    displayName: info.displayName,
   }));
 }

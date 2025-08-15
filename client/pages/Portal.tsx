@@ -1,23 +1,36 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  ArrowLeft, 
-  Calendar, 
-  FileText, 
-  User, 
-  Settings, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import {
+  ArrowLeft,
+  Calendar,
+  FileText,
+  User,
+  Settings,
+  Clock,
+  CheckCircle,
+  AlertCircle,
   Edit,
   Download,
   Plus,
@@ -25,8 +38,8 @@ import {
   Bell,
   Lock,
   LogOut,
-  Loader2
-} from 'lucide-react';
+  Loader2,
+} from "lucide-react";
 
 interface Patient {
   id: string;
@@ -45,7 +58,7 @@ interface Appointment {
   doctor: string;
   date: string;
   time: string;
-  status: 'scheduled' | 'completed' | 'cancelled';
+  status: "scheduled" | "completed" | "cancelled";
   notes?: string;
 }
 
@@ -55,7 +68,7 @@ interface ExamResult {
   name: string;
   type: string;
   date: string;
-  status: 'pending' | 'ready' | 'viewed';
+  status: "pending" | "ready" | "viewed";
   resultUrl?: string;
   notes?: string;
 }
@@ -68,27 +81,28 @@ interface NotificationSettings {
 
 export default function Portal() {
   const { toast } = useToast();
-  
+
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<Patient | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  
+
   // Data state
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [examResults, setExamResults] = useState<ExamResult[]>([]);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileData, setProfileData] = useState<Patient | null>(null);
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
-    emailReminders: true,
-    smsReminders: false,
-    examNotifications: true
-  });
+  const [notificationSettings, setNotificationSettings] =
+    useState<NotificationSettings>({
+      emailReminders: true,
+      smsReminders: false,
+      examNotifications: true,
+    });
   const [loginHints, setLoginHints] = useState<any[]>([]);
-  
+
   // Loading states
   const [isLoadingAppointments, setIsLoadingAppointments] = useState(false);
   const [isLoadingExams, setIsLoadingExams] = useState(false);
@@ -99,13 +113,13 @@ export default function Portal() {
   useEffect(() => {
     const loadLoginHints = async () => {
       try {
-        const response = await fetch('/api/portal/auth/login-hints');
+        const response = await fetch("/api/portal/auth/login-hints");
         const result = await response.json();
         if (result.success) {
           setLoginHints(result.data);
         }
       } catch (error) {
-        console.error('Error loading login hints:', error);
+        console.error("Error loading login hints:", error);
       }
     };
 
@@ -115,12 +129,12 @@ export default function Portal() {
   // API Helper
   const apiCall = async (url: string, options: RequestInit = {}) => {
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     };
 
     if (authToken) {
-      headers['Authorization'] = `Bearer ${authToken}`;
+      headers["Authorization"] = `Bearer ${authToken}`;
     }
 
     const response = await fetch(url, {
@@ -147,10 +161,10 @@ export default function Portal() {
     }
 
     setIsLoggingIn(true);
-    
+
     try {
-      const response = await apiCall('/api/portal/auth/login', {
-        method: 'POST',
+      const response = await apiCall("/api/portal/auth/login", {
+        method: "POST",
         body: JSON.stringify(loginData),
       });
 
@@ -159,7 +173,7 @@ export default function Portal() {
         setAuthToken(response.token);
         setProfileData(response.patient);
         setIsAuthenticated(true);
-        
+
         toast({
           title: "Sucesso",
           description: "Login realizado com sucesso",
@@ -175,7 +189,7 @@ export default function Portal() {
         });
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       toast({
         title: "Erro",
         description: "Erro de conexão. Tente novamente.",
@@ -188,17 +202,17 @@ export default function Portal() {
 
   const handleLogout = async () => {
     try {
-      await apiCall('/api/portal/auth/logout', { method: 'POST' });
+      await apiCall("/api/portal/auth/logout", { method: "POST" });
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
-    
+
     setIsAuthenticated(false);
     setCurrentUser(null);
     setAuthToken(null);
     setAppointments([]);
     setExamResults([]);
-    setActiveTab('dashboard');
+    setActiveTab("dashboard");
     setProfileData(null);
   };
 
@@ -207,19 +221,19 @@ export default function Portal() {
     await Promise.all([
       loadAppointments(),
       loadExamResults(),
-      loadNotificationSettings()
+      loadNotificationSettings(),
     ]);
   };
 
   const loadAppointments = async () => {
     setIsLoadingAppointments(true);
     try {
-      const response = await apiCall('/api/portal/appointments');
+      const response = await apiCall("/api/portal/appointments");
       if (response.success) {
         setAppointments(response.data);
       }
     } catch (error) {
-      console.error('Error loading appointments:', error);
+      console.error("Error loading appointments:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar consultas",
@@ -233,12 +247,12 @@ export default function Portal() {
   const loadExamResults = async () => {
     setIsLoadingExams(true);
     try {
-      const response = await apiCall('/api/portal/exams');
+      const response = await apiCall("/api/portal/exams");
       if (response.success) {
         setExamResults(response.data);
       }
     } catch (error) {
-      console.error('Error loading exams:', error);
+      console.error("Error loading exams:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar exames",
@@ -251,12 +265,12 @@ export default function Portal() {
 
   const loadNotificationSettings = async () => {
     try {
-      const response = await apiCall('/api/portal/notifications');
+      const response = await apiCall("/api/portal/notifications");
       if (response.success) {
         setNotificationSettings(response.data);
       }
     } catch (error) {
-      console.error('Error loading notification settings:', error);
+      console.error("Error loading notification settings:", error);
     }
   };
 
@@ -266,8 +280,8 @@ export default function Portal() {
 
     setIsSavingProfile(true);
     try {
-      const response = await apiCall('/api/portal/profile', {
-        method: 'PATCH',
+      const response = await apiCall("/api/portal/profile", {
+        method: "PATCH",
         body: JSON.stringify({
           name: profileData.name,
           phone: profileData.phone,
@@ -290,7 +304,7 @@ export default function Portal() {
         });
       }
     } catch (error) {
-      console.error('Error saving profile:', error);
+      console.error("Error saving profile:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar perfil",
@@ -302,15 +316,19 @@ export default function Portal() {
   };
 
   // Appointment management
-  const createAppointment = async (appointmentData: { specialty: string; preferredDate: string; notes?: string }) => {
+  const createAppointment = async (appointmentData: {
+    specialty: string;
+    preferredDate: string;
+    notes?: string;
+  }) => {
     try {
-      const response = await apiCall('/api/portal/appointments', {
-        method: 'POST',
+      const response = await apiCall("/api/portal/appointments", {
+        method: "POST",
         body: JSON.stringify(appointmentData),
       });
 
       if (response.success) {
-        setAppointments(prev => [...prev, response.data]);
+        setAppointments((prev) => [...prev, response.data]);
         toast({
           title: "Sucesso",
           description: response.message || "Consulta agendada com sucesso",
@@ -325,7 +343,7 @@ export default function Portal() {
         return false;
       }
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      console.error("Error creating appointment:", error);
       toast({
         title: "Erro",
         description: "Erro ao agendar consulta",
@@ -337,17 +355,20 @@ export default function Portal() {
 
   const cancelAppointment = async (appointmentId: string) => {
     try {
-      const response = await apiCall(`/api/portal/appointments/${appointmentId}`, {
-        method: 'DELETE',
-      });
+      const response = await apiCall(
+        `/api/portal/appointments/${appointmentId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.success) {
-        setAppointments(prev => 
-          prev.map(app => 
-            app.id === appointmentId 
-              ? { ...app, status: 'cancelled' as const }
-              : app
-          )
+        setAppointments((prev) =>
+          prev.map((app) =>
+            app.id === appointmentId
+              ? { ...app, status: "cancelled" as const }
+              : app,
+          ),
         );
         toast({
           title: "Sucesso",
@@ -355,7 +376,7 @@ export default function Portal() {
         });
       }
     } catch (error) {
-      console.error('Error cancelling appointment:', error);
+      console.error("Error cancelling appointment:", error);
       toast({
         title: "Erro",
         description: "Erro ao cancelar consulta",
@@ -368,27 +389,27 @@ export default function Portal() {
   const markExamAsViewed = async (examId: string) => {
     try {
       const response = await apiCall(`/api/portal/exams/${examId}/viewed`, {
-        method: 'PATCH',
+        method: "PATCH",
       });
 
       if (response.success) {
-        setExamResults(prev =>
-          prev.map(exam =>
-            exam.id === examId
-              ? { ...exam, status: 'viewed' as const }
-              : exam
-          )
+        setExamResults((prev) =>
+          prev.map((exam) =>
+            exam.id === examId ? { ...exam, status: "viewed" as const } : exam,
+          ),
         );
       }
     } catch (error) {
-      console.error('Error marking exam as viewed:', error);
+      console.error("Error marking exam as viewed:", error);
     }
   };
 
   const downloadExam = async (examId: string) => {
     try {
-      const response = await apiCall(`/api/portal/exams/${examId}/download-file`);
-      
+      const response = await apiCall(
+        `/api/portal/exams/${examId}/download-file`,
+      );
+
       // For demo, we'll show a success message
       // In production, this would trigger an actual file download
       await markExamAsViewed(examId);
@@ -397,7 +418,7 @@ export default function Portal() {
         description: "Download iniciado com sucesso",
       });
     } catch (error) {
-      console.error('Error downloading exam:', error);
+      console.error("Error downloading exam:", error);
       toast({
         title: "Erro",
         description: "Erro ao fazer download do exame",
@@ -408,20 +429,29 @@ export default function Portal() {
 
   // Dashboard statistics
   const getDashboardStats = () => {
-    const scheduledAppointments = appointments.filter(a => a.status === 'scheduled');
-    const readyExams = examResults.filter(e => e.status === 'ready');
-    const thisMonthAppointments = appointments.filter(a => {
+    const scheduledAppointments = appointments.filter(
+      (a) => a.status === "scheduled",
+    );
+    const readyExams = examResults.filter((e) => e.status === "ready");
+    const thisMonthAppointments = appointments.filter((a) => {
       const appointmentDate = new Date(a.date);
       const now = new Date();
-      return appointmentDate.getMonth() === now.getMonth() && 
-             appointmentDate.getFullYear() === now.getFullYear();
+      return (
+        appointmentDate.getMonth() === now.getMonth() &&
+        appointmentDate.getFullYear() === now.getFullYear()
+      );
     });
 
     return {
-      nextAppointment: scheduledAppointments[0]?.date ? new Date(scheduledAppointments[0].date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '-',
+      nextAppointment: scheduledAppointments[0]?.date
+        ? new Date(scheduledAppointments[0].date).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "-",
       pendingExams: readyExams.length,
       thisMonthAppointments: thisMonthAppointments.length,
-      notifications: readyExams.length + scheduledAppointments.length
+      notifications: readyExams.length + scheduledAppointments.length,
     };
   };
 
@@ -439,7 +469,9 @@ export default function Portal() {
                   className="w-12 h-12 object-contain"
                 />
                 <div>
-                  <h1 className="text-xl font-bold text-primary">Portal do Paciente</h1>
+                  <h1 className="text-xl font-bold text-primary">
+                    Portal do Paciente
+                  </h1>
                   <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
                 </div>
               </div>
@@ -475,7 +507,12 @@ export default function Portal() {
                     id="email"
                     type="email"
                     value={loginData.email}
-                    onChange={(e) => setLoginData(prev => ({...prev, email: e.target.value}))}
+                    onChange={(e) =>
+                      setLoginData((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
                     placeholder="seu@email.com"
                     disabled={isLoggingIn}
                   />
@@ -486,16 +523,23 @@ export default function Portal() {
                     id="password"
                     type="password"
                     value={loginData.password}
-                    onChange={(e) => setLoginData(prev => ({...prev, password: e.target.value}))}
+                    onChange={(e) =>
+                      setLoginData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
                     placeholder="••••••••"
                     disabled={isLoggingIn}
-                    onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                    onKeyPress={(e) => e.key === "Enter" && handleLogin()}
                   />
                 </div>
-                <Button 
-                  onClick={handleLogin} 
+                <Button
+                  onClick={handleLogin}
                   className="w-full bg-clinic-gradient hover:opacity-90"
-                  disabled={!loginData.email || !loginData.password || isLoggingIn}
+                  disabled={
+                    !loginData.email || !loginData.password || isLoggingIn
+                  }
                 >
                   {isLoggingIn ? (
                     <>
@@ -503,25 +547,40 @@ export default function Portal() {
                       Entrando...
                     </>
                   ) : (
-                    'Entrar'
+                    "Entrar"
                   )}
                 </Button>
                 <div className="mt-6 border-t pt-6">
-                  <h3 className="font-semibold mb-4 text-center">Usuários para Teste</h3>
+                  <h3 className="font-semibold mb-4 text-center">
+                    Usuários para Teste
+                  </h3>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
                     {loginHints.map((hint, index) => (
                       <div
                         key={index}
                         className="bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-                        onClick={() => setLoginData({ email: hint.email, password: hint.password })}
+                        onClick={() =>
+                          setLoginData({
+                            email: hint.email,
+                            password: hint.password,
+                          })
+                        }
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <p className="font-semibold text-sm">{hint.displayName}</p>
-                            <p className="text-xs text-muted-foreground mb-1">{hint.description}</p>
+                            <p className="font-semibold text-sm">
+                              {hint.displayName}
+                            </p>
+                            <p className="text-xs text-muted-foreground mb-1">
+                              {hint.description}
+                            </p>
                             <div className="flex space-x-4 text-xs">
-                              <span className="text-blue-600">📧 {hint.email}</span>
-                              <span className="text-green-600">🔑 {hint.password}</span>
+                              <span className="text-blue-600">
+                                📧 {hint.email}
+                              </span>
+                              <span className="text-green-600">
+                                🔑 {hint.password}
+                              </span>
                             </div>
                           </div>
                           <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded capitalize">
@@ -558,8 +617,12 @@ export default function Portal() {
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h1 className="text-xl font-bold text-primary">Portal do Paciente</h1>
-                <p className="text-xs text-muted-foreground">Bem-vindo, {currentUser?.name}</p>
+                <h1 className="text-xl font-bold text-primary">
+                  Portal do Paciente
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  Bem-vindo, {currentUser?.name}
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -592,14 +655,16 @@ export default function Portal() {
           {/* Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
             {/* Notifications Banner */}
-            {examResults.filter(e => e.status === 'ready').length > 0 && (
+            {examResults.filter((e) => e.status === "ready").length > 0 && (
               <Card className="bg-green-50 border-green-200">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-6 h-6 text-green-600" />
                     <div className="flex-1">
                       <h4 className="font-semibold text-green-800">
-                        Você tem {examResults.filter(e => e.status === 'ready').length} resultado(s) de exame disponível(is)!
+                        Você tem{" "}
+                        {examResults.filter((e) => e.status === "ready").length}{" "}
+                        resultado(s) de exame disponível(is)!
                       </h4>
                       <p className="text-sm text-green-700">
                         Clique em "Ver Exames" para acessar seus resultados.
@@ -608,7 +673,7 @@ export default function Portal() {
                     <Button
                       size="sm"
                       className="bg-green-600 hover:bg-green-700"
-                      onClick={() => setActiveTab('exams')}
+                      onClick={() => setActiveTab("exams")}
                     >
                       Ver Exames
                     </Button>
@@ -617,25 +682,33 @@ export default function Portal() {
               </Card>
             )}
 
-            {appointments.filter(a => a.status === 'scheduled').length > 0 && (
+            {appointments.filter((a) => a.status === "scheduled").length >
+              0 && (
               <Card className="bg-blue-50 border-blue-200">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
                     <Calendar className="w-6 h-6 text-blue-600" />
                     <div className="flex-1">
                       <h4 className="font-semibold text-blue-800">
-                        Você tem {appointments.filter(a => a.status === 'scheduled').length} consulta(s) agendada(s)
+                        Você tem{" "}
+                        {
+                          appointments.filter((a) => a.status === "scheduled")
+                            .length
+                        }{" "}
+                        consulta(s) agendada(s)
                       </h4>
                       <p className="text-sm text-blue-700">
-                        Próxima consulta: {appointments.filter(a => a.status === 'scheduled')[0] &&
-                          `${appointments.filter(a => a.status === 'scheduled')[0].specialty} em ${new Date(appointments.filter(a => a.status === 'scheduled')[0].date).toLocaleDateString('pt-BR')}`
-                        }
+                        Próxima consulta:{" "}
+                        {appointments.filter(
+                          (a) => a.status === "scheduled",
+                        )[0] &&
+                          `${appointments.filter((a) => a.status === "scheduled")[0].specialty} em ${new Date(appointments.filter((a) => a.status === "scheduled")[0].date).toLocaleDateString("pt-BR")}`}
                       </p>
                     </div>
                     <Button
                       size="sm"
                       className="bg-blue-600 hover:bg-blue-700"
-                      onClick={() => setActiveTab('appointments')}
+                      onClick={() => setActiveTab("appointments")}
                     >
                       Ver Consultas
                     </Button>
@@ -645,27 +718,42 @@ export default function Portal() {
             )}
             {/* Quick Actions */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('appointments')}>
+              <Card
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => setActiveTab("appointments")}
+              >
                 <CardContent className="p-6 text-center">
                   <Calendar className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Agendar Consulta</h3>
-                  <p className="text-sm text-muted-foreground">Agende sua próxima consulta rapidamente</p>
+                  <p className="text-sm text-muted-foreground">
+                    Agende sua próxima consulta rapidamente
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('exams')}>
+              <Card
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => setActiveTab("exams")}
+              >
                 <CardContent className="p-6 text-center">
                   <FileText className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Ver Exames</h3>
-                  <p className="text-sm text-muted-foreground">Acesse seus resultados de exames</p>
+                  <p className="text-sm text-muted-foreground">
+                    Acesse seus resultados de exames
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('profile')}>
+              <Card
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => setActiveTab("profile")}
+              >
                 <CardContent className="p-6 text-center">
                   <User className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Atualizar Dados</h3>
-                  <p className="text-sm text-muted-foreground">Mantenha suas informações atualizadas</p>
+                  <p className="text-sm text-muted-foreground">
+                    Mantenha suas informações atualizadas
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -676,11 +764,21 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Próxima Consulta</p>
-                      <p className="text-2xl font-bold">{stats.nextAppointment}</p>
-                      {appointments.filter(a => a.status === 'scheduled')[0] && (
+                      <p className="text-sm text-muted-foreground">
+                        Próxima Consulta
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {stats.nextAppointment}
+                      </p>
+                      {appointments.filter(
+                        (a) => a.status === "scheduled",
+                      )[0] && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          {appointments.filter(a => a.status === 'scheduled')[0].specialty}
+                          {
+                            appointments.filter(
+                              (a) => a.status === "scheduled",
+                            )[0].specialty
+                          }
                         </p>
                       )}
                     </div>
@@ -693,9 +791,13 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Exames Disponíveis</p>
+                      <p className="text-sm text-muted-foreground">
+                        Exames Disponíveis
+                      </p>
                       <p className="text-2xl font-bold">{stats.pendingExams}</p>
-                      <p className="text-xs text-muted-foreground mt-1">Prontos para download</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Prontos para download
+                      </p>
                     </div>
                     <FileText className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -706,9 +808,15 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Consultas Este Mês</p>
-                      <p className="text-2xl font-bold">{stats.thisMonthAppointments}</p>
-                      <p className="text-xs text-muted-foreground mt-1">Realizadas/Agendadas</p>
+                      <p className="text-sm text-muted-foreground">
+                        Consultas Este Mês
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {stats.thisMonthAppointments}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Realizadas/Agendadas
+                      </p>
                     </div>
                     <CheckCircle className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -719,9 +827,13 @@ export default function Portal() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Total de Exames</p>
+                      <p className="text-sm text-muted-foreground">
+                        Total de Exames
+                      </p>
                       <p className="text-2xl font-bold">{examResults.length}</p>
-                      <p className="text-xs text-muted-foreground mt-1">No histórico</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        No histórico
+                      </p>
                     </div>
                     <Bell className="w-8 h-8 text-clinic-accent" />
                   </div>
@@ -738,7 +850,7 @@ export default function Portal() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setActiveTab('appointments')}
+                      onClick={() => setActiveTab("appointments")}
                     >
                       Ver Todas
                     </Button>
@@ -746,19 +858,33 @@ export default function Portal() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {appointments.filter(a => a.status === 'scheduled').slice(0, 3).map(appointment => (
-                      <div key={appointment.id} className="flex items-center space-x-4 p-3 bg-blue-50 rounded-lg">
-                        <Calendar className="w-8 h-8 text-blue-500" />
-                        <div className="flex-1">
-                          <p className="font-medium">{appointment.specialty}</p>
-                          <p className="text-sm text-muted-foreground">{appointment.doctor}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(appointment.date).toLocaleDateString('pt-BR')} às {appointment.time}
-                          </p>
+                    {appointments
+                      .filter((a) => a.status === "scheduled")
+                      .slice(0, 3)
+                      .map((appointment) => (
+                        <div
+                          key={appointment.id}
+                          className="flex items-center space-x-4 p-3 bg-blue-50 rounded-lg"
+                        >
+                          <Calendar className="w-8 h-8 text-blue-500" />
+                          <div className="flex-1">
+                            <p className="font-medium">
+                              {appointment.specialty}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {appointment.doctor}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(appointment.date).toLocaleDateString(
+                                "pt-BR",
+                              )}{" "}
+                              às {appointment.time}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    {appointments.filter(a => a.status === 'scheduled').length === 0 && (
+                      ))}
+                    {appointments.filter((a) => a.status === "scheduled")
+                      .length === 0 && (
                       <p className="text-muted-foreground text-center py-4">
                         Nenhuma consulta agendada
                       </p>
@@ -774,7 +900,7 @@ export default function Portal() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setActiveTab('exams')}
+                      onClick={() => setActiveTab("exams")}
                     >
                       Ver Todos
                     </Button>
@@ -782,26 +908,35 @@ export default function Portal() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {examResults.filter(e => e.status === 'ready').slice(0, 3).map(exam => (
-                      <div key={exam.id} className="flex items-center space-x-4 p-3 bg-green-50 rounded-lg">
-                        <FileText className="w-8 h-8 text-green-500" />
-                        <div className="flex-1">
-                          <p className="font-medium">{exam.name}</p>
-                          <p className="text-sm text-muted-foreground">{exam.type}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(exam.date).toLocaleDateString('pt-BR')}
-                          </p>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => downloadExam(exam.id)}
+                    {examResults
+                      .filter((e) => e.status === "ready")
+                      .slice(0, 3)
+                      .map((exam) => (
+                        <div
+                          key={exam.id}
+                          className="flex items-center space-x-4 p-3 bg-green-50 rounded-lg"
                         >
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    {examResults.filter(e => e.status === 'ready').length === 0 && (
+                          <FileText className="w-8 h-8 text-green-500" />
+                          <div className="flex-1">
+                            <p className="font-medium">{exam.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {exam.type}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(exam.date).toLocaleDateString("pt-BR")}
+                            </p>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => downloadExam(exam.id)}
+                          >
+                            <Download className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    {examResults.filter((e) => e.status === "ready").length ===
+                      0 && (
                       <p className="text-muted-foreground text-center py-4">
                         Nenhum exame disponível
                       </p>
@@ -819,19 +954,27 @@ export default function Portal() {
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-blue-700">Última Consulta</h4>
+                    <h4 className="font-semibold text-blue-700">
+                      Última Consulta
+                    </h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {appointments.filter(a => a.status === 'completed')[0] ?
-                        new Date(appointments.filter(a => a.status === 'completed')[0].date).toLocaleDateString('pt-BR') :
-                        'Nenhuma consulta realizada'
-                      }
+                      {appointments.filter((a) => a.status === "completed")[0]
+                        ? new Date(
+                            appointments.filter(
+                              (a) => a.status === "completed",
+                            )[0].date,
+                          ).toLocaleDateString("pt-BR")
+                        : "Nenhuma consulta realizada"}
                     </p>
                   </div>
 
                   <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-semibold text-green-700">Exames Realizados</h4>
+                    <h4 className="font-semibold text-green-700">
+                      Exames Realizados
+                    </h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {examResults.filter(e => e.status !== 'pending').length} exames completos
+                      {examResults.filter((e) => e.status !== "pending").length}{" "}
+                      exames completos
                     </p>
                   </div>
 
@@ -847,12 +990,14 @@ export default function Portal() {
           </TabsContent>
 
           {/* Continue with other tabs... Due to length constraints, I'll implement the key functionality here */}
-          
+
           {/* Appointments Tab */}
           <TabsContent value="appointments" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Minhas Consultas</h2>
-              <AppointmentDialog onAppointmentCreated={(data) => createAppointment(data)} />
+              <AppointmentDialog
+                onAppointmentCreated={(data) => createAppointment(data)}
+              />
             </div>
 
             {isLoadingAppointments ? (
@@ -867,28 +1012,47 @@ export default function Portal() {
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold">{appointment.specialty}</h3>
-                            <Badge variant={
-                              appointment.status === 'scheduled' ? 'default' :
-                              appointment.status === 'completed' ? 'secondary' : 'destructive'
-                            }>
-                              {appointment.status === 'scheduled' ? 'Agendada' :
-                               appointment.status === 'completed' ? 'Realizada' : 'Cancelada'}
+                            <h3 className="font-semibold">
+                              {appointment.specialty}
+                            </h3>
+                            <Badge
+                              variant={
+                                appointment.status === "scheduled"
+                                  ? "default"
+                                  : appointment.status === "completed"
+                                    ? "secondary"
+                                    : "destructive"
+                              }
+                            >
+                              {appointment.status === "scheduled"
+                                ? "Agendada"
+                                : appointment.status === "completed"
+                                  ? "Realizada"
+                                  : "Cancelada"}
                             </Badge>
                           </div>
-                          <p className="text-muted-foreground">{appointment.doctor}</p>
+                          <p className="text-muted-foreground">
+                            {appointment.doctor}
+                          </p>
                           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span>📅 {new Date(appointment.date).toLocaleDateString('pt-BR')}</span>
+                            <span>
+                              📅{" "}
+                              {new Date(appointment.date).toLocaleDateString(
+                                "pt-BR",
+                              )}
+                            </span>
                             <span>🕐 {appointment.time}</span>
                           </div>
                           {appointment.notes && (
-                            <p className="text-sm bg-gray-50 p-2 rounded">{appointment.notes}</p>
+                            <p className="text-sm bg-gray-50 p-2 rounded">
+                              {appointment.notes}
+                            </p>
                           )}
                         </div>
                         <div className="flex flex-col space-y-2">
-                          {appointment.status === 'scheduled' && (
-                            <Button 
-                              variant="destructive" 
+                          {appointment.status === "scheduled" && (
+                            <Button
+                              variant="destructive"
                               size="sm"
                               onClick={() => cancelAppointment(appointment.id)}
                             >
@@ -903,7 +1067,9 @@ export default function Portal() {
                 {appointments.length === 0 && (
                   <Card>
                     <CardContent className="p-8 text-center">
-                      <p className="text-muted-foreground">Nenhuma consulta encontrada</p>
+                      <p className="text-muted-foreground">
+                        Nenhuma consulta encontrada
+                      </p>
                     </CardContent>
                   </Card>
                 )}
@@ -928,24 +1094,34 @@ export default function Portal() {
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2">
                             <h3 className="font-semibold">{exam.name}</h3>
-                            <Badge variant={
-                              exam.status === 'ready' ? 'default' :
-                              exam.status === 'viewed' ? 'secondary' : 'outline'
-                            }>
-                              {exam.status === 'ready' ? 'Disponível' :
-                               exam.status === 'viewed' ? 'Visualizado' : 'Pendente'}
+                            <Badge
+                              variant={
+                                exam.status === "ready"
+                                  ? "default"
+                                  : exam.status === "viewed"
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                            >
+                              {exam.status === "ready"
+                                ? "Disponível"
+                                : exam.status === "viewed"
+                                  ? "Visualizado"
+                                  : "Pendente"}
                             </Badge>
                           </div>
                           <p className="text-muted-foreground">{exam.type}</p>
                           <p className="text-sm text-muted-foreground">
-                            📅 {new Date(exam.date).toLocaleDateString('pt-BR')}
+                            📅 {new Date(exam.date).toLocaleDateString("pt-BR")}
                           </p>
                           {exam.notes && (
-                            <p className="text-sm bg-gray-50 p-2 rounded">{exam.notes}</p>
+                            <p className="text-sm bg-gray-50 p-2 rounded">
+                              {exam.notes}
+                            </p>
                           )}
                         </div>
                         <div className="flex flex-col space-y-2">
-                          {exam.status === 'ready' && (
+                          {exam.status === "ready" && (
                             <>
                               <Button
                                 size="sm"
@@ -965,7 +1141,7 @@ export default function Portal() {
                               </Button>
                             </>
                           )}
-                          {exam.status === 'viewed' && (
+                          {exam.status === "viewed" && (
                             <Button
                               variant="outline"
                               size="sm"
@@ -983,7 +1159,9 @@ export default function Portal() {
                 {examResults.length === 0 && (
                   <Card>
                     <CardContent className="p-8 text-center">
-                      <p className="text-muted-foreground">Nenhum exame encontrado</p>
+                      <p className="text-muted-foreground">
+                        Nenhum exame encontrado
+                      </p>
                     </CardContent>
                   </Card>
                 )}
@@ -1001,7 +1179,7 @@ export default function Portal() {
                 disabled={isSavingProfile}
               >
                 <Edit className="w-4 h-4 mr-2" />
-                {isEditingProfile ? 'Cancelar' : 'Editar'}
+                {isEditingProfile ? "Cancelar" : "Editar"}
               </Button>
             </div>
 
@@ -1016,25 +1194,35 @@ export default function Portal() {
                       <div>
                         <Label>Nome Completo</Label>
                         <Input
-                          value={profileData?.name || ''}
-                          onChange={(e) => setProfileData(prev => prev ? {...prev, name: e.target.value} : null)}
+                          value={profileData?.name || ""}
+                          onChange={(e) =>
+                            setProfileData((prev) =>
+                              prev ? { ...prev, name: e.target.value } : null,
+                            )
+                          }
                           disabled={isSavingProfile}
                         />
                       </div>
                       <div>
                         <Label>E-mail</Label>
                         <Input
-                          value={profileData?.email || ''}
+                          value={profileData?.email || ""}
                           disabled={true}
                           className="bg-gray-50"
                         />
-                        <p className="text-xs text-muted-foreground mt-1">E-mail não pode ser alterado</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          E-mail não pode ser alterado
+                        </p>
                       </div>
                       <div>
                         <Label>Telefone</Label>
                         <Input
-                          value={profileData?.phone || ''}
-                          onChange={(e) => setProfileData(prev => prev ? {...prev, phone: e.target.value} : null)}
+                          value={profileData?.phone || ""}
+                          onChange={(e) =>
+                            setProfileData((prev) =>
+                              prev ? { ...prev, phone: e.target.value } : null,
+                            )
+                          }
                           disabled={isSavingProfile}
                         />
                       </div>
@@ -1042,27 +1230,35 @@ export default function Portal() {
                         <Label>Data de Nascimento</Label>
                         <Input
                           type="date"
-                          value={profileData?.birthDate || ''}
+                          value={profileData?.birthDate || ""}
                           disabled={true}
                           className="bg-gray-50"
                         />
-                        <p className="text-xs text-muted-foreground mt-1">Data de nascimento não pode ser alterada</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Data de nascimento não pode ser alterada
+                        </p>
                       </div>
                       <div>
                         <Label>CPF</Label>
                         <Input
-                          value={profileData?.cpf || ''}
+                          value={profileData?.cpf || ""}
                           disabled={true}
                           className="bg-gray-50"
                         />
-                        <p className="text-xs text-muted-foreground mt-1">CPF não pode ser alterado</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          CPF não pode ser alterado
+                        </p>
                       </div>
                     </div>
                     <div>
                       <Label>Endereço</Label>
                       <Textarea
-                        value={profileData?.address || ''}
-                        onChange={(e) => setProfileData(prev => prev ? {...prev, address: e.target.value} : null)}
+                        value={profileData?.address || ""}
+                        onChange={(e) =>
+                          setProfileData((prev) =>
+                            prev ? { ...prev, address: e.target.value } : null,
+                          )
+                        }
                         disabled={isSavingProfile}
                       />
                     </div>
@@ -1077,14 +1273,16 @@ export default function Portal() {
                           Salvando...
                         </>
                       ) : (
-                        'Salvar Alterações'
+                        "Salvar Alterações"
                       )}
                     </Button>
                   </>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-muted-foreground">Nome Completo</Label>
+                      <Label className="text-muted-foreground">
+                        Nome Completo
+                      </Label>
                       <p className="font-medium">{currentUser?.name}</p>
                     </div>
                     <div>
@@ -1096,8 +1294,16 @@ export default function Portal() {
                       <p className="font-medium">{currentUser?.phone}</p>
                     </div>
                     <div>
-                      <Label className="text-muted-foreground">Data de Nascimento</Label>
-                      <p className="font-medium">{currentUser?.birthDate ? new Date(currentUser.birthDate).toLocaleDateString('pt-BR') : '-'}</p>
+                      <Label className="text-muted-foreground">
+                        Data de Nascimento
+                      </Label>
+                      <p className="font-medium">
+                        {currentUser?.birthDate
+                          ? new Date(currentUser.birthDate).toLocaleDateString(
+                              "pt-BR",
+                            )
+                          : "-"}
+                      </p>
                     </div>
                     <div>
                       <Label className="text-muted-foreground">CPF</Label>
@@ -1125,16 +1331,25 @@ export default function Portal() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">E-mail de lembrete</p>
-                    <p className="text-sm text-muted-foreground">Receber lembretes de consultas por e-mail</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receber lembretes de consultas por e-mail
+                    </p>
                   </div>
                   <Button
-                    variant={notificationSettings.emailReminders ? "default" : "outline"}
+                    variant={
+                      notificationSettings.emailReminders
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     onClick={async () => {
-                      const newSettings = { ...notificationSettings, emailReminders: !notificationSettings.emailReminders };
+                      const newSettings = {
+                        ...notificationSettings,
+                        emailReminders: !notificationSettings.emailReminders,
+                      };
                       try {
-                        await apiCall('/api/portal/notifications', {
-                          method: 'PATCH',
+                        await apiCall("/api/portal/notifications", {
+                          method: "PATCH",
                           body: JSON.stringify(newSettings),
                         });
                         setNotificationSettings(newSettings);
@@ -1151,22 +1366,31 @@ export default function Portal() {
                       }
                     }}
                   >
-                    {notificationSettings.emailReminders ? 'Ativado' : 'Desativado'}
+                    {notificationSettings.emailReminders
+                      ? "Ativado"
+                      : "Desativado"}
                   </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">SMS de lembrete</p>
-                    <p className="text-sm text-muted-foreground">Receber lembretes de consultas por SMS</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receber lembretes de consultas por SMS
+                    </p>
                   </div>
                   <Button
-                    variant={notificationSettings.smsReminders ? "default" : "outline"}
+                    variant={
+                      notificationSettings.smsReminders ? "default" : "outline"
+                    }
                     size="sm"
                     onClick={async () => {
-                      const newSettings = { ...notificationSettings, smsReminders: !notificationSettings.smsReminders };
+                      const newSettings = {
+                        ...notificationSettings,
+                        smsReminders: !notificationSettings.smsReminders,
+                      };
                       try {
-                        await apiCall('/api/portal/notifications', {
-                          method: 'PATCH',
+                        await apiCall("/api/portal/notifications", {
+                          method: "PATCH",
                           body: JSON.stringify(newSettings),
                         });
                         setNotificationSettings(newSettings);
@@ -1183,22 +1407,34 @@ export default function Portal() {
                       }
                     }}
                   >
-                    {notificationSettings.smsReminders ? 'Ativado' : 'Desativado'}
+                    {notificationSettings.smsReminders
+                      ? "Ativado"
+                      : "Desativado"}
                   </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Resultados de exames</p>
-                    <p className="text-sm text-muted-foreground">Notificar quando resultados estiverem disponíveis</p>
+                    <p className="text-sm text-muted-foreground">
+                      Notificar quando resultados estiverem disponíveis
+                    </p>
                   </div>
                   <Button
-                    variant={notificationSettings.examNotifications ? "default" : "outline"}
+                    variant={
+                      notificationSettings.examNotifications
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     onClick={async () => {
-                      const newSettings = { ...notificationSettings, examNotifications: !notificationSettings.examNotifications };
+                      const newSettings = {
+                        ...notificationSettings,
+                        examNotifications:
+                          !notificationSettings.examNotifications,
+                      };
                       try {
-                        await apiCall('/api/portal/notifications', {
-                          method: 'PATCH',
+                        await apiCall("/api/portal/notifications", {
+                          method: "PATCH",
                           body: JSON.stringify(newSettings),
                         });
                         setNotificationSettings(newSettings);
@@ -1215,7 +1451,9 @@ export default function Portal() {
                       }
                     }}
                   >
-                    {notificationSettings.examNotifications ? 'Ativado' : 'Desativado'}
+                    {notificationSettings.examNotifications
+                      ? "Ativado"
+                      : "Desativado"}
                   </Button>
                 </div>
               </CardContent>
@@ -1241,7 +1479,6 @@ export default function Portal() {
               </CardContent>
             </Card>
           </TabsContent>
-
         </Tabs>
       </div>
     </div>
@@ -1249,12 +1486,16 @@ export default function Portal() {
 }
 
 // Appointment Dialog Component
-function AppointmentDialog({ onAppointmentCreated }: { onAppointmentCreated: (data: any) => Promise<boolean> }) {
+function AppointmentDialog({
+  onAppointmentCreated,
+}: {
+  onAppointmentCreated: (data: any) => Promise<boolean>;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    specialty: '',
-    preferredDate: '',
-    notes: ''
+    specialty: "",
+    preferredDate: "",
+    notes: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -1266,7 +1507,7 @@ function AppointmentDialog({ onAppointmentCreated }: { onAppointmentCreated: (da
     const success = await onAppointmentCreated(formData);
     if (success) {
       setIsOpen(false);
-      setFormData({ specialty: '', preferredDate: '', notes: '' });
+      setFormData({ specialty: "", preferredDate: "", notes: "" });
     }
     setIsSubmitting(false);
   };
@@ -1289,10 +1530,12 @@ function AppointmentDialog({ onAppointmentCreated }: { onAppointmentCreated: (da
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label>Especialidade</Label>
-            <select 
+            <select
               className="w-full p-2 border rounded-md"
               value={formData.specialty}
-              onChange={(e) => setFormData(prev => ({...prev, specialty: e.target.value}))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, specialty: e.target.value }))
+              }
               required
             >
               <option value="">Selecione uma especialidade</option>
@@ -1306,24 +1549,31 @@ function AppointmentDialog({ onAppointmentCreated }: { onAppointmentCreated: (da
           </div>
           <div>
             <Label>Data Preferida</Label>
-            <Input 
-              type="date" 
+            <Input
+              type="date"
               value={formData.preferredDate}
-              onChange={(e) => setFormData(prev => ({...prev, preferredDate: e.target.value}))}
-              min={new Date().toISOString().split('T')[0]}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  preferredDate: e.target.value,
+                }))
+              }
+              min={new Date().toISOString().split("T")[0]}
               required
             />
           </div>
           <div>
             <Label>Observações</Label>
-            <Textarea 
+            <Textarea
               placeholder="Descreva o motivo da consulta..."
               value={formData.notes}
-              onChange={(e) => setFormData(prev => ({...prev, notes: e.target.value}))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, notes: e.target.value }))
+              }
             />
           </div>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             className="w-full bg-clinic-gradient hover:opacity-90"
             disabled={isSubmitting}
           >
@@ -1333,7 +1583,7 @@ function AppointmentDialog({ onAppointmentCreated }: { onAppointmentCreated: (da
                 Agendando...
               </>
             ) : (
-              'Solicitar Agendamento'
+              "Solicitar Agendamento"
             )}
           </Button>
         </form>
