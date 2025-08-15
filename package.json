@@ -18,7 +18,12 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "db:setup": "node scripts/setup-sqlite.js",
+    "db:reset": "rm -f data/clinic.db && npm run db:setup",
+    "db:backup": "cp data/clinic.db data/clinic-backup-$(date +%Y%m%d-%H%M%S).db",
+    "db:inspect": "sqlite3 data/clinic.db",
+    "db:migrate:prod": "echo 'Execute os arquivos SQL em migrations/ no seu PostgreSQL/Supabase'"
   },
   "dependencies": {
     "@types/fs-extra": "^11.0.4",
