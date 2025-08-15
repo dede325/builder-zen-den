@@ -46,8 +46,45 @@ import {
 } from "./routes/portal-permissions";
 import { getLoginHintsHandler } from "./routes/login-hints";
 
+// New enhanced routes
+import {
+  getMessages,
+  sendMessage,
+  markMessageAsRead,
+  getConversation,
+  getMessagingContacts
+} from "./routes/messaging";
+import {
+  uploadFiles,
+  getFile,
+  getCompressedFile,
+  getThumbnail,
+  getUserFiles,
+  deleteFile,
+  uploadProfilePicture,
+  getStorageStats,
+  handleUploadError
+} from "./routes/file-upload";
+import {
+  createVitalSigns,
+  getPatientVitalSigns,
+  getTodayVitalSigns,
+  getVitalSignsStats,
+  updateVitalSigns,
+  getVitalSignsAlerts
+} from "./routes/vital-signs";
+import { upload } from "./file-upload";
+import { initializeWebSocket } from "./websocket";
+import { createServer as createHttpServer } from "http";
+
 export function createServer() {
   const app = express();
+
+  // Create HTTP server for WebSocket
+  const server = createHttpServer(app);
+
+  // Initialize WebSocket
+  initializeWebSocket(server);
 
   // Middleware
   app.use(cors());
@@ -108,5 +145,30 @@ export function createServer() {
   app.get("/api/portal/permissions/role/:role", getRolePermissions);
   app.post("/api/portal/permissions/validate", requireAuth, validateAction);
 
-  return app;
+  // Messaging routes (protected)
+  app.get("/api/messaging/messages", requireAuth, getMessages);
+  app.post("/api/messaging/messages", requireAuth, sendMessage);
+  app.patch("/api/messaging/messages/:messageId/read", requireAuth, markMessageAsRead);
+  app.get("/api/messaging/conversation/:userId/:otherUserId", requireAuth, getConversation);
+  app.get("/api/messaging/contacts", requireAuth, getMessagingContacts);
+
+  // File upload routes (protected)
+  app.post("/api/files/upload", requireAuth, upload.array('files', 5), uploadFiles, handleUploadError);
+  app.post("/api/files/upload/profile", requireAuth, upload.single('profile'), uploadProfilePicture, handleUploadError);
+  app.get("/api/files/:fileId", requireAuth, getFile);
+  app.get("/api/files/:fileId/compressed", requireAuth, getCompressedFile);
+  app.get("/api/files/:fileId/thumbnail", requireAuth, getThumbnail);
+  app.get("/api/files/user/:userId", requireAuth, getUserFiles);
+  app.delete("/api/files/:fileId", requireAuth, deleteFile);
+  app.get("/api/files/user/:userId/stats", requireAuth, getStorageStats);
+
+  // Vital signs routes (protected)
+  app.post("/api/vital-signs", requireAuth, createVitalSigns);
+  app.get("/api/vital-signs/patient/:patientId", requireAuth, getPatientVitalSigns);
+  app.get("/api/vital-signs/today", requireAuth, getTodayVitalSigns);
+  app.get("/api/vital-signs/stats/:nurseId", requireAuth, getVitalSignsStats);
+  app.patch("/api/vital-signs/:vitalId", requireAuth, updateVitalSigns);
+  app.get("/api/vital-signs/alerts", requireAuth, getVitalSignsAlerts);
+
+  return { app, server };
 }
