@@ -893,8 +893,9 @@ export default function Index() {
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link to="/contato" className="w-full sm:w-auto">
                     <Button
-                      size="lg"
-                      className="bg-clinic-gradient hover:opacity-90 text-white border-0 w-full sm:w-auto min-h-[48px] px-6"
+                      variant="clinic"
+                      size="xl"
+                      className="w-full sm:w-auto btn-hover-lift text-on-dark"
                     >
                       <Calendar className="w-5 h-5 mr-2" />
                       Agendar Consulta
@@ -903,8 +904,8 @@ export default function Index() {
                   <Link to="/contato" className="w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      size="lg"
-                      className="border-white/50 text-white hover:bg-white hover:text-primary backdrop-blur-sm w-full sm:w-auto min-h-[48px] px-6"
+                      size="xl"
+                      className="border-white/50 text-white hover:bg-white hover:text-primary backdrop-blur-sm w-full sm:w-auto btn-hover-lift focus-ring-enhanced"
                     >
                       Entrar em Contato
                     </Button>
