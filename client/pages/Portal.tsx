@@ -668,10 +668,10 @@ export default function Portal() {
               />
               <div>
                 <h1 className="text-xl font-bold text-primary">
-                  Portal do Paciente
+                  Portal da Clínica Bem Cuidar
                 </h1>
                 <p className="text-xs text-muted-foreground">
-                  Bem-vindo, {currentUser?.name}
+                  {getRoleDisplayName(currentUserRole?.role)} - {currentUser?.name}
                 </p>
               </div>
             </div>
