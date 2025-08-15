@@ -43,6 +43,7 @@ export function createServer() {
   // Portal authentication routes
   app.post("/api/portal/auth/login", handleLogin);
   app.post("/api/portal/auth/logout", handleLogout);
+  app.get("/api/portal/auth/login-hints", getLoginHintsHandler);
 
   // Portal patient routes (protected)
   app.get("/api/portal/profile", requireAuth, getProfile);
