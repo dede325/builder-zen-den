@@ -62,6 +62,17 @@ interface Patient {
   address: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  permissions: Permission[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface Appointment {
   id: string;
   patientId: string;
