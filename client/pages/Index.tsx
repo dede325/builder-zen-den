@@ -268,7 +268,7 @@ export default function Index() {
       icon: UserCheck,
       description: "Saúde da mulher",
       detailedDescription:
-        "A ginecologia e obstetrícia é a especialidade que cuida da sa��de da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
+        "A ginecologia e obstetrícia é a especialidade que cuida da sa���de da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
       conditions: [
         "Infecções ginecológicas",
         "Distúrbios menstruais",
@@ -1302,10 +1302,10 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-medical-premium">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start space-x-4">
-                    <Mail className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
+                    <Mail className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0 equipment-hover" />
                     <div>
                       <h4 className="font-semibold mb-2 text-sm sm:text-base">
                         E-mail
