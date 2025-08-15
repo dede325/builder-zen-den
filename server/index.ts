@@ -54,6 +54,7 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+  app.get("/api/server-date", getServerDate);
 
   // Contact form routes
   app.post("/api/contact", handleContactSubmission);
