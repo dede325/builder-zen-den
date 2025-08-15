@@ -303,11 +303,11 @@ export default function Portal() {
         }
       />
       
-      {/* Rotas protegidas do dashboard */}
+      {/* Rotas protegidas do dashboard do paciente */}
       <Route
         path="/*"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute requiredRole="patient">
             <DashboardLayout />
           </ProtectedRoute>
         }
@@ -320,6 +320,25 @@ export default function Portal() {
         <Route path="profile" element={<ProfilePage />} />
         {/* Redirecionar rotas desconhecidas para dashboard */}
         <Route path="*" element={<Navigate to="/portal/dashboard" replace />} />
+      </Route>
+
+      {/* Rotas protegidas do dashboard médico */}
+      <Route
+        path="/doctor/*"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <DoctorLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<DoctorDashboard />} />
+        <Route path="patients" element={<div>Pacientes em desenvolvimento...</div>} />
+        <Route path="consultations" element={<div>Consultas em desenvolvimento...</div>} />
+        <Route path="exams" element={<div>Exames em desenvolvimento...</div>} />
+        <Route path="messages" element={<div>Mensagens em desenvolvimento...</div>} />
+        <Route path="profile" element={<div>Perfil em desenvolvimento...</div>} />
+        {/* Redirecionar rotas desconhecidas para dashboard médico */}
+        <Route path="*" element={<Navigate to="/portal/doctor/dashboard" replace />} />
       </Route>
     </Routes>
   );
