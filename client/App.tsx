@@ -10,6 +10,13 @@ import Index from "./pages/Index";
 import Portal from "./pages/Portal";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Sobre from "./pages/Sobre";
+import Exames from "./pages/Exames";
+
+// Specialty pages
+import Cardiologia from "./pages/specialties/Cardiologia";
+import Pediatria from "./pages/specialties/Pediatria";
+import Dermatologia from "./pages/specialties/Dermatologia";
 
 const queryClient = new QueryClient();
 
