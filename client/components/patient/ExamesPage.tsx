@@ -137,7 +137,7 @@ function ExameDetails({ exame, onClose }: ExameDetailsProps) {
             
             <TabsContent value="arquivo" className="space-y-4">
               <div className="text-center py-8">
-                <FileIcon className="h-16 w-16 mx-auto mb-4 text-red-500" />
+                <FileText className="h-16 w-16 mx-auto mb-4 text-red-500" />
                 <h3 className="text-lg font-medium mb-2">Resultado em PDF</h3>
                 <p className="text-muted-foreground mb-4">
                   Baixe o arquivo PDF com o resultado completo do exame
