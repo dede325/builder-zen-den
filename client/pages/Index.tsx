@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
-import Footer from "@/components/Footer";
+import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButtons from "@/components/FloatingActionButtons";
 import SearchDialog from "@/components/SearchDialog";
 import Testimonials from "@/components/Testimonials";
