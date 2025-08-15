@@ -1451,7 +1451,7 @@ export default function Index() {
                         handleInputChange("message", e.target.value)
                       }
                       rows={4}
-                      className={`min-h-[120px] ${formErrors.message ? "border-red-500" : ""}`}
+                      className={`input-premium min-h-[120px] ${formErrors.message ? "error-premium" : ""}`}
                       disabled={isSubmitting}
                       placeholder="Descreva sua dúvida ou necessidade..."
                     />
