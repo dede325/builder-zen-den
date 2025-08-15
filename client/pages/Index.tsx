@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
-import EnhancedFooter from "@/components/EnhancedFooter";
+import SimplifiedFooter from "@/components/SimplifiedFooter";
 import EnhancedFloatingButtons from "@/components/EnhancedFloatingButtons";
 import SearchDialog from "@/components/SearchDialog";
 import EnhancedTestimonials from "@/components/EnhancedTestimonials";
@@ -86,7 +86,7 @@ export default function Index() {
       subtitle: "Equipe médica experiente e dedicada",
     },
     {
-      url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      url: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?ixlib=rb-4.0.3&auto=format&fit=crop&w=2128&q=80",
       title: "Ambiente Moderno",
       subtitle: "Instalações confortáveis e seguras",
     },
@@ -1492,7 +1492,7 @@ export default function Index() {
         </div>
       </section>
 
-      <EnhancedFooter />
+      <SimplifiedFooter />
 
       {/* Enhanced Floating Action Buttons */}
       <EnhancedFloatingButtons />
