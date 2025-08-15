@@ -73,6 +73,15 @@ import {
   updateVitalSigns,
   getVitalSignsAlerts
 } from "./routes/vital-signs";
+import {
+  getNotificationTemplates,
+  sendNotification,
+  getNotificationLogs,
+  getNotificationPreferences,
+  updateNotificationPreferences,
+  sendBulkNotifications,
+  getNotificationStats
+} from "./routes/notifications";
 import { upload } from "./file-upload";
 import { initializeWebSocket } from "./websocket";
 import { createServer as createHttpServer } from "http";
@@ -178,6 +187,15 @@ export function createServer() {
   app.get("/api/vital-signs/stats/:nurseId", requireAuth, getVitalSignsStats);
   app.patch("/api/vital-signs/:vitalId", requireAuth, updateVitalSigns);
   app.get("/api/vital-signs/alerts", requireAuth, getVitalSignsAlerts);
+
+  // Notification routes (protected)
+  app.get("/api/notifications/templates", requireAuth, getNotificationTemplates);
+  app.post("/api/notifications/send", requireAuth, sendNotification);
+  app.post("/api/notifications/send-bulk", requireAuth, sendBulkNotifications);
+  app.get("/api/notifications/logs", requireAuth, getNotificationLogs);
+  app.get("/api/notifications/preferences/:userId", requireAuth, getNotificationPreferences);
+  app.put("/api/notifications/preferences/:userId", requireAuth, updateNotificationPreferences);
+  app.get("/api/notifications/stats", requireAuth, getNotificationStats);
 
   return { app, server };
 }
