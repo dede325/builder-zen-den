@@ -1266,10 +1266,10 @@ export default function Index() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
             {/* Contact Info */}
             <div className="space-y-6 lg:space-y-8">
-              <Card>
+              <Card className="card-medical-premium">
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start space-x-4">
-                    <MapPin className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
+                    <MapPin className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0 equipment-hover" />
                     <div>
                       <h4 className="font-semibold mb-2 text-sm sm:text-base">
                         Localização
