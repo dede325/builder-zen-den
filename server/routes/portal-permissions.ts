@@ -1,3 +1,10 @@
+/**
+ * © 2025 B&S Best Services Angola & Alegria Matoso Investimentos.
+ * Tutelado por Kaijhe Morose.
+ * Todos os direitos reservados.
+ * Proibida a cópia, modificação, distribuição ou uso sem autorização escrita.
+ */
+
 import { RequestHandler } from "express";
 import { PermissionManager, Permission, UserRole } from "../types";
 
