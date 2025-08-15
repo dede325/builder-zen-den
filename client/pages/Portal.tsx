@@ -469,7 +469,7 @@ export default function Portal() {
                     type="password"
                     value={loginData.password}
                     onChange={(e) => setLoginData(prev => ({...prev, password: e.target.value}))}
-                    placeholder="•���••••••"
+                    placeholder="••••••••"
                     disabled={isLoggingIn}
                     onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                   />
@@ -742,7 +742,7 @@ export default function Portal() {
                   <div className="text-center p-4 bg-purple-50 rounded-lg">
                     <h4 className="font-semibold text-purple-700">Histórico</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Paciente desde {new Date(currentUser?.createdAt || '').toLocaleDateString('pt-BR')}
+                      Membro desde 2024
                     </p>
                   </div>
                 </div>
