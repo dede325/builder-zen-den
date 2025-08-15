@@ -39,7 +39,18 @@ import {
   Lock,
   LogOut,
   Loader2,
+  Shield,
 } from "lucide-react";
+
+// Role-based dashboard components
+import PatientDashboard from "@/components/dashboards/PatientDashboard";
+import DoctorDashboard from "@/components/dashboards/DoctorDashboard";
+import NurseDashboard from "@/components/dashboards/NurseDashboard";
+import AdminDashboard from "@/components/dashboards/AdminDashboard";
+import ReceptionistDashboard from "@/components/dashboards/ReceptionistDashboard";
+
+// Import types from shared
+import { UserRole, Permission, PermissionManager } from "@shared/permissions";
 
 interface Patient {
   id: string;
