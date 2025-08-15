@@ -805,7 +805,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={prevSlide}
-            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm min-h-[44px] w-10 sm:w-auto"
+            className="bg-black/40 border-white/50 text-white backdrop-blur-sm min-h-[44px] w-10 sm:w-auto slide-control-hover focus-ring-enhanced"
             aria-label="Slide anterior"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -817,7 +817,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={nextSlide}
-            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm min-h-[44px] w-10 sm:w-auto"
+            className="bg-black/40 border-white/50 text-white backdrop-blur-sm min-h-[44px] w-10 sm:w-auto slide-control-hover focus-ring-enhanced"
             aria-label="Próximo slide"
           >
             <ChevronRight className="w-4 h-4" />
@@ -830,7 +830,7 @@ export default function Index() {
             variant="outline"
             size="sm"
             onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-black/40 border-white/50 text-white hover:bg-black/60 backdrop-blur-sm min-h-[44px] w-10 sm:w-auto"
+            className="bg-black/40 border-white/50 text-white backdrop-blur-sm min-h-[44px] w-10 sm:w-auto slide-control-hover focus-ring-enhanced"
             aria-label={isPlaying ? "Pausar slideshow" : "Reproduzir slideshow"}
           >
             {isPlaying ? (
