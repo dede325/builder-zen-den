@@ -296,7 +296,7 @@ export default function Index() {
     {
       name: "Ortopedia",
       icon: Activity,
-      description: "Saúde dos ossos e articulaç��es",
+      description: "Saúde dos ossos e articulações",
       detailedDescription:
         "A ortopedia é a especialidade médica que cuida do sistema musculoesquelético. Tratamos fraturas, lesões esportivas, doenças degenerativas e deformidades dos ossos, articulações, músculos, tendões e ligamentos.",
       conditions: [
@@ -1201,7 +1201,7 @@ export default function Index() {
       <section className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+            <h3 className="heading-medical text-2xl sm:text-3xl font-bold text-foreground mb-4">
               Horário de Funcionamento
             </h3>
           </div>
