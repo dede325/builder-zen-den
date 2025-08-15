@@ -1089,8 +1089,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <Testimonials />
+      {/* Enhanced Testimonials Section */}
+      <EnhancedTestimonials />
 
       {/* Certifications Section */}
       <Certifications />
