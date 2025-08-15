@@ -1,33 +1,4 @@
-import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { Outlet } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import {
   LayoutDashboard,
@@ -37,18 +8,10 @@ import {
   MessageSquare,
   DollarSign,
   Package,
-  User,
-  LogOut,
-  Settings,
-  Bell,
-  Moon,
-  Sun,
-  Home,
   Activity,
   Heart,
-  Shield,
-  ChevronRight,
 } from "lucide-react";
+import OptimizedDashboardLayout from "../dashboard/OptimizedDashboardLayout";
 
 interface NavigationItem {
   name: string;
@@ -56,6 +19,7 @@ interface NavigationItem {
   icon: React.ComponentType<any>;
   badge?: number;
   description?: string;
+  color?: string;
 }
 
 const managerNavigation: NavigationItem[] = [
@@ -64,12 +28,14 @@ const managerNavigation: NavigationItem[] = [
     href: "/manager/dashboard",
     icon: LayoutDashboard,
     description: "Visão geral da clínica",
+    color: "text-blue-600 dark:text-blue-400",
   },
   {
     name: "Funcionários",
     href: "/manager/staff",
     icon: Users,
     description: "Gestão de equipe",
+    color: "text-green-600 dark:text-green-400",
   },
   {
     name: "Consultas",
@@ -77,6 +43,7 @@ const managerNavigation: NavigationItem[] = [
     icon: Calendar,
     badge: 5,
     description: "Agendamentos e consultas",
+    color: "text-purple-600 dark:text-purple-400",
   },
   {
     name: "Exames",
@@ -84,6 +51,7 @@ const managerNavigation: NavigationItem[] = [
     icon: FileText,
     badge: 3,
     description: "Gestão de exames",
+    color: "text-orange-600 dark:text-orange-400",
   },
   {
     name: "Mensagens",
@@ -91,18 +59,21 @@ const managerNavigation: NavigationItem[] = [
     icon: MessageSquare,
     badge: 12,
     description: "Comunicação interna",
+    color: "text-red-600 dark:text-red-400",
   },
   {
     name: "Financeiro",
     href: "/manager/finances",
     icon: DollarSign,
     description: "Relatórios financeiros",
+    color: "text-emerald-600 dark:text-emerald-400",
   },
   {
     name: "Estoque",
     href: "/manager/inventory",
     icon: Package,
     description: "Controle de estoque",
+    color: "text-amber-600 dark:text-amber-400",
   },
 ];
 
