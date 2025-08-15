@@ -162,7 +162,7 @@ export default function Index() {
       detailedDescription:
         "A pediatria é a especialidade médica dedicada à assistência de crianças, adolescentes e jovens até os 18 anos. Nossos pediatras oferecem cuidados preventivos e curativos, acompanhando o crescimento e desenvolvimento saudável desde o nascimento.",
       conditions: [
-        "Infec��ões respiratórias",
+        "Infecções respiratórias",
         "Diarreias e gastroenterites",
         "Alergias",
         "Distúrbios do crescimento",
@@ -1137,9 +1137,9 @@ export default function Index() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              <Card className="text-center">
+              <Card className="card-floating text-center">
                 <CardContent className="pt-4 sm:pt-6 p-3 sm:p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 equipment-hover">
                     <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
                   <h5 className="font-semibold mb-2 text-sm sm:text-base">
