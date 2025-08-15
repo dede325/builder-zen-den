@@ -547,6 +547,58 @@ export default function Portal() {
 
           {/* Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
+            {/* Notifications Banner */}
+            {examResults.filter(e => e.status === 'ready').length > 0 && (
+              <Card className="bg-green-50 border-green-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-green-800">
+                        Você tem {examResults.filter(e => e.status === 'ready').length} resultado(s) de exame disponível(is)!
+                      </h4>
+                      <p className="text-sm text-green-700">
+                        Clique em "Ver Exames" para acessar seus resultados.
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => setActiveTab('exams')}
+                    >
+                      Ver Exames
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {appointments.filter(a => a.status === 'scheduled').length > 0 && (
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <Calendar className="w-6 h-6 text-blue-600" />
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-blue-800">
+                        Você tem {appointments.filter(a => a.status === 'scheduled').length} consulta(s) agendada(s)
+                      </h4>
+                      <p className="text-sm text-blue-700">
+                        Próxima consulta: {appointments.filter(a => a.status === 'scheduled')[0] &&
+                          `${appointments.filter(a => a.status === 'scheduled')[0].specialty} em ${new Date(appointments.filter(a => a.status === 'scheduled')[0].date).toLocaleDateString('pt-BR')}`
+                        }
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700"
+                      onClick={() => setActiveTab('appointments')}
+                    >
+                      Ver Consultas
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             {/* Quick Actions */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('appointments')}>
