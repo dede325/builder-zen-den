@@ -213,10 +213,10 @@ export default function DashboardLayout() {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-colors group ${
+                  className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium group sidebar-item-hover focus-ring-enhanced ${
                     isActive
-                      ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary"
-                      : "text-foreground/80 hover:bg-accent hover:text-accent-foreground"
+                      ? "active bg-primary text-primary-foreground shadow-accessible"
+                      : "text-sidebar-foreground"
                   }`}
                   onClick={() => window.innerWidth < 1024 && setIsSidebarOpen(false)}
                 >
