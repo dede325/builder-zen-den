@@ -1426,14 +1426,14 @@ export default function Index() {
 
           <div className="border-t border-blue-600 mt-8 pt-8 text-center text-blue-100">
             <p>
-              &copy; 2024 Clínica Bem Cuidar. Desenvolvido por{" "}
+              &copy; {currentYear} Clínica Bem Cuidar. Desenvolvido por{" "}
               <a
                 href="https://bestservices.ao"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-blue-200 font-semibold underline transition-colors"
               >
-                Kaijhe
+                Kaijhe Morose
               </a>{" "}
               - Todos os direitos reservados.
             </p>
