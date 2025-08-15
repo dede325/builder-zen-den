@@ -129,6 +129,7 @@ export default function Contato() {
           phone: "",
           subject: "consulta",
           message: "",
+          honeypot: "",
         });
         setFormErrors({});
 
