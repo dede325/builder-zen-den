@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sem Conexão - Clínica Bem Cuidar</title>
+    <meta name="description" content="Página offline da Clínica Bem Cuidar">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --primary: 121 203 203;
+            --primary-dark: 86 98 100;
+            --text: 34 34 34;
+            --text-muted: 107 114 128;
+            --background: 255 255 255;
+            --border: 229 231 235;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: rgb(var(--background));
+            color: rgb(var(--text));
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            padding: 48px 32px;
+            border: 1px solid rgb(var(--border));
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--primary-dark)));
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(var(--primary), 0.3);
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: rgb(var(--text));
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgb(var(--text-muted));
+            margin-bottom: 32px;
+        }
+
+        .message {
+            background: rgba(var(--primary), 0.1);
+            border: 1px solid rgba(var(--primary), 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .message h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: rgb(var(--primary-dark));
+        }
+
+        .message p {
+            font-size: 14px;
+            color: rgb(var(--text-muted));
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            min-height: 44px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--primary-dark)));
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(var(--primary), 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: rgb(var(--text));
+            border: 1px solid rgb(var(--border));
+        }
+
+        .btn-secondary:hover {
+            background: rgba(var(--primary), 0.05);
+            border-color: rgb(var(--primary));
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding: 16px;
+            background: rgba(var(--primary), 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(var(--primary), 0.1);
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: rgb(var(--primary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 16px;
+            height: 16px;
+            color: white;
+        }
+
+        .feature-text h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: rgb(var(--text));
+        }
+
+        .feature-text p {
+            font-size: 12px;
+            color: rgb(var(--text-muted));
+            line-height: 1.4;
+        }
+
+        .contact-info {
+            background: rgba(var(--text), 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .contact-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: rgb(var(--text));
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgb(var(--text-muted));
+        }
+
+        .contact-item svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: rgb(var(--primary));
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgb(var(--text-muted));
+            margin-top: 24px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status.online .status-dot {
+            background: #10b981;
+            animation: none;
+        }
+
+        @media (min-width: 640px) {
+            .actions {
+                flex-direction: row;
+            }
+
+            .features {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Angola-specific styles */
+        .angola-flag {
+            display: inline-block;
+            width: 20px;
+            height: 14px;
+            background: linear-gradient(to bottom, #ff0000 50%, #000000 50%);
+            border-radius: 2px;
+            margin-right: 8px;
+            position: relative;
+        }
+
+        .angola-flag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid #ffff00;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+        </div>
+
+        <h1>Sem Conexão à Internet</h1>
+        <p class="subtitle">
+            <span class="angola-flag"></span>
+            Clínica Bem Cuidar - Angola
+        </p>
+
+        <div class="message">
+            <h2>Aplicação Disponível Offline</h2>
+            <p>Esta página está disponível mesmo sem internet. Algumas funcionalidades podem estar limitadas, mas você ainda pode acessar informações importantes da clínica.</p>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="checkConnection()">
+                Verificar Conexão
+            </button>
+            <button class="btn btn-secondary" onclick="goBack()">
+                Voltar
+            </button>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h3>Informações Offline</h3>
+                    <p>Acesso aos dados da clínica mesmo sem conexão</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h3>Sincronização Automática</h3>
+                    <p>Dados serão sincronizados quando a conexão for restaurada</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h3>Experiência Premium</h3>
+                    <p>Interface moderna e responsiva em todos os dispositivos</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h3>Segurança Angola</h3>
+                    <p>Conforme Lei n.º 22/11 de Proteção de Dados</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-info">
+            <h3>Contacto de Emergência</h3>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+                <span>+244 945 344 650</span>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Av. 21 de Janeiro, Nº 351, Benfica, Luanda</span>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.53 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                </svg>
+                <span>recepcao@bemcuidar.co.ao</span>
+            </div>
+        </div>
+
+        <div class="status" id="connectionStatus">
+            <div class="status-dot"></div>
+            <span>Sem conexão à internet</span>
+        </div>
+    </div>
+
+    <script>
+        // Check connection status
+        function updateConnectionStatus() {
+            const status = document.getElementById('connectionStatus');
+            const dot = status.querySelector('.status-dot');
+            const text = status.querySelector('span');
+            
+            if (navigator.onLine) {
+                status.classList.add('online');
+                text.textContent = 'Conexão restaurada';
+                // Auto-redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } else {
+                status.classList.remove('online');
+                text.textContent = 'Sem conexão à internet';
+            }
+        }
+
+        function checkConnection() {
+            updateConnectionStatus();
+            if (navigator.onLine) {
+                window.location.href = '/';
+            } else {
+                // Provide feedback
+                const btn = document.querySelector('.btn-primary');
+                const originalText = btn.textContent;
+                btn.textContent = 'Ainda sem conexão...';
+                btn.style.opacity = '0.6';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.opacity = '1';
+                }, 2000);
+            }
+        }
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        }
+
+        // Listen for connection changes
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+
+        // Initial status check
+        updateConnectionStatus();
+
+        // Add Angola-specific time and locale info
+        function updateAngolaInfo() {
+            const now = new Date();
+            const angolaTime = now.toLocaleString('pt-AO', {
+                timeZone: 'Africa/Luanda',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Add time info to page if needed
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle && !subtitle.dataset.timeAdded) {
+                const timeDiv = document.createElement('div');
+                timeDiv.style.fontSize = '12px';
+                timeDiv.style.color = 'rgb(var(--text-muted))';
+                timeDiv.style.marginTop = '8px';
+                timeDiv.textContent = angolaTime;
+                subtitle.appendChild(timeDiv);
+                subtitle.dataset.timeAdded = 'true';
+            }
+        }
+
+        // Update Angola time
+        updateAngolaInfo();
+        setInterval(updateAngolaInfo, 60000); // Update every minute
+
+        console.log('[Offline Page] Clínica Bem Cuidar - Página offline carregada');
+    </script>
+</body>
+</html>
