@@ -23,25 +23,25 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Início", href: "#inicio" },
-  { 
-    name: "Especialidades", 
+  {
+    name: "Especialidades",
     href: "#especialidades",
-    description: "Conheça os nossos especialistas"
+    description: "Conheça os nossos especialistas",
   },
-  { 
-    name: "Exames", 
+  {
+    name: "Exames",
     href: "/exames",
-    description: "Exames complementares de diagnóstico"
+    description: "Exames complementares de diagnóstico",
   },
-  { 
-    name: "Equipa", 
+  {
+    name: "Equipa",
     href: "/equipa",
-    description: "Profissionais qualificados"
+    description: "Profissionais qualificados",
   },
-  { 
-    name: "Contacto", 
+  {
+    name: "Contacto",
     href: "#contacto",
-    description: "Entre em contacto connosco"
+    description: "Entre em contacto connosco",
   },
 ];
 
@@ -50,7 +50,10 @@ interface GlassHeaderProps {
   setIsSearchOpen: (open: boolean) => void;
 }
 
-export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHeaderProps) {
+export default function GlassHeader({
+  isSearchOpen,
+  setIsSearchOpen,
+}: GlassHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isPWAInstallable, setIsPWAInstallable] = useState(false);
@@ -62,8 +65,8 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       setScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Handle PWA install prompt
@@ -73,8 +76,12 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       setIsPWAInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () =>
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
   }, []);
 
   // Close mobile menu on route change
@@ -85,13 +92,13 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
   // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
 
@@ -107,7 +114,7 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       backdropFilter: "blur(20px)",
       borderColor: "rgba(121, 203, 203, 0.2)",
       boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    }
+    },
   };
 
   const mobileMenuVariants = {
@@ -117,7 +124,7 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       transition: {
         duration: 0.3,
         ease: "easeInOut",
-      }
+      },
     },
     open: {
       opacity: 1,
@@ -125,8 +132,8 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       transition: {
         duration: 0.3,
         ease: "easeInOut",
-      }
-    }
+      },
+    },
   };
 
   const navItemVariants = {
@@ -137,18 +144,18 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
       transition: {
         delay: i * 0.1,
         duration: 0.3,
-        ease: "easeOut"
-      }
-    })
+        ease: "easeOut",
+      },
+    }),
   };
 
   const installPWA = async () => {
-    if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
+    if ("serviceWorker" in navigator && "BeforeInstallPromptEvent" in window) {
       const event = (window as any).deferredPrompt;
       if (event) {
         event.prompt();
         const result = await event.userChoice;
-        if (result.outcome === 'accepted') {
+        if (result.outcome === "accepted") {
           setIsPWAInstallable(false);
         }
       }
@@ -166,7 +173,7 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <motion.div 
+            <motion.div
               className="flex items-center space-x-3 min-w-0"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -206,8 +213,8 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
                   >
                     {item.name}
                     {item.badge && (
-                      <Badge 
-                        variant="secondary" 
+                      <Badge
+                        variant="secondary"
                         className="ml-2 text-xs bg-primary text-primary-foreground"
                       >
                         {item.badge}
@@ -234,7 +241,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 lg:space-x-4">
               {/* Search Button */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="ghost"
                   size="sm"
@@ -247,7 +257,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
               </motion.div>
 
               {/* Language Selector */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="ghost"
                   size="sm"
@@ -260,7 +273,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
               </motion.div>
 
               {/* Emergency Call */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   asChild
                   variant="ghost"
@@ -275,7 +291,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
               </motion.div>
 
               {/* CTA Button */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   asChild
                   variant="clinic"
@@ -310,7 +329,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
               )}
 
               {/* Mobile Menu Button */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="ghost"
                   size="sm"
@@ -378,7 +400,10 @@ export default function GlassHeader({ isSearchOpen, setIsSearchOpen }: GlassHead
                           )}
                         </div>
                         {item.badge && (
-                          <Badge variant="secondary" className="bg-primary text-primary-foreground">
+                          <Badge
+                            variant="secondary"
+                            className="bg-primary text-primary-foreground"
+                          >
                             {item.badge}
                           </Badge>
                         )}

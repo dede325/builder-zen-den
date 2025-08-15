@@ -618,7 +618,9 @@ export default function Index() {
                 <h1 className="text-lg sm:text-xl font-bold text-foreground truncate">
                   Clínica Bem Cuidar
                 </h1>
-                <p className="text-xs text-muted-foreground hidden sm:block">Cuidar é Amar</p>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Cuidar é Amar
+                </p>
               </div>
             </div>
 
@@ -780,7 +782,10 @@ export default function Index() {
       </header>
 
       {/* Hero Section with Slider */}
-      <section id="inicio" className="relative h-screen overflow-hidden -mt-16 sm:-mt-20">
+      <section
+        id="inicio"
+        className="relative h-screen overflow-hidden -mt-16 sm:-mt-20"
+      >
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
             <div
@@ -848,18 +853,16 @@ export default function Index() {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center slide-indicator-hover ${
-                index === currentSlide
-                  ? "bg-white"
-                  : "bg-white/50"
+                index === currentSlide ? "bg-white" : "bg-white/50"
               }`}
               aria-label={`Ir para slide ${index + 1}`}
               aria-current={index === currentSlide ? "true" : "false"}
             >
-              <span className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
-                index === currentSlide
-                  ? "bg-white"
-                  : "bg-white/50"
-              }`} />
+              <span
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
+                  index === currentSlide ? "bg-white" : "bg-white/50"
+                }`}
+              />
             </button>
           ))}
         </div>
@@ -1001,7 +1004,7 @@ export default function Index() {
                 onClick={() => handleSpecialtyClick(specialty)}
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+                  if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     handleSpecialtyClick(specialty);
                   }
@@ -1034,7 +1037,10 @@ export default function Index() {
       </section>
 
       {/* Exams Section */}
-      <section id="exames" className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30">
+      <section
+        id="exames"
+        className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30"
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
@@ -1136,7 +1142,9 @@ export default function Index() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <h5 className="font-semibold mb-2 text-sm sm:text-base">1000+</h5>
+                  <h5 className="font-semibold mb-2 text-sm sm:text-base">
+                    1000+
+                  </h5>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     Pacientes Atendidos
                   </p>
@@ -1148,7 +1156,9 @@ export default function Index() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <h5 className="font-semibold mb-2 text-sm sm:text-base">15+</h5>
+                  <h5 className="font-semibold mb-2 text-sm sm:text-base">
+                    15+
+                  </h5>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     Anos de Experiência
                   </p>
@@ -1160,7 +1170,9 @@ export default function Index() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <Stethoscope className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <h5 className="font-semibold mb-2 text-sm sm:text-base">12</h5>
+                  <h5 className="font-semibold mb-2 text-sm sm:text-base">
+                    12
+                  </h5>
                   <p className="text-xs sm:text-sm text-muted-foreground">
                     Especialidades
                   </p>
@@ -1172,8 +1184,12 @@ export default function Index() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <h5 className="font-semibold mb-2 text-sm sm:text-base">100%</h5>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Satisfação</p>
+                  <h5 className="font-semibold mb-2 text-sm sm:text-base">
+                    100%
+                  </h5>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Satisfação
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -1195,20 +1211,28 @@ export default function Index() {
               <CardContent className="p-6 sm:p-8">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-sm sm:text-base">Segunda a Sexta</span>
+                    <span className="font-medium text-sm sm:text-base">
+                      Segunda a Sexta
+                    </span>
                     <span className="text-clinic-accent font-semibold text-sm sm:text-base">
                       07:00 - 19:00
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-sm sm:text-base">Sábado</span>
+                    <span className="font-medium text-sm sm:text-base">
+                      Sábado
+                    </span>
                     <span className="text-clinic-accent font-semibold text-sm sm:text-base">
                       07:00 - 13:00
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-sm sm:text-base">Domingo</span>
-                    <span className="text-muted-foreground text-sm sm:text-base">Fechado</span>
+                    <span className="font-medium text-sm sm:text-base">
+                      Domingo
+                    </span>
+                    <span className="text-muted-foreground text-sm sm:text-base">
+                      Fechado
+                    </span>
                   </div>
                   <div className="pt-4 border-t border-border">
                     <p className="text-xs sm:text-sm text-muted-foreground text-center">
@@ -1224,7 +1248,10 @@ export default function Index() {
       </section>
 
       {/* Contact Form Section */}
-      <section id="contato" className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30">
+      <section
+        id="contato"
+        className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30"
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
@@ -1244,7 +1271,9 @@ export default function Index() {
                   <div className="flex items-start space-x-4">
                     <MapPin className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="font-semibold mb-2 text-sm sm:text-base">Localização</h4>
+                      <h4 className="font-semibold mb-2 text-sm sm:text-base">
+                        Localização
+                      </h4>
                       <p className="text-muted-foreground text-sm sm:text-base">
                         Avenida 21 de Janeiro, Nº 351
                         <br />
@@ -1262,8 +1291,12 @@ export default function Index() {
                   <div className="flex items-start space-x-4">
                     <Phone className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="font-semibold mb-2 text-sm sm:text-base">Telefone</h4>
-                      <p className="text-muted-foreground text-sm sm:text-base">+244 945 344 650</p>
+                      <h4 className="font-semibold mb-2 text-sm sm:text-base">
+                        Telefone
+                      </h4>
+                      <p className="text-muted-foreground text-sm sm:text-base">
+                        +244 945 344 650
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -1274,7 +1307,9 @@ export default function Index() {
                   <div className="flex items-start space-x-4">
                     <Mail className="w-6 h-6 text-clinic-accent mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="font-semibold mb-2 text-sm sm:text-base">E-mail</h4>
+                      <h4 className="font-semibold mb-2 text-sm sm:text-base">
+                        E-mail
+                      </h4>
                       <p className="text-muted-foreground text-sm sm:text-base">
                         recepcao@bemcuidar.co.ao
                         <br />
@@ -1289,7 +1324,9 @@ export default function Index() {
             {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg sm:text-xl">Envie sua Mensagem</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">
+                  Envie sua Mensagem
+                </CardTitle>
                 <CardDescription className="text-sm sm:text-base">
                   Preencha o formulário e entraremos em contato em breve
                 </CardDescription>
@@ -1317,7 +1354,9 @@ export default function Index() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <Label htmlFor="name" className="text-sm sm:text-base">Nome Completo *</Label>
+                    <Label htmlFor="name" className="text-sm sm:text-base">
+                      Nome Completo *
+                    </Label>
                     <Input
                       id="name"
                       value={formData.name}
@@ -1335,7 +1374,9 @@ export default function Index() {
                   </div>
 
                   <div>
-                    <Label htmlFor="email" className="text-sm sm:text-base">E-mail *</Label>
+                    <Label htmlFor="email" className="text-sm sm:text-base">
+                      E-mail *
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -1355,7 +1396,9 @@ export default function Index() {
                   </div>
 
                   <div>
-                    <Label htmlFor="phone" className="text-sm sm:text-base">Telefone *</Label>
+                    <Label htmlFor="phone" className="text-sm sm:text-base">
+                      Telefone *
+                    </Label>
                     <Input
                       id="phone"
                       value={formData.phone}
@@ -1374,7 +1417,9 @@ export default function Index() {
                   </div>
 
                   <div>
-                    <Label htmlFor="subject" className="text-sm sm:text-base">Assunto *</Label>
+                    <Label htmlFor="subject" className="text-sm sm:text-base">
+                      Assunto *
+                    </Label>
                     <select
                       id="subject"
                       value={formData.subject}
@@ -1396,7 +1441,9 @@ export default function Index() {
                   </div>
 
                   <div>
-                    <Label htmlFor="message" className="text-sm sm:text-base">Mensagem *</Label>
+                    <Label htmlFor="message" className="text-sm sm:text-base">
+                      Mensagem *
+                    </Label>
                     <Textarea
                       id="message"
                       value={formData.message}

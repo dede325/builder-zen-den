@@ -13,50 +13,55 @@ import {
   Clock,
   Activity,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 
 export default function Offline() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [lastSyncAttempt, setLastSyncAttempt] = useState<Date | null>(null);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
+  const [syncStatus, setSyncStatus] = useState<
+    "idle" | "syncing" | "success" | "error"
+  >("idle");
 
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
       attemptSync();
     };
-    
+
     const handleOffline = () => {
       setIsOnline(false);
-      setSyncStatus('idle');
+      setSyncStatus("idle");
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
   const attemptSync = async () => {
-    setSyncStatus('syncing');
+    setSyncStatus("syncing");
     setLastSyncAttempt(new Date());
 
     try {
       // Trigger background sync if service worker is available
-      if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+      if (
+        "serviceWorker" in navigator &&
+        "sync" in window.ServiceWorkerRegistration.prototype
+      ) {
         const registration = await navigator.serviceWorker.ready;
-        await registration.sync.register('form-submission');
-        await registration.sync.register('appointment-booking');
+        await registration.sync.register("form-submission");
+        await registration.sync.register("appointment-booking");
       }
 
-      setSyncStatus('success');
+      setSyncStatus("success");
     } catch (error) {
-      console.error('Sync failed:', error);
-      setSyncStatus('error');
+      console.error("Sync failed:", error);
+      setSyncStatus("error");
     }
   };
 
@@ -65,10 +70,10 @@ export default function Offline() {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('pt-AO', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
+    return date.toLocaleTimeString("pt-AO", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     });
   };
 
@@ -80,7 +85,7 @@ export default function Offline() {
           <div className="mx-auto w-20 h-20 bg-clinic-gradient rounded-full flex items-center justify-center">
             <Heart className="w-10 h-10 text-white" />
           </div>
-          
+
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
               Clínica Bem Cuidar
@@ -89,14 +94,20 @@ export default function Offline() {
               {isOnline ? (
                 <>
                   <Wifi className="w-5 h-5 text-success" />
-                  <Badge variant="outline" className="border-success text-success">
+                  <Badge
+                    variant="outline"
+                    className="border-success text-success"
+                  >
                     Ligado à Internet
                   </Badge>
                 </>
               ) : (
                 <>
                   <WifiOff className="w-5 h-5 text-destructive" />
-                  <Badge variant="outline" className="border-destructive text-destructive">
+                  <Badge
+                    variant="outline"
+                    className="border-destructive text-destructive"
+                  >
                     Sem Ligação à Internet
                   </Badge>
                 </>
@@ -110,34 +121,41 @@ export default function Offline() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-warning" />
-              {isOnline ? 'A restabelecer ligação...' : 'Está sem ligação à internet'}
+              {isOnline
+                ? "A restabelecer ligação..."
+                : "Está sem ligação à internet"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {isOnline ? (
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  A sua ligação à internet foi restabelecida. A sincronizar os seus dados...
+                  A sua ligação à internet foi restabelecida. A sincronizar os
+                  seus dados...
                 </p>
-                
+
                 {/* Sync Status */}
                 <div className="flex items-center justify-center gap-2">
-                  {syncStatus === 'syncing' && (
+                  {syncStatus === "syncing" && (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin text-info" />
                       <span className="text-info">A sincronizar dados...</span>
                     </>
                   )}
-                  {syncStatus === 'success' && (
+                  {syncStatus === "success" && (
                     <>
                       <CheckCircle className="w-4 h-4 text-success" />
-                      <span className="text-success">Dados sincronizados com sucesso</span>
+                      <span className="text-success">
+                        Dados sincronizados com sucesso
+                      </span>
                     </>
                   )}
-                  {syncStatus === 'error' && (
+                  {syncStatus === "error" && (
                     <>
                       <AlertCircle className="w-4 h-4 text-destructive" />
-                      <span className="text-destructive">Erro na sincronização</span>
+                      <span className="text-destructive">
+                        Erro na sincronização
+                      </span>
                     </>
                   )}
                 </div>
@@ -157,13 +175,14 @@ export default function Offline() {
               <div className="space-y-6">
                 <div className="text-center">
                   <p className="text-muted-foreground mb-4">
-                    Não se preocupe! Ainda pode consultar as nossas informações básicas 
-                    e os seus dados serão sincronizados assim que a ligação for restabelecida.
+                    Não se preocupe! Ainda pode consultar as nossas informações
+                    básicas e os seus dados serão sincronizados assim que a
+                    ligação for restabelecida.
                   </p>
-                  
-                  <Button 
-                    onClick={refreshPage} 
-                    variant="outline" 
+
+                  <Button
+                    onClick={refreshPage}
+                    variant="outline"
                     className="btn-hover-lift"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
@@ -183,8 +202,8 @@ export default function Offline() {
                     <p className="text-destructive-foreground mb-3">
                       Em caso de emergência médica, contacte-nos directamente:
                     </p>
-                    <a 
-                      href="tel:+244945344650" 
+                    <a
+                      href="tel:+244945344650"
                       className="text-destructive font-semibold text-lg hover:underline"
                     >
                       +244 945 344 650
@@ -199,10 +218,14 @@ export default function Offline() {
                       <div className="flex items-start gap-3">
                         <MapPin className="w-5 h-5 text-info mt-0.5" />
                         <div>
-                          <h4 className="font-semibold text-info-foreground mb-1">Localização</h4>
+                          <h4 className="font-semibold text-info-foreground mb-1">
+                            Localização
+                          </h4>
                           <p className="text-sm text-info-foreground/80">
-                            Avenida 21 de Janeiro, Nº 351<br />
-                            Benfica, Luanda<br />
+                            Avenida 21 de Janeiro, Nº 351
+                            <br />
+                            Benfica, Luanda
+                            <br />
                             Angola
                           </p>
                         </div>
@@ -215,7 +238,9 @@ export default function Offline() {
                       <div className="flex items-start gap-3">
                         <Clock className="w-5 h-5 text-info mt-0.5" />
                         <div>
-                          <h4 className="font-semibold text-info-foreground mb-1">Horários</h4>
+                          <h4 className="font-semibold text-info-foreground mb-1">
+                            Horários
+                          </h4>
                           <div className="text-sm text-info-foreground/80 space-y-1">
                             <p>Seg-Sex: 07:00-19:00</p>
                             <p>Sábado: 07:00-13:00</p>
@@ -268,7 +293,7 @@ export default function Offline() {
         {/* Footer */}
         <div className="text-center text-sm text-muted-foreground">
           <p>
-            Esta aplicação funciona offline graças à tecnologia PWA.{' '}
+            Esta aplicação funciona offline graças à tecnologia PWA.{" "}
             <Link to="/" className="text-primary hover:underline">
               Voltar à página inicial
             </Link>

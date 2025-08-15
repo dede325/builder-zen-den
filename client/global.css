@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Importar hover states e animações */
-@import './styles/hover-states.css';
+@import "./styles/hover-states.css";
 
 @layer base {
   /**

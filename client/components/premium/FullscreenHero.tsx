@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -40,49 +45,61 @@ const heroSlides: Slide[] = [
     id: "tecnologia",
     title: "Tecnologia Médica Avançada",
     subtitle: "Diagnósticos precisos com equipamentos de última geração",
-    description: "Na Clínica Bem Cuidar, investimos continuamente em tecnologia médica de ponta para garantir diagnósticos rápidos e precisos, proporcionando o melhor cuidado de saúde em Angola.",
-    image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-    overlay: "linear-gradient(135deg, rgba(121, 203, 203, 0.8) 0%, rgba(86, 98, 100, 0.6) 100%)",
+    description:
+      "Na Clínica Bem Cuidar, investimos continuamente em tecnologia médica de ponta para garantir diagnósticos rápidos e precisos, proporcionando o melhor cuidado de saúde em Angola.",
+    image:
+      "https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    overlay:
+      "linear-gradient(135deg, rgba(121, 203, 203, 0.8) 0%, rgba(86, 98, 100, 0.6) 100%)",
     cta: {
       primary: "Agendar Consulta",
-      secondary: "Conhecer Tecnologias"
-    }
+      secondary: "Conhecer Tecnologias",
+    },
   },
   {
     id: "humanizado",
     title: "Atendimento Humanizado",
     subtitle: "Cuidado personalizado focado no seu bem-estar",
-    description: "Cada paciente é único. Por isso, oferecemos um atendimento personalizado e humanizado, onde o seu conforto e bem-estar são sempre a nossa prioridade máxima.",
-    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
-    overlay: "linear-gradient(135deg, rgba(86, 98, 100, 0.7) 0%, rgba(121, 203, 203, 0.5) 100%)",
+    description:
+      "Cada paciente é único. Por isso, oferecemos um atendimento personalizado e humanizado, onde o seu conforto e bem-estar são sempre a nossa prioridade máxima.",
+    image:
+      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
+    overlay:
+      "linear-gradient(135deg, rgba(86, 98, 100, 0.7) 0%, rgba(121, 203, 203, 0.5) 100%)",
     cta: {
       primary: "Marcar Consulta",
-      secondary: "Nossa Filosofia"
-    }
+      secondary: "Nossa Filosofia",
+    },
   },
   {
     id: "especialistas",
     title: "Especialistas Qualificados",
     subtitle: "Equipa médica experiente e dedicada",
-    description: "Contamos com uma equipa multidisciplinar de especialistas altamente qualificados, com formação nacional e internacional, dedicados a proporcionar cuidados de excelência.",
-    image: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2086&q=80",
-    overlay: "linear-gradient(135deg, rgba(121, 203, 203, 0.6) 0%, rgba(86, 98, 100, 0.8) 100%)",
+    description:
+      "Contamos com uma equipa multidisciplinar de especialistas altamente qualificados, com formação nacional e internacional, dedicados a proporcionar cuidados de excelência.",
+    image:
+      "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2086&q=80",
+    overlay:
+      "linear-gradient(135deg, rgba(121, 203, 203, 0.6) 0%, rgba(86, 98, 100, 0.8) 100%)",
     cta: {
       primary: "Conhecer Equipa",
-      secondary: "Especialidades"
-    }
+      secondary: "Especialidades",
+    },
   },
   {
     id: "instalacoes",
     title: "Instalações Modernas",
     subtitle: "Ambiente confortável e seguro para todos",
-    description: "Nossas instalações foram projetadas pensando no seu conforto e segurança, com ambientes modernos, climatizados e equipados com os mais altos padrões de qualidade e higiene.",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-    overlay: "linear-gradient(135deg, rgba(86, 98, 100, 0.6) 0%, rgba(121, 203, 203, 0.7) 100%)",
+    description:
+      "Nossas instalações foram projetadas pensando no seu conforto e segurança, com ambientes modernos, climatizados e equipados com os mais altos padrões de qualidade e higiene.",
+    image:
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    overlay:
+      "linear-gradient(135deg, rgba(86, 98, 100, 0.6) 0%, rgba(121, 203, 203, 0.7) 100%)",
     cta: {
       primary: "Tour Virtual",
-      secondary: "Localização"
-    }
+      secondary: "Localização",
+    },
   },
 ];
 
@@ -126,12 +143,14 @@ export default function FullscreenHero() {
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setCurrentSlide(
+      (prev) => (prev - 1 + heroSlides.length) % heroSlides.length,
+    );
   };
 
   const scrollToContent = () => {
-    const element = document.getElementById('especialidades');
-    element?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById("especialidades");
+    element?.scrollIntoView({ behavior: "smooth" });
   };
 
   const currentSlideData = heroSlides[currentSlide];
@@ -143,8 +162,8 @@ export default function FullscreenHero() {
       transition: {
         duration: 0.6,
         staggerChildren: 0.2,
-      }
-    }
+      },
+    },
   };
 
   const itemVariants = {
@@ -154,9 +173,9 @@ export default function FullscreenHero() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const slideVariants = {
@@ -169,22 +188,22 @@ export default function FullscreenHero() {
       scale: 1,
       transition: {
         duration: 1.2,
-        ease: "easeOut"
-      }
+        ease: "easeOut",
+      },
     },
     exit: {
       opacity: 0,
       scale: 0.9,
       transition: {
         duration: 0.8,
-        ease: "easeIn"
-      }
-    }
+        ease: "easeIn",
+      },
+    },
   };
 
   return (
-    <section 
-      ref={heroRef} 
+    <section
+      ref={heroRef}
       className="relative h-screen overflow-hidden flex items-center justify-center"
     >
       {/* Background Slides */}
@@ -199,13 +218,13 @@ export default function FullscreenHero() {
             className="absolute inset-0"
             style={{ y }}
           >
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ 
+              style={{
                 backgroundImage: `url(${currentSlideData.image})`,
               }}
             />
-            <div 
+            <div
               className="absolute inset-0"
               style={{ background: currentSlideData.overlay }}
             />
@@ -245,9 +264,15 @@ export default function FullscreenHero() {
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsPlaying(!isPlaying)}
           className="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-200 shadow-lg"
-          aria-label={isPlaying ? "Pausar apresentação" : "Reproduzir apresentação"}
+          aria-label={
+            isPlaying ? "Pausar apresentação" : "Reproduzir apresentação"
+          }
         >
-          {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+          {isPlaying ? (
+            <Pause className="w-4 h-4" />
+          ) : (
+            <Play className="w-4 h-4 ml-0.5" />
+          )}
         </motion.button>
       </div>
 
@@ -260,9 +285,9 @@ export default function FullscreenHero() {
             whileTap={{ scale: 0.9 }}
             onClick={() => setCurrentSlide(index)}
             className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide 
-                ? 'bg-white shadow-lg' 
-                : 'bg-white/40 hover:bg-white/60'
+              index === currentSlide
+                ? "bg-white shadow-lg"
+                : "bg-white/40 hover:bg-white/60"
             }`}
             aria-label={`Ir para slide ${index + 1}`}
           >
@@ -279,7 +304,7 @@ export default function FullscreenHero() {
       </div>
 
       {/* Main Content */}
-      <motion.div 
+      <motion.div
         className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white"
         style={{ opacity }}
         initial="hidden"
@@ -289,8 +314,8 @@ export default function FullscreenHero() {
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
           <motion.div variants={itemVariants} className="mb-6">
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white px-4 py-2 text-sm"
             >
               <Heart className="w-4 h-4 mr-2" />
@@ -299,7 +324,7 @@ export default function FullscreenHero() {
           </motion.div>
 
           {/* Title */}
-          <motion.h1 
+          <motion.h1
             variants={itemVariants}
             className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
           >
@@ -318,7 +343,7 @@ export default function FullscreenHero() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p 
+          <motion.p
             variants={itemVariants}
             className="text-xl sm:text-2xl lg:text-3xl mb-6 font-light opacity-90"
           >
@@ -336,7 +361,7 @@ export default function FullscreenHero() {
           </motion.p>
 
           {/* Description */}
-          <motion.p 
+          <motion.p
             variants={itemVariants}
             className="text-lg sm:text-xl mb-8 max-w-3xl mx-auto opacity-80 leading-relaxed"
           >
@@ -354,7 +379,7 @@ export default function FullscreenHero() {
           </motion.p>
 
           {/* CTAs */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
@@ -384,7 +409,7 @@ export default function FullscreenHero() {
           </motion.div>
 
           {/* Stats */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
           >
@@ -395,22 +420,24 @@ export default function FullscreenHero() {
                 className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-lg"
               >
                 <stat.icon className="w-8 h-8 mx-auto mb-2 text-white" />
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-2xl font-bold text-white mb-1">
+                  {stat.value}
+                </div>
                 <div className="text-sm text-white/80">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
 
           {/* Emergency Contact */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="inline-flex items-center gap-4 bg-red-500/90 backdrop-blur-md rounded-full px-6 py-3 border border-red-400/30 shadow-lg"
           >
             <Phone className="w-5 h-5 text-white" />
             <div className="text-left">
               <div className="text-sm text-white/90">Urgências 24h</div>
-              <a 
-                href="tel:+244945344650" 
+              <a
+                href="tel:+244945344650"
                 className="text-white font-semibold hover:underline"
               >
                 +244 945 344 650
@@ -421,7 +448,7 @@ export default function FullscreenHero() {
       </motion.div>
 
       {/* Scroll Indicator */}
-      <motion.div 
+      <motion.div
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

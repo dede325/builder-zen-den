@@ -44,59 +44,79 @@ interface ConsentRecord {
   ipAddress: string;
   userAgent: string;
   policyVersion: string;
-  consentMethod: 'banner' | 'settings' | 'form';
+  consentMethod: "banner" | "settings" | "form";
 }
 
-const CURRENT_POLICY_VERSION = '2024.1';
-const CONSENT_STORAGE_KEY = 'bem-cuidar-consent';
-const CONSENT_LOG_KEY = 'bem-cuidar-consent-log';
+const CURRENT_POLICY_VERSION = "2024.1";
+const CONSENT_STORAGE_KEY = "bem-cuidar-consent";
+const CONSENT_LOG_KEY = "bem-cuidar-consent-log";
 
 const consentCategories = [
   {
-    id: 'necessary' as keyof ConsentSettings,
-    title: 'Estritamente Necessários',
-    description: 'Estes cookies são essenciais para o funcionamento do website.',
+    id: "necessary" as keyof ConsentSettings,
+    title: "Estritamente Necessários",
+    description:
+      "Estes cookies são essenciais para o funcionamento do website.",
     icon: Shield,
     required: true,
-    examples: ['Cookies de sessão', 'Preferências de segurança', 'Funcionalidades básicas'],
-    legal: 'Base legal: Interesse legítimo (Art. 6º, n.º 1, f) RGPD / Lei 22/11)'
+    examples: [
+      "Cookies de sessão",
+      "Preferências de segurança",
+      "Funcionalidades básicas",
+    ],
+    legal:
+      "Base legal: Interesse legítimo (Art. 6º, n.º 1, f) RGPD / Lei 22/11)",
   },
   {
-    id: 'functional' as keyof ConsentSettings,
-    title: 'Funcionais',
-    description: 'Melhoram a funcionalidade e personalização do website.',
+    id: "functional" as keyof ConsentSettings,
+    title: "Funcionais",
+    description: "Melhoram a funcionalidade e personalização do website.",
     icon: Settings,
     required: false,
-    examples: ['Preferências de idioma', 'Configurações de interface', 'Lembrança de escolhas'],
-    legal: 'Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)'
+    examples: [
+      "Preferências de idioma",
+      "Configurações de interface",
+      "Lembrança de escolhas",
+    ],
+    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
   },
   {
-    id: 'analytics' as keyof ConsentSettings,
-    title: 'Análise e Performance',
-    description: 'Ajudam-nos a entender como os visitantes usam o website.',
+    id: "analytics" as keyof ConsentSettings,
+    title: "Análise e Performance",
+    description: "Ajudam-nos a entender como os visitantes usam o website.",
     icon: BarChart3,
     required: false,
-    examples: ['Google Analytics', 'Estatísticas de uso', 'Relatórios de performance'],
-    legal: 'Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)'
+    examples: [
+      "Google Analytics",
+      "Estatísticas de uso",
+      "Relatórios de performance",
+    ],
+    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
   },
   {
-    id: 'marketing' as keyof ConsentSettings,
-    title: 'Marketing e Publicidade',
-    description: 'Usados para publicidade dirigida e campanhas de marketing.',
+    id: "marketing" as keyof ConsentSettings,
+    title: "Marketing e Publicidade",
+    description: "Usados para publicidade dirigida e campanhas de marketing.",
     icon: Target,
     required: false,
-    examples: ['Anúncios personalizados', 'Remarketing', 'Redes sociais'],
-    legal: 'Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)'
+    examples: ["Anúncios personalizados", "Remarketing", "Redes sociais"],
+    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
   },
   {
-    id: 'healthData' as keyof ConsentSettings,
-    title: 'Dados de Saúde (Especiais)',
-    description: 'Processamento de dados sensíveis de saúde para prestação de cuidados médicos.',
+    id: "healthData" as keyof ConsentSettings,
+    title: "Dados de Saúde (Especiais)",
+    description:
+      "Processamento de dados sensíveis de saúde para prestação de cuidados médicos.",
     icon: FileText,
     required: false,
-    examples: ['Histórico médico', 'Informações de consultas', 'Dados clínicos'],
-    legal: 'Base legal: Consentimento explícito (Art. 9º, n.º 2, a) RGPD / Lei 22/11)',
-    special: true
+    examples: [
+      "Histórico médico",
+      "Informações de consultas",
+      "Dados clínicos",
+    ],
+    legal:
+      "Base legal: Consentimento explícito (Art. 9º, n.º 2, a) RGPD / Lei 22/11)",
+    special: true,
   },
 ];
 
@@ -104,12 +124,16 @@ interface ConsentManagerProps {
   onConsentChange?: (settings: ConsentSettings) => void;
 }
 
-export default function ConsentManager({ onConsentChange }: ConsentManagerProps) {
+export default function ConsentManager({
+  onConsentChange,
+}: ConsentManagerProps) {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<keyof ConsentSettings | null>(null);
-  
+  const [selectedCategory, setSelectedCategory] = useState<
+    keyof ConsentSettings | null
+  >(null);
+
   const [consentSettings, setConsentSettings] = useState<ConsentSettings>({
     necessary: true,
     functional: false,
@@ -124,14 +148,14 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
   // Check existing consent on mount
   useEffect(() => {
     const existingConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
-    
+
     if (existingConsent) {
       try {
         const parsed = JSON.parse(existingConsent);
         setConsentSettings(parsed.settings);
         setHasConsent(true);
       } catch (error) {
-        console.error('Error parsing consent:', error);
+        console.error("Error parsing consent:", error);
         setShowBanner(true);
       }
     } else {
@@ -142,27 +166,35 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
   }, []);
 
   // Log consent record
-  const logConsent = async (settings: ConsentSettings, method: ConsentRecord['consentMethod']) => {
+  const logConsent = async (
+    settings: ConsentSettings,
+    method: ConsentRecord["consentMethod"],
+  ) => {
     const record: ConsentRecord = {
       id: `consent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       settings,
-      ipAddress: 'hidden-for-privacy', // In production, get from backend
+      ipAddress: "hidden-for-privacy", // In production, get from backend
       userAgent: navigator.userAgent,
       policyVersion: CURRENT_POLICY_VERSION,
       consentMethod: method,
     };
 
     // Store locally (in production, also send to backend)
-    const existingLogs = JSON.parse(localStorage.getItem(CONSENT_LOG_KEY) || '[]');
+    const existingLogs = JSON.parse(
+      localStorage.getItem(CONSENT_LOG_KEY) || "[]",
+    );
     existingLogs.push(record);
     localStorage.setItem(CONSENT_LOG_KEY, JSON.stringify(existingLogs));
 
-    console.log('[Consent] Logged consent record:', record);
+    console.log("[Consent] Logged consent record:", record);
   };
 
   // Save consent
-  const saveConsent = async (settings: ConsentSettings, method: ConsentRecord['consentMethod']) => {
+  const saveConsent = async (
+    settings: ConsentSettings,
+    method: ConsentRecord["consentMethod"],
+  ) => {
     setIsLoading(true);
 
     try {
@@ -174,19 +206,18 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
 
       localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consentData));
       await logConsent(settings, method);
-      
+
       setConsentSettings(settings);
       setHasConsent(true);
       setShowBanner(false);
       setShowSettings(false);
-      
+
       onConsentChange?.(settings);
 
       // In production, sync with backend
       // await fetch('/api/consent', { method: 'POST', body: JSON.stringify(consentData) });
-
     } catch (error) {
-      console.error('Error saving consent:', error);
+      console.error("Error saving consent:", error);
     } finally {
       setIsLoading(false);
     }
@@ -201,7 +232,7 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
       marketing: true,
       healthData: false, // Health data requires explicit opt-in
     };
-    saveConsent(allAccepted, 'banner');
+    saveConsent(allAccepted, "banner");
   };
 
   // Accept only necessary
@@ -213,7 +244,7 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
       marketing: false,
       healthData: false,
     };
-    saveConsent(necessaryOnly, 'banner');
+    saveConsent(necessaryOnly, "banner");
   };
 
   // Update specific consent
@@ -224,19 +255,19 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
 
   // Save custom settings
   const saveCustomSettings = () => {
-    saveConsent(consentSettings, 'settings');
+    saveConsent(consentSettings, "settings");
   };
 
   const bannerVariants = {
     hidden: { y: 100, opacity: 0 },
     visible: { y: 0, opacity: 1 },
-    exit: { y: 100, opacity: 0 }
+    exit: { y: 100, opacity: 0 },
   };
 
   const settingsVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.95 }
+    exit: { opacity: 0, scale: 0.95 },
   };
 
   return (
@@ -260,10 +291,11 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                       Proteção de Dados Pessoais
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      Este website utiliza cookies e processa dados pessoais para melhorar a sua experiência. 
-                      Ao utilizar os nossos serviços de saúde, poderemos processar dados sensíveis mediante o seu 
-                      consentimento explícito, conforme a{' '}
-                      <button 
+                      Este website utiliza cookies e processa dados pessoais
+                      para melhorar a sua experiência. Ao utilizar os nossos
+                      serviços de saúde, poderemos processar dados sensíveis
+                      mediante o seu consentimento explícito, conforme a{" "}
+                      <button
                         onClick={() => setShowDetails(true)}
                         className="text-primary hover:underline font-medium"
                       >
@@ -313,7 +345,7 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                     disabled={isLoading}
                     className="whitespace-nowrap"
                   >
-                    {isLoading ? 'A guardar...' : 'Aceitar Todos'}
+                    {isLoading ? "A guardar..." : "Aceitar Todos"}
                   </Button>
                 </div>
               </div>
@@ -331,8 +363,8 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
               Definições de Privacidade
             </DialogTitle>
             <DialogDescription>
-              Escolha quais cookies e dados pretende partilhar connosco. 
-              Pode alterar estas preferências a qualquer momento.
+              Escolha quais cookies e dados pretende partilhar connosco. Pode
+              alterar estas preferências a qualquer momento.
             </DialogDescription>
           </DialogHeader>
 
@@ -342,16 +374,20 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                 key={category.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`border rounded-lg p-4 ${category.special ? 'border-warning bg-warning/5' : 'border-border'}`}
+                className={`border rounded-lg p-4 ${category.special ? "border-warning bg-warning/5" : "border-border"}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      category.special ? 'bg-warning/10' : 'bg-primary/10'
-                    }`}>
-                      <category.icon className={`w-5 h-5 ${
-                        category.special ? 'text-warning' : 'text-primary'
-                      }`} />
+                    <div
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                        category.special ? "bg-warning/10" : "bg-primary/10"
+                      }`}
+                    >
+                      <category.icon
+                        className={`w-5 h-5 ${
+                          category.special ? "text-warning" : "text-primary"
+                        }`}
+                      />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -362,7 +398,10 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                           </Badge>
                         )}
                         {category.special && (
-                          <Badge variant="outline" className="text-xs border-warning text-warning">
+                          <Badge
+                            variant="outline"
+                            className="text-xs border-warning text-warning"
+                          >
                             Dados Especiais
                           </Badge>
                         )}
@@ -371,14 +410,15 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                         {category.description}
                       </p>
                       <div className="text-xs text-muted-foreground">
-                        <strong>Exemplos:</strong> {category.examples.join(', ')}
+                        <strong>Exemplos:</strong>{" "}
+                        {category.examples.join(", ")}
                       </div>
                       <div className="text-xs text-info mt-2">
                         {category.legal}
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
@@ -390,7 +430,9 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                     </Button>
                     <Checkbox
                       checked={consentSettings[category.id]}
-                      onCheckedChange={(checked) => updateConsent(category.id, !!checked)}
+                      onCheckedChange={(checked) =>
+                        updateConsent(category.id, !!checked)
+                      }
                       disabled={category.required}
                       className="scale-125"
                     />
@@ -409,10 +451,12 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                     Informação Importante sobre Dados de Saúde
                   </p>
                   <p className="text-info-foreground/80 leading-relaxed">
-                    Os dados de saúde são considerados dados pessoais especiais e são processados 
-                    apenas mediante o seu consentimento explícito, conforme o Art. 9º da Lei n.º 22/11. 
-                    Estes dados são essenciais para a prestação de cuidados médicos adequados e são 
-                    protegidos com as mais altas medidas de segurança.
+                    Os dados de saúde são considerados dados pessoais especiais
+                    e são processados apenas mediante o seu consentimento
+                    explícito, conforme o Art. 9º da Lei n.º 22/11. Estes dados
+                    são essenciais para a prestação de cuidados médicos
+                    adequados e são protegidos com as mais altas medidas de
+                    segurança.
                   </p>
                 </div>
               </div>
@@ -432,7 +476,7 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                 disabled={isLoading}
                 className="flex-1"
               >
-                {isLoading ? 'A guardar...' : 'Guardar Preferências'}
+                {isLoading ? "A guardar..." : "Guardar Preferências"}
               </Button>
             </div>
           </div>
@@ -457,17 +501,42 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
               <h4 className="font-semibold mb-3">Os Seus Direitos</h4>
               <div className="space-y-3">
                 {[
-                  { icon: Eye, title: 'Direito de Acesso', desc: 'Consultar que dados pessoais processamos' },
-                  { icon: Settings, title: 'Direito de Retificação', desc: 'Corrigir dados incorretos ou incompletos' },
-                  { icon: X, title: 'Direito de Eliminação', desc: 'Solicitar a eliminação dos seus dados' },
-                  { icon: Lock, title: 'Direito de Limitação', desc: 'Restringir o processamento dos seus dados' },
-                  { icon: User, title: 'Direito de Portabilidade', desc: 'Receber os seus dados em formato estruturado' },
+                  {
+                    icon: Eye,
+                    title: "Direito de Acesso",
+                    desc: "Consultar que dados pessoais processamos",
+                  },
+                  {
+                    icon: Settings,
+                    title: "Direito de Retificação",
+                    desc: "Corrigir dados incorretos ou incompletos",
+                  },
+                  {
+                    icon: X,
+                    title: "Direito de Eliminação",
+                    desc: "Solicitar a eliminação dos seus dados",
+                  },
+                  {
+                    icon: Lock,
+                    title: "Direito de Limitação",
+                    desc: "Restringir o processamento dos seus dados",
+                  },
+                  {
+                    icon: User,
+                    title: "Direito de Portabilidade",
+                    desc: "Receber os seus dados em formato estruturado",
+                  },
                 ].map((right) => (
-                  <div key={right.title} className="flex items-start gap-3 p-3 border border-border rounded-lg">
+                  <div
+                    key={right.title}
+                    className="flex items-start gap-3 p-3 border border-border rounded-lg"
+                  >
                     <right.icon className="w-5 h-5 text-primary mt-0.5" />
                     <div>
                       <div className="font-medium">{right.title}</div>
-                      <div className="text-sm text-muted-foreground">{right.desc}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {right.desc}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -482,15 +551,21 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
                 <div className="flex items-center gap-3">
                   <User className="w-5 h-5 text-primary" />
                   <div>
-                    <div className="font-medium">Encarregado de Proteção de Dados (DPO)</div>
-                    <div className="text-sm text-muted-foreground">dpo@bemcuidar.co.ao</div>
+                    <div className="font-medium">
+                      Encarregado de Proteção de Dados (DPO)
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      dpo@bemcuidar.co.ao
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-primary" />
                   <div>
                     <div className="font-medium">Questões Legais</div>
-                    <div className="text-sm text-muted-foreground">legal@bemcuidar.co.ao</div>
+                    <div className="text-sm text-muted-foreground">
+                      legal@bemcuidar.co.ao
+                    </div>
                   </div>
                 </div>
               </div>
@@ -498,10 +573,10 @@ export default function ConsentManager({ onConsentChange }: ConsentManagerProps)
 
             <div className="bg-muted/50 p-4 rounded-lg">
               <p className="text-sm text-muted-foreground">
-                Para mais informações sobre a Lei n.º 22/11, consulte:{' '}
-                <a 
-                  href="https://lex.ao" 
-                  target="_blank" 
+                Para mais informações sobre a Lei n.º 22/11, consulte:{" "}
+                <a
+                  href="https://lex.ao"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline inline-flex items-center gap-1"
                 >

@@ -130,19 +130,22 @@ export default function DashboardLayout() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isSidebarOpen) {
-        const sidebar = document.getElementById('mobile-sidebar');
-        const menuButton = document.getElementById('mobile-menu-button');
-        
-        if (sidebar && menuButton && 
-            !sidebar.contains(event.target as Node) && 
-            !menuButton.contains(event.target as Node)) {
+        const sidebar = document.getElementById("mobile-sidebar");
+        const menuButton = document.getElementById("mobile-menu-button");
+
+        if (
+          sidebar &&
+          menuButton &&
+          !sidebar.contains(event.target as Node) &&
+          !menuButton.contains(event.target as Node)
+        ) {
           setIsSidebarOpen(false);
         }
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
 
   if (!user) {
@@ -158,7 +161,9 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 ${isDarkMode ? "dark" : ""}`}>
+    <div
+      className={`min-h-screen bg-gray-50 dark:bg-gray-900 ${isDarkMode ? "dark" : ""}`}
+    >
       {/* Mobile sidebar backdrop */}
       {isSidebarOpen && (
         <div
@@ -218,7 +223,9 @@ export default function DashboardLayout() {
                       ? "active bg-primary text-primary-foreground shadow-accessible"
                       : "text-sidebar-foreground"
                   }`}
-                  onClick={() => window.innerWidth < 1024 && setIsSidebarOpen(false)}
+                  onClick={() =>
+                    window.innerWidth < 1024 && setIsSidebarOpen(false)
+                  }
                 >
                   <div className="flex items-center space-x-3">
                     <Icon
@@ -229,8 +236,11 @@ export default function DashboardLayout() {
                     <span className="truncate">{item.name}</span>
                   </div>
                   {item.badge && item.badge > 0 && (
-                    <Badge variant="destructive" className="text-xs min-w-[20px] h-5">
-                      {item.badge > 99 ? '99+' : item.badge}
+                    <Badge
+                      variant="destructive"
+                      className="text-xs min-w-[20px] h-5"
+                    >
+                      {item.badge > 99 ? "99+" : item.badge}
                     </Badge>
                   )}
                 </Link>
@@ -298,7 +308,9 @@ export default function DashboardLayout() {
                 size="sm"
                 onClick={toggleDarkMode}
                 className="p-2 w-9 h-9 btn-hover-lift"
-                aria-label={isDarkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+                aria-label={
+                  isDarkMode ? "Ativar modo claro" : "Ativar modo escuro"
+                }
               >
                 {isDarkMode ? (
                   <Sun className="w-4 h-4" />
@@ -308,14 +320,20 @@ export default function DashboardLayout() {
               </Button>
 
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative p-2 w-9 h-9 btn-hover-lift">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="relative p-2 w-9 h-9 btn-hover-lift"
+              >
                 <Bell className="w-4 h-4" />
                 {unreadMessages + newExamResults > 0 && (
                   <Badge
                     variant="destructive"
                     className="absolute -top-1 -right-1 w-5 h-5 text-xs p-0 flex items-center justify-center badge-hover"
                   >
-                    {unreadMessages + newExamResults > 99 ? '99+' : unreadMessages + newExamResults}
+                    {unreadMessages + newExamResults > 99
+                      ? "99+"
+                      : unreadMessages + newExamResults}
                   </Badge>
                 )}
               </Button>

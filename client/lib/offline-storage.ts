@@ -1,7 +1,7 @@
 /**
  * Sistema de Armazenamento Offline - IndexedDB
  * Clínica Bem Cuidar
- * 
+ *
  * Gerencia dados offline para PWA, incluindo:
  * - Formulários de agendamento
  * - Dados de contacto
@@ -11,17 +11,17 @@
  */
 
 // Configuração do banco de dados
-const DB_NAME = 'BemCuidarDB';
+const DB_NAME = "BemCuidarDB";
 const DB_VERSION = 1;
 
 // Stores (tabelas)
 const STORES = {
-  APPOINTMENTS: 'appointments',
-  CONTACTS: 'contacts',
-  SETTINGS: 'settings',
-  API_CACHE: 'api_cache',
-  CONSENT_LOGS: 'consent_logs',
-  SYNC_QUEUE: 'sync_queue',
+  APPOINTMENTS: "appointments",
+  CONTACTS: "contacts",
+  SETTINGS: "settings",
+  API_CACHE: "api_cache",
+  CONSENT_LOGS: "consent_logs",
+  SYNC_QUEUE: "sync_queue",
 } as const;
 
 // Tipos
@@ -29,7 +29,7 @@ export interface OfflineAppointment {
   id: string;
   timestamp: number;
   data: any;
-  status: 'pending' | 'syncing' | 'synced' | 'error';
+  status: "pending" | "syncing" | "synced" | "error";
   retryCount: number;
   lastRetry?: number;
   error?: string;
@@ -39,7 +39,7 @@ export interface OfflineContact {
   id: string;
   timestamp: number;
   data: any;
-  status: 'pending' | 'syncing' | 'synced' | 'error';
+  status: "pending" | "syncing" | "synced" | "error";
   retryCount: number;
 }
 
@@ -62,14 +62,14 @@ export interface ConsentLog {
 
 export interface SyncQueueItem {
   id: string;
-  type: 'appointment' | 'contact' | 'consent';
+  type: "appointment" | "contact" | "consent";
   endpoint: string;
-  method: 'POST' | 'PUT' | 'DELETE';
+  method: "POST" | "PUT" | "DELETE";
   data: any;
   timestamp: number;
   retryCount: number;
   nextRetry: number;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 class OfflineStorage {
@@ -90,7 +90,7 @@ class OfflineStorage {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
 
       request.onerror = () => {
-        reject(new Error('Failed to open IndexedDB'));
+        reject(new Error("Failed to open IndexedDB"));
       };
 
       request.onsuccess = () => {
@@ -113,43 +113,53 @@ class OfflineStorage {
   private createStores(db: IDBDatabase): void {
     // Store para agendamentos offline
     if (!db.objectStoreNames.contains(STORES.APPOINTMENTS)) {
-      const appointmentStore = db.createObjectStore(STORES.APPOINTMENTS, { keyPath: 'id' });
-      appointmentStore.createIndex('timestamp', 'timestamp');
-      appointmentStore.createIndex('status', 'status');
+      const appointmentStore = db.createObjectStore(STORES.APPOINTMENTS, {
+        keyPath: "id",
+      });
+      appointmentStore.createIndex("timestamp", "timestamp");
+      appointmentStore.createIndex("status", "status");
     }
 
     // Store para contactos offline
     if (!db.objectStoreNames.contains(STORES.CONTACTS)) {
-      const contactStore = db.createObjectStore(STORES.CONTACTS, { keyPath: 'id' });
-      contactStore.createIndex('timestamp', 'timestamp');
-      contactStore.createIndex('status', 'status');
+      const contactStore = db.createObjectStore(STORES.CONTACTS, {
+        keyPath: "id",
+      });
+      contactStore.createIndex("timestamp", "timestamp");
+      contactStore.createIndex("status", "status");
     }
 
     // Store para configurações
     if (!db.objectStoreNames.contains(STORES.SETTINGS)) {
-      db.createObjectStore(STORES.SETTINGS, { keyPath: 'key' });
+      db.createObjectStore(STORES.SETTINGS, { keyPath: "key" });
     }
 
     // Store para cache da API
     if (!db.objectStoreNames.contains(STORES.API_CACHE)) {
-      const cacheStore = db.createObjectStore(STORES.API_CACHE, { keyPath: 'key' });
-      cacheStore.createIndex('timestamp', 'timestamp');
-      cacheStore.createIndex('expires', 'expires');
+      const cacheStore = db.createObjectStore(STORES.API_CACHE, {
+        keyPath: "key",
+      });
+      cacheStore.createIndex("timestamp", "timestamp");
+      cacheStore.createIndex("expires", "expires");
     }
 
     // Store para logs de consentimento
     if (!db.objectStoreNames.contains(STORES.CONSENT_LOGS)) {
-      const consentStore = db.createObjectStore(STORES.CONSENT_LOGS, { keyPath: 'id' });
-      consentStore.createIndex('timestamp', 'timestamp');
-      consentStore.createIndex('synced', 'synced');
+      const consentStore = db.createObjectStore(STORES.CONSENT_LOGS, {
+        keyPath: "id",
+      });
+      consentStore.createIndex("timestamp", "timestamp");
+      consentStore.createIndex("synced", "synced");
     }
 
     // Store para fila de sincronização
     if (!db.objectStoreNames.contains(STORES.SYNC_QUEUE)) {
-      const syncStore = db.createObjectStore(STORES.SYNC_QUEUE, { keyPath: 'id' });
-      syncStore.createIndex('timestamp', 'timestamp');
-      syncStore.createIndex('nextRetry', 'nextRetry');
-      syncStore.createIndex('priority', 'priority');
+      const syncStore = db.createObjectStore(STORES.SYNC_QUEUE, {
+        keyPath: "id",
+      });
+      syncStore.createIndex("timestamp", "timestamp");
+      syncStore.createIndex("nextRetry", "nextRetry");
+      syncStore.createIndex("priority", "priority");
     }
   }
 
@@ -167,17 +177,17 @@ class OfflineStorage {
   async saveAppointment(data: any): Promise<string> {
     const db = await this.getDB();
     const id = `appointment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const appointment: OfflineAppointment = {
       id,
       timestamp: Date.now(),
       data,
-      status: 'pending',
+      status: "pending",
       retryCount: 0,
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.APPOINTMENTS], 'readwrite');
+      const transaction = db.transaction([STORES.APPOINTMENTS], "readwrite");
       const store = transaction.objectStore(STORES.APPOINTMENTS);
       const request = store.add(appointment);
 
@@ -185,14 +195,14 @@ class OfflineStorage {
         // Adicionar à fila de sincronização
         this.addToSyncQueue({
           id: `sync_${id}`,
-          type: 'appointment',
-          endpoint: '/api/agendamento',
-          method: 'POST',
+          type: "appointment",
+          endpoint: "/api/agendamento",
+          method: "POST",
           data,
           timestamp: Date.now(),
           retryCount: 0,
           nextRetry: Date.now(),
-          priority: 'high'
+          priority: "high",
         });
         resolve(id);
       };
@@ -207,31 +217,31 @@ class OfflineStorage {
   async saveContact(data: any): Promise<string> {
     const db = await this.getDB();
     const id = `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const contact: OfflineContact = {
       id,
       timestamp: Date.now(),
       data,
-      status: 'pending',
+      status: "pending",
       retryCount: 0,
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.CONTACTS], 'readwrite');
+      const transaction = db.transaction([STORES.CONTACTS], "readwrite");
       const store = transaction.objectStore(STORES.CONTACTS);
       const request = store.add(contact);
 
       request.onsuccess = () => {
         this.addToSyncQueue({
           id: `sync_${id}`,
-          type: 'contact',
-          endpoint: '/api/contacto',
-          method: 'POST',
+          type: "contact",
+          endpoint: "/api/contacto",
+          method: "POST",
           data,
           timestamp: Date.now(),
           retryCount: 0,
           nextRetry: Date.now(),
-          priority: 'medium'
+          priority: "medium",
         });
         resolve(id);
       };
@@ -246,33 +256,33 @@ class OfflineStorage {
   async saveConsentLog(settings: any, version: string): Promise<string> {
     const db = await this.getDB();
     const id = `consent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const log: ConsentLog = {
       id,
       timestamp: Date.now(),
       settings,
       version,
-      ipAddress: 'hidden', // Será preenchido no backend
+      ipAddress: "hidden", // Será preenchido no backend
       userAgent: navigator.userAgent,
       synced: false,
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.CONSENT_LOGS], 'readwrite');
+      const transaction = db.transaction([STORES.CONSENT_LOGS], "readwrite");
       const store = transaction.objectStore(STORES.CONSENT_LOGS);
       const request = store.add(log);
 
       request.onsuccess = () => {
         this.addToSyncQueue({
           id: `sync_${id}`,
-          type: 'consent',
-          endpoint: '/api/consent-log',
-          method: 'POST',
+          type: "consent",
+          endpoint: "/api/consent-log",
+          method: "POST",
           data: log,
           timestamp: Date.now(),
           retryCount: 0,
           nextRetry: Date.now(),
-          priority: 'low'
+          priority: "low",
         });
         resolve(id);
       };
@@ -286,9 +296,9 @@ class OfflineStorage {
    */
   private async addToSyncQueue(item: SyncQueueItem): Promise<void> {
     const db = await this.getDB();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.SYNC_QUEUE], 'readwrite');
+      const transaction = db.transaction([STORES.SYNC_QUEUE], "readwrite");
       const store = transaction.objectStore(STORES.SYNC_QUEUE);
       const request = store.add(item);
 
@@ -302,11 +312,11 @@ class OfflineStorage {
    */
   async getPendingSyncItems(): Promise<SyncQueueItem[]> {
     const db = await this.getDB();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.SYNC_QUEUE], 'readonly');
+      const transaction = db.transaction([STORES.SYNC_QUEUE], "readonly");
       const store = transaction.objectStore(STORES.SYNC_QUEUE);
-      const index = store.index('nextRetry');
+      const index = store.index("nextRetry");
       const request = index.getAll(IDBKeyRange.upperBound(Date.now()));
 
       request.onsuccess = () => {
@@ -332,25 +342,28 @@ class OfflineStorage {
     try {
       const response = await fetch(item.endpoint, {
         method: item.method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(item.data),
       });
 
       if (response.ok) {
         // Remover da fila de sincronização
         await this.removeFromSyncQueue(item.id);
-        
+
         // Marcar como sincronizado no store original
         await this.markAsSynced(item);
-        
-        console.log(`[OfflineStorage] Synced ${item.type} successfully:`, item.id);
+
+        console.log(
+          `[OfflineStorage] Synced ${item.type} successfully:`,
+          item.id,
+        );
         return true;
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
     } catch (error) {
       console.error(`[OfflineStorage] Sync failed for ${item.id}:`, error);
-      
+
       // Incrementar contador de tentativas
       await this.incrementRetryCount(item);
       return false;
@@ -362,9 +375,9 @@ class OfflineStorage {
    */
   private async removeFromSyncQueue(id: string): Promise<void> {
     const db = await this.getDB();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.SYNC_QUEUE], 'readwrite');
+      const transaction = db.transaction([STORES.SYNC_QUEUE], "readwrite");
       const store = transaction.objectStore(STORES.SYNC_QUEUE);
       const request = store.delete(id);
 
@@ -378,7 +391,7 @@ class OfflineStorage {
    */
   private async markAsSynced(item: SyncQueueItem): Promise<void> {
     const db = await this.getDB();
-    
+
     const storeMap = {
       appointment: STORES.APPOINTMENTS,
       contact: STORES.CONTACTS,
@@ -389,22 +402,22 @@ class OfflineStorage {
     if (!storeName) return;
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([storeName], 'readwrite');
+      const transaction = db.transaction([storeName], "readwrite");
       const store = transaction.objectStore(storeName);
-      
+
       // Extrair ID original do item
-      const originalId = item.id.replace('sync_', '');
+      const originalId = item.id.replace("sync_", "");
       const getRequest = store.get(originalId);
 
       getRequest.onsuccess = () => {
         const record = getRequest.result;
         if (record) {
-          if (item.type === 'consent') {
+          if (item.type === "consent") {
             record.synced = true;
           } else {
-            record.status = 'synced';
+            record.status = "synced";
           }
-          
+
           const putRequest = store.put(record);
           putRequest.onsuccess = () => resolve();
           putRequest.onerror = () => reject(putRequest.error);
@@ -422,7 +435,7 @@ class OfflineStorage {
    */
   private async incrementRetryCount(item: SyncQueueItem): Promise<void> {
     const db = await this.getDB();
-    
+
     const maxRetries = 5;
     const retryDelay = Math.min(1000 * Math.pow(2, item.retryCount), 300000); // Backoff exponencial, máx 5min
 
@@ -440,7 +453,7 @@ class OfflineStorage {
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.SYNC_QUEUE], 'readwrite');
+      const transaction = db.transaction([STORES.SYNC_QUEUE], "readwrite");
       const store = transaction.objectStore(STORES.SYNC_QUEUE);
       const request = store.put(updatedItem);
 
@@ -452,18 +465,22 @@ class OfflineStorage {
   /**
    * Cache de dados da API
    */
-  async cacheAPIData(key: string, data: any, ttlMinutes: number = 30): Promise<void> {
+  async cacheAPIData(
+    key: string,
+    data: any,
+    ttlMinutes: number = 30,
+  ): Promise<void> {
     const db = await this.getDB();
-    
+
     const cacheItem: APICache = {
       key,
       data,
       timestamp: Date.now(),
-      expires: Date.now() + (ttlMinutes * 60 * 1000),
+      expires: Date.now() + ttlMinutes * 60 * 1000,
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.API_CACHE], 'readwrite');
+      const transaction = db.transaction([STORES.API_CACHE], "readwrite");
       const store = transaction.objectStore(STORES.API_CACHE);
       const request = store.put(cacheItem);
 
@@ -477,9 +494,9 @@ class OfflineStorage {
    */
   async getCachedData(key: string): Promise<any | null> {
     const db = await this.getDB();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.API_CACHE], 'readonly');
+      const transaction = db.transaction([STORES.API_CACHE], "readonly");
       const store = transaction.objectStore(STORES.API_CACHE);
       const request = store.get(key);
 
@@ -505,9 +522,9 @@ class OfflineStorage {
    */
   async removeCachedData(key: string): Promise<void> {
     const db = await this.getDB();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.API_CACHE], 'readwrite');
+      const transaction = db.transaction([STORES.API_CACHE], "readwrite");
       const store = transaction.objectStore(STORES.API_CACHE);
       const request = store.delete(key);
 
@@ -522,11 +539,11 @@ class OfflineStorage {
   async cleanExpiredData(): Promise<void> {
     const db = await this.getDB();
     const now = Date.now();
-    
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORES.API_CACHE], 'readwrite');
+      const transaction = db.transaction([STORES.API_CACHE], "readwrite");
       const store = transaction.objectStore(STORES.API_CACHE);
-      const index = store.index('expires');
+      const index = store.index("expires");
       const request = index.openCursor(IDBKeyRange.upperBound(now));
 
       request.onsuccess = (event) => {
@@ -553,7 +570,7 @@ class OfflineStorage {
     cacheSize: number;
   }> {
     const db = await this.getDB();
-    
+
     const stats = {
       appointments: 0,
       contacts: 0,
@@ -561,10 +578,15 @@ class OfflineStorage {
       cacheSize: 0,
     };
 
-    const stores = [STORES.APPOINTMENTS, STORES.CONTACTS, STORES.SYNC_QUEUE, STORES.API_CACHE];
-    const promises = stores.map(storeName => {
+    const stores = [
+      STORES.APPOINTMENTS,
+      STORES.CONTACTS,
+      STORES.SYNC_QUEUE,
+      STORES.API_CACHE,
+    ];
+    const promises = stores.map((storeName) => {
       return new Promise<number>((resolve, reject) => {
-        const transaction = db.transaction([storeName], 'readonly');
+        const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         const request = store.count();
 
@@ -574,7 +596,7 @@ class OfflineStorage {
     });
 
     const results = await Promise.all(promises);
-    
+
     stats.appointments = results[0];
     stats.contacts = results[1];
     stats.syncQueue = results[2];
@@ -588,7 +610,7 @@ class OfflineStorage {
    */
   async runAutoSync(): Promise<void> {
     if (!navigator.onLine) {
-      console.log('[OfflineStorage] Offline, skipping sync');
+      console.log("[OfflineStorage] Offline, skipping sync");
       return;
     }
 
@@ -598,7 +620,7 @@ class OfflineStorage {
     for (const item of pendingItems) {
       await this.syncItem(item);
       // Pequeno delay entre sincronizações para não sobrecarregar
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     // Limpar dados expirados
@@ -610,22 +632,25 @@ class OfflineStorage {
 export const offlineStorage = new OfflineStorage();
 
 // Configurar sincronização automática
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   // Sync quando voltar online
-  window.addEventListener('online', () => {
-    console.log('[OfflineStorage] Back online, running sync');
+  window.addEventListener("online", () => {
+    console.log("[OfflineStorage] Back online, running sync");
     offlineStorage.runAutoSync();
   });
 
   // Sync periódico (a cada 5 minutos se online)
-  setInterval(() => {
-    if (navigator.onLine) {
-      offlineStorage.runAutoSync();
-    }
-  }, 5 * 60 * 1000);
+  setInterval(
+    () => {
+      if (navigator.onLine) {
+        offlineStorage.runAutoSync();
+      }
+    },
+    5 * 60 * 1000,
+  );
 
   // Sync quando a página está prestes a ser fechada
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener("beforeunload", () => {
     if (navigator.onLine) {
       offlineStorage.runAutoSync();
     }
