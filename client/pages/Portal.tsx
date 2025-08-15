@@ -313,10 +313,8 @@ export default function Portal() {
         />
         <Route path="exams" element={<DoctorExamsPage />} />
         <Route path="messages" element={<DoctorMessagesPage />} />
-        <Route
-          path="profile"
-          element={<div>Perfil em desenvolvimento...</div>}
-        />
+        <Route path="billing" element={<DoctorBillingPage />} />
+        <Route path="profile" element={<DoctorProfilePage />} />
         {/* Redirecionar rotas desconhecidas para dashboard médico */}
         <Route
           path="*"
