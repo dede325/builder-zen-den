@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
 import Footer from "@/components/Footer";
+import FloatingActionButtons from "@/components/FloatingActionButtons";
+import SearchDialog from "@/components/SearchDialog";
 import {
   Heart,
   Clock,
@@ -38,6 +40,7 @@ import {
   ChevronLeft,
   Play,
   Pause,
+  Search,
 } from "lucide-react";
 
 export default function Index() {
@@ -62,6 +65,7 @@ export default function Index() {
     useState<SpecialtyInfo | null>(null);
   const [isSpecialtyModalOpen, setIsSpecialtyModalOpen] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const heroImages = [
     {
@@ -648,6 +652,15 @@ export default function Index() {
               >
                 Contato
               </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsSearchOpen(true)}
+                className="mr-4"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Buscar
+              </Button>
               <Link
                 to="/portal"
                 className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
@@ -722,6 +735,18 @@ export default function Index() {
                 >
                   Contato
                 </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setIsSearchOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-fit"
+                >
+                  <Search className="w-4 h-4 mr-2" />
+                  Buscar
+                </Button>
                 <Link
                   to="/portal"
                   className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity w-fit"
@@ -1375,6 +1400,15 @@ export default function Index() {
       </section>
 
       <Footer />
+
+      {/* Floating Action Buttons */}
+      <FloatingActionButtons />
+
+      {/* Search Dialog */}
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
 
       {/* Specialty Modal */}
       <SpecialtyModal
