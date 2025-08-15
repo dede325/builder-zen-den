@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import GoogleMaps from "@/components/GoogleMaps";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -538,6 +539,23 @@ export default function Contato() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* Maps Section */}
+      <section className="py-20 bg-clinic-light/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Como Chegar
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Encontre facilmente nossa clínica no coração de Benfica, Luanda.
+              Estamos estrategicamente localizados para seu fácil acesso.
+            </p>
+          </div>
+
+          <GoogleMaps />
         </div>
       </section>
 
