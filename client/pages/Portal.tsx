@@ -11,6 +11,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import Dashboard from '@/components/dashboard/Dashboard';
 import AppointmentsPage from '@/components/dashboard/AppointmentsPage';
+import DoctorLayout from '@/components/dashboard/DoctorLayout';
+import DoctorDashboard from '@/components/dashboard/DoctorDashboard';
 import {
   ArrowLeft,
   Eye,
