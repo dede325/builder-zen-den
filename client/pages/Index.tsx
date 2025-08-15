@@ -95,19 +95,127 @@ export default function Index() {
     setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
   };
 
-  const specialties = [
-    { name: 'Cardiologia', icon: Heart, description: 'Cuidados especializados do coração' },
-    { name: 'Pediatria', icon: Baby, description: 'Atendimento dedicado às crianças' },
-    { name: 'Cirurgia Geral', icon: Activity, description: 'Procedimentos cirúrgicos seguros' },
-    { name: 'Dermatologia', icon: Shield, description: 'Saúde e beleza da pele' },
-    { name: 'Neurologia', icon: Brain, description: 'Cuidados do sistema nervoso' },
-    { name: 'Ginecologia-Obstetrícia', icon: UserCheck, description: 'Saúde da mulher' },
-    { name: 'Ortopedia', icon: Activity, description: 'Saúde dos ossos e articulações' },
-    { name: 'Otorrinolaringologia', icon: Eye, description: 'Ouvido, nariz e garganta' },
-    { name: 'Urologia', icon: Stethoscope, description: 'Sistema urinário e reprodutor' },
-    { name: 'Endocrinologia', icon: Zap, description: 'Hormônios e metabolismo' },
-    { name: 'Gastroenterologia', icon: Activity, description: 'Sistema digestivo' },
-    { name: 'Medicina do Trabalho', icon: Users, description: 'Saúde ocupacional' }
+  const specialties: SpecialtyInfo[] = [
+    {
+      name: 'Cardiologia',
+      icon: Heart,
+      description: 'Cuidados especializados do coração',
+      detailedDescription: 'A cardiologia é a especialidade médica que se dedica ao diagnóstico e tratamento das doenças que acometem o coração e o sistema cardiovascular. Nossa equipe de cardiologistas está preparada para oferecer cuidados completos desde a prevenção até o tratamento de condições cardíacas complexas.',
+      conditions: ['Hipertensão arterial', 'Insuficiência cardíaca', 'Arritmias cardíacas', 'Infarto do miocárdio', 'Angina', 'Doenças das válvulas cardíacas'],
+      procedures: ['Eletrocardiograma', 'Ecocardiograma', 'Holter 24h', 'Teste ergométrico', 'Cateterismo cardíaco', 'Angioplastia'],
+      imageUrl: 'https://images.pexels.com/photos/6320167/pexels-photo-6320167.jpeg',
+      specialists: ['Maria Silva', 'João Santos', 'Ana Costa']
+    },
+    {
+      name: 'Pediatria',
+      icon: Baby,
+      description: 'Atendimento dedicado às crianças',
+      detailedDescription: 'A pediatria é a especialidade médica dedicada à assistência de crianças, adolescentes e jovens até os 18 anos. Nossos pediatras oferecem cuidados preventivos e curativos, acompanhando o crescimento e desenvolvimento saudável desde o nascimento.',
+      conditions: ['Infecções respiratórias', 'Diarreias e gastroenterites', 'Alergias', 'Distúrbios do crescimento', 'Vacinação', 'Desenvolvimento neuropsicomotor'],
+      procedures: ['Consultas de rotina', 'Vacinação', 'Testes de desenvolvimento', 'Orientação nutricional', 'Puericultura', 'Nebulização'],
+      imageUrl: 'https://images.pexels.com/photos/695954/pexels-photo-695954.jpeg',
+      specialists: ['Pedro Oliveira', 'Lucia Fernandes', 'Carlos Mendes']
+    },
+    {
+      name: 'Cirurgia Geral',
+      icon: Activity,
+      description: 'Procedimentos cirúrgicos seguros',
+      detailedDescription: 'A cirurgia geral abrange procedimentos cirúrgicos em diversas partes do corpo. Nossa equipe cirúrgica utiliza técnicas modernas e minimamente invasivas para garantir os melhores resultados e uma recuperação mais rápida para nossos pacientes.',
+      conditions: ['Hérnias', 'Cálculos biliares', 'Apendicite', 'Tumores benignos', 'Feridas complexas', 'Doenças da tireoide'],
+      procedures: ['Herniorrafia', 'Colecistectomia', 'Apendicectomia', 'Biópsias', 'Cirurgia de tireoide', 'Cirurgia laparoscópica'],
+      imageUrl: 'https://images.pexels.com/photos/25205116/pexels-photo-25205116.jpeg',
+      specialists: ['Roberto Lima', 'Fernanda Alves', 'Miguel Torres']
+    },
+    {
+      name: 'Dermatologia',
+      icon: Shield,
+      description: 'Saúde e beleza da pele',
+      detailedDescription: 'A dermatologia é a especialidade que cuida da saúde da pele, cabelos e unhas. Oferecemos tratamentos para doenças dermatológicas, procedimentos estéticos e orientações para manutenção da saúde da pele.',
+      conditions: ['Acne', 'Dermatite', 'Psoríase', 'Câncer de pele', 'Alopecia', 'Micoses'],
+      procedures: ['Consulta dermatológica', 'Mapeamento de pintas', 'Biópsias de pele', 'Crioterapia', 'Procedimentos estéticos', 'Laser terapêutico'],
+      imageUrl: 'https://images.pexels.com/photos/8528645/pexels-photo-8528645.jpeg',
+      specialists: ['Sandra Ribeiro', 'Paulo Martins', 'Clara Sousa']
+    },
+    {
+      name: 'Neurologia',
+      icon: Brain,
+      description: 'Cuidados do sistema nervoso',
+      detailedDescription: 'A neurologia trata das doenças do sistema nervoso central e periférico. Nossa equipe neurológica está preparada para diagnosticar e tratar condições que afetam o cérebro, medula espinhal, nervos e músculos.',
+      conditions: ['Enxaqueca', 'Epilepsia', 'AVC', 'Doença de Parkinson', 'Alzheimer', 'Esclerose múltipla'],
+      procedures: ['Eletroencefalograma', 'Eletroneuromiografia', 'Punção lombar', 'Doppler transcraniano', 'Consulta neurológica', 'Testes cognitivos'],
+      imageUrl: 'https://images.pexels.com/photos/20860586/pexels-photo-20860586.jpeg',
+      specialists: ['Dr. Antonio Gomes', 'Dra. Beatriz Rocha', 'Dr. Fernando Dias']
+    },
+    {
+      name: 'Ginecologia-Obstetrícia',
+      icon: UserCheck,
+      description: 'Saúde da mulher',
+      detailedDescription: 'A ginecologia e obstetrícia é a especialidade que cuida da saúde da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.',
+      conditions: ['Infecções ginecológicas', 'Distúrbios menstruais', 'Menopausa', 'Gravidez', 'Câncer ginecológico', 'Planejamento familiar'],
+      procedures: ['Papanicolaou', 'Ultrassom pélvico', 'Colposcopia', 'Pré-natal', 'Parto normal', 'Cesariana'],
+      imageUrl: 'https://images.pexels.com/photos/8528645/pexels-photo-8528645.jpeg',
+      specialists: ['Dra. Mariana Lopes', 'Dra. Isabel Carvalho', 'Dra. Teresa Nunes']
+    },
+    {
+      name: 'Ortopedia',
+      icon: Activity,
+      description: 'Saúde dos ossos e articulações',
+      detailedDescription: 'A ortopedia é a especialidade médica que cuida do sistema musculoesquelético. Tratamos fraturas, lesões esportivas, doenças degenerativas e deformidades dos ossos, articulações, músculos, tendões e ligamentos.',
+      conditions: ['Fraturas', 'Artrose', 'Lesões esportivas', 'Hérnia de disco', 'Tendinites', 'Escoliose'],
+      procedures: ['Radiografias', 'Infiltrações', 'Artroscopia', 'Cirurgia de coluna', 'Próteses articulares', 'Fisioterapia'],
+      imageUrl: 'https://images.pexels.com/photos/20860586/pexels-photo-20860586.jpeg',
+      specialists: ['Dr. Ricardo Pereira', 'Dr. José Ferreira', 'Dra. Sónia Ramos']
+    },
+    {
+      name: 'Otorrinolaringologia',
+      icon: Eye,
+      description: 'Ouvido, nariz e garganta',
+      detailedDescription: 'A otorrinolaringologia trata das doenças do ouvido, nariz, seios paranasais, faringe e laringe. Nossa equipe oferece cuidados completos para problemas auditivos, respiratórios e de deglutição.',
+      conditions: ['Otite', 'Sinusite', 'Amigdalite', 'Perda auditiva', 'Ronco e apneia', 'Vertigem'],
+      procedures: ['Audiometria', 'Endoscopia nasal', 'Timpanometria', 'Cirurgia de amígdalas', 'Septoplastia', 'Implante coclear'],
+      imageUrl: 'https://images.pexels.com/photos/6320167/pexels-photo-6320167.jpeg',
+      specialists: ['Dr. Manuel Castro', 'Dra. Patrícia Moreira', 'Dr. André Silva']
+    },
+    {
+      name: 'Urologia',
+      icon: Stethoscope,
+      description: 'Sistema urinário e reprodutor',
+      detailedDescription: 'A urologia é a especialidade que trata das doenças do sistema urinário masculino e feminino, e do sistema reprodutor masculino. Oferecemos cuidados desde a prevenção até tratamentos cirúrgicos complexos.',
+      conditions: ['Infecção urinária', 'Cálculos renais', 'Próstata aumentada', 'Incontinência urinária', 'Disfunção erétil', 'Câncer urológico'],
+      procedures: ['Ultrassom urológico', 'Cistoscopia', 'Biópsia de próstata', 'Litotripsia', 'Cirurgia de próstata', 'Vasectomia'],
+      imageUrl: 'https://images.pexels.com/photos/6320167/pexels-photo-6320167.jpeg',
+      specialists: ['Dr. Henrique Viana', 'Dr. Gabriel Monteiro', 'Dra. Raquel Teixeira']
+    },
+    {
+      name: 'Endocrinologia',
+      icon: Zap,
+      description: 'Hormônios e metabolismo',
+      detailedDescription: 'A endocrinologia é a especialidade que cuida dos distúrbios hormonais e metabólicos. Tratamos diabetes, doenças da tireoide, obesidade e outros desequilíbrios hormonais que afetam o funcionamento do organismo.',
+      conditions: ['Diabetes', 'Hipotireoidismo', 'Hipertireoidismo', 'Obesidade', 'Osteoporose', 'Síndrome metabólica'],
+      procedures: ['Consulta endócrina', 'Testes hormonais', 'Curva glicêmica', 'Densitometria óssea', 'Orientação nutricional', 'Monitorização contínua'],
+      imageUrl: 'https://images.pexels.com/photos/6320167/pexels-photo-6320167.jpeg',
+      specialists: ['Dra. Cristina Rodrigues', 'Dr. Rui Barbosa', 'Dra. Helena Correia']
+    },
+    {
+      name: 'Gastroenterologia',
+      icon: Activity,
+      description: 'Sistema digestivo',
+      detailedDescription: 'A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, fígado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.',
+      conditions: ['Gastrite', 'Úlcera péptica', 'Refluxo gastroesofágico', 'Síndrome do intestino irritável', 'Hepatite', 'Doença de Crohn'],
+      procedures: ['Endoscopia digestiva', 'Colonoscopia', 'Retossigmoidoscopia', 'Teste respiratório', 'Biópsia hepática', 'Polipectomia'],
+      imageUrl: 'https://images.pexels.com/photos/6320167/pexels-photo-6320167.jpeg',
+      specialists: ['Dr. Vítor Almeida', 'Dra. Susana Pinto', 'Dr. Nuno Araújo']
+    },
+    {
+      name: 'Medicina do Trabalho',
+      icon: Users,
+      description: 'Saúde ocupacional',
+      detailedDescription: 'A medicina do trabalho foca na prevenção, diagnóstico e tratamento de doenças relacionadas ao trabalho. Oferecemos exames ocupacionais e programas de saúde para empresas e trabalhadores.',
+      conditions: ['LER/DORT', 'Perda auditiva ocupacional', 'Doenças respiratórias ocupacionais', 'Stress ocupacional', 'Acidentes de trabalho', 'Exposição a agentes químicos'],
+      procedures: ['Exames admissionais', 'Exames periódicos', 'Audiometria ocupacional', 'Espirometria', 'Acuidade visual', 'Avaliação ergonômica'],
+      imageUrl: 'https://images.pexels.com/photos/9951388/pexels-photo-9951388.jpeg',
+      specialists: ['Dr. Luís Tavares', 'Dra. Mónica Bastos', 'Dr. Sérgio Costa']
+    }
   ];
 
   const validateEmail = (email: string): boolean => {
