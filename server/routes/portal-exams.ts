@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
 import { ApiResponse } from "../types";
+import { PDFGenerator } from "../pdf-generator";
 
 export const getExamResults: RequestHandler = async (req, res) => {
   try {
