@@ -296,7 +296,7 @@ export default function Index() {
     {
       name: "Ortopedia",
       icon: Activity,
-      description: "Saúde dos ossos e articulações",
+      description: "Saúde dos ossos e articulaç��es",
       detailedDescription:
         "A ortopedia é a especialidade médica que cuida do sistema musculoesquelético. Tratamos fraturas, lesões esportivas, doenças degenerativas e deformidades dos ossos, articulações, músculos, tendões e ligamentos.",
       conditions: [
@@ -1151,9 +1151,9 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="card-floating text-center">
                 <CardContent className="pt-4 sm:pt-6 p-3 sm:p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 equipment-hover">
                     <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
                   <h5 className="font-semibold mb-2 text-sm sm:text-base">
@@ -1165,9 +1165,9 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="card-floating text-center">
                 <CardContent className="pt-4 sm:pt-6 p-3 sm:p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 equipment-hover">
                     <Stethoscope className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
                   <h5 className="font-semibold mb-2 text-sm sm:text-base">
@@ -1179,9 +1179,9 @@ export default function Index() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="card-floating text-center">
                 <CardContent className="pt-4 sm:pt-6 p-3 sm:p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 equipment-hover">
                     <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
                   <h5 className="font-semibold mb-2 text-sm sm:text-base">
