@@ -5,11 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Send, 
-  Search, 
-  Phone, 
-  Video, 
+import {
+  Send,
+  Search,
+  Phone,
+  Video,
   MoreVertical,
   Paperclip,
   Smile,
@@ -18,7 +18,7 @@ import {
   Circle,
   MessageSquare,
   Stethoscope,
-  UserNurse,
+  Heart,
   Users
 } from 'lucide-react';
 import { ContatoChat, Mensagem } from '@shared/patient-types';
