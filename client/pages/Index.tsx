@@ -278,27 +278,27 @@ export default function Index() {
                 >
                   Especialidades
                 </a>
-                <a
-                  href="#exames"
+                <Link
+                  to="/exames"
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Exames
-                </a>
-                <a
-                  href="#sobre"
+                </Link>
+                <Link
+                  to="/sobre"
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sobre
-                </a>
-                <a
-                  href="#contato"
+                </Link>
+                <Link
+                  to="/contato"
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contato
-                </a>
+                </Link>
                 <Link
                   to="/portal"
                   className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity w-fit"
