@@ -134,7 +134,7 @@ export default function Index() {
       icon: Heart,
       description: "Cuidados especializados do coração",
       detailedDescription:
-        "A cardiologia é a especialidade médica que se dedica ao diagnóstico e tratamento das doenças que acometem o coração e o sistema cardiovascular. Nossa equipe de cardiologistas está preparada para oferecer cuidados completos desde a prevenção até o tratamento de condições cardíacas complexas.",
+        "A cardiologia é a especialidade médica que se dedica ao diagnóstico e tratamento das doenças que acometem o cora��ão e o sistema cardiovascular. Nossa equipe de cardiologistas está preparada para oferecer cuidados completos desde a prevenção até o tratamento de condições cardíacas complexas.",
       conditions: [
         "Hipertensão arterial",
         "Insuficiência cardíaca",
@@ -605,7 +605,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background pt-16 sm:pt-20">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
+      <header className="nav-premium fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
