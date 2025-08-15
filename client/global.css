@@ -1,12 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Importar hover states e animações */
 @import "./styles/hover-states.css";
 
 /* Importar estilos visuais aprimorados */
 @import "./styles/enhanced-visuals.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   /**
