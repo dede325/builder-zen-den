@@ -235,7 +235,7 @@ body {
 /* ===== SPECIALTY CARDS ENHANCEMENT ===== */
 
 .specialty-card-premium {
-  @apply group relative;
+  @apply relative;
   background-color: rgba(255, 255, 255, 0.9);
   @apply border border-clinic-accent border-opacity-20;
   @apply rounded-2xl p-6;
