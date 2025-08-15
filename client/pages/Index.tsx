@@ -1207,7 +1207,7 @@ export default function Index() {
           </div>
 
           <div className="max-w-2xl mx-auto">
-            <Card>
+            <Card className="card-medical-premium">
               <CardContent className="p-6 sm:p-8">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
