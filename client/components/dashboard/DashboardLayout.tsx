@@ -297,7 +297,7 @@ export default function DashboardLayout() {
                 variant="ghost"
                 size="sm"
                 onClick={toggleDarkMode}
-                className="p-2 w-9 h-9"
+                className="p-2 w-9 h-9 btn-hover-lift"
                 aria-label={isDarkMode ? "Ativar modo claro" : "Ativar modo escuro"}
               >
                 {isDarkMode ? (
@@ -308,12 +308,12 @@ export default function DashboardLayout() {
               </Button>
 
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative p-2 w-9 h-9">
+              <Button variant="ghost" size="sm" className="relative p-2 w-9 h-9 btn-hover-lift">
                 <Bell className="w-4 h-4" />
                 {unreadMessages + newExamResults > 0 && (
                   <Badge
                     variant="destructive"
-                    className="absolute -top-1 -right-1 w-5 h-5 text-xs p-0 flex items-center justify-center"
+                    className="absolute -top-1 -right-1 w-5 h-5 text-xs p-0 flex items-center justify-center badge-hover"
                   >
                     {unreadMessages + newExamResults > 99 ? '99+' : unreadMessages + newExamResults}
                   </Badge>
