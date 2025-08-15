@@ -34,77 +34,11 @@ import {
   Stethoscope,
 } from "lucide-react";
 
-// Placeholder components para as páginas do dashboard
-
-function ExamsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Exames</h2>
-      </div>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-center text-gray-500">
-            Página de exames em desenvolvimento...
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function MessagesPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Mensagens</h2>
-        <Button>Nova Mensagem</Button>
-      </div>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-center text-gray-500">
-            Página de mensagens em desenvolvimento...
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function InvoicesPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Faturas</h2>
-      </div>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-center text-gray-500">
-            Página de faturas em desenvolvimento...
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function ProfilePage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Perfil</h2>
-        <Button>Editar Perfil</Button>
-      </div>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-center text-gray-500">
-            Página de perfil em desenvolvimento...
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+// Import patient components
+import ExamesPage from "@/components/patient/ExamesPage";
+import MensagensPage from "@/components/patient/MensagensPage";
+import FaturasPage from "@/components/patient/FaturasPage";
+import PerfilPage from "@/components/patient/PerfilPage";
 
 // Componente de Login
 function LoginForm() {
