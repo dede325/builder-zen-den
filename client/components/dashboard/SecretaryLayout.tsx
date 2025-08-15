@@ -66,60 +66,60 @@ export default function SecretaryLayout() {
       name: "Dashboard",
       href: "/portal/secretary/dashboard",
       icon: LayoutDashboard,
-      color: "text-blue-600",
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
       name: "Agenda",
       href: "/portal/secretary/appointments",
       icon: Calendar,
       badge: pendingAppointments,
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
     },
     {
       name: "Pacientes",
       href: "/portal/secretary/patients",
       icon: Users,
       badge: waitingPatients,
-      color: "text-purple-600",
+      color: "text-purple-600 dark:text-purple-400",
     },
     {
       name: "Recepção",
       href: "/portal/secretary/reception",
       icon: UserPlus,
-      color: "text-indigo-600",
+      color: "text-indigo-600 dark:text-indigo-400",
     },
     {
       name: "Financeiro",
       href: "/portal/secretary/billing",
       icon: DollarSign,
       badge: pendingPayments,
-      color: "text-orange-600",
+      color: "text-orange-600 dark:text-orange-400",
     },
     {
       name: "Chamadas",
       href: "/portal/secretary/calls",
       icon: Phone,
       badge: todayCalls,
-      color: "text-teal-600",
+      color: "text-teal-600 dark:text-teal-400",
     },
     {
       name: "Documentos",
       href: "/portal/secretary/documents",
       icon: FileText,
-      color: "text-cyan-600",
+      color: "text-cyan-600 dark:text-cyan-400",
     },
     {
       name: "Mensagens",
       href: "/portal/secretary/messages",
       icon: MessageSquare,
       badge: unreadMessages,
-      color: "text-pink-600",
+      color: "text-pink-600 dark:text-pink-400",
     },
     {
       name: "Perfil",
       href: "/portal/secretary/profile",
       icon: User,
-      color: "text-gray-600",
+      color: "text-gray-600 dark:text-gray-400",
     },
   ];
 
@@ -250,14 +250,14 @@ export default function SecretaryLayout() {
                   to={item.href}
                   className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400"
-                      : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                      ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary"
+                      : "text-foreground/80 hover:bg-accent hover:text-accent-foreground"
                   }`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <div className="flex items-center space-x-3">
                     <Icon
-                      className={`w-5 h-5 ${isActive ? "text-blue-600 dark:text-blue-400" : item.color}`}
+                      className={`w-5 h-5 ${isActive ? "text-primary" : item.color}`}
                     />
                     <span>{item.name}</span>
                   </div>
