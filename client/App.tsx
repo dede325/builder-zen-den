@@ -24,6 +24,7 @@ import Equipe from "./pages/Equipe";
 import Galeria from "./pages/Galeria";
 import FAQ from "./pages/FAQ";
 import Planos from "./pages/Planos";
+import Login from "./pages/Login";
 
 // Specialty pages
 import Cardiologia from "./pages/specialties/Cardiologia";
