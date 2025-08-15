@@ -91,6 +91,28 @@
       "active": true,
       "createdAt": "2024-01-01T00:00:00.000Z",
       "updatedAt": "2025-01-15T08:00:00.000Z"
+    },
+    {
+      "id": "1755252825177",
+      "name": "Paciente",
+      "email": "paciente@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T10:13:45.177Z",
+      "updatedAt": "2025-08-15T10:13:45.177Z"
+    },
+    {
+      "id": "1755253421993",
+      "name": "Medico",
+      "email": "medico@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T10:23:41.993Z",
+      "updatedAt": "2025-08-15T10:23:41.993Z"
     }
   ],
   "appointments": [
@@ -109,7 +131,7 @@
       "symptoms": "Dor no peito ocasional",
       "notes": "Paciente com histórico familiar de problemas cardíacos",
       "paymentStatus": "pending",
-      "paymentAmount": 150.0,
+      "paymentAmount": 150,
       "createdAt": "2025-01-15T10:30:00.000Z",
       "updatedAt": "2025-01-15T10:30:00.000Z"
     },
@@ -129,7 +151,7 @@
       "notes": "Primeira consulta. Solicitados exames complementares.",
       "doctorNotes": "Paciente apresenta sintomas leves. ECG normal. Retorno em 30 dias.",
       "paymentStatus": "paid",
-      "paymentAmount": 150.0,
+      "paymentAmount": 150,
       "completedAt": "2024-12-15T10:30:00.000Z",
       "createdAt": "2024-12-10T14:20:00.000Z",
       "updatedAt": "2024-12-15T10:30:00.000Z"
@@ -149,7 +171,7 @@
       "symptoms": "Febre baixa",
       "notes": "Consulta de rotina",
       "paymentStatus": "pending",
-      "paymentAmount": 120.0,
+      "paymentAmount": 120,
       "createdAt": "2025-01-12T16:45:00.000Z",
       "updatedAt": "2025-01-14T09:00:00.000Z"
     },
@@ -169,6 +191,18 @@
       "cancellationReason": "Viagem imprevista",
       "createdAt": "2024-11-15T11:30:00.000Z",
       "updatedAt": "2024-11-19T12:00:00.000Z"
+    },
+    {
+      "id": "1755252978415",
+      "patientId": "1755252825177",
+      "specialty": "Neurologia",
+      "doctor": "Dr. Paulo Mendes",
+      "date": "2025-08-22",
+      "time": "14:00",
+      "status": "scheduled",
+      "notes": "",
+      "createdAt": "2025-08-15T10:16:18.415Z",
+      "updatedAt": "2025-08-15T10:16:18.415Z"
     }
   ],
   "examResults": [

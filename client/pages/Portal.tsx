@@ -1,3 +1,10 @@
+/**
+ * © 2025 B&S Best Services Angola & Alegria Matoso Investimentos.
+ * Tutelado por Kaijhe Morose.
+ * Todos os direitos reservados.
+ * Proibida a cópia, modificação, distribuição ou uso sem autorização escrita.
+ */
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -39,7 +46,18 @@ import {
   Lock,
   LogOut,
   Loader2,
+  Shield,
 } from "lucide-react";
+
+// Role-based dashboard components
+import PatientDashboard from "@/components/dashboards/PatientDashboard";
+import DoctorDashboard from "@/components/dashboards/DoctorDashboard";
+import NurseDashboard from "@/components/dashboards/NurseDashboard";
+import AdminDashboard from "@/components/dashboards/AdminDashboard";
+import ReceptionistDashboard from "@/components/dashboards/ReceptionistDashboard";
+
+// Import types from shared
+import { UserRole, Permission, PermissionManager } from "@shared/permissions";
 
 interface Patient {
   id: string;
@@ -49,6 +67,17 @@ interface Patient {
   birthDate: string;
   cpf: string;
   address: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  permissions: Permission[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Appointment {
@@ -85,6 +114,7 @@ export default function Portal() {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<Patient | null>(null);
+  const [currentUserRole, setCurrentUserRole] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -127,14 +157,19 @@ export default function Portal() {
   }, []);
 
   // API Helper
-  const apiCall = async (url: string, options: RequestInit = {}) => {
+  const apiCall = async (
+    url: string,
+    options: RequestInit = {},
+    token?: string,
+  ) => {
     const headers = {
       "Content-Type": "application/json",
       ...options.headers,
     };
 
-    if (authToken) {
-      headers["Authorization"] = `Bearer ${authToken}`;
+    const tokenToUse = token || authToken;
+    if (tokenToUse) {
+      headers["Authorization"] = `Bearer ${tokenToUse}`;
     }
 
     const response = await fetch(url, {
@@ -170,17 +205,18 @@ export default function Portal() {
 
       if (response.success) {
         setCurrentUser(response.patient);
+        setCurrentUserRole(response.user);
         setAuthToken(response.token);
         setProfileData(response.patient);
         setIsAuthenticated(true);
 
         toast({
           title: "Sucesso",
-          description: "Login realizado com sucesso",
+          description: `Login realizado como ${getRoleDisplayName(response.user?.role)} - ${response.patient.name}`,
         });
 
-        // Load initial data
-        loadData();
+        // Load initial data with the new token
+        loadData(response.token);
       } else {
         toast({
           title: "Erro",
@@ -209,6 +245,7 @@ export default function Portal() {
 
     setIsAuthenticated(false);
     setCurrentUser(null);
+    setCurrentUserRole(null);
     setAuthToken(null);
     setAppointments([]);
     setExamResults([]);
@@ -217,18 +254,18 @@ export default function Portal() {
   };
 
   // Data loading
-  const loadData = async () => {
+  const loadData = async (token?: string) => {
     await Promise.all([
-      loadAppointments(),
-      loadExamResults(),
-      loadNotificationSettings(),
+      loadAppointments(token),
+      loadExamResults(token),
+      loadNotificationSettings(token),
     ]);
   };
 
-  const loadAppointments = async () => {
+  const loadAppointments = async (token?: string) => {
     setIsLoadingAppointments(true);
     try {
-      const response = await apiCall("/api/portal/appointments");
+      const response = await apiCall("/api/portal/appointments", {}, token);
       if (response.success) {
         setAppointments(response.data);
       }
@@ -244,10 +281,10 @@ export default function Portal() {
     }
   };
 
-  const loadExamResults = async () => {
+  const loadExamResults = async (token?: string) => {
     setIsLoadingExams(true);
     try {
-      const response = await apiCall("/api/portal/exams");
+      const response = await apiCall("/api/portal/exams", {}, token);
       if (response.success) {
         setExamResults(response.data);
       }
@@ -263,9 +300,9 @@ export default function Portal() {
     }
   };
 
-  const loadNotificationSettings = async () => {
+  const loadNotificationSettings = async (token?: string) => {
     try {
-      const response = await apiCall("/api/portal/notifications");
+      const response = await apiCall("/api/portal/notifications", {}, token);
       if (response.success) {
         setNotificationSettings(response.data);
       }
@@ -428,6 +465,30 @@ export default function Portal() {
   };
 
   // Dashboard statistics
+  // Helper functions
+  const getRoleDisplayName = (role?: UserRole): string => {
+    const roleNames = {
+      [UserRole.PATIENT]: "Paciente",
+      [UserRole.DOCTOR]: "Médico",
+      [UserRole.NURSE]: "Enfermeira",
+      [UserRole.ADMIN]: "Administrador",
+      [UserRole.RECEPTIONIST]: "Recepcionista",
+    };
+    return role ? roleNames[role] : "Usuário";
+  };
+
+  const hasPermission = (permission: Permission): boolean => {
+    return currentUserRole
+      ? PermissionManager.hasPermission(currentUserRole, permission)
+      : false;
+  };
+
+  const canAccessResource = (resource: string, action: string): boolean => {
+    return currentUserRole
+      ? PermissionManager.canAccessResource(currentUserRole, resource, action)
+      : false;
+  };
+
   const getDashboardStats = () => {
     const scheduledAppointments = appointments.filter(
       (a) => a.status === "scheduled",
@@ -453,6 +514,124 @@ export default function Portal() {
       thisMonthAppointments: thisMonthAppointments.length,
       notifications: readyExams.length + scheduledAppointments.length,
     };
+  };
+
+  // Role-based dashboard renderer
+  const renderRoleBasedDashboard = () => {
+    if (!currentUserRole) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Shield className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">
+                Carregando Permissões
+              </h3>
+              <p className="text-muted-foreground">
+                Verificando suas permissões de acesso...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
+
+    const commonProps = {
+      currentUser,
+      appointments,
+      examResults,
+      notificationSettings,
+      isLoadingAppointments,
+      isLoadingExams,
+      activeTab,
+      setActiveTab,
+      onCreateAppointment: createAppointment,
+      onCancelAppointment: cancelAppointment,
+      onMarkExamAsViewed: markExamAsViewed,
+      onDownloadExam: downloadExam,
+      onUpdateProfile: () => setIsEditingProfile(true),
+      onUpdateNotifications: (settings: any) => {
+        // Handle notification updates
+        setNotificationSettings(settings);
+      },
+    };
+
+    switch (currentUserRole.role) {
+      case UserRole.PATIENT:
+        return <PatientDashboard {...commonProps} />;
+
+      case UserRole.DOCTOR:
+        return (
+          <DoctorDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            isLoadingExams={isLoadingExams}
+          />
+        );
+
+      case UserRole.NURSE:
+        return (
+          <NurseDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            isLoadingExams={isLoadingExams}
+          />
+        );
+
+      case UserRole.ADMIN:
+        return (
+          <AdminDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        );
+
+      case UserRole.RECEPTIONIST:
+        return (
+          <ReceptionistDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            onCreateAppointment={createAppointment}
+            onCancelAppointment={cancelAppointment}
+          />
+        );
+
+      default:
+        return (
+          <div className="container mx-auto px-4 py-8">
+            <Card>
+              <CardContent className="p-8 text-center">
+                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Acesso Negado</h3>
+                <p className="text-muted-foreground">
+                  Seu perfil não tem permissões para acessar este sistema.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={handleLogout}
+                >
+                  Fazer Logout
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        );
+    }
   };
 
   if (!isAuthenticated) {
@@ -618,10 +797,11 @@ export default function Portal() {
               />
               <div>
                 <h1 className="text-xl font-bold text-primary">
-                  Portal do Paciente
+                  Portal da Clínica Bem Cuidar
                 </h1>
                 <p className="text-xs text-muted-foreground">
-                  Bem-vindo, {currentUser?.name}
+                  {getRoleDisplayName(currentUserRole?.role)} -{" "}
+                  {currentUser?.name}
                 </p>
               </div>
             </div>
@@ -641,846 +821,119 @@ export default function Portal() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="appointments">Consultas</TabsTrigger>
-            <TabsTrigger value="exams">Exames</TabsTrigger>
-            <TabsTrigger value="profile">Perfil</TabsTrigger>
-            <TabsTrigger value="settings">Configurações</TabsTrigger>
-          </TabsList>
+      {/* Main Content - Role-based Dashboard */}
+      {renderRoleBasedDashboard()}
 
-          {/* Dashboard */}
-          <TabsContent value="dashboard" className="space-y-6">
-            {/* Notifications Banner */}
-            {examResults.filter((e) => e.status === "ready").length > 0 && (
-              <Card className="bg-green-50 border-green-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-green-800">
-                        Você tem{" "}
-                        {examResults.filter((e) => e.status === "ready").length}{" "}
-                        resultado(s) de exame disponível(is)!
-                      </h4>
-                      <p className="text-sm text-green-700">
-                        Clique em "Ver Exames" para acessar seus resultados.
-                      </p>
-                    </div>
-                    <Button
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700"
-                      onClick={() => setActiveTab("exams")}
-                    >
-                      Ver Exames
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {appointments.filter((a) => a.status === "scheduled").length >
-              0 && (
-              <Card className="bg-blue-50 border-blue-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="w-6 h-6 text-blue-600" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-blue-800">
-                        Você tem{" "}
-                        {
-                          appointments.filter((a) => a.status === "scheduled")
-                            .length
-                        }{" "}
-                        consulta(s) agendada(s)
-                      </h4>
-                      <p className="text-sm text-blue-700">
-                        Próxima consulta:{" "}
-                        {appointments.filter(
-                          (a) => a.status === "scheduled",
-                        )[0] &&
-                          `${appointments.filter((a) => a.status === "scheduled")[0].specialty} em ${new Date(appointments.filter((a) => a.status === "scheduled")[0].date).toLocaleDateString("pt-BR")}`}
-                      </p>
-                    </div>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700"
-                      onClick={() => setActiveTab("appointments")}
-                    >
-                      Ver Consultas
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-            {/* Quick Actions */}
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <Card
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setActiveTab("appointments")}
-              >
-                <CardContent className="p-6 text-center">
-                  <Calendar className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">Agendar Consulta</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Agende sua próxima consulta rapidamente
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setActiveTab("exams")}
-              >
-                <CardContent className="p-6 text-center">
-                  <FileText className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">Ver Exames</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Acesse seus resultados de exames
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setActiveTab("profile")}
-              >
-                <CardContent className="p-6 text-center">
-                  <User className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">Atualizar Dados</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Mantenha suas informações atualizadas
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Statistics Cards */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Próxima Consulta
-                      </p>
-                      <p className="text-2xl font-bold">
-                        {stats.nextAppointment}
-                      </p>
-                      {appointments.filter(
-                        (a) => a.status === "scheduled",
-                      )[0] && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {
-                            appointments.filter(
-                              (a) => a.status === "scheduled",
-                            )[0].specialty
-                          }
-                        </p>
-                      )}
-                    </div>
-                    <Calendar className="w-8 h-8 text-clinic-accent" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Exames Disponíveis
-                      </p>
-                      <p className="text-2xl font-bold">{stats.pendingExams}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Prontos para download
-                      </p>
-                    </div>
-                    <FileText className="w-8 h-8 text-clinic-accent" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Consultas Este Mês
-                      </p>
-                      <p className="text-2xl font-bold">
-                        {stats.thisMonthAppointments}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Realizadas/Agendadas
-                      </p>
-                    </div>
-                    <CheckCircle className="w-8 h-8 text-clinic-accent" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Total de Exames
-                      </p>
-                      <p className="text-2xl font-bold">{examResults.length}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        No histórico
-                      </p>
-                    </div>
-                    <Bell className="w-8 h-8 text-clinic-accent" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="grid lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    Próximas Consultas
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setActiveTab("appointments")}
-                    >
-                      Ver Todas
-                    </Button>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {appointments
-                      .filter((a) => a.status === "scheduled")
-                      .slice(0, 3)
-                      .map((appointment) => (
-                        <div
-                          key={appointment.id}
-                          className="flex items-center space-x-4 p-3 bg-blue-50 rounded-lg"
-                        >
-                          <Calendar className="w-8 h-8 text-blue-500" />
-                          <div className="flex-1">
-                            <p className="font-medium">
-                              {appointment.specialty}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {appointment.doctor}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(appointment.date).toLocaleDateString(
-                                "pt-BR",
-                              )}{" "}
-                              às {appointment.time}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    {appointments.filter((a) => a.status === "scheduled")
-                      .length === 0 && (
-                      <p className="text-muted-foreground text-center py-4">
-                        Nenhuma consulta agendada
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    Exames Recentes
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setActiveTab("exams")}
-                    >
-                      Ver Todos
-                    </Button>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {examResults
-                      .filter((e) => e.status === "ready")
-                      .slice(0, 3)
-                      .map((exam) => (
-                        <div
-                          key={exam.id}
-                          className="flex items-center space-x-4 p-3 bg-green-50 rounded-lg"
-                        >
-                          <FileText className="w-8 h-8 text-green-500" />
-                          <div className="flex-1">
-                            <p className="font-medium">{exam.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {exam.type}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(exam.date).toLocaleDateString("pt-BR")}
-                            </p>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => downloadExam(exam.id)}
-                          >
-                            <Download className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    {examResults.filter((e) => e.status === "ready").length ===
-                      0 && (
-                      <p className="text-muted-foreground text-center py-4">
-                        Nenhum exame disponível
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Health Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Resumo de Saúde</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="text-center p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-blue-700">
-                      Última Consulta
-                    </h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {appointments.filter((a) => a.status === "completed")[0]
-                        ? new Date(
-                            appointments.filter(
-                              (a) => a.status === "completed",
-                            )[0].date,
-                          ).toLocaleDateString("pt-BR")
-                        : "Nenhuma consulta realizada"}
-                    </p>
-                  </div>
-
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-semibold text-green-700">
-                      Exames Realizados
-                    </h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {examResults.filter((e) => e.status !== "pending").length}{" "}
-                      exames completos
-                    </p>
-                  </div>
-
-                  <div className="text-center p-4 bg-purple-50 rounded-lg">
-                    <h4 className="font-semibold text-purple-700">Histórico</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Membro desde 2024
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Continue with other tabs... Due to length constraints, I'll implement the key functionality here */}
-
-          {/* Appointments Tab */}
-          <TabsContent value="appointments" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Minhas Consultas</h2>
-              <AppointmentDialog
-                onAppointmentCreated={(data) => createAppointment(data)}
-              />
-            </div>
-
-            {isLoadingAppointments ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin" />
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {appointments.map((appointment) => (
-                  <Card key={appointment.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold">
-                              {appointment.specialty}
-                            </h3>
-                            <Badge
-                              variant={
-                                appointment.status === "scheduled"
-                                  ? "default"
-                                  : appointment.status === "completed"
-                                    ? "secondary"
-                                    : "destructive"
-                              }
-                            >
-                              {appointment.status === "scheduled"
-                                ? "Agendada"
-                                : appointment.status === "completed"
-                                  ? "Realizada"
-                                  : "Cancelada"}
-                            </Badge>
-                          </div>
-                          <p className="text-muted-foreground">
-                            {appointment.doctor}
-                          </p>
-                          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span>
-                              📅{" "}
-                              {new Date(appointment.date).toLocaleDateString(
-                                "pt-BR",
-                              )}
-                            </span>
-                            <span>🕐 {appointment.time}</span>
-                          </div>
-                          {appointment.notes && (
-                            <p className="text-sm bg-gray-50 p-2 rounded">
-                              {appointment.notes}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                          {appointment.status === "scheduled" && (
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => cancelAppointment(appointment.id)}
-                            >
-                              Cancelar
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-                {appointments.length === 0 && (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <p className="text-muted-foreground">
-                        Nenhuma consulta encontrada
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Exams Tab */}
-          <TabsContent value="exams" className="space-y-6">
-            <h2 className="text-2xl font-bold">Meus Exames</h2>
-
-            {isLoadingExams ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin" />
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {examResults.map((exam) => (
-                  <Card key={exam.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold">{exam.name}</h3>
-                            <Badge
-                              variant={
-                                exam.status === "ready"
-                                  ? "default"
-                                  : exam.status === "viewed"
-                                    ? "secondary"
-                                    : "outline"
-                              }
-                            >
-                              {exam.status === "ready"
-                                ? "Disponível"
-                                : exam.status === "viewed"
-                                  ? "Visualizado"
-                                  : "Pendente"}
-                            </Badge>
-                          </div>
-                          <p className="text-muted-foreground">{exam.type}</p>
-                          <p className="text-sm text-muted-foreground">
-                            📅 {new Date(exam.date).toLocaleDateString("pt-BR")}
-                          </p>
-                          {exam.notes && (
-                            <p className="text-sm bg-gray-50 p-2 rounded">
-                              {exam.notes}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                          {exam.status === "ready" && (
-                            <>
-                              <Button
-                                size="sm"
-                                className="bg-clinic-gradient hover:opacity-90"
-                                onClick={() => markExamAsViewed(exam.id)}
-                              >
-                                <Eye className="w-4 h-4 mr-2" />
-                                Visualizar
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => downloadExam(exam.id)}
-                              >
-                                <Download className="w-4 h-4 mr-2" />
-                                Baixar PDF
-                              </Button>
-                            </>
-                          )}
-                          {exam.status === "viewed" && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => downloadExam(exam.id)}
-                            >
-                              <Download className="w-4 h-4 mr-2" />
-                              Baixar PDF
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-                {examResults.length === 0 && (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <p className="text-muted-foreground">
-                        Nenhum exame encontrado
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Meu Perfil</h2>
-              <Button
-                variant="outline"
-                onClick={() => setIsEditingProfile(!isEditingProfile)}
-                disabled={isSavingProfile}
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                {isEditingProfile ? "Cancelar" : "Editar"}
-              </Button>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Dados Pessoais</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isEditingProfile ? (
-                  <>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Nome Completo</Label>
-                        <Input
-                          value={profileData?.name || ""}
-                          onChange={(e) =>
-                            setProfileData((prev) =>
-                              prev ? { ...prev, name: e.target.value } : null,
-                            )
-                          }
-                          disabled={isSavingProfile}
-                        />
-                      </div>
-                      <div>
-                        <Label>E-mail</Label>
-                        <Input
-                          value={profileData?.email || ""}
-                          disabled={true}
-                          className="bg-gray-50"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          E-mail não pode ser alterado
-                        </p>
-                      </div>
-                      <div>
-                        <Label>Telefone</Label>
-                        <Input
-                          value={profileData?.phone || ""}
-                          onChange={(e) =>
-                            setProfileData((prev) =>
-                              prev ? { ...prev, phone: e.target.value } : null,
-                            )
-                          }
-                          disabled={isSavingProfile}
-                        />
-                      </div>
-                      <div>
-                        <Label>Data de Nascimento</Label>
-                        <Input
-                          type="date"
-                          value={profileData?.birthDate || ""}
-                          disabled={true}
-                          className="bg-gray-50"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Data de nascimento não pode ser alterada
-                        </p>
-                      </div>
-                      <div>
-                        <Label>CPF</Label>
-                        <Input
-                          value={profileData?.cpf || ""}
-                          disabled={true}
-                          className="bg-gray-50"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          CPF não pode ser alterado
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Endereço</Label>
-                      <Textarea
-                        value={profileData?.address || ""}
-                        onChange={(e) =>
-                          setProfileData((prev) =>
-                            prev ? { ...prev, address: e.target.value } : null,
-                          )
-                        }
-                        disabled={isSavingProfile}
-                      />
-                    </div>
-                    <Button
-                      onClick={saveProfile}
-                      className="bg-clinic-gradient hover:opacity-90"
-                      disabled={isSavingProfile}
-                    >
-                      {isSavingProfile ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Salvando...
-                        </>
-                      ) : (
-                        "Salvar Alterações"
-                      )}
-                    </Button>
-                  </>
-                ) : (
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="text-muted-foreground">
-                        Nome Completo
-                      </Label>
-                      <p className="font-medium">{currentUser?.name}</p>
-                    </div>
-                    <div>
-                      <Label className="text-muted-foreground">E-mail</Label>
-                      <p className="font-medium">{currentUser?.email}</p>
-                    </div>
-                    <div>
-                      <Label className="text-muted-foreground">Telefone</Label>
-                      <p className="font-medium">{currentUser?.phone}</p>
-                    </div>
-                    <div>
-                      <Label className="text-muted-foreground">
-                        Data de Nascimento
-                      </Label>
-                      <p className="font-medium">
-                        {currentUser?.birthDate
-                          ? new Date(currentUser.birthDate).toLocaleDateString(
-                              "pt-BR",
-                            )
-                          : "-"}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-muted-foreground">CPF</Label>
-                      <p className="font-medium">{currentUser?.cpf}</p>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Label className="text-muted-foreground">Endereço</Label>
-                      <p className="font-medium">{currentUser?.address}</p>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Settings Tab */}
-          <TabsContent value="settings" className="space-y-6">
-            <h2 className="text-2xl font-bold">Configurações</h2>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Notificações</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">E-mail de lembrete</p>
-                    <p className="text-sm text-muted-foreground">
-                      Receber lembretes de consultas por e-mail
-                    </p>
-                  </div>
-                  <Button
-                    variant={
-                      notificationSettings.emailReminders
-                        ? "default"
-                        : "outline"
+      {/* Profile Edit Dialog - Shared across all roles */}
+      {isEditingProfile && (
+        <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Editar Perfil</DialogTitle>
+              <DialogDescription>
+                Atualize suas informações pessoais
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Nome Completo</Label>
+                  <Input
+                    value={profileData?.name || ""}
+                    onChange={(e) =>
+                      setProfileData((prev) =>
+                        prev ? { ...prev, name: e.target.value } : null,
+                      )
                     }
-                    size="sm"
-                    onClick={async () => {
-                      const newSettings = {
-                        ...notificationSettings,
-                        emailReminders: !notificationSettings.emailReminders,
-                      };
-                      try {
-                        await apiCall("/api/portal/notifications", {
-                          method: "PATCH",
-                          body: JSON.stringify(newSettings),
-                        });
-                        setNotificationSettings(newSettings);
-                        toast({
-                          title: "Sucesso",
-                          description: "Configuração atualizada",
-                        });
-                      } catch (error) {
-                        toast({
-                          title: "Erro",
-                          description: "Erro ao atualizar configuração",
-                          variant: "destructive",
-                        });
-                      }
-                    }}
-                  >
-                    {notificationSettings.emailReminders
-                      ? "Ativado"
-                      : "Desativado"}
-                  </Button>
+                    disabled={isSavingProfile}
+                  />
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">SMS de lembrete</p>
-                    <p className="text-sm text-muted-foreground">
-                      Receber lembretes de consultas por SMS
-                    </p>
-                  </div>
-                  <Button
-                    variant={
-                      notificationSettings.smsReminders ? "default" : "outline"
+                <div>
+                  <Label>E-mail</Label>
+                  <Input
+                    value={profileData?.email || ""}
+                    disabled={true}
+                    className="bg-gray-50"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    E-mail não pode ser alterado
+                  </p>
+                </div>
+                <div>
+                  <Label>Telefone</Label>
+                  <Input
+                    value={profileData?.phone || ""}
+                    onChange={(e) =>
+                      setProfileData((prev) =>
+                        prev ? { ...prev, phone: e.target.value } : null,
+                      )
                     }
-                    size="sm"
-                    onClick={async () => {
-                      const newSettings = {
-                        ...notificationSettings,
-                        smsReminders: !notificationSettings.smsReminders,
-                      };
-                      try {
-                        await apiCall("/api/portal/notifications", {
-                          method: "PATCH",
-                          body: JSON.stringify(newSettings),
-                        });
-                        setNotificationSettings(newSettings);
-                        toast({
-                          title: "Sucesso",
-                          description: "Configuração atualizada",
-                        });
-                      } catch (error) {
-                        toast({
-                          title: "Erro",
-                          description: "Erro ao atualizar configuração",
-                          variant: "destructive",
-                        });
-                      }
-                    }}
-                  >
-                    {notificationSettings.smsReminders
-                      ? "Ativado"
-                      : "Desativado"}
-                  </Button>
+                    disabled={isSavingProfile}
+                  />
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Resultados de exames</p>
-                    <p className="text-sm text-muted-foreground">
-                      Notificar quando resultados estiverem disponíveis
-                    </p>
-                  </div>
-                  <Button
-                    variant={
-                      notificationSettings.examNotifications
-                        ? "default"
-                        : "outline"
-                    }
-                    size="sm"
-                    onClick={async () => {
-                      const newSettings = {
-                        ...notificationSettings,
-                        examNotifications:
-                          !notificationSettings.examNotifications,
-                      };
-                      try {
-                        await apiCall("/api/portal/notifications", {
-                          method: "PATCH",
-                          body: JSON.stringify(newSettings),
-                        });
-                        setNotificationSettings(newSettings);
-                        toast({
-                          title: "Sucesso",
-                          description: "Configuração atualizada",
-                        });
-                      } catch (error) {
-                        toast({
-                          title: "Erro",
-                          description: "Erro ao atualizar configuração",
-                          variant: "destructive",
-                        });
-                      }
-                    }}
-                  >
-                    {notificationSettings.examNotifications
-                      ? "Ativado"
-                      : "Desativado"}
-                  </Button>
+                <div>
+                  <Label>Data de Nascimento</Label>
+                  <Input
+                    type="date"
+                    value={profileData?.birthDate || ""}
+                    disabled={true}
+                    className="bg-gray-50"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Data de nascimento não pode ser alterada
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Segurança</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button variant="outline" className="w-full justify-start">
-                  <Lock className="w-4 h-4 mr-2" />
-                  Alterar Senha
+                <div>
+                  <Label>CPF</Label>
+                  <Input
+                    value={profileData?.cpf || ""}
+                    disabled={true}
+                    className="bg-gray-50"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    CPF não pode ser alterado
+                  </p>
+                </div>
+              </div>
+              <div>
+                <Label>Endereço</Label>
+                <Textarea
+                  value={profileData?.address || ""}
+                  onChange={(e) =>
+                    setProfileData((prev) =>
+                      prev ? { ...prev, address: e.target.value } : null,
+                    )
+                  }
+                  disabled={isSavingProfile}
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditingProfile(false)}
+                  disabled={isSavingProfile}
+                >
+                  Cancelar
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Baixar Dados Pessoais
+                <Button
+                  onClick={saveProfile}
+                  className="bg-clinic-gradient hover:opacity-90"
+                  disabled={isSavingProfile}
+                >
+                  {isSavingProfile ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Salvando...
+                    </>
+                  ) : (
+                    "Salvar Alterações"
+                  )}
                 </Button>
-                <Button variant="destructive" className="w-full justify-start">
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  Excluir Conta
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

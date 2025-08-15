@@ -1,3 +1,10 @@
+/**
+ * © 2025 B&S Best Services Angola & Alegria Matoso Investimentos.
+ * Tutelado por Kaijhe Morose.
+ * Todos os direitos reservados.
+ * Proibida a cópia, modificação, distribuição ou uso sem autorização escrita.
+ */
+
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
 import {
@@ -53,9 +60,26 @@ export const handleLogin: RequestHandler = async (req, res) => {
       });
     }
 
+    // Get user role and permissions
+    const userRole = getUserRole(email) || UserRole.PATIENT;
+    const userPermissions = getUserPermissions(email);
+
+    // Create user object with permissions
+    const user = {
+      id: patient.id,
+      name: patient.name,
+      email: patient.email,
+      role: userRole,
+      permissions: userPermissions,
+      isActive: true,
+      createdAt: patient.createdAt || new Date().toISOString(),
+      updatedAt: patient.updatedAt || new Date().toISOString(),
+    };
+
     const response: LoginResponse = {
       success: true,
       patient,
+      user,
       token: `mock-token-${patient.id}`, // In production, use JWT
       message: "Login realizado com sucesso",
     };
@@ -84,6 +108,9 @@ export const requireAuth: RequestHandler = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.error("Auth error: Missing or invalid authorization header", {
+      authHeader,
+    });
     return res.status(401).json({
       success: false,
       message: "Token de acesso obrigatório",
@@ -94,6 +121,9 @@ export const requireAuth: RequestHandler = (req, res, next) => {
 
   // Simple token validation - in production, use JWT verification
   if (!token.startsWith("mock-token-")) {
+    console.error("Auth error: Invalid token format", {
+      token: token.substring(0, 20) + "...",
+    });
     return res.status(401).json({
       success: false,
       message: "Token inválido",
