@@ -26,21 +26,6 @@ import {
 } from 'lucide-react';
 
 // Placeholder components para as páginas do dashboard
-function AppointmentsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Consultas</h2>
-        <Button>Nova Consulta</Button>
-      </div>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-center text-gray-500">Página de consultas em desenvolvimento...</p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
 
 function ExamsPage() {
   return (
