@@ -194,13 +194,14 @@ export default function Portal() {
 
       if (response.success) {
         setCurrentUser(response.patient);
+        setCurrentUserRole(response.user);
         setAuthToken(response.token);
         setProfileData(response.patient);
         setIsAuthenticated(true);
 
         toast({
           title: "Sucesso",
-          description: "Login realizado com sucesso",
+          description: `Login realizado como ${getRoleDisplayName(response.user?.role)} - ${response.patient.name}`,
         });
 
         // Load initial data with the new token
