@@ -268,7 +268,7 @@ export default function Index() {
       icon: UserCheck,
       description: "Saúde da mulher",
       detailedDescription:
-        "A ginecologia e obstetrícia é a especialidade que cuida da sa���de da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
+        "A ginecologia e obstetrícia é a especialidade que cuida da sa��de da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
       conditions: [
         "Infecções ginecológicas",
         "Distúrbios menstruais",
@@ -1322,7 +1322,7 @@ export default function Index() {
             </div>
 
             {/* Contact Form */}
-            <Card>
+            <Card className="card-medical-premium">
               <CardHeader>
                 <CardTitle className="text-lg sm:text-xl">
                   Envie sua Mensagem
