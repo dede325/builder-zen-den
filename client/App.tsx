@@ -12,6 +12,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Sobre from "./pages/Sobre";
 import Exames from "./pages/Exames";
+import Contato from "./pages/Contato";
 
 // Specialty pages
 import Cardiologia from "./pages/specialties/Cardiologia";
