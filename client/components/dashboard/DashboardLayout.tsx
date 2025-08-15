@@ -195,7 +195,7 @@ export default function DashboardLayout() {
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden p-2"
+              className="lg:hidden p-2 btn-hover-lift"
               onClick={() => setIsSidebarOpen(false)}
               aria-label="Fechar menu"
             >
