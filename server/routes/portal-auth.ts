@@ -84,6 +84,7 @@ export const requireAuth: RequestHandler = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.error("Auth error: Missing or invalid authorization header", { authHeader });
     return res.status(401).json({
       success: false,
       message: "Token de acesso obrigatório",
@@ -94,6 +95,7 @@ export const requireAuth: RequestHandler = (req, res, next) => {
 
   // Simple token validation - in production, use JWT verification
   if (!token.startsWith("mock-token-")) {
+    console.error("Auth error: Invalid token format", { token: token.substring(0, 20) + "..." });
     return res.status(401).json({
       success: false,
       message: "Token inválido",
