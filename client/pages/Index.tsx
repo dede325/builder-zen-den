@@ -601,7 +601,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-20">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
         <div className="container mx-auto px-4 py-4">
