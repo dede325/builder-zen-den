@@ -281,10 +281,10 @@ export default function Portal() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="appointments" element={<AppointmentsPage />} />
-        <Route path="exams" element={<ExamsPage />} />
-        <Route path="messages" element={<MessagesPage />} />
-        <Route path="invoices" element={<InvoicesPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="exams" element={<ExamesPage />} />
+        <Route path="messages" element={<MensagensPage />} />
+        <Route path="invoices" element={<FaturasPage />} />
+        <Route path="profile" element={<PerfilPage />} />
         {/* Redirecionar rotas desconhecidas para dashboard */}
         <Route path="*" element={<Navigate to="/portal/dashboard" replace />} />
       </Route>
