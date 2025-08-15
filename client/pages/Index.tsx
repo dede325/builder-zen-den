@@ -1074,9 +1074,9 @@ export default function Index() {
               </CardContent>
             </Card>
 
-            <Card className="text-center sm:col-span-2 lg:col-span-1">
+            <Card className="card-medical-premium text-center sm:col-span-2 lg:col-span-1">
               <CardContent className="p-4 sm:p-6">
-                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4" />
+                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4 equipment-hover" />
                 <h4 className="text-lg font-semibold mb-2">
                   Análises Clínicas
                 </h4>
