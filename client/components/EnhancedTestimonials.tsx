@@ -13,7 +13,6 @@ import {
   Shield,
   Award,
   Users,
-  Calendar,
   MessageCircle,
   ThumbsUp,
   Verified
@@ -103,38 +102,6 @@ const testimonials: Testimonial[] = [
     verified: true,
     helpful: 15,
     tags: ["Diagnóstico", "Orientação", "Resultados"]
-  },
-  {
-    id: "5",
-    name: "Isabel Carvalho",
-    age: 34,
-    location: "Luanda, Cazenga",
-    rating: 5,
-    specialty: "Ginecologia",
-    doctor: "Dra. Mariana Lopes",
-    date: "2024-01-03",
-    title: "Atendimento ginecológico de qualidade",
-    content: "A Dra. Mariana é muito profissional e atenciosa. Senti-me muito à vontade durante a consulta. As instalações são modernas e o atendimento é de primeira classe.",
-    treatment: "Consulta ginecológica + Exames preventivos",
-    verified: true,
-    helpful: 22,
-    tags: ["Profissionalismo", "Conforto", "Modernidade"]
-  },
-  {
-    id: "6",
-    name: "Paulo Santos",
-    age: 41,
-    location: "Luanda, Viana",
-    rating: 5,
-    specialty: "Dermatologia",
-    doctor: "Dra. Sandra Ribeiro",
-    date: "2024-01-01",
-    title: "Tratamento dermatológico excelente",
-    content: "A Dra. Sandra resolveu um problema de pele que me incomodava há muito tempo. O tratamento foi rápido e eficaz. A clínica tem equipamentos de última geração.",
-    treatment: "Consulta + Laser terapêutico + Medicação",
-    verified: true,
-    helpful: 19,
-    tags: ["Tecnologia", "Eficácia", "Rapidez"]
   }
 ];
 
@@ -266,7 +233,7 @@ export default function EnhancedTestimonials() {
               </div>
               <p className="text-2xl font-bold text-clinic-primary">{totalReviews}+</p>
               <p className="text-sm text-muted-foreground">Depoimentos</p>
-            </div>
+            </motion.div>
 
             <motion.div variants={staggerItem} className="text-center">
               <div className="flex items-center justify-center mb-2">
@@ -274,7 +241,7 @@ export default function EnhancedTestimonials() {
               </div>
               <p className="text-2xl font-bold text-clinic-primary">100%</p>
               <p className="text-sm text-muted-foreground">Verificados</p>
-            </div>
+            </motion.div>
 
             <motion.div variants={staggerItem} className="text-center">
               <div className="flex items-center justify-center mb-2">
@@ -282,7 +249,7 @@ export default function EnhancedTestimonials() {
               </div>
               <p className="text-2xl font-bold text-clinic-primary">98%</p>
               <p className="text-sm text-muted-foreground">Recomendação</p>
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
 
