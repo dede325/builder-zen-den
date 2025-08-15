@@ -234,6 +234,7 @@ export default function Portal() {
 
     setIsAuthenticated(false);
     setCurrentUser(null);
+    setCurrentUserRole(null);
     setAuthToken(null);
     setAppointments([]);
     setExamResults([]);
