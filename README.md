@@ -35,6 +35,7 @@ O **Sistema de Clínica Médica Bem Cuidar** é uma aplicação web completa des
 ## 🚀 Tecnologias Utilizadas
 
 ### Frontend
+
 - **React 18** - Biblioteca principal para interface de usuário
 - **TypeScript** - Tipagem estática para maior segurança
 - **React Router 6** - Roteamento SPA (Single Page Application)
@@ -44,6 +45,7 @@ O **Sistema de Clínica Médica Bem Cuidar** é uma aplicação web completa des
 - **Vite** - Build tool e servidor de desenvolvimento
 
 ### Backend
+
 - **Express.js** - Framework web para Node.js
 - **TypeScript** - Tipagem para o servidor
 - **Zod** - Validação de schemas
@@ -52,6 +54,7 @@ O **Sistema de Clínica Médica Bem Cuidar** é uma aplicação web completa des
 - **PostgreSQL** - Banco de dados para produção (via Supabase)
 
 ### Ferramentas de Desenvolvimento
+
 - **PNPM** - Gerenciador de pacotes eficiente
 - **Vitest** - Framework de testes
 - **Prettier** - Formatação de código
@@ -62,6 +65,7 @@ O **Sistema de Clínica Médica Bem Cuidar** é uma aplicação web completa des
 ### Website Institucional
 
 #### 🏠 Página Principal
+
 - Slider de imagens com controles interativos
 - Seções de especialidades médicas
 - Informações sobre a clínica
@@ -69,6 +73,7 @@ O **Sistema de Clínica Médica Bem Cuidar** é uma aplicação web completa des
 - Horários de funcionamento
 
 #### 🩺 Especialidades Médicas
+
 O sistema inclui as seguintes especialidades com informações detalhadas:
 
 1. **Cardiologia** - Cuidados especializados do coração
@@ -85,6 +90,7 @@ O sistema inclui as seguintes especialidades com informações detalhadas:
 12. **Medicina do Trabalho** - Saúde ocupacional
 
 #### 📋 Sistema de Exames
+
 - Catálogo completo de exames disponíveis
 - Informações detalhadas sobre procedimentos
 - Orientações para pacientes
@@ -92,18 +98,21 @@ O sistema inclui as seguintes especialidades com informações detalhadas:
 ### Portal do Paciente
 
 #### 🔐 Sistema de Autenticação
+
 - Login seguro com validação
 - Diferentes níveis de acesso (paciente, admin)
 - Sistema de permissões granular
 - Logout automático por segurança
 
 #### 👤 Perfil do Paciente
+
 - Dados pessoais editáveis
 - Histórico médico
 - Configurações de notificações
 - Preferências de comunicação
 
 #### 📅 Agendamento de Consultas
+
 - Interface intuitiva para agendamentos
 - Visualização de horários disponíveis
 - Histórico de consultas
@@ -111,6 +120,7 @@ O sistema inclui as seguintes especialidades com informações detalhadas:
 - Notificações automáticas
 
 #### 🔬 Resultados de Exames
+
 - Acesso seguro aos resultados
 - Download de arquivos PDF
 - Histórico completo de exames
@@ -118,6 +128,7 @@ O sistema inclui as seguintes especialidades com informações detalhadas:
 - Estatísticas pessoais
 
 #### 📊 Dashboard Personalizado
+
 - Resumo de atividades
 - Próximos compromissos
 - Alertas importantes
@@ -175,19 +186,21 @@ projeto/
 
 ### Pré-requisitos
 
-- **Node.js** 18+ 
+- **Node.js** 18+
 - **PNPM** (recomendado) ou npm
 - **Git**
 
 ### Passos de Instalação
 
 1. **Clone o repositório**
+
 ```bash
 git clone https://github.com/seu-usuario/clinica-bem-cuidar.git
 cd clinica-bem-cuidar
 ```
 
 2. **Instale as dependências**
+
 ```bash
 pnpm install
 # ou
@@ -195,6 +208,7 @@ npm install
 ```
 
 3. **Configure as variáveis de ambiente**
+
 ```bash
 cp .env.example .env
 ```
@@ -226,6 +240,7 @@ PING_MESSAGE=pong
 ```
 
 4. **Execute as migrações do banco de dados**
+
 ```bash
 # Para SQLite (desenvolvimento)
 pnpm run db:migrate
@@ -235,17 +250,20 @@ pnpm run db:migrate:prod
 ```
 
 5. **Inicie o servidor de desenvolvimento**
+
 ```bash
 pnpm dev
 ```
 
 6. **Acesse a aplicação**
+
 - Frontend: http://localhost:8080
 - API: http://localhost:8080/api
 
 ## 📜 Scripts Disponíveis
 
 ### Desenvolvimento
+
 ```bash
 pnpm dev          # Inicia servidor de desenvolvimento
 pnpm dev:client   # Apenas frontend
@@ -253,6 +271,7 @@ pnpm dev:server   # Apenas backend
 ```
 
 ### Build e Produção
+
 ```bash
 pnpm build        # Build completo (cliente + servidor)
 pnpm build:client # Build apenas do frontend
@@ -261,6 +280,7 @@ pnpm start        # Inicia servidor de produção
 ```
 
 ### Testes
+
 ```bash
 pnpm test         # Executa todos os testes
 pnpm test:watch   # Testes em modo watch
@@ -268,6 +288,7 @@ pnpm test:ui      # Interface gráfica dos testes
 ```
 
 ### Banco de Dados
+
 ```bash
 pnpm db:migrate     # Executa migrações SQLite
 pnpm db:migrate:prod # Executa migrações PostgreSQL
@@ -276,6 +297,7 @@ pnpm db:reset       # Reseta banco de dados
 ```
 
 ### Qualidade de Código
+
 ```bash
 pnpm typecheck    # Verificação de tipos TypeScript
 pnpm format       # Formatar código com Prettier
@@ -301,6 +323,7 @@ Senha: admin123
 ### Funcionalidades do Portal
 
 #### Área do Paciente
+
 - **Dashboard** - Visão geral das atividades
 - **Perfil** - Gerenciamento de dados pessoais
 - **Consultas** - Agendamento e histórico
@@ -308,6 +331,7 @@ Senha: admin123
 - **Notificações** - Configurações de comunicação
 
 #### Área Administrativa
+
 - **Gestão de Pacientes** - CRUD completo
 - **Agendamentos** - Controle de consultas
 - **Relatórios** - Estatísticas e métricas
@@ -327,6 +351,7 @@ Senha: admin123
 O sistema utiliza arquivos JSON para simular dados em desenvolvimento:
 
 #### `data/portal-data.json`
+
 ```json
 {
   "users": [
@@ -362,6 +387,7 @@ O sistema utiliza arquivos JSON para simular dados em desenvolvimento:
 ```
 
 #### `data/contact-submissions.json`
+
 ```json
 {
   "submissions": [
@@ -385,9 +411,9 @@ Para desenvolvimento local, o sistema usa SQLite:
 
 ```typescript
 // server/storage.ts
-import Database from 'better-sqlite3';
+import Database from "better-sqlite3";
 
-const db = new Database('data/clinic.db');
+const db = new Database("data/clinic.db");
 
 // Criação de tabelas
 db.exec(`
@@ -410,6 +436,7 @@ db.exec(`
 As migrações estão organizadas em arquivos SQL numerados:
 
 #### `migrations/001_initial_setup.sql`
+
 ```sql
 -- Criação das tabelas principais
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -448,6 +475,7 @@ CREATE TABLE doctors (
 ```
 
 #### `migrations/002_appointments.sql`
+
 ```sql
 -- Tabela de agendamentos
 CREATE TABLE appointments (
@@ -471,6 +499,7 @@ CREATE INDEX idx_appointments_status ON appointments(status);
 ```
 
 #### `migrations/003_exams.sql`
+
 ```sql
 -- Tabela de tipos de exames
 CREATE TABLE exam_types (
@@ -502,12 +531,14 @@ CREATE TABLE exam_results (
 ### Como Executar as Migrações
 
 #### Para Supabase
+
 1. Acesse o dashboard do Supabase
 2. Vá para SQL Editor
 3. Execute cada arquivo de migração em ordem
 4. Verifique a criação das tabelas
 
 #### Via CLI (se configurado)
+
 ```bash
 # Instalar Supabase CLI
 npm install -g @supabase/cli
@@ -524,6 +555,7 @@ supabase db push
 ### Opções de Deploy
 
 #### 1. Netlify (Recomendado)
+
 ```bash
 # Build para produção
 pnpm build
@@ -534,6 +566,7 @@ netlify deploy --prod --dir=dist
 ```
 
 #### 2. Vercel
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -543,6 +576,7 @@ vercel --prod
 ```
 
 #### 3. Docker
+
 ```dockerfile
 FROM node:18-alpine
 
@@ -559,6 +593,7 @@ CMD ["node", "dist/server/index.js"]
 ### Configurações de Produção
 
 #### Variáveis de Ambiente
+
 ```env
 NODE_ENV=production
 PORT=8080
@@ -570,6 +605,7 @@ SMTP_PASS=sua-api-key-sendgrid
 ```
 
 #### Otimizações
+
 - Compressão gzip habilitada
 - Cache de assets estáticos
 - Minificação de CSS/JS
@@ -597,6 +633,7 @@ SMTP_PASS=sua-api-key-sendgrid
 ### Issues e Bug Reports
 
 Ao reportar bugs, inclua:
+
 - Descrição detalhada do problema
 - Passos para reproduzir
 - Comportamento esperado vs atual
@@ -611,20 +648,22 @@ Este projeto foi desenvolvido por **Kaijhe Morose** para a **Clínica Bem Cuidar
 Copyright (c) 2025 Kaijhe Morose & Clínica Bem Cuidar
 Todos os direitos reservados.
 
-Este software é proprietário e confidencial. 
-Não é permitida a reprodução, distribuição ou 
+Este software é proprietário e confidencial.
+Não é permitida a reprodução, distribuição ou
 uso sem autorização expressa do autor.
 ```
 
 ## 📞 Suporte e Contato
 
 ### Desenvolvedor
+
 - **Nome**: Kaijhe Morose
 - **Email**: kaijhe@bestservices.ao
 - **Website**: https://bestservices.ao
 - **LinkedIn**: [Kaijhe Morose](https://linkedin.com/in/kaijhe)
 
 ### Clínica Bem Cuidar
+
 - **Endereço**: Av. 21 de Janeiro, Nº 351, Benfica, Luanda
 - **Telefone**: +244 945 344 650
 - **Email**: recepcao@bemcuidar.co.ao
@@ -634,4 +673,4 @@ uso sem autorização expressa do autor.
 
 > **"Cuidar é Amar"** - Clínica Bem Cuidar
 
-*Sistema desenvolvido com ❤️ por Kaijhe Morose usando tecnologias modernas e boas práticas de desenvolvimento.*
+_Sistema desenvolvido com ❤️ por Kaijhe Morose usando tecnologias modernas e boas práticas de desenvolvimento._

@@ -8,18 +8,21 @@ interface FooterProps {
   className?: string;
 }
 
-export default function Footer({ variant = "default", className = "" }: FooterProps) {
+export default function Footer({
+  variant = "default",
+  className = "",
+}: FooterProps) {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   // Fetch current year from server
   useEffect(() => {
     const fetchServerDate = async () => {
       try {
-        const response = await fetch('/api/server-date');
+        const response = await fetch("/api/server-date");
         const data: ServerDateResponse = await response.json();
         setCurrentYear(data.year);
       } catch (error) {
-        console.warn('Failed to fetch server date, using client date:', error);
+        console.warn("Failed to fetch server date, using client date:", error);
         setCurrentYear(new Date().getFullYear());
       }
     };

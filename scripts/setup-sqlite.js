@@ -6,45 +6,48 @@
  * Desenvolvido por: Kaijhe Morose
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Verificar se better-sqlite3 está disponível
 let Database;
 try {
-  Database = require('better-sqlite3');
+  Database = require("better-sqlite3");
 } catch (error) {
-  console.error('❌ better-sqlite3 não encontrado. Instalando...');
-  const { execSync } = require('child_process');
-  execSync('pnpm add better-sqlite3', { stdio: 'inherit' });
-  Database = require('better-sqlite3');
+  console.error("❌ better-sqlite3 não encontrado. Instalando...");
+  const { execSync } = require("child_process");
+  execSync("pnpm add better-sqlite3", { stdio: "inherit" });
+  Database = require("better-sqlite3");
 }
 
-const portalDataPath = path.join(__dirname, '../data/portal-data.json');
-const contactDataPath = path.join(__dirname, '../data/contact-submissions.json');
-const dbPath = path.join(__dirname, '../data/clinic.db');
+const portalDataPath = path.join(__dirname, "../data/portal-data.json");
+const contactDataPath = path.join(
+  __dirname,
+  "../data/contact-submissions.json",
+);
+const dbPath = path.join(__dirname, "../data/clinic.db");
 
 // Criar diretório data se não existir
 const dataDir = path.dirname(dbPath);
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
-  console.log('📁 Diretório data/ criado');
+  console.log("📁 Diretório data/ criado");
 }
 
 // Inicializar banco SQLite
-console.log('🚀 Configurando banco SQLite...');
+console.log("🚀 Configurando banco SQLite...");
 const db = new Database(dbPath);
 
 // Configurações de performance
-db.pragma('journal_mode = WAL');
-db.pragma('synchronous = NORMAL');
-db.pragma('cache_size = 1000000');
-db.pragma('foreign_keys = ON');
+db.pragma("journal_mode = WAL");
+db.pragma("synchronous = NORMAL");
+db.pragma("cache_size = 1000000");
+db.pragma("foreign_keys = ON");
 
-console.log('⚙️ Configurações de performance aplicadas');
+console.log("⚙️ Configurações de performance aplicadas");
 
 // Criar tabelas
-console.log('📋 Criando estrutura de tabelas...');
+console.log("📋 Criando estrutura de tabelas...");
 
 const createTables = `
 -- Tabela de usuários
@@ -187,10 +190,10 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 `;
 
 db.exec(createTables);
-console.log('✅ Tabelas criadas com sucesso');
+console.log("✅ Tabelas criadas com sucesso");
 
 // Criar índices para performance
-console.log('🔍 Criando índices...');
+console.log("🔍 Criando índices...");
 
 const createIndexes = `
 -- Índices para users
@@ -227,14 +230,14 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_created ON audit_logs(created_at);
 `;
 
 db.exec(createIndexes);
-console.log('✅ Índices criados com sucesso');
+console.log("✅ Índices criados com sucesso");
 
 // Inserir dados mock se disponíveis
 if (fs.existsSync(portalDataPath)) {
-  console.log('📊 Carregando dados mock do portal...');
-  
-  const portalData = JSON.parse(fs.readFileSync(portalDataPath, 'utf8'));
-  
+  console.log("📊 Carregando dados mock do portal...");
+
+  const portalData = JSON.parse(fs.readFileSync(portalDataPath, "utf8"));
+
   // Preparar statements
   const insertUser = db.prepare(`
     INSERT OR REPLACE INTO users 
@@ -243,7 +246,7 @@ if (fs.existsSync(portalDataPath)) {
      role, active, created_at, updated_at) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
+
   const insertAppointment = db.prepare(`
     INSERT OR REPLACE INTO appointments 
     (id, patient_id, doctor_id, doctor_name, specialty, appointment_date, appointment_time, 
@@ -251,7 +254,7 @@ if (fs.existsSync(portalDataPath)) {
      payment_amount, cancelled_at, cancellation_reason, completed_at, created_at, updated_at) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
+
   const insertExamResult = db.prepare(`
     INSERT OR REPLACE INTO exam_results 
     (id, patient_id, request_id, exam_name, exam_type, category, request_date, 
@@ -260,19 +263,19 @@ if (fs.existsSync(portalDataPath)) {
      last_downloaded_at, created_at, updated_at) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
+
   const insertNotificationSettings = db.prepare(`
     INSERT OR REPLACE INTO notification_settings 
     (user_id, email_reminders, sms_reminders, exam_notifications, appointment_reminders, 
      health_tips, marketing_emails, emergency_alerts) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
+
   // Inserir pacientes
-  portalData.patients.forEach(patient => {
+  portalData.patients.forEach((patient) => {
     // Gerar hash de senha simples para desenvolvimento
-    const passwordHash = '$2b$10$dummy.hash.for.development.only';
-    
+    const passwordHash = "$2b$10$dummy.hash.for.development.only";
+
     insertUser.run(
       patient.id,
       patient.email,
@@ -281,24 +284,24 @@ if (fs.existsSync(portalDataPath)) {
       patient.phone || null,
       patient.birthDate || null,
       patient.document || null,
-      patient.documentType || 'BI',
+      patient.documentType || "BI",
       patient.address || null,
       patient.bloodType || null,
       patient.allergies || null,
       patient.emergencyContact || null,
       patient.insuranceProvider || null,
       patient.insuranceNumber || null,
-      patient.role || 'patient',
+      patient.role || "patient",
       patient.active ? 1 : 0,
       patient.createdAt || new Date().toISOString(),
-      patient.updatedAt || new Date().toISOString()
+      patient.updatedAt || new Date().toISOString(),
     );
   });
-  
+
   console.log(`✅ ${portalData.patients.length} usuários inseridos`);
-  
+
   // Inserir agendamentos
-  portalData.appointments.forEach(appointment => {
+  portalData.appointments.forEach((appointment) => {
     insertAppointment.run(
       appointment.id,
       appointment.patientId,
@@ -308,26 +311,26 @@ if (fs.existsSync(portalDataPath)) {
       appointment.date,
       appointment.time,
       appointment.duration || 30,
-      appointment.status || 'scheduled',
-      appointment.type || 'consultation',
+      appointment.status || "scheduled",
+      appointment.type || "consultation",
       appointment.reason || null,
       appointment.symptoms || null,
       appointment.notes || null,
       appointment.doctorNotes || null,
-      appointment.paymentStatus || 'pending',
+      appointment.paymentStatus || "pending",
       appointment.paymentAmount || null,
       appointment.cancelledAt || null,
       appointment.cancellationReason || null,
       appointment.completedAt || null,
       appointment.createdAt || new Date().toISOString(),
-      appointment.updatedAt || new Date().toISOString()
+      appointment.updatedAt || new Date().toISOString(),
     );
   });
-  
+
   console.log(`✅ ${portalData.appointments.length} agendamentos inseridos`);
-  
+
   // Inserir resultados de exames
-  portalData.examResults.forEach(exam => {
+  portalData.examResults.forEach((exam) => {
     insertExamResult.run(
       exam.id,
       exam.patientId,
@@ -339,7 +342,7 @@ if (fs.existsSync(portalDataPath)) {
       exam.collectionDate || null,
       exam.examDate || exam.date,
       exam.resultDate || exam.date,
-      exam.status || 'final',
+      exam.status || "final",
       exam.viewed ? 1 : 0,
       exam.viewedAt || null,
       exam.doctorName || null,
@@ -351,45 +354,49 @@ if (fs.existsSync(portalDataPath)) {
       exam.downloadCount || 0,
       exam.lastDownloaded || null,
       exam.createdAt || new Date().toISOString(),
-      exam.updatedAt || new Date().toISOString()
+      exam.updatedAt || new Date().toISOString(),
     );
   });
-  
-  console.log(`✅ ${portalData.examResults.length} resultados de exames inseridos`);
-  
+
+  console.log(
+    `✅ ${portalData.examResults.length} resultados de exames inseridos`,
+  );
+
   // Inserir configurações de notificação
-  Object.entries(portalData.notificationSettings || {}).forEach(([userId, settings]) => {
-    insertNotificationSettings.run(
-      userId,
-      settings.emailReminders ? 1 : 0,
-      settings.smsReminders ? 1 : 0,
-      settings.examNotifications ? 1 : 0,
-      settings.appointmentReminders ? 1 : 0,
-      settings.healthTips ? 1 : 0,
-      settings.marketingEmails ? 1 : 0,
-      settings.emergencyAlerts ? 1 : 0
-    );
-  });
-  
+  Object.entries(portalData.notificationSettings || {}).forEach(
+    ([userId, settings]) => {
+      insertNotificationSettings.run(
+        userId,
+        settings.emailReminders ? 1 : 0,
+        settings.smsReminders ? 1 : 0,
+        settings.examNotifications ? 1 : 0,
+        settings.appointmentReminders ? 1 : 0,
+        settings.healthTips ? 1 : 0,
+        settings.marketingEmails ? 1 : 0,
+        settings.emergencyAlerts ? 1 : 0,
+      );
+    },
+  );
+
   console.log(`✅ Configurações de notificação inseridas`);
 } else {
-  console.log('⚠️ Arquivo portal-data.json não encontrado, pulando dados mock');
+  console.log("⚠️ Arquivo portal-data.json não encontrado, pulando dados mock");
 }
 
 // Inserir dados de contato se disponíveis
 if (fs.existsSync(contactDataPath)) {
-  console.log('📮 Carregando submissões de contato...');
-  
-  const contactData = JSON.parse(fs.readFileSync(contactDataPath, 'utf8'));
-  
+  console.log("📮 Carregando submissões de contato...");
+
+  const contactData = JSON.parse(fs.readFileSync(contactDataPath, "utf8"));
+
   const insertContact = db.prepare(`
     INSERT OR REPLACE INTO contact_submissions 
     (id, name, email, phone, subject, message, status, response, responded_by, 
      responded_at, created_at, updated_at) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
-  contactData.submissions.forEach(submission => {
+
+  contactData.submissions.forEach((submission) => {
     insertContact.run(
       submission.id,
       submission.name,
@@ -397,38 +404,48 @@ if (fs.existsSync(contactDataPath)) {
       submission.phone || null,
       submission.subject,
       submission.message,
-      submission.status || 'pending',
+      submission.status || "pending",
       submission.response || null,
       submission.responded_by || null,
       submission.responded_at || null,
-      submission.submitted_at || submission.created_at || new Date().toISOString(),
-      submission.updated_at || new Date().toISOString()
+      submission.submitted_at ||
+        submission.created_at ||
+        new Date().toISOString(),
+      submission.updated_at || new Date().toISOString(),
     );
   });
-  
-  console.log(`✅ ${contactData.submissions.length} submissões de contato inseridas`);
+
+  console.log(
+    `✅ ${contactData.submissions.length} submissões de contato inseridas`,
+  );
 } else {
-  console.log('⚠️ Arquivo contact-submissions.json não encontrado, pulando dados de contato');
+  console.log(
+    "⚠️ Arquivo contact-submissions.json não encontrado, pulando dados de contato",
+  );
 }
 
 // Verificar integridade do banco
-console.log('🔍 Verificando integridade do banco...');
+console.log("🔍 Verificando integridade do banco...");
 
 const checkIntegrity = db.prepare("PRAGMA integrity_check").get();
-if (checkIntegrity.integrity_check === 'ok') {
-  console.log('✅ Integridade do banco verificada');
+if (checkIntegrity.integrity_check === "ok") {
+  console.log("✅ Integridade do banco verificada");
 } else {
-  console.error('❌ Problemas de integridade encontrados:', checkIntegrity);
+  console.error("❌ Problemas de integridade encontrados:", checkIntegrity);
 }
 
 // Mostrar estatísticas
-console.log('\n📈 Estatísticas do banco:');
+console.log("\n📈 Estatísticas do banco:");
 
 const stats = {
   users: db.prepare("SELECT COUNT(*) as count FROM users").get().count,
-  appointments: db.prepare("SELECT COUNT(*) as count FROM appointments").get().count,
-  examResults: db.prepare("SELECT COUNT(*) as count FROM exam_results").get().count,
-  contactSubmissions: db.prepare("SELECT COUNT(*) as count FROM contact_submissions").get().count
+  appointments: db.prepare("SELECT COUNT(*) as count FROM appointments").get()
+    .count,
+  examResults: db.prepare("SELECT COUNT(*) as count FROM exam_results").get()
+    .count,
+  contactSubmissions: db
+    .prepare("SELECT COUNT(*) as count FROM contact_submissions")
+    .get().count,
 };
 
 console.log(`👥 Usuários: ${stats.users}`);
@@ -439,13 +456,13 @@ console.log(`📧 Submissões de contato: ${stats.contactSubmissions}`);
 // Fechar conexão
 db.close();
 
-console.log('\n🎉 Configuração SQLite concluída com sucesso!');
+console.log("\n🎉 Configuração SQLite concluída com sucesso!");
 console.log(`📁 Banco criado em: ${dbPath}`);
 console.log('🚀 Execute "pnpm dev" para iniciar o servidor');
 
 // Mostrar dicas de login
-console.log('\n🔐 Contas de teste disponíveis:');
-console.log('   paciente@example.com / 123456 (Paciente)');
-console.log('   admin@bemcuidar.co.ao / admin123 (Admin)');
-console.log('   medico@bemcuidar.co.ao / medico123 (Médico)');
-console.log('   recepcao@bemcuidar.co.ao / recepcao123 (Recepcionista)');
+console.log("\n🔐 Contas de teste disponíveis:");
+console.log("   paciente@example.com / 123456 (Paciente)");
+console.log("   admin@bemcuidar.co.ao / admin123 (Admin)");
+console.log("   medico@bemcuidar.co.ao / medico123 (Médico)");
+console.log("   recepcao@bemcuidar.co.ao / recepcao123 (Recepcionista)");

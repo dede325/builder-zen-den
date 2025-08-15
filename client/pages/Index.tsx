@@ -100,11 +100,11 @@ export default function Index() {
   useEffect(() => {
     const fetchServerDate = async () => {
       try {
-        const response = await fetch('/api/server-date');
+        const response = await fetch("/api/server-date");
         const data = await response.json();
         setCurrentYear(data.year);
       } catch (error) {
-        console.warn('Failed to fetch server date, using client date:', error);
+        console.warn("Failed to fetch server date, using client date:", error);
         setCurrentYear(new Date().getFullYear());
       }
     };

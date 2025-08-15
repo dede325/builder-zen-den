@@ -16,6 +16,7 @@ Este documento explica como o sistema utiliza SQLite para desenvolvimento local 
 O sistema da **Clínica Bem Cuidar** utiliza SQLite como banco de dados local para desenvolvimento, oferecendo:
 
 ### ✅ Vantagens do SQLite
+
 - **Zero configuração** - Não requer instalação de servidor
 - **Arquivo único** - Todo o banco em um arquivo `.db`
 - **Compatibilidade** - Funciona em qualquer sistema operacional
@@ -23,6 +24,7 @@ O sistema da **Clínica Bem Cuidar** utiliza SQLite como banco de dados local pa
 - **Portabilidade** - Fácil backup e compartilhamento
 
 ### 🔄 Migração para Produção
+
 - **Desenvolvimento**: SQLite (local)
 - **Produção**: PostgreSQL via Supabase
 - **Scripts de migração** disponíveis em `/migrations/`
@@ -41,18 +43,20 @@ data/
 ### Portal Data (`portal-data.json`)
 
 #### Estrutura Principal
+
 ```json
 {
-  "patients": [],           // Pacientes cadastrados
-  "appointments": [],       // Agendamentos
-  "examResults": [],       // Resultados de exames
+  "patients": [], // Pacientes cadastrados
+  "appointments": [], // Agendamentos
+  "examResults": [], // Resultados de exames
   "notificationSettings": {}, // Configurações de notificação
-  "systemStats": {},       // Estatísticas do sistema
-  "loginHints": []         // Dicas de login para desenvolvimento
+  "systemStats": {}, // Estatísticas do sistema
+  "loginHints": [] // Dicas de login para desenvolvimento
 }
 ```
 
 #### Dados de Pacientes
+
 ```json
 {
   "id": "1",
@@ -76,6 +80,7 @@ data/
 ```
 
 #### Dados de Agendamentos
+
 ```json
 {
   "id": "1",
@@ -91,11 +96,12 @@ data/
   "reason": "Consulta de rotina cardiológica",
   "symptoms": "Dor no peito ocasional",
   "paymentStatus": "pending",
-  "paymentAmount": 150.00
+  "paymentAmount": 150.0
 }
 ```
 
 #### Dados de Exames
+
 ```json
 {
   "id": "1",
@@ -153,9 +159,9 @@ O sistema cria automaticamente o banco SQLite quando necessário:
 
 ```typescript
 // server/storage.ts
-import Database from 'better-sqlite3';
+import Database from "better-sqlite3";
 
-const db = new Database('data/clinic.db');
+const db = new Database("data/clinic.db");
 
 // Criação automática de tabelas
 db.exec(`
@@ -193,7 +199,7 @@ PORT=8080
 # Executar migrações SQLite (desenvolvimento)
 pnpm run db:migrate
 
-# Executar migrações PostgreSQL (produção)  
+# Executar migrações PostgreSQL (produção)
 pnpm run db:migrate:prod
 
 # Reset do banco (desenvolvimento)
@@ -258,25 +264,28 @@ INSERT OR IGNORE INTO users (email, password_hash, name, phone, role) VALUES
 
 ### Contas de Login para Desenvolvimento
 
-| Email | Senha | Papel | Descrição |
-|-------|-------|-------|-----------|
-| `paciente@example.com` | `123456` | Patient | Conta de paciente |
-| `admin@bemcuidar.co.ao` | `admin123` | Admin | Administrador |
-| `medico@bemcuidar.co.ao` | `medico123` | Doctor | Médico |
-| `recepcao@bemcuidar.co.ao` | `recepcao123` | Receptionist | Recepcionista |
+| Email                      | Senha         | Papel        | Descrição         |
+| -------------------------- | ------------- | ------------ | ----------------- |
+| `paciente@example.com`     | `123456`      | Patient      | Conta de paciente |
+| `admin@bemcuidar.co.ao`    | `admin123`    | Admin        | Administrador     |
+| `medico@bemcuidar.co.ao`   | `medico123`   | Doctor       | Médico            |
+| `recepcao@bemcuidar.co.ao` | `recepcao123` | Receptionist | Recepcionista     |
 
 ### Dados de Exemplo
 
 #### Pacientes Mock
+
 - **João Silva** - Paciente com histórico médico completo
 - **Maria Santos** - Paciente pediátrico
 
 #### Agendamentos Mock
+
 - Consultas agendadas, completadas e canceladas
 - Diferentes especialidades e status
 - Histórico de pagamentos
 
 #### Exames Mock
+
 - Hemograma completo com resultados normais
 - ECG com interpretação
 - Exames visualizados e não visualizados
@@ -290,7 +299,7 @@ INSERT OR IGNORE INTO users (email, password_hash, name, phone, role) VALUES
 {
   "scripts": {
     "db:migrate": "node scripts/migrate-sqlite.js",
-    "db:migrate:prod": "node scripts/migrate-postgres.js", 
+    "db:migrate:prod": "node scripts/migrate-postgres.js",
     "db:seed": "node scripts/seed-data.js",
     "db:reset": "node scripts/reset-db.js",
     "db:backup": "node scripts/backup-sqlite.js",
@@ -303,28 +312,28 @@ INSERT OR IGNORE INTO users (email, password_hash, name, phone, role) VALUES
 
 ```javascript
 // scripts/migrate-sqlite.js
-const Database = require('better-sqlite3');
-const fs = require('fs');
-const path = require('path');
+const Database = require("better-sqlite3");
+const fs = require("fs");
+const path = require("path");
 
-const db = new Database('data/clinic.db');
+const db = new Database("data/clinic.db");
 
 // Executar migrações
-const migrationDir = path.join(__dirname, '../migrations/sqlite');
+const migrationDir = path.join(__dirname, "../migrations/sqlite");
 const migrations = fs.readdirSync(migrationDir).sort();
 
-console.log('🚀 Executando migrações SQLite...');
+console.log("🚀 Executando migrações SQLite...");
 
-migrations.forEach(file => {
-  if (file.endsWith('.sql')) {
+migrations.forEach((file) => {
+  if (file.endsWith(".sql")) {
     console.log(`📄 Executando ${file}...`);
-    const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
+    const sql = fs.readFileSync(path.join(migrationDir, file), "utf8");
     db.exec(sql);
     console.log(`✅ ${file} executado com sucesso`);
   }
 });
 
-console.log('🎉 Migrações concluídas!');
+console.log("🎉 Migrações concluídas!");
 db.close();
 ```
 
@@ -332,12 +341,12 @@ db.close();
 
 ```javascript
 // scripts/seed-data.js
-const Database = require('better-sqlite3');
-const portalData = require('../data/portal-data.json');
+const Database = require("better-sqlite3");
+const portalData = require("../data/portal-data.json");
 
-const db = new Database('data/clinic.db');
+const db = new Database("data/clinic.db");
 
-console.log('🌱 Populando banco com dados mock...');
+console.log("🌱 Populando banco com dados mock...");
 
 // Inserir pacientes
 const insertUser = db.prepare(`
@@ -346,7 +355,7 @@ const insertUser = db.prepare(`
   VALUES (?, ?, ?, ?, ?, ?, ?)
 `);
 
-portalData.patients.forEach(patient => {
+portalData.patients.forEach((patient) => {
   insertUser.run(
     patient.id,
     patient.email,
@@ -354,7 +363,7 @@ portalData.patients.forEach(patient => {
     patient.phone,
     patient.document,
     patient.role,
-    patient.active ? 1 : 0
+    patient.active ? 1 : 0,
   );
 });
 
@@ -367,7 +376,7 @@ const insertAppointment = db.prepare(`
   VALUES (?, ?, ?, ?, ?, ?, ?)
 `);
 
-portalData.appointments.forEach(appointment => {
+portalData.appointments.forEach((appointment) => {
   insertAppointment.run(
     appointment.id,
     appointment.patientId,
@@ -375,13 +384,13 @@ portalData.appointments.forEach(appointment => {
     appointment.specialty,
     appointment.date,
     appointment.time,
-    appointment.status
+    appointment.status,
   );
 });
 
 console.log(`✅ ${portalData.appointments.length} agendamentos inseridos`);
 
-console.log('🎉 Dados mock carregados com sucesso!');
+console.log("🎉 Dados mock carregados com sucesso!");
 db.close();
 ```
 
@@ -406,6 +415,7 @@ rm data/clinic.db && pnpm run db:migrate && pnpm run db:seed
 ### Problemas Comuns
 
 #### Erro: "Database locked"
+
 ```bash
 # Verificar processos usando o banco
 lsof data/clinic.db
@@ -416,6 +426,7 @@ pnpm dev
 ```
 
 #### Banco corrompido
+
 ```bash
 # Verificar integridade
 sqlite3 data/clinic.db "PRAGMA integrity_check;"
@@ -425,6 +436,7 @@ sqlite3 data/clinic.db ".recover" | sqlite3 data/clinic-recovered.db
 ```
 
 #### Reset completo
+
 ```bash
 # Remover banco e recriar
 rm -f data/clinic.db
