@@ -1,3 +1,10 @@
+/**
+ * © 2025 B&S Best Services Angola & Alegria Matoso Investimentos.
+ * Tutelado por Kaijhe Morose.
+ * Todos os direitos reservados.
+ * Proibida a cópia, modificação, distribuição ou uso sem autorização escrita.
+ */
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
