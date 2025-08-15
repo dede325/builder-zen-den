@@ -16,6 +16,8 @@ import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
 import Footer from "@/components/Footer";
 import FloatingActionButtons from "@/components/FloatingActionButtons";
 import SearchDialog from "@/components/SearchDialog";
+import Testimonials from "@/components/Testimonials";
+import Certifications from "@/components/Certifications";
 import {
   Heart,
   Clock,
@@ -86,7 +88,7 @@ export default function Index() {
     {
       url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       title: "Ambiente Moderno",
-      subtitle: "Instalaç��es confortáveis e seguras",
+      subtitle: "Instalações confortáveis e seguras",
     },
   ];
 
@@ -1044,6 +1046,12 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Certifications Section */}
+      <Certifications />
 
       {/* About Section */}
       <section id="sobre" className="py-20">
