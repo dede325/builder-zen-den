@@ -505,6 +505,122 @@ export default function Portal() {
     };
   };
 
+  // Role-based dashboard renderer
+  const renderRoleBasedDashboard = () => {
+    if (!currentUserRole) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Shield className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Carregando Permissões</h3>
+              <p className="text-muted-foreground">
+                Verificando suas permissões de acesso...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
+
+    const commonProps = {
+      currentUser,
+      appointments,
+      examResults,
+      notificationSettings,
+      isLoadingAppointments,
+      isLoadingExams,
+      activeTab,
+      setActiveTab,
+      onCreateAppointment: createAppointment,
+      onCancelAppointment: cancelAppointment,
+      onMarkExamAsViewed: markExamAsViewed,
+      onDownloadExam: downloadExam,
+      onUpdateProfile: () => setIsEditingProfile(true),
+      onUpdateNotifications: (settings: any) => {
+        // Handle notification updates
+        setNotificationSettings(settings);
+      },
+    };
+
+    switch (currentUserRole.role) {
+      case UserRole.PATIENT:
+        return <PatientDashboard {...commonProps} />;
+
+      case UserRole.DOCTOR:
+        return (
+          <DoctorDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            isLoadingExams={isLoadingExams}
+          />
+        );
+
+      case UserRole.NURSE:
+        return (
+          <NurseDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            isLoadingExams={isLoadingExams}
+          />
+        );
+
+      case UserRole.ADMIN:
+        return (
+          <AdminDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            examResults={examResults}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        );
+
+      case UserRole.RECEPTIONIST:
+        return (
+          <ReceptionistDashboard
+            currentUser={currentUser}
+            appointments={appointments}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoadingAppointments={isLoadingAppointments}
+            onCreateAppointment={createAppointment}
+            onCancelAppointment={cancelAppointment}
+          />
+        );
+
+      default:
+        return (
+          <div className="container mx-auto px-4 py-8">
+            <Card>
+              <CardContent className="p-8 text-center">
+                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Acesso Negado</h3>
+                <p className="text-muted-foreground">
+                  Seu perfil não tem permissões para acessar este sistema.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={handleLogout}
+                >
+                  Fazer Logout
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        );
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-background">
