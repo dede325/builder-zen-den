@@ -20,6 +20,8 @@ import Dashboard from "@/components/dashboard/Dashboard";
 import AppointmentsPage from "@/components/dashboard/AppointmentsPage";
 import DoctorLayout from "@/components/dashboard/DoctorLayout";
 import DoctorDashboard from "@/components/dashboard/DoctorDashboard";
+import DoctorExamsPage from "@/components/dashboard/DoctorExamsPage";
+import DoctorMessagesPage from "@/components/dashboard/DoctorMessagesPage";
 import {
   ArrowLeft,
   Eye,
