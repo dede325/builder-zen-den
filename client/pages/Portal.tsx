@@ -127,14 +127,15 @@ export default function Portal() {
   }, []);
 
   // API Helper
-  const apiCall = async (url: string, options: RequestInit = {}) => {
+  const apiCall = async (url: string, options: RequestInit = {}, token?: string) => {
     const headers = {
       "Content-Type": "application/json",
       ...options.headers,
     };
 
-    if (authToken) {
-      headers["Authorization"] = `Bearer ${authToken}`;
+    const tokenToUse = token || authToken;
+    if (tokenToUse) {
+      headers["Authorization"] = `Bearer ${tokenToUse}`;
     }
 
     const response = await fetch(url, {
@@ -217,18 +218,18 @@ export default function Portal() {
   };
 
   // Data loading
-  const loadData = async () => {
+  const loadData = async (token?: string) => {
     await Promise.all([
-      loadAppointments(),
-      loadExamResults(),
-      loadNotificationSettings(),
+      loadAppointments(token),
+      loadExamResults(token),
+      loadNotificationSettings(token),
     ]);
   };
 
-  const loadAppointments = async () => {
+  const loadAppointments = async (token?: string) => {
     setIsLoadingAppointments(true);
     try {
-      const response = await apiCall("/api/portal/appointments");
+      const response = await apiCall("/api/portal/appointments", {}, token);
       if (response.success) {
         setAppointments(response.data);
       }
@@ -244,10 +245,10 @@ export default function Portal() {
     }
   };
 
-  const loadExamResults = async () => {
+  const loadExamResults = async (token?: string) => {
     setIsLoadingExams(true);
     try {
-      const response = await apiCall("/api/portal/exams");
+      const response = await apiCall("/api/portal/exams", {}, token);
       if (response.success) {
         setExamResults(response.data);
       }
@@ -263,9 +264,9 @@ export default function Portal() {
     }
   };
 
-  const loadNotificationSettings = async () => {
+  const loadNotificationSettings = async (token?: string) => {
     try {
-      const response = await apiCall("/api/portal/notifications");
+      const response = await apiCall("/api/portal/notifications", {}, token);
       if (response.success) {
         setNotificationSettings(response.data);
       }
