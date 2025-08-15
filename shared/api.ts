@@ -40,3 +40,12 @@ export interface ContactSubmission extends ContactFormData {
   submitted_at: string;
   status: 'pending' | 'responded' | 'archived';
 }
+
+/**
+ * Server date response
+ */
+export interface ServerDateResponse {
+  currentDate: string;
+  year: number;
+  timestamp: number;
+}
