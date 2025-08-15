@@ -884,7 +884,7 @@ export default function Index() {
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 leading-tight">
                   Cuidamos da sua <span className="text-[#79cbcb]">saúde</span>
                   <br />
-                  com humanização
+                  com humaniza��ão
                   <br className="hidden sm:block" /> e excelência
                 </h1>
 
@@ -1014,7 +1014,7 @@ export default function Index() {
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="specialty-icon w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center">
+                    <div className="specialty-icon-premium w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center">
                       <specialty.icon className="w-5 h-5 text-clinic-accent icon-hover" />
                     </div>
                     <h4 className="font-semibold text-foreground group-hover:text-clinic-primary transition-colors text-sm sm:text-base">
@@ -1069,7 +1069,7 @@ export default function Index() {
                 <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4" />
                 <h4 className="text-lg font-semibold mb-2">Ecocardiograma</h4>
                 <p className="text-muted-foreground text-sm sm:text-base">
-                  Ultrassom do coração para diagn��stico detalhado
+                  Ultrassom do coração para diagnóstico detalhado
                 </p>
               </CardContent>
             </Card>
