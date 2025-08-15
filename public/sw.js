@@ -1,458 +1,505 @@
-// Service Worker para Clínica Bem Cuidar PWA
-// Versão: 1.0.0
-// Localização: Angola (pt-AO)
+// Service Worker for Clínica Bem Cuidar PWA
+// Enhanced for Angola locale and medical data compliance
 
-const CACHE_VERSION = "bem-cuidar-v1.0.0";
-const OFFLINE_VERSION = "offline-v1.0.0";
+const CACHE_NAME = 'clinica-bem-cuidar-v1.3.0';
+const STATIC_CACHE = 'static-v1.3.0';
+const DYNAMIC_CACHE = 'dynamic-v1.3.0';
+const OFFLINE_PAGE = '/offline.html';
 
-// Cache names
-const STATIC_CACHE = `${CACHE_VERSION}-static`;
-const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
-const IMAGES_CACHE = `${CACHE_VERSION}-images`;
-const API_CACHE = `${CACHE_VERSION}-api`;
-const OFFLINE_CACHE = `${OFFLINE_VERSION}-offline`;
-
-// URLs to cache immediately
+// Core assets to cache (critical for PWA functionality)
 const STATIC_ASSETS = [
-  "/",
-  "/offline",
-  "/manifest.json",
-  "/global.css",
-  // Critical CSS and JS will be added dynamically
+  '/',
+  '/offline.html',
+  '/manifest.json',
+  '/global.css',
+  // App shell
+  '/src/main.tsx',
+  '/src/App.tsx',
+  '/src/components/ui/button.tsx',
+  '/src/components/ui/card.tsx',
+  // Icons for offline use
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  // Critical fonts (if using local fonts)
+  '/fonts/inter-regular.woff2',
+  '/fonts/inter-medium.woff2',
+  '/fonts/inter-semibold.woff2'
 ];
 
-// URLs for offline fallback
-const OFFLINE_FALLBACK_PAGE = "/offline";
-
-// API endpoints to cache
-const API_ENDPOINTS = [
-  "/api/especialidades",
-  "/api/horarios",
-  "/api/contacto",
-  "/api/server-date",
+// API endpoints to cache for offline functionality
+const API_CACHE_PATTERNS = [
+  /^.*\/api\/specialties/,
+  /^.*\/api\/schedule/,
+  /^.*\/api\/contact-info/,
+  /^.*\/api\/server-date/
 ];
+
+// Image patterns for caching
+const IMAGE_CACHE_PATTERNS = [
+  /\.(?:png|jpg|jpeg|svg|webp|avif)$/,
+  /unsplash\.com/,
+  /images\.pexels\.com/,
+  /cdn\.builder\.io/
+];
+
+// Angola-specific considerations
+const ANGOLA_CONFIG = {
+  timeZone: 'Africa/Luanda',
+  currency: 'AOA',
+  locale: 'pt-AO',
+  emergencyNumbers: ['112', '113', '115'],
+  dataRetentionDays: 30 // For offline form data
+};
 
 // Install event - cache static assets
-self.addEventListener("install", (event) => {
-  console.log("[SW] Installing service worker...");
-
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing Service Worker for Clínica Bem Cuidar...');
+  
   event.waitUntil(
     Promise.all([
       // Cache static assets
       caches.open(STATIC_CACHE).then((cache) => {
-        console.log("[SW] Caching static assets");
-        return cache.addAll(STATIC_ASSETS);
+        console.log('[SW] Caching static assets...');
+        return cache.addAll(STATIC_ASSETS.filter(url => url !== null));
       }),
-
-      // Cache offline page
-      caches.open(OFFLINE_CACHE).then((cache) => {
-        console.log("[SW] Caching offline page");
-        return cache.add(OFFLINE_FALLBACK_PAGE);
-      }),
+      
+      // Create offline page cache
+      caches.open(DYNAMIC_CACHE).then((cache) => {
+        console.log('[SW] Creating offline page cache...');
+        return cache.add(OFFLINE_PAGE);
+      })
     ]).then(() => {
-      console.log("[SW] Installation complete");
+      console.log('[SW] Installation completed successfully');
       // Skip waiting to activate immediately
       return self.skipWaiting();
-    }),
+    }).catch((error) => {
+      console.error('[SW] Installation failed:', error);
+    })
   );
 });
 
-// Activate event - clean old caches
-self.addEventListener("activate", (event) => {
-  console.log("[SW] Activating service worker...");
-
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating Service Worker...');
+  
   event.waitUntil(
     Promise.all([
-      // Clean old caches
+      // Clean up old caches
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (
-              !cacheName.startsWith(CACHE_VERSION) &&
-              !cacheName.startsWith(OFFLINE_VERSION)
-            ) {
-              console.log("[SW] Deleting old cache:", cacheName);
+            if (cacheName !== STATIC_CACHE && 
+                cacheName !== DYNAMIC_CACHE && 
+                cacheName !== CACHE_NAME) {
+              console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          }),
+          })
         );
       }),
-
-      // Take control of all pages
-      self.clients.claim(),
+      
+      // Take control of all clients
+      self.clients.claim()
     ]).then(() => {
-      console.log("[SW] Activation complete");
-    }),
+      console.log('[SW] Activation completed successfully');
+    }).catch((error) => {
+      console.error('[SW] Activation failed:', error);
+    })
   );
 });
 
-// Fetch event - handle network requests
-self.addEventListener("fetch", (event) => {
+// Fetch event - implement caching strategies
+self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-
-  // Skip non-GET requests
-  if (request.method !== "GET") {
+  
+  // Skip non-GET requests for PWA
+  if (request.method !== 'GET') {
     return;
   }
-
-  // Skip chrome-extension requests
-  if (url.protocol === "chrome-extension:") {
+  
+  // Skip browser-extension requests
+  if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') {
     return;
   }
-
-  // Handle different types of requests
-  if (url.pathname.startsWith("/api/")) {
-    // API requests - network first with cache fallback
-    event.respondWith(handleApiRequest(request));
-  } else if (isImageRequest(request)) {
-    // Images - cache first with network fallback
-    event.respondWith(handleImageRequest(request));
-  } else if (isStaticAsset(request)) {
-    // Static assets - cache first
-    event.respondWith(handleStaticRequest(request));
-  } else {
-    // HTML pages - network first with offline fallback
-    event.respondWith(handlePageRequest(request));
-  }
+  
+  event.respondWith(handleFetch(request));
 });
 
-// Handle API requests
-async function handleApiRequest(request) {
-  const cacheName = API_CACHE;
-
+async function handleFetch(request) {
+  const url = new URL(request.url);
+  
   try {
-    // Try network first
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache successful responses
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+    // Strategy 1: Network First for API calls (real-time medical data)
+    if (isAPIRequest(url)) {
+      return await networkFirstStrategy(request);
     }
-
-    return networkResponse;
+    
+    // Strategy 2: Cache First for images and static assets
+    if (isStaticAsset(url) || isImageRequest(url)) {
+      return await cacheFirstStrategy(request);
+    }
+    
+    // Strategy 3: Stale While Revalidate for HTML pages
+    if (isHTMLRequest(request)) {
+      return await staleWhileRevalidateStrategy(request);
+    }
+    
+    // Default: Network with cache fallback
+    return await networkWithCacheFallback(request);
+    
   } catch (error) {
-    console.log("[SW] Network failed for API, trying cache:", request.url);
+    console.error('[SW] Fetch error:', error);
+    return await getOfflineFallback(request);
+  }
+}
 
-    // Fallback to cache
+// Network First Strategy - for APIs
+async function networkFirstStrategy(request) {
+  try {
+    const response = await fetch(request);
+    
+    if (response.ok) {
+      // Cache successful responses
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    
+    return response;
+  } catch (error) {
+    console.log('[SW] Network failed, trying cache for:', request.url);
     const cachedResponse = await caches.match(request);
+    
     if (cachedResponse) {
       return cachedResponse;
     }
-
-    // Return error response
-    return new Response(
-      JSON.stringify({
-        error: "Sem conexão de internet",
-        message:
-          "Por favor, verifique a sua ligação à internet e tente novamente.",
-        timestamp: new Date().toISOString(),
-      }),
-      {
-        status: 503,
-        statusText: "Service Unavailable",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-      },
-    );
-  }
-}
-
-// Handle image requests
-async function handleImageRequest(request) {
-  const cacheName = IMAGES_CACHE;
-
-  // Try cache first
-  const cachedResponse = await caches.match(request);
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  try {
-    // Try network
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache the image
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+    
+    // Return offline API response for critical endpoints
+    if (request.url.includes('/api/')) {
+      return new Response(
+        JSON.stringify({
+          error: 'Sem conexão à internet',
+          message: 'Os dados serão sincronizados quando a conexão for restaurada',
+          timestamp: new Date().toISOString(),
+          angola_time: new Date().toLocaleString('pt-AO', { 
+            timeZone: ANGOLA_CONFIG.timeZone 
+          })
+        }),
+        {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
-
-    return networkResponse;
-  } catch (error) {
-    console.log("[SW] Failed to load image:", request.url);
-
-    // Return placeholder image
-    return new Response(
-      `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-        <rect width="400" height="300" fill="#f3f4f6"/>
-        <text x="200" y="150" text-anchor="middle" fill="#6b7280" font-family="Arial" font-size="16">
-          Imagem indisponível
-        </text>
-      </svg>`,
-      {
-        headers: { "Content-Type": "image/svg+xml" },
-      },
-    );
-  }
-}
-
-// Handle static asset requests
-async function handleStaticRequest(request) {
-  const cacheName = STATIC_CACHE;
-
-  // Try cache first
-  const cachedResponse = await caches.match(request);
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  try {
-    // Try network
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache the asset
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
-    }
-
-    return networkResponse;
-  } catch (error) {
-    console.log("[SW] Failed to load static asset:", request.url);
+    
     throw error;
   }
 }
 
-// Handle page requests
-async function handlePageRequest(request) {
-  try {
-    // Try network first
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache successful page responses
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-
-    return networkResponse;
-  } catch (error) {
-    console.log("[SW] Network failed for page, trying cache:", request.url);
-
-    // Try cache
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Fallback to offline page
-    console.log("[SW] Serving offline page");
-    return caches.match(OFFLINE_FALLBACK_PAGE);
+// Cache First Strategy - for static assets
+async function cacheFirstStrategy(request) {
+  const cachedResponse = await caches.match(request);
+  
+  if (cachedResponse) {
+    return cachedResponse;
   }
+  
+  try {
+    const response = await fetch(request);
+    
+    if (response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    
+    return response;
+  } catch (error) {
+    console.error('[SW] Failed to fetch static asset:', request.url);
+    throw error;
+  }
+}
+
+// Stale While Revalidate Strategy - for HTML pages
+async function staleWhileRevalidateStrategy(request) {
+  const cachedResponse = await caches.match(request);
+  
+  // Fetch in background to update cache
+  const fetchPromise = fetch(request).then((response) => {
+    if (response.ok) {
+      const cache = caches.open(DYNAMIC_CACHE);
+      cache.then(c => c.put(request, response.clone()));
+    }
+    return response;
+  }).catch(() => null);
+  
+  // Return cached version immediately if available
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  // Otherwise wait for network
+  return await fetchPromise || getOfflineFallback(request);
+}
+
+// Network with Cache Fallback
+async function networkWithCacheFallback(request) {
+  try {
+    const response = await fetch(request);
+    
+    if (response.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    
+    return response;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || getOfflineFallback(request);
+  }
+}
+
+// Get offline fallback
+async function getOfflineFallback(request) {
+  if (isHTMLRequest(request)) {
+    return await caches.match(OFFLINE_PAGE) || 
+           new Response('Página offline não encontrada', { status: 404 });
+  }
+  
+  return new Response('Recurso não disponível offline', { 
+    status: 503,
+    statusText: 'Service Unavailable' 
+  });
 }
 
 // Helper functions
-function isImageRequest(request) {
-  return (
-    request.destination === "image" ||
-    /\.(jpg|jpeg|png|gif|webp|avif|svg)$/i.test(new URL(request.url).pathname)
-  );
+function isAPIRequest(url) {
+  return url.pathname.startsWith('/api/') || 
+         API_CACHE_PATTERNS.some(pattern => pattern.test(url.href));
 }
 
-function isStaticAsset(request) {
-  const url = new URL(request.url);
-  return (
-    request.destination === "script" ||
-    request.destination === "style" ||
-    /\.(js|css|woff|woff2|ttf|eot)$/i.test(url.pathname)
-  );
+function isStaticAsset(url) {
+  return url.pathname.includes('/static/') ||
+         url.pathname.includes('/assets/') ||
+         url.pathname.includes('/css/') ||
+         url.pathname.includes('/js/') ||
+         url.pathname.includes('/fonts/');
 }
 
-// Background sync for offline form submissions
-self.addEventListener("sync", (event) => {
-  console.log("[SW] Background sync:", event.tag);
+function isImageRequest(url) {
+  return IMAGE_CACHE_PATTERNS.some(pattern => pattern.test(url.href));
+}
 
-  if (event.tag === "form-submission") {
-    event.waitUntil(syncFormSubmissions());
+function isHTMLRequest(request) {
+  return request.headers.get('accept')?.includes('text/html');
+}
+
+// Background Sync for form submissions (Angola compliance)
+self.addEventListener('sync', (event) => {
+  console.log('[SW] Background sync triggered:', event.tag);
+  
+  if (event.tag === 'contact-form-sync') {
+    event.waitUntil(syncContactForms());
   }
-
-  if (event.tag === "appointment-booking") {
-    event.waitUntil(syncAppointmentBookings());
+  
+  if (event.tag === 'appointment-sync') {
+    event.waitUntil(syncAppointments());
   }
 });
 
-// Sync offline form submissions
-async function syncFormSubmissions() {
+// Sync contact forms when connection is restored
+async function syncContactForms() {
   try {
     const db = await openIndexedDB();
-    const submissions = await getStoredSubmissions(db);
-
-    for (const submission of submissions) {
+    const forms = await getStoredForms(db, 'contact-forms');
+    
+    for (const form of forms) {
       try {
-        const response = await fetch("/api/contacto", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(submission.data),
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form.data)
         });
-
+        
         if (response.ok) {
-          await removeSubmission(db, submission.id);
-          console.log("[SW] Form submission synced:", submission.id);
+          await removeStoredForm(db, 'contact-forms', form.id);
+          console.log('[SW] Successfully synced contact form:', form.id);
+          
+          // Notify client about successful sync
+          self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+              client.postMessage({
+                type: 'SYNC_SUCCESS',
+                data: { formType: 'contact', id: form.id }
+              });
+            });
+          });
         }
       } catch (error) {
-        console.log("[SW] Failed to sync submission:", submission.id, error);
+        console.error('[SW] Failed to sync form:', form.id, error);
       }
     }
   } catch (error) {
-    console.log("[SW] Error syncing form submissions:", error);
+    console.error('[SW] Sync contact forms failed:', error);
   }
 }
 
-// Sync offline appointment bookings
-async function syncAppointmentBookings() {
+// Push notifications for appointments (Angola medical requirements)
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push notification received');
+  
+  if (!event.data) return;
+  
   try {
-    const db = await openIndexedDB();
-    const bookings = await getStoredBookings(db);
-
-    for (const booking of bookings) {
-      try {
-        const response = await fetch("/api/agendamento", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(booking.data),
-        });
-
-        if (response.ok) {
-          await removeBooking(db, booking.id);
-          console.log("[SW] Appointment booking synced:", booking.id);
+    const data = event.data.json();
+    const options = {
+      body: data.body || 'Nova notificação da Clínica Bem Cuidar',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/badge-72x72.png',
+      data: data.data || {},
+      actions: [
+        {
+          action: 'view',
+          title: 'Ver Detalhes',
+          icon: '/icons/action-view.png'
+        },
+        {
+          action: 'dismiss',
+          title: 'Dispensar'
         }
-      } catch (error) {
-        console.log("[SW] Failed to sync booking:", booking.id, error);
-      }
-    }
+      ],
+      lang: 'pt-AO',
+      tag: data.tag || 'clinic-notification',
+      renotify: true,
+      requireInteraction: data.urgent || false
+    };
+    
+    event.waitUntil(
+      self.registration.showNotification(
+        data.title || 'Clínica Bem Cuidar',
+        options
+      )
+    );
   } catch (error) {
-    console.log("[SW] Error syncing appointment bookings:", error);
+    console.error('[SW] Push notification error:', error);
   }
-}
+});
 
-// IndexedDB helpers (simplified)
-function openIndexedDB() {
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification clicked:', event.notification.tag);
+  
+  event.notification.close();
+  
+  const action = event.action;
+  const data = event.notification.data;
+  
+  if (action === 'view' && data.url) {
+    event.waitUntil(
+      clients.openWindow(data.url)
+    );
+  } else if (action === 'dismiss') {
+    // Log dismissal for analytics
+    console.log('[SW] Notification dismissed by user');
+  } else {
+    // Default action - open app
+    event.waitUntil(
+      clients.matchAll({ type: 'window' }).then(clients => {
+        if (clients.length > 0) {
+          return clients[0].focus();
+        }
+        return clients.openWindow('/');
+      })
+    );
+  }
+});
+
+// IndexedDB helpers for offline storage
+async function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("BemCuidarDB", 1);
-
+    const request = indexedDB.open('ClinicaBemCuidar', 1);
+    
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
-
+    
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-
-      if (!db.objectStoreNames.contains("submissions")) {
-        db.createObjectStore("submissions", {
-          keyPath: "id",
-          autoIncrement: true,
-        });
+      
+      // Create stores for offline data
+      if (!db.objectStoreNames.contains('contact-forms')) {
+        const store = db.createObjectStore('contact-forms', { keyPath: 'id' });
+        store.createIndex('timestamp', 'timestamp');
       }
-
-      if (!db.objectStoreNames.contains("bookings")) {
-        db.createObjectStore("bookings", {
-          keyPath: "id",
-          autoIncrement: true,
-        });
+      
+      if (!db.objectStoreNames.contains('appointments')) {
+        const store = db.createObjectStore('appointments', { keyPath: 'id' });
+        store.createIndex('timestamp', 'timestamp');
       }
     };
   });
 }
 
-function getStoredSubmissions(db) {
+async function getStoredForms(db, storeName) {
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["submissions"], "readonly");
-    const store = transaction.objectStore("submissions");
+    const transaction = db.transaction([storeName], 'readonly');
+    const store = transaction.objectStore(storeName);
     const request = store.getAll();
-
+    
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
   });
 }
 
-function getStoredBookings(db) {
+async function removeStoredForm(db, storeName, id) {
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["bookings"], "readonly");
-    const store = transaction.objectStore("bookings");
-    const request = store.getAll();
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
-  });
-}
-
-function removeSubmission(db, id) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["submissions"], "readwrite");
-    const store = transaction.objectStore("submissions");
+    const transaction = db.transaction([storeName], 'readwrite');
+    const store = transaction.objectStore(storeName);
     const request = store.delete(id);
-
+    
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve();
   });
 }
 
-function removeBooking(db, id) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["bookings"], "readwrite");
-    const store = transaction.objectStore("bookings");
-    const request = store.delete(id);
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve();
-  });
-}
-
-// Push notification handling
-self.addEventListener("push", (event) => {
-  console.log("[SW] Push notification received");
-
-  const options = {
-    body: "Tem uma nova mensagem da Clínica Bem Cuidar",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: "1",
-    },
-    actions: [
-      {
-        action: "explore",
-        title: "Ver Detalhes",
-        icon: "/icons/checkmark.png",
-      },
-      {
-        action: "close",
-        title: "Fechar",
-        icon: "/icons/xmark.png",
-      },
-    ],
-  };
-
-  event.waitUntil(
-    self.registration.showNotification("Clínica Bem Cuidar", options),
-  );
-});
-
-// Notification click handling
-self.addEventListener("notificationclick", (event) => {
-  console.log("[SW] Notification click received.");
-
-  event.notification.close();
-
-  if (event.action === "explore") {
-    event.waitUntil(clients.openWindow("/portal"));
-  } else if (event.action === "close") {
-    // Just close the notification
-  } else {
-    event.waitUntil(clients.openWindow("/"));
+// Cache cleanup based on Angola data retention policies
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CLEANUP_CACHE') {
+    event.waitUntil(cleanupOldCache());
+  }
+  
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
-console.log("[SW] Service Worker loaded successfully");
+async function cleanupOldCache() {
+  try {
+    const cacheNames = await caches.keys();
+    const retentionDate = new Date();
+    retentionDate.setDate(retentionDate.getDate() - ANGOLA_CONFIG.dataRetentionDays);
+    
+    // Clean up dynamic cache entries older than retention period
+    const dynamicCache = await caches.open(DYNAMIC_CACHE);
+    const keys = await dynamicCache.keys();
+    
+    for (const request of keys) {
+      const response = await dynamicCache.match(request);
+      if (response) {
+        const dateHeader = response.headers.get('date');
+        if (dateHeader) {
+          const responseDate = new Date(dateHeader);
+          if (responseDate < retentionDate) {
+            await dynamicCache.delete(request);
+            console.log('[SW] Cleaned up old cache entry:', request.url);
+          }
+        }
+      }
+    }
+    
+    console.log('[SW] Cache cleanup completed');
+  } catch (error) {
+    console.error('[SW] Cache cleanup failed:', error);
+  }
+}
+
+console.log('[SW] Service Worker script loaded successfully');
