@@ -410,8 +410,8 @@ export default function DoctorDashboard({
               <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Lista de Pacientes</h3>
               <p className="text-muted-foreground mb-4">
-                Acesse o histórico clínico completo dos seus pacientes, incluindo
-                consultas anteriores, exames e tratamentos.
+                Acesse o histórico clínico completo dos seus pacientes,
+                incluindo consultas anteriores, exames e tratamentos.
               </p>
               <Button variant="outline">Ver Lista Completa</Button>
             </CardContent>

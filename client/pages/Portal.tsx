@@ -157,7 +157,11 @@ export default function Portal() {
   }, []);
 
   // API Helper
-  const apiCall = async (url: string, options: RequestInit = {}, token?: string) => {
+  const apiCall = async (
+    url: string,
+    options: RequestInit = {},
+    token?: string,
+  ) => {
     const headers = {
       "Content-Type": "application/json",
       ...options.headers,
@@ -520,7 +524,9 @@ export default function Portal() {
           <Card>
             <CardContent className="p-8 text-center">
               <Shield className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Carregando Permissões</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Carregando Permissões
+              </h3>
               <p className="text-muted-foreground">
                 Verificando suas permissões de acesso...
               </p>
@@ -794,7 +800,8 @@ export default function Portal() {
                   Portal da Clínica Bem Cuidar
                 </h1>
                 <p className="text-xs text-muted-foreground">
-                  {getRoleDisplayName(currentUserRole?.role)} - {currentUser?.name}
+                  {getRoleDisplayName(currentUserRole?.role)} -{" "}
+                  {currentUser?.name}
                 </p>
               </div>
             </div>
@@ -927,7 +934,6 @@ export default function Portal() {
           </DialogContent>
         </Dialog>
       )}
-
     </div>
   );
 }

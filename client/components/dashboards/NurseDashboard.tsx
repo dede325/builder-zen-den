@@ -250,7 +250,9 @@ export default function NurseDashboard({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Hoje</p>
-                    <p className="text-2xl font-bold">{stats.todayAppointments}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.todayAppointments}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Consultas agendadas
                     </p>
@@ -267,7 +269,9 @@ export default function NurseDashboard({
                     <p className="text-sm text-muted-foreground">
                       Sinais Vitais
                     </p>
-                    <p className="text-2xl font-bold">{stats.completedVitals}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.completedVitals}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Registrados hoje
                     </p>
@@ -404,7 +408,7 @@ export default function NurseDashboard({
         {/* Schedule Tab */}
         <TabsContent value="schedule" className="space-y-6">
           <h2 className="text-2xl font-bold">Consultas do Dia</h2>
-          
+
           {isLoadingAppointments ? (
             <div className="flex justify-center py-8">
               <Loader2 className="w-8 h-8 animate-spin" />
@@ -418,7 +422,9 @@ export default function NurseDashboard({
                       <div className="space-y-1">
                         <div className="flex items-center space-x-2">
                           <h3 className="font-semibold">{appointment.time}</h3>
-                          <Badge variant="outline">{appointment.specialty}</Badge>
+                          <Badge variant="outline">
+                            {appointment.specialty}
+                          </Badge>
                         </div>
                         <p className="text-muted-foreground">
                           Dr. {appointment.doctor}
@@ -484,8 +490,8 @@ export default function NurseDashboard({
                 Sistema de Gestão de Exames
               </h3>
               <p className="text-muted-foreground mb-4">
-                Marque exames, acompanhe o status e organize a logística para
-                os procedimentos diagnósticos.
+                Marque exames, acompanhe o status e organize a logística para os
+                procedimentos diagnósticos.
               </p>
               <div className="flex justify-center space-x-4">
                 <Button variant="outline">Marcar Exame</Button>

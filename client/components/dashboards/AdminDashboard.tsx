@@ -117,7 +117,8 @@ export default function AdminDashboard({
                     <AlertTriangle className="w-6 h-6 text-yellow-600" />
                     <div className="flex-1">
                       <h4 className="font-semibold text-yellow-800">
-                        {systemStats.pendingApprovals} aprovação(ões) pendente(s)
+                        {systemStats.pendingApprovals} aprovação(ões)
+                        pendente(s)
                       </h4>
                       <p className="text-sm text-yellow-700">
                         Novos cadastros de usuários aguardando aprovação
@@ -217,7 +218,9 @@ export default function AdminDashboard({
                     <p className="text-sm text-muted-foreground">
                       Total de Usuários
                     </p>
-                    <p className="text-2xl font-bold">{systemStats.totalUsers}</p>
+                    <p className="text-2xl font-bold">
+                      {systemStats.totalUsers}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Ativos no sistema
                     </p>
@@ -234,7 +237,9 @@ export default function AdminDashboard({
                     <p className="text-sm text-muted-foreground">
                       Consultas Hoje
                     </p>
-                    <p className="text-2xl font-bold">{stats.todayAppointments}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.todayAppointments}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Agendadas para hoje
                     </p>
@@ -273,7 +278,9 @@ export default function AdminDashboard({
                     <p className="text-sm text-muted-foreground">
                       Uptime do Sistema
                     </p>
-                    <p className="text-2xl font-bold">{systemStats.systemUptime}</p>
+                    <p className="text-2xl font-bold">
+                      {systemStats.systemUptime}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Últimos 30 dias
                     </p>
@@ -343,7 +350,10 @@ export default function AdminDashboard({
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       <span className="font-medium">Servidor Web</span>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-800"
+                    >
                       Online
                     </Badge>
                   </div>
@@ -352,7 +362,10 @@ export default function AdminDashboard({
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       <span className="font-medium">Base de Dados</span>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-800"
+                    >
                       Online
                     </Badge>
                   </div>
@@ -361,7 +374,10 @@ export default function AdminDashboard({
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       <span className="font-medium">Email Service</span>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-800"
+                    >
                       Online
                     </Badge>
                   </div>
@@ -370,7 +386,10 @@ export default function AdminDashboard({
                       <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                       <span className="font-medium">Backup Service</span>
                     </div>
-                    <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                    <Badge
+                      variant="secondary"
+                      className="bg-yellow-100 text-yellow-800"
+                    >
                       Processando
                     </Badge>
                   </div>
@@ -413,7 +432,9 @@ export default function AdminDashboard({
           <Card>
             <CardContent className="p-8 text-center">
               <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Agenda Centralizada</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Agenda Centralizada
+              </h3>
               <p className="text-muted-foreground mb-4">
                 Visualize e gerencie todas as agendas dos médicos, organize
                 horários e resolva conflitos de agendamento.
@@ -469,7 +490,9 @@ export default function AdminDashboard({
           <Card>
             <CardContent className="p-8 text-center">
               <Shield className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Sistema de Auditoria</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Sistema de Auditoria
+              </h3>
               <p className="text-muted-foreground mb-4">
                 Acompanhe todas as alterações feitas no sistema, monitore
                 atividades de usuários e garanta a segurança dos dados.

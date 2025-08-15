@@ -269,7 +269,9 @@ export default function ReceptionistDashboard({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Hoje</p>
-                    <p className="text-2xl font-bold">{stats.todayAppointments}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.todayAppointments}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Consultas agendadas
                     </p>
@@ -284,7 +286,9 @@ export default function ReceptionistDashboard({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Check-in</p>
-                    <p className="text-2xl font-bold">{stats.checkedInPatients}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.checkedInPatients}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Pacientes atendidos
                     </p>
@@ -299,7 +303,9 @@ export default function ReceptionistDashboard({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Aguardando</p>
-                    <p className="text-2xl font-bold">{stats.waitingPatients}</p>
+                    <p className="text-2xl font-bold">
+                      {stats.waitingPatients}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Para check-in
                     </p>
@@ -468,7 +474,7 @@ export default function ReceptionistDashboard({
         {/* Check-in Tab */}
         <TabsContent value="checkin" className="space-y-6">
           <h2 className="text-2xl font-bold">Lista de Pacientes do Dia</h2>
-          
+
           <div className="grid gap-4">
             {patientsToday.map((patient) => (
               <Card key={patient.id}>
@@ -485,7 +491,9 @@ export default function ReceptionistDashboard({
                               : "bg-orange-100 text-orange-800"
                           }
                         >
-                          {patient.checkedIn ? "Check-in Realizado" : "Aguardando"}
+                          {patient.checkedIn
+                            ? "Check-in Realizado"
+                            : "Aguardando"}
                         </Badge>
                       </div>
                       <p className="text-muted-foreground">
@@ -523,7 +531,7 @@ export default function ReceptionistDashboard({
               Novo Paciente
             </Button>
           </div>
-          
+
           {/* Pending Registrations */}
           {newPatients.length > 0 && (
             <Card>
@@ -563,9 +571,7 @@ export default function ReceptionistDashboard({
           <Card>
             <CardContent className="p-8 text-center">
               <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
-                Sistema de Registo
-              </h3>
+              <h3 className="text-lg font-semibold mb-2">Sistema de Registo</h3>
               <p className="text-muted-foreground mb-4">
                 Crie perfis para novos pacientes, atualize informações de
                 contato e gerencie os dados básicos dos utentes.
@@ -595,7 +601,8 @@ export default function ReceptionistDashboard({
               </h3>
               <p className="text-muted-foreground mb-4">
                 Comunique-se com médicos, enfermeiros e outros membros da equipe
-                para coordenar o atendimento e resolver questões administrativas.
+                para coordenar o atendimento e resolver questões
+                administrativas.
               </p>
               <div className="flex justify-center space-x-4">
                 <Button variant="outline">

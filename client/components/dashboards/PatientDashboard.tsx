@@ -153,7 +153,9 @@ export default function PatientDashboard({
                     </h4>
                     <p className="text-sm text-blue-700">
                       Próxima consulta:{" "}
-                      {appointments.filter((a) => a.status === "scheduled")[0] &&
+                      {appointments.filter(
+                        (a) => a.status === "scheduled",
+                      )[0] &&
                         `${appointments.filter((a) => a.status === "scheduled")[0].specialty} em ${new Date(appointments.filter((a) => a.status === "scheduled")[0].date).toLocaleDateString("pt-BR")}`}
                     </p>
                   </div>
@@ -233,12 +235,17 @@ export default function PatientDashboard({
                     <p className="text-sm text-muted-foreground">
                       Próxima Consulta
                     </p>
-                    <p className="text-2xl font-bold">{stats.nextAppointment}</p>
-                    {appointments.filter((a) => a.status === "scheduled")[0] && (
+                    <p className="text-2xl font-bold">
+                      {stats.nextAppointment}
+                    </p>
+                    {appointments.filter(
+                      (a) => a.status === "scheduled",
+                    )[0] && (
                       <p className="text-xs text-muted-foreground mt-1">
                         {
-                          appointments.filter((a) => a.status === "scheduled")[0]
-                            .specialty
+                          appointments.filter(
+                            (a) => a.status === "scheduled",
+                          )[0].specialty
                         }
                       </p>
                     )}
