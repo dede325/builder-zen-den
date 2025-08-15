@@ -101,13 +101,16 @@ export const requireAuth: RequestHandler = (req, res, next) => {
     });
   }
   
-  // Create user object with permissions for patients
+  // Create user object with permissions based on user type
+  const userRole = getUserRole(patient.email) || UserRole.PATIENT;
+  const userPermissions = getUserPermissions(patient.email);
+
   const user = {
     id: patient.id,
     name: patient.name,
     email: patient.email,
-    role: UserRole.PATIENT,
-    permissions: PermissionManager.getPermissionsForRole(UserRole.PATIENT),
+    role: userRole,
+    permissions: userPermissions,
     isActive: true,
     createdAt: patient.createdAt || new Date().toISOString(),
     updatedAt: patient.updatedAt || new Date().toISOString()
