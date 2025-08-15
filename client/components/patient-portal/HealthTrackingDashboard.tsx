@@ -390,7 +390,174 @@ export default function HealthTrackingDashboard() {
                   <option value="water">Água</option>
                 </select>
               </div>
-              {/* Additional form fields would go here based on selectedMetricType */}
+              {selectedMetricType === 'weight' && (
+                <div>
+                  <Label htmlFor="weight">Peso (kg)</Label>
+                  <Input
+                    id="weight"
+                    type="number"
+                    step="0.1"
+                    placeholder="75.5"
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
+              {selectedMetricType === 'blood_pressure' && (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="systolic">Sistólica (mmHg)</Label>
+                      <Input
+                        id="systolic"
+                        type="number"
+                        placeholder="120"
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="diastolic">Diastólica (mmHg)</Label>
+                      <Input
+                        id="diastolic"
+                        type="number"
+                        placeholder="80"
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedMetricType === 'heart_rate' && (
+                <div>
+                  <Label htmlFor="heartRate">Frequência Cardíaca (bpm)</Label>
+                  <Input
+                    id="heartRate"
+                    type="number"
+                    placeholder="72"
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
+              {selectedMetricType === 'temperature' && (
+                <div>
+                  <Label htmlFor="temperature">Temperatura (°C)</Label>
+                  <Input
+                    id="temperature"
+                    type="number"
+                    step="0.1"
+                    placeholder="36.5"
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
+              {selectedMetricType === 'glucose' && (
+                <div>
+                  <Label htmlFor="glucose">Glicose (mg/dL)</Label>
+                  <Input
+                    id="glucose"
+                    type="number"
+                    placeholder="90"
+                    className="mt-1"
+                  />
+                  <div className="mt-2">
+                    <Label>Momento da medição</Label>
+                    <select className="w-full p-2 border rounded mt-1">
+                      <option value="fasting">Jejum</option>
+                      <option value="before_meal">Antes da refeição</option>
+                      <option value="after_meal">Após refeição</option>
+                      <option value="bedtime">Antes de dormir</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {selectedMetricType === 'steps' && (
+                <div>
+                  <Label htmlFor="steps">Passos</Label>
+                  <Input
+                    id="steps"
+                    type="number"
+                    placeholder="8500"
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
+              {selectedMetricType === 'sleep' && (
+                <div className="space-y-3">
+                  <div>
+                    <Label htmlFor="sleepHours">Horas de sono</Label>
+                    <Input
+                      id="sleepHours"
+                      type="number"
+                      step="0.5"
+                      placeholder="7.5"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>Qualidade do sono</Label>
+                    <select className="w-full p-2 border rounded mt-1">
+                      <option value="excellent">Excelente</option>
+                      <option value="good">Boa</option>
+                      <option value="fair">Regular</option>
+                      <option value="poor">Ruim</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {selectedMetricType === 'water' && (
+                <div>
+                  <Label htmlFor="water">Água consumida (litros)</Label>
+                  <Input
+                    id="water"
+                    type="number"
+                    step="0.1"
+                    placeholder="2.1"
+                    className="mt-1"
+                  />
+                </div>
+              )}
+
+              {selectedMetricType && (
+                <div>
+                  <Label htmlFor="notes">Observações (opcional)</Label>
+                  <Textarea
+                    id="notes"
+                    placeholder="Adicione observações sobre esta medição..."
+                    className="mt-1"
+                    rows={2}
+                  />
+                </div>
+              )}
+
+              {selectedMetricType && (
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowAddMetric(false);
+                      setSelectedMetricType('');
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      // Here you would handle saving the metric
+                      console.log('Saving metric:', selectedMetricType);
+                      setShowAddMetric(false);
+                      setSelectedMetricType('');
+                    }}
+                  >
+                    Salvar
+                  </Button>
+                </div>
+              )}
             </div>
           </DialogContent>
         </Dialog>
