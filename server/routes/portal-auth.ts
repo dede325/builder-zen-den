@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { portalStorage } from "../portal-storage";
 import { LoginRequest, LoginResponse, ApiResponse, UserRole, PermissionManager } from "../types";
+import { validateUserCredentials, getUserRole, getUserPermissions } from "../user-types";
 import { z } from "zod";
 
 const LoginSchema = z.object({
