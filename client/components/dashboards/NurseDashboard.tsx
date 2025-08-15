@@ -37,6 +37,8 @@ import {
   Eye,
   Loader2,
 } from "lucide-react";
+import MessagingComponent from "@/components/messaging/MessagingComponent";
+import FileUploadComponent from "@/components/file-upload/FileUploadComponent";
 
 interface NurseDashboardProps {
   currentUser: any;
@@ -504,19 +506,7 @@ export default function NurseDashboard({
         {/* Messages Tab */}
         <TabsContent value="messages" className="space-y-6">
           <h2 className="text-2xl font-bold">Mensagens Internas</h2>
-          <Card>
-            <CardContent className="p-8 text-center">
-              <MessageSquare className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
-                Comunicação Interna
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Comunique-se com médicos, recepção e outros membros da equipe
-                para coordenar o atendimento aos pacientes.
-              </p>
-              <Button variant="outline">Abrir Mensagens</Button>
-            </CardContent>
-          </Card>
+          <MessagingComponent />
         </TabsContent>
       </Tabs>
     </div>
