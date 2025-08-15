@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
+import Footer from "@/components/Footer";
 import {
   Heart,
   Clock,
@@ -60,6 +61,7 @@ export default function Index() {
   const [selectedSpecialty, setSelectedSpecialty] =
     useState<SpecialtyInfo | null>(null);
   const [isSpecialtyModalOpen, setIsSpecialtyModalOpen] = useState(false);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   const heroImages = [
     {
@@ -93,6 +95,22 @@ export default function Index() {
 
     return () => clearInterval(interval);
   }, [isPlaying, heroImages.length]);
+
+  // Fetch current year from server
+  useEffect(() => {
+    const fetchServerDate = async () => {
+      try {
+        const response = await fetch("/api/server-date");
+        const data = await response.json();
+        setCurrentYear(data.year);
+      } catch (error) {
+        console.warn("Failed to fetch server date, using client date:", error);
+        setCurrentYear(new Date().getFullYear());
+      }
+    };
+
+    fetchServerDate();
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroImages.length);
@@ -1342,87 +1360,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-clinic-gradient text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Fc711f463c22d41959919669aa4ee5149%2F512ad61a260e4819863aa241ea5d9cd5?format=webp&width=800"
-                  alt="Clínica Bem Cuidar Logo"
-                  className="w-10 h-10 object-contain filter brightness-0 invert"
-                />
-                <div>
-                  <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
-                  <p className="text-blue-100">Cuidar é Amar</p>
-                </div>
-              </div>
-              <p className="text-blue-100">
-                Cuidamos da sua saúde com humanização, tecnologia e excelência
-                médica.
-              </p>
-            </div>
-
-            <div>
-              <h5 className="font-semibold mb-4">Contato</h5>
-              <div className="space-y-2 text-blue-100">
-                <p>
-                  <MapPin className="w-4 h-4 inline mr-2" />
-                  Av. 21 de Janeiro, Nº 351, Benfica
-                </p>
-                <p>
-                  <Phone className="w-4 h-4 inline mr-2" />
-                  +244 945 344 650
-                </p>
-                <p>
-                  <Mail className="w-4 h-4 inline mr-2" />
-                  recepcao@bemcuidar.co.ao
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h5 className="font-semibold mb-4">Links Úteis</h5>
-              <div className="space-y-2">
-                <Link
-                  to="/portal"
-                  className="block text-blue-100 hover:text-white transition-colors"
-                >
-                  Portal do Paciente
-                </Link>
-                <a
-                  href="#especialidades"
-                  className="block text-blue-100 hover:text-white transition-colors"
-                >
-                  Especialidades
-                </a>
-                <a
-                  href="#exames"
-                  className="block text-blue-100 hover:text-white transition-colors"
-                >
-                  Exames
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-blue-600 mt-8 pt-8 text-center text-blue-100">
-            <p>
-              &copy; 2024 Clínica Bem Cuidar. Desenvolvido por{" "}
-              <a
-                href="https://bestservices.ao"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-blue-200 font-semibold underline transition-colors"
-              >
-                Kaijhe
-              </a>{" "}
-              - Todos os direitos reservados.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Specialty Modal */}
       <SpecialtyModal
