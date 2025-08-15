@@ -32,6 +32,39 @@
       "address": "Endereço demo, Luanda",
       "createdAt": "2025-08-15T08:56:15.909Z",
       "updatedAt": "2025-08-15T08:56:15.909Z"
+    },
+    {
+      "id": "1755249043413",
+      "name": "Paciente",
+      "email": "paciente@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T09:10:43.413Z",
+      "updatedAt": "2025-08-15T09:10:43.413Z"
+    },
+    {
+      "id": "1755249178169",
+      "name": "Medico",
+      "email": "medico@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T09:12:58.169Z",
+      "updatedAt": "2025-08-15T09:12:58.169Z"
+    },
+    {
+      "id": "1755249262842",
+      "name": "Recepcao",
+      "email": "recepcao@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T09:14:22.842Z",
+      "updatedAt": "2025-08-15T09:14:22.842Z"
     }
   ],
   "appointments": [
@@ -57,6 +90,18 @@
       "notes": "Consulta de rotina realizada com sucesso",
       "createdAt": "2025-08-15T08:56:15.909Z",
       "updatedAt": "2025-08-15T08:56:15.909Z"
+    },
+    {
+      "id": "1755249089957",
+      "patientId": "1755249043413",
+      "specialty": "Clínica Geral",
+      "doctor": "Dra. Maria Santos",
+      "date": "2025-08-21",
+      "time": "14:00",
+      "status": "scheduled",
+      "notes": "teste",
+      "createdAt": "2025-08-15T09:11:29.957Z",
+      "updatedAt": "2025-08-15T09:11:29.957Z"
     }
   ],
   "examResults": [
