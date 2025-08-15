@@ -35,6 +35,7 @@ export default function Contato() {
     phone: "",
     subject: "consulta",
     message: "",
+    honeypot: "", // Hidden field for spam protection
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
