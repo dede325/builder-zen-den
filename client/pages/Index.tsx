@@ -618,15 +618,22 @@ export default function Index() {
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {specialties.map((specialty, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
+              <Card
+                key={index}
+                className="hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-105"
+                onClick={() => handleSpecialtyClick(specialty)}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center group-hover:bg-clinic-accent/20 transition-colors">
-                      <specialty.icon className="w-5 h-5 text-clinic-accent" />
+                    <div className="w-10 h-10 bg-clinic-accent/10 rounded-lg flex items-center justify-center group-hover:bg-clinic-gradient transition-all duration-300">
+                      <specialty.icon className="w-5 h-5 text-clinic-accent group-hover:text-white transition-colors" />
                     </div>
-                    <h4 className="font-semibold text-foreground">{specialty.name}</h4>
+                    <h4 className="font-semibold text-foreground group-hover:text-clinic-primary transition-colors">{specialty.name}</h4>
                   </div>
-                  <p className="text-sm text-muted-foreground">{specialty.description}</p>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{specialty.description}</p>
+                  <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="text-xs text-clinic-accent font-medium">Clique para mais informações →</p>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -676,7 +683,7 @@ export default function Index() {
       <section id="sobre" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-foreground mb-4">Sobre a Clínica Bem Cuidar</h3>
+            <h3 className="text-3xl font-bold text-foreground mb-4">Sobre a Cl��nica Bem Cuidar</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               H�� mais de uma década cuidando da sua saúde com dedicação e humanização
             </p>
