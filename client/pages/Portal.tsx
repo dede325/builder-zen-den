@@ -164,8 +164,11 @@ function LoginForm() {
           <AlertCircle className="w-4 h-4" />
           <AlertDescription>
             <strong>Contas de demonstração:</strong><br />
+            <strong>Pacientes:</strong><br />
             <code>paciente@example.com</code> / <code>123456</code><br />
-            <code>carlos@example.com</code> / <code>123456</code>
+            <code>carlos@example.com</code> / <code>123456</code><br />
+            <strong>Médico:</strong><br />
+            <code>medico@bemcuidar.co.ao</code> / <code>medico123</code>
           </AlertDescription>
         </Alert>
 
