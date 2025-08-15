@@ -36,16 +36,9 @@ export default function Footer({
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Fc711f463c22d41959919669aa4ee5149%2F512ad61a260e4819863aa241ea5d9cd5?format=webp&width=800"
-                  alt="Clínica Bem Cuidar Logo"
-                  className="w-10 h-10 object-contain filter brightness-0 invert"
-                />
-                <div>
-                  <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
-                  <p className="text-gray-300">Cuidar é Amar</p>
-                </div>
+              <div className="mb-4">
+                <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
+                <p className="text-gray-300">Cuidar é Amar</p>
               </div>
               <p className="text-gray-300">
                 Cuidamos da sua saúde com humanização, tecnologia e excelência
@@ -120,16 +113,9 @@ export default function Footer({
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fc711f463c22d41959919669aa4ee5149%2F512ad61a260e4819863aa241ea5d9cd5?format=webp&width=800"
-                alt="Clínica Bem Cuidar Logo"
-                className="w-10 h-10 object-contain filter brightness-0 invert"
-              />
-              <div>
-                <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
-                <p className="text-blue-100">Cuidar é Amar</p>
-              </div>
+            <div className="mb-4">
+              <h4 className="text-xl font-bold">Clínica Bem Cuidar</h4>
+              <p className="text-blue-100">Cuidar é Amar</p>
             </div>
             <p className="text-blue-100">
               Cuidamos da sua saúde com humanização, tecnologia e excelência
