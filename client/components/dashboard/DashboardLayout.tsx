@@ -1,16 +1,4 @@
-import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { Outlet } from "react-router-dom";
 import { useAuthStore } from "@/store/auth";
 import { useMedicalStore } from "@/store/medical";
 import {
@@ -20,18 +8,9 @@ import {
   MessageSquare,
   CreditCard,
   User,
-  LogOut,
-  Settings,
-  Bell,
-  Menu,
-  X,
-  Moon,
-  Sun,
-  Home,
-  Activity,
   Heart,
-  Shield,
 } from "lucide-react";
+import OptimizedDashboardLayout from "./OptimizedDashboardLayout";
 
 interface NavigationItem {
   name: string;
@@ -42,12 +21,7 @@ interface NavigationItem {
 }
 
 export default function DashboardLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { messages, appointments, examResults } = useMedicalStore();
 
   // Contar itens não lidos/pendentes para badges
