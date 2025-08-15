@@ -95,6 +95,23 @@ export default function Portal() {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
+  // Load login hints on component mount
+  useEffect(() => {
+    const loadLoginHints = async () => {
+      try {
+        const response = await fetch('/api/portal/auth/login-hints');
+        const result = await response.json();
+        if (result.success) {
+          setLoginHints(result.data);
+        }
+      } catch (error) {
+        console.error('Error loading login hints:', error);
+      }
+    };
+
+    loadLoginHints();
+  }, []);
+
   // API Helper
   const apiCall = async (url: string, options: RequestInit = {}) => {
     const headers = {
