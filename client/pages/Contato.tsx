@@ -58,6 +58,13 @@ export default function Contato() {
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
 
+    // Check honeypot field (should be empty)
+    if (formData.honeypot.trim() !== "") {
+      errors.honeypot = "Spam detectado";
+      setFormErrors(errors);
+      return false;
+    }
+
     if (!formData.name.trim()) {
       errors.name = "Nome é obrigatório";
     } else if (formData.name.trim().length < 2) {
