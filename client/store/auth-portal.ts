@@ -1,7 +1,12 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export type UserRole = 'patient' | 'doctor' | 'admin' | 'nurse' | 'receptionist';
+export type UserRole =
+  | "patient"
+  | "doctor"
+  | "admin"
+  | "nurse"
+  | "receptionist";
 
 export interface User {
   id: string;
@@ -19,14 +24,14 @@ export interface User {
   is_active: boolean;
   requires_2fa?: boolean;
   preferences: {
-    language: 'pt-AO' | 'pt-BR' | 'en';
+    language: "pt-AO" | "pt-BR" | "en";
     timezone: string;
     notifications: {
       email: boolean;
       sms: boolean;
       push: boolean;
     };
-    theme: 'light' | 'dark' | 'system';
+    theme: "light" | "dark" | "system";
   };
 }
 
@@ -41,7 +46,7 @@ interface AuthState {
   session: AuthSession | null;
   loading: boolean;
   error: string | null;
-  
+
   // Actions
   login: (email: string, password: string, role?: UserRole) => Promise<void>;
   logout: () => void;
@@ -49,8 +54,11 @@ interface AuthState {
   updateProfile: (updates: Partial<User>) => Promise<void>;
   verify2FA: (code: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
-  
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<void>;
+
   // Utils
   isAuthenticated: () => boolean;
   hasPermission: (permission: string) => boolean;
@@ -67,35 +75,34 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (email: string, password: string, role?: UserRole) => {
         set({ loading: true, error: null });
-        
+
         try {
-          const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password, role }),
           });
 
           if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Falha na autenticação');
+            throw new Error(error.message || "Falha na autenticação");
           }
 
           const session: AuthSession = await response.json();
-          
+
           // Validate session
           if (!session.access_token || !session.user) {
-            throw new Error('Sessão inválida recebida do servidor');
+            throw new Error("Sessão inválida recebida do servidor");
           }
 
           set({ session, loading: false });
-          
+
           // Store last login
-          localStorage.setItem('last_login', new Date().toISOString());
-          
+          localStorage.setItem("last_login", new Date().toISOString());
         } catch (error) {
-          set({ 
-            error: error instanceof Error ? error.message : 'Erro desconhecido',
-            loading: false 
+          set({
+            error: error instanceof Error ? error.message : "Erro desconhecido",
+            loading: false,
           });
           throw error;
         }
@@ -103,44 +110,43 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         const { session } = get();
-        
+
         if (session?.refresh_token) {
           // Notify server of logout
-          fetch('/api/auth/logout', {
-            method: 'POST',
+          fetch("/api/auth/logout", {
+            method: "POST",
             headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ refresh_token: session.refresh_token }),
           }).catch(console.error);
         }
 
         set({ session: null, error: null });
-        localStorage.removeItem('last_login');
+        localStorage.removeItem("last_login");
       },
 
       refreshToken: async () => {
         const { session } = get();
-        
+
         if (!session?.refresh_token) {
-          throw new Error('Nenhum refresh token disponível');
+          throw new Error("Nenhum refresh token disponível");
         }
 
         try {
-          const response = await fetch('/api/auth/refresh', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const response = await fetch("/api/auth/refresh", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refresh_token: session.refresh_token }),
           });
 
           if (!response.ok) {
-            throw new Error('Falha ao renovar token');
+            throw new Error("Falha ao renovar token");
           }
 
           const newSession: AuthSession = await response.json();
           set({ session: newSession });
-          
         } catch (error) {
           // If refresh fails, logout user
           get().logout();
@@ -150,22 +156,22 @@ export const useAuthStore = create<AuthState>()(
 
       updateProfile: async (updates: Partial<User>) => {
         const { session } = get();
-        
+
         if (!session) {
-          throw new Error('Usuário não autenticado');
+          throw new Error("Usuário não autenticado");
         }
 
-        const response = await fetch('/api/auth/profile', {
-          method: 'PATCH',
+        const response = await fetch("/api/auth/profile", {
+          method: "PATCH",
           headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(updates),
         });
 
         if (!response.ok) {
-          throw new Error('Falha ao atualizar perfil');
+          throw new Error("Falha ao atualizar perfil");
         }
 
         const updatedUser = await response.json();
@@ -179,55 +185,58 @@ export const useAuthStore = create<AuthState>()(
 
       verify2FA: async (code: string) => {
         const { session } = get();
-        
+
         if (!session) {
-          throw new Error('Usuário não autenticado');
+          throw new Error("Usuário não autenticado");
         }
 
-        const response = await fetch('/api/auth/verify-2fa', {
-          method: 'POST',
+        const response = await fetch("/api/auth/verify-2fa", {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ code }),
         });
 
         if (!response.ok) {
-          throw new Error('Código 2FA inválido');
+          throw new Error("Código 2FA inválido");
         }
       },
 
       resetPassword: async (email: string) => {
-        const response = await fetch('/api/auth/reset-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         });
 
         if (!response.ok) {
-          throw new Error('Falha ao enviar e-mail de recuperação');
+          throw new Error("Falha ao enviar e-mail de recuperação");
         }
       },
 
       changePassword: async (currentPassword: string, newPassword: string) => {
         const { session } = get();
-        
+
         if (!session) {
-          throw new Error('Usuário não autenticado');
+          throw new Error("Usuário não autenticado");
         }
 
-        const response = await fetch('/api/auth/change-password', {
-          method: 'POST',
+        const response = await fetch("/api/auth/change-password", {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+          body: JSON.stringify({
+            current_password: currentPassword,
+            new_password: newPassword,
+          }),
         });
 
         if (!response.ok) {
-          throw new Error('Falha ao alterar senha');
+          throw new Error("Falha ao alterar senha");
         }
       },
 
@@ -253,10 +262,10 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'bem-cuidar-auth',
+      name: "bem-cuidar-auth",
       partialize: (state) => ({ session: state.session }),
-    }
-  )
+    },
+  ),
 );
 
 // Auto refresh token before expiry

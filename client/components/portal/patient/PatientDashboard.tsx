@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 import {
   Calendar,
   FileText,
@@ -23,9 +23,9 @@ import {
   User,
   Phone,
   Mail,
-} from 'lucide-react';
-import { formatDate, formatMoney } from '@/lib/locale-angola-portal';
-import { useAuthStore } from '@/store/auth-portal';
+} from "lucide-react";
+import { formatDate, formatMoney } from "@/lib/locale-angola-portal";
+import { useAuthStore } from "@/store/auth-portal";
 
 interface Appointment {
   id: string;
@@ -33,9 +33,9 @@ interface Appointment {
   time: string;
   doctor: string;
   specialty: string;
-  status: 'agendado' | 'confirmado' | 'concluido' | 'cancelado';
+  status: "agendado" | "confirmado" | "concluido" | "cancelado";
   location: string;
-  type: 'presencial' | 'teleconsulta';
+  type: "presencial" | "teleconsulta";
 }
 
 interface ExamResult {
@@ -43,9 +43,9 @@ interface ExamResult {
   name: string;
   date: Date;
   doctor: string;
-  status: 'pendente' | 'disponivel' | 'revisao';
+  status: "pendente" | "disponivel" | "revisao";
   category: string;
-  priority: 'normal' | 'urgente';
+  priority: "normal" | "urgente";
   hasFile: boolean;
 }
 
@@ -69,46 +69,46 @@ export default function PatientDashboard() {
   useEffect(() => {
     const mockAppointments: Appointment[] = [
       {
-        id: '1',
+        id: "1",
         date: new Date(2025, 0, 20),
-        time: '14:30',
-        doctor: 'Dr. João Silva',
-        specialty: 'Cardiologia',
-        status: 'confirmado',
-        location: 'Consultório 301',
-        type: 'presencial',
+        time: "14:30",
+        doctor: "Dr. João Silva",
+        specialty: "Cardiologia",
+        status: "confirmado",
+        location: "Consultório 301",
+        type: "presencial",
       },
       {
-        id: '2',
+        id: "2",
         date: new Date(2025, 0, 25),
-        time: '09:00',
-        doctor: 'Dra. Maria Santos',
-        specialty: 'Dermatologia',
-        status: 'agendado',
-        location: 'Online',
-        type: 'teleconsulta',
+        time: "09:00",
+        doctor: "Dra. Maria Santos",
+        specialty: "Dermatologia",
+        status: "agendado",
+        location: "Online",
+        type: "teleconsulta",
       },
     ];
 
     const mockExams: ExamResult[] = [
       {
-        id: '1',
-        name: 'Análises Sanguíneas Completas',
+        id: "1",
+        name: "Análises Sanguíneas Completas",
         date: new Date(2025, 0, 15),
-        doctor: 'Dr. João Silva',
-        status: 'disponivel',
-        category: 'Laboratório',
-        priority: 'normal',
+        doctor: "Dr. João Silva",
+        status: "disponivel",
+        category: "Laboratório",
+        priority: "normal",
         hasFile: true,
       },
       {
-        id: '2',
-        name: 'Eletrocardiograma',
+        id: "2",
+        name: "Eletrocardiograma",
         date: new Date(2025, 0, 18),
-        doctor: 'Dr. João Silva',
-        status: 'revisao',
-        category: 'Cardiologia',
-        priority: 'urgente',
+        doctor: "Dr. João Silva",
+        status: "revisao",
+        category: "Cardiologia",
+        priority: "urgente",
         hasFile: false,
       },
     ];
@@ -132,28 +132,31 @@ export default function PatientDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmado':
-      case 'disponivel':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'agendado':
-      case 'pendente':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'cancelado':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'revisao':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case "confirmado":
+      case "disponivel":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "agendado":
+      case "pendente":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "cancelado":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "revisao":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const nextAppointment = appointments
-    .filter(apt => apt.date >= new Date() && apt.status !== 'cancelado')
+    .filter((apt) => apt.date >= new Date() && apt.status !== "cancelado")
     .sort((a, b) => a.date.getTime() - b.date.getTime())[0];
 
-  const bmi = vitalSigns.length > 0 
-    ? (vitalSigns[0].weight / Math.pow(vitalSigns[0].height / 100, 2)).toFixed(1)
-    : null;
+  const bmi =
+    vitalSigns.length > 0
+      ? (
+          vitalSigns[0].weight / Math.pow(vitalSigns[0].height / 100, 2)
+        ).toFixed(1)
+      : null;
 
   if (loading) {
     return (
@@ -174,13 +177,13 @@ export default function PatientDashboard() {
         >
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Olá, {user?.name?.split(' ')[0]}! 👋
+              Olá, {user?.name?.split(" ")[0]}! 👋
             </h1>
             <p className="text-gray-600 mt-1">
               Gerencie sua saúde de forma inteligente
             </p>
           </div>
-          
+
           <div className="flex gap-3">
             <Button variant="outline" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
@@ -204,9 +207,13 @@ export default function PatientDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Próxima Consulta</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Próxima Consulta
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {nextAppointment ? formatDate(nextAppointment.date, 'dayMonth') : '--'}
+                    {nextAppointment
+                      ? formatDate(nextAppointment.date, "dayMonth")
+                      : "--"}
                   </p>
                 </div>
                 <Calendar className="h-8 w-8 text-blue-600" />
@@ -218,9 +225,11 @@ export default function PatientDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Exames Pendentes</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Exames Pendentes
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {examResults.filter(e => e.status === 'pendente').length}
+                    {examResults.filter((e) => e.status === "pendente").length}
                   </p>
                 </div>
                 <FileText className="h-8 w-8 text-green-600" />
@@ -234,7 +243,7 @@ export default function PatientDashboard() {
                 <div>
                   <p className="text-sm font-medium text-gray-600">IMC Atual</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {bmi || '--'}
+                    {bmi || "--"}
                   </p>
                 </div>
                 <Activity className="h-8 w-8 text-purple-600" />
@@ -246,12 +255,13 @@ export default function PatientDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Pressão Arterial</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Pressão Arterial
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {vitalSigns.length > 0 
+                    {vitalSigns.length > 0
                       ? `${vitalSigns[0].bloodPressure.systolic}/${vitalSigns[0].bloodPressure.diastolic}`
-                      : '--'
-                    }
+                      : "--"}
                   </p>
                 </div>
                 <Heart className="h-8 w-8 text-red-600" />
@@ -294,7 +304,8 @@ export default function PatientDashboard() {
                             {appointment.doctor}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {formatDate(appointment.date, 'short')} às {appointment.time}
+                            {formatDate(appointment.date, "short")} às{" "}
+                            {appointment.time}
                           </p>
                         </div>
                       </div>
@@ -303,7 +314,7 @@ export default function PatientDashboard() {
                           {appointment.status}
                         </Badge>
                         <p className="text-xs text-gray-500 mt-1">
-                          {appointment.type === 'teleconsulta' ? (
+                          {appointment.type === "teleconsulta" ? (
                             <span className="flex items-center gap-1">
                               <Video className="h-3 w-3" />
                               Online
@@ -315,7 +326,7 @@ export default function PatientDashboard() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {appointments.length === 0 && (
                     <div className="text-center py-8">
                       <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -355,13 +366,15 @@ export default function PatientDashboard() {
                           {exam.name}
                         </h5>
                         <p className="text-xs text-gray-500">
-                          {formatDate(exam.date, 'short')}
+                          {formatDate(exam.date, "short")}
                         </p>
-                        <Badge className={`${getStatusColor(exam.status)} text-xs mt-1`}>
+                        <Badge
+                          className={`${getStatusColor(exam.status)} text-xs mt-1`}
+                        >
                           {exam.status}
                         </Badge>
                       </div>
-                      
+
                       <div className="flex gap-1">
                         {exam.hasFile && (
                           <Button variant="ghost" size="sm">
@@ -374,7 +387,7 @@ export default function PatientDashboard() {
                       </div>
                     </div>
                   ))}
-                  
+
                   <Button variant="outline" className="w-full text-sm">
                     Ver Todos os Exames
                   </Button>
@@ -409,7 +422,7 @@ export default function PatientDashboard() {
                       {vitalSigns[0].weight} kg
                     </p>
                   </div>
-                  
+
                   <div className="text-center">
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                       <span className="text-2xl">📏</span>
@@ -419,7 +432,7 @@ export default function PatientDashboard() {
                       {vitalSigns[0].height} cm
                     </p>
                   </div>
-                  
+
                   <div className="text-center">
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
                       <Heart className="w-8 h-8 text-red-600" />
@@ -429,7 +442,7 @@ export default function PatientDashboard() {
                       {vitalSigns[0].heartRate} bpm
                     </p>
                   </div>
-                  
+
                   <div className="text-center">
                     <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
                       <span className="text-2xl">🌡️</span>
@@ -460,22 +473,34 @@ export default function PatientDashboard() {
           transition={{ delay: 0.5 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          <Button variant="outline" className="h-20 flex flex-col items-center gap-2">
+          <Button
+            variant="outline"
+            className="h-20 flex flex-col items-center gap-2"
+          >
             <MessageSquare className="h-6 w-6" />
             <span className="text-sm">Chat Médico</span>
           </Button>
-          
-          <Button variant="outline" className="h-20 flex flex-col items-center gap-2">
+
+          <Button
+            variant="outline"
+            className="h-20 flex flex-col items-center gap-2"
+          >
             <Upload className="h-6 w-6" />
             <span className="text-sm">Upload Docs</span>
           </Button>
-          
-          <Button variant="outline" className="h-20 flex flex-col items-center gap-2">
+
+          <Button
+            variant="outline"
+            className="h-20 flex flex-col items-center gap-2"
+          >
             <User className="h-6 w-6" />
             <span className="text-sm">Perfil</span>
           </Button>
-          
-          <Button variant="outline" className="h-20 flex flex-col items-center gap-2">
+
+          <Button
+            variant="outline"
+            className="h-20 flex flex-col items-center gap-2"
+          >
             <Phone className="h-6 w-6" />
             <span className="text-sm">Emergência</span>
           </Button>

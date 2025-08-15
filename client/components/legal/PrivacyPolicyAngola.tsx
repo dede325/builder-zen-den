@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
+import {
   Shield,
   FileText,
   Clock,
@@ -20,7 +26,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { angolaFormatter } from "@/lib/locale-angola";
 
@@ -56,41 +62,57 @@ const DATA_CONTROLLER: DataController = {
   phone: "+244 945 344 650",
   email: "recepcao@bemcuidar.co.ao",
   dpoEmail: "dpo@bemcuidar.co.ao",
-  registrationNumber: "NIF: 5000XXXXXX" // To be updated with real NIF
+  registrationNumber: "NIF: 5000XXXXXX", // To be updated with real NIF
 };
 
 const PROCESSING_PURPOSES: DataProcessingPurpose[] = [
   {
     purpose: "Prestação de cuidados de saúde",
     legalBasis: "Execução de contrato e interesses vitais do titular dos dados",
-    dataTypes: ["Dados de identificação", "Dados de saúde", "Dados de contacto"],
-    retentionPeriod: "20 anos após a última consulta (conforme legislação sanitária)",
-    recipients: ["Médicos especialistas", "Laboratórios parceiros", "Seguradoras (com consentimento)"]
+    dataTypes: [
+      "Dados de identificação",
+      "Dados de saúde",
+      "Dados de contacto",
+    ],
+    retentionPeriod:
+      "20 anos após a última consulta (conforme legislação sanitária)",
+    recipients: [
+      "Médicos especialistas",
+      "Laboratórios parceiros",
+      "Seguradoras (com consentimento)",
+    ],
   },
   {
     purpose: "Agendamento e gestão de consultas",
     legalBasis: "Execução de contrato",
     dataTypes: ["Nome", "Telefone", "E-mail", "Preferências de horário"],
-    retentionPeriod: "5 anos após a última interação"
+    retentionPeriod: "5 anos após a última interação",
   },
   {
     purpose: "Faturação e pagamento",
     legalBasis: "Obrigação legal e execução de contrato",
-    dataTypes: ["Dados de identificação", "Dados financeiros", "Seguro de saúde"],
-    retentionPeriod: "10 anos (conforme legislação fiscal e contabilística)"
+    dataTypes: [
+      "Dados de identificação",
+      "Dados financeiros",
+      "Seguro de saúde",
+    ],
+    retentionPeriod: "10 anos (conforme legislação fiscal e contabilística)",
   },
   {
     purpose: "Comunicações de marketing",
     legalBasis: "Consentimento explícito",
     dataTypes: ["Nome", "E-mail", "Telefone", "Preferências"],
-    retentionPeriod: "Até retirada do consentimento ou 3 anos de inatividade"
+    retentionPeriod: "Até retirada do consentimento ou 3 anos de inatividade",
   },
   {
     purpose: "Melhoria dos serviços",
     legalBasis: "Interesses legítimos",
-    dataTypes: ["Dados anonimizados de utilização", "Estatísticas de satisfação"],
-    retentionPeriod: "5 anos em formato anonimizado"
-  }
+    dataTypes: [
+      "Dados anonimizados de utilização",
+      "Estatísticas de satisfação",
+    ],
+    retentionPeriod: "5 anos em formato anonimizado",
+  },
 ];
 
 const USER_RIGHTS: PrivacyRights = {
@@ -99,28 +121,28 @@ const USER_RIGHTS: PrivacyRights = {
   erasure: true,
   restriction: true,
   portability: true,
-  objection: true
+  objection: true,
 };
 
 export default function PrivacyPolicyAngola() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [currentSection, setCurrentSection] = useState<string>('overview');
+  const [currentSection, setCurrentSection] = useState<string>("overview");
 
   useEffect(() => {
     // In a real implementation, this would fetch the last update date from the server
-    setLastUpdated(new Date('2024-01-15')); // Example date
+    setLastUpdated(new Date("2024-01-15")); // Example date
   }, []);
 
   const sections = [
-    { id: 'overview', title: 'Resumo Executivo', icon: Info },
-    { id: 'controller', title: 'Responsável pelo Tratamento', icon: User },
-    { id: 'purposes', title: 'Finalidades do Tratamento', icon: FileText },
-    { id: 'legal-basis', title: 'Base Legal', icon: Shield },
-    { id: 'rights', title: 'Direitos dos Titulares', icon: Eye },
-    { id: 'retention', title: 'Período de Conservação', icon: Clock },
-    { id: 'security', title: 'Segurança dos Dados', icon: Shield },
-    { id: 'transfers', title: 'Transferências de Dados', icon: ExternalLink },
-    { id: 'contact', title: 'Contactos', icon: Mail }
+    { id: "overview", title: "Resumo Executivo", icon: Info },
+    { id: "controller", title: "Responsável pelo Tratamento", icon: User },
+    { id: "purposes", title: "Finalidades do Tratamento", icon: FileText },
+    { id: "legal-basis", title: "Base Legal", icon: Shield },
+    { id: "rights", title: "Direitos dos Titulares", icon: Eye },
+    { id: "retention", title: "Período de Conservação", icon: Clock },
+    { id: "security", title: "Segurança dos Dados", icon: Shield },
+    { id: "transfers", title: "Transferências de Dados", icon: ExternalLink },
+    { id: "contact", title: "Contactos", icon: Mail },
   ];
 
   const formatLastUpdated = () => {
@@ -129,7 +151,7 @@ export default function PrivacyPolicyAngola() {
 
   const renderSection = () => {
     switch (currentSection) {
-      case 'overview':
+      case "overview":
         return (
           <div className="space-y-6">
             <div className="bg-clinic-light/30 p-6 rounded-lg border border-clinic-accent/20">
@@ -137,17 +159,22 @@ export default function PrivacyPolicyAngola() {
                 Resumo da Política de Privacidade
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                A Clínica Bem Cuidar está comprometida com a proteção dos seus dados pessoais, 
-                em conformidade com a Lei n.º 22/11 de 17 de Junho (Lei de Proteção de Dados Pessoais de Angola).
+                A Clínica Bem Cuidar está comprometida com a proteção dos seus
+                dados pessoais, em conformidade com a Lei n.º 22/11 de 17 de
+                Junho (Lei de Proteção de Dados Pessoais de Angola).
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">Tratamento lícito e transparente</span>
+                  <span className="text-sm">
+                    Tratamento lícito e transparente
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-600" />
-                  <span className="text-sm">Finalidades específicas e legítimas</span>
+                  <span className="text-sm">
+                    Finalidades específicas e legítimas
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-600" />
@@ -164,10 +191,13 @@ export default function PrivacyPolicyAngola() {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-yellow-800 mb-2">Dados Sensíveis de Saúde</h4>
+                  <h4 className="font-semibold text-yellow-800 mb-2">
+                    Dados Sensíveis de Saúde
+                  </h4>
                   <p className="text-sm text-yellow-700">
-                    O tratamento de dados de saúde requer consentimento explícito ou justificação 
-                    por interesses vitais, conforme previsto na legislação angolana.
+                    O tratamento de dados de saúde requer consentimento
+                    explícito ou justificação por interesses vitais, conforme
+                    previsto na legislação angolana.
                   </p>
                 </div>
               </div>
@@ -175,23 +205,30 @@ export default function PrivacyPolicyAngola() {
           </div>
         );
 
-      case 'controller':
+      case "controller":
         return (
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Responsável pelo Tratamento de Dados</CardTitle>
+                <CardTitle className="text-lg">
+                  Responsável pelo Tratamento de Dados
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h4 className="font-semibold mb-3">Entidade</h4>
                     <div className="space-y-2">
-                      <p className="text-sm"><strong>Nome:</strong> {DATA_CONTROLLER.name}</p>
-                      <p className="text-sm"><strong>NIF:</strong> {DATA_CONTROLLER.registrationNumber}</p>
+                      <p className="text-sm">
+                        <strong>Nome:</strong> {DATA_CONTROLLER.name}
+                      </p>
+                      <p className="text-sm">
+                        <strong>NIF:</strong>{" "}
+                        {DATA_CONTROLLER.registrationNumber}
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-semibold mb-3">Contactos</h4>
                     <div className="space-y-2">
@@ -205,7 +242,9 @@ export default function PrivacyPolicyAngola() {
                       </div>
                       <div className="flex items-start gap-2">
                         <MapPin className="w-4 h-4 text-clinic-accent mt-0.5" />
-                        <span className="text-sm">{DATA_CONTROLLER.address}</span>
+                        <span className="text-sm">
+                          {DATA_CONTROLLER.address}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -214,15 +253,20 @@ export default function PrivacyPolicyAngola() {
                 <Separator />
 
                 <div>
-                  <h4 className="font-semibold mb-3">Encarregado de Proteção de Dados (DPO)</h4>
+                  <h4 className="font-semibold mb-3">
+                    Encarregado de Proteção de Dados (DPO)
+                  </h4>
                   <div className="bg-clinic-light/30 p-4 rounded-lg">
                     <p className="text-sm mb-2">
-                      Para questões relacionadas com a proteção de dados pessoais, pode contactar 
-                      o nosso Encarregado de Proteção de Dados:
+                      Para questões relacionadas com a proteção de dados
+                      pessoais, pode contactar o nosso Encarregado de Proteção
+                      de Dados:
                     </p>
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-clinic-accent" />
-                      <span className="text-sm font-medium">{DATA_CONTROLLER.dpoEmail}</span>
+                      <span className="text-sm font-medium">
+                        {DATA_CONTROLLER.dpoEmail}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -231,13 +275,13 @@ export default function PrivacyPolicyAngola() {
           </div>
         );
 
-      case 'purposes':
+      case "purposes":
         return (
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">
               Os seus dados pessoais são tratados para as seguintes finalidades:
             </p>
-            
+
             {PROCESSING_PURPOSES.map((purpose, index) => (
               <Card key={index}>
                 <CardHeader>
@@ -251,18 +295,24 @@ export default function PrivacyPolicyAngola() {
                     <h5 className="font-medium mb-2">Tipos de Dados</h5>
                     <div className="flex flex-wrap gap-2">
                       {purpose.dataTypes.map((dataType, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {dataType}
                         </Badge>
                       ))}
                     </div>
                   </div>
-                  
+
                   <div>
                     <h5 className="font-medium mb-2">Período de Conservação</h5>
-                    <p className="text-sm text-muted-foreground">{purpose.retentionPeriod}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {purpose.retentionPeriod}
+                    </p>
                   </div>
-                  
+
                   {purpose.recipients && (
                     <div>
                       <h5 className="font-medium mb-2">Destinatários</h5>
@@ -279,12 +329,12 @@ export default function PrivacyPolicyAngola() {
           </div>
         );
 
-      case 'legal-basis':
+      case "legal-basis":
         return (
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">
-              O tratamento dos seus dados pessoais baseia-se nas seguintes bases legais previstas 
-              na Lei n.º 22/11:
+              O tratamento dos seus dados pessoais baseia-se nas seguintes bases
+              legais previstas na Lei n.º 22/11:
             </p>
 
             <div className="grid gap-4">
@@ -295,8 +345,8 @@ export default function PrivacyPolicyAngola() {
                     Consentimento
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Para dados sensíveis de saúde e comunicações de marketing, solicitamos 
-                    o seu consentimento explícito e informado.
+                    Para dados sensíveis de saúde e comunicações de marketing,
+                    solicitamos o seu consentimento explícito e informado.
                   </p>
                   <Badge variant="outline">Artigo 7º da Lei n.º 22/11</Badge>
                 </CardContent>
@@ -309,8 +359,8 @@ export default function PrivacyPolicyAngola() {
                     Execuç��o de Contrato
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Tratamento necessário para a prestação de cuidados de saúde e 
-                    cumprimento das obrigações contratuais.
+                    Tratamento necessário para a prestação de cuidados de saúde
+                    e cumprimento das obrigações contratuais.
                   </p>
                   <Badge variant="outline">Artigo 6º da Lei n.º 22/11</Badge>
                 </CardContent>
@@ -323,7 +373,7 @@ export default function PrivacyPolicyAngola() {
                     Interesses Vitais
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Em situações de emergência médica onde é necessário proteger 
+                    Em situações de emergência médica onde é necessário proteger
                     a vida ou integridade física do titular dos dados.
                   </p>
                   <Badge variant="outline">Artigo 6º, n.º 1, alínea d)</Badge>
@@ -337,8 +387,9 @@ export default function PrivacyPolicyAngola() {
                     Obrigação Legal
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Cumprimento de obrigações legais em matéria fiscal, contabilística 
-                    e sanitária impostas pela legislação angolana.
+                    Cumprimento de obrigações legais em matéria fiscal,
+                    contabilística e sanitária impostas pela legislação
+                    angolana.
                   </p>
                   <Badge variant="outline">Artigo 6º, n.º 1, alínea c)</Badge>
                 </CardContent>
@@ -347,11 +398,12 @@ export default function PrivacyPolicyAngola() {
           </div>
         );
 
-      case 'rights':
+      case "rights":
         return (
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">
-              Enquanto titular dos dados, tem os seguintes direitos garantidos pela Lei n.º 22/11:
+              Enquanto titular dos dados, tem os seguintes direitos garantidos
+              pela Lei n.º 22/11:
             </p>
 
             <div className="grid gap-4">
@@ -362,8 +414,8 @@ export default function PrivacyPolicyAngola() {
                     Direito de Acesso
                   </h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Pode solicitar informações sobre os dados pessoais que tratamos, 
-                    as finalidades e os destinatários.
+                    Pode solicitar informações sobre os dados pessoais que
+                    tratamos, as finalidades e os destinatários.
                   </p>
                   <Button variant="outline" size="sm">
                     <Download className="w-4 h-4 mr-2" />
@@ -379,8 +431,8 @@ export default function PrivacyPolicyAngola() {
                     Direito de Retificação
                   </h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Pode solicitar a correção de dados pessoais inexatos ou 
-                    o completamento de dados incompletos.
+                    Pode solicitar a correção de dados pessoais inexatos ou o
+                    completamento de dados incompletos.
                   </p>
                   <Button variant="outline" size="sm">
                     <Edit className="w-4 h-4 mr-2" />
@@ -396,7 +448,7 @@ export default function PrivacyPolicyAngola() {
                     Direito ao Apagamento
                   </h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Pode solicitar o apagamento dos seus dados pessoais, sujeito 
+                    Pode solicitar o apagamento dos seus dados pessoais, sujeito
                     a limitações legais e médicas.
                   </p>
                   <Button variant="outline" size="sm">
@@ -413,7 +465,7 @@ export default function PrivacyPolicyAngola() {
                     Direito à Portabilidade
                   </h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Pode solicitar os seus dados em formato estruturado e 
+                    Pode solicitar os seus dados em formato estruturado e
                     legível por máquina.
                   </p>
                   <Button variant="outline" size="sm">
@@ -425,30 +477,37 @@ export default function PrivacyPolicyAngola() {
             </div>
 
             <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Como Exercer os Seus Direitos</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">
+                Como Exercer os Seus Direitos
+              </h4>
               <p className="text-sm text-blue-700 mb-3">
-                Para exercer qualquer dos seus direitos, contacte-nos através de:
+                Para exercer qualquer dos seus direitos, contacte-nos através
+                de:
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-700">{DATA_CONTROLLER.dpoEmail}</span>
+                  <span className="text-sm font-medium text-blue-700">
+                    {DATA_CONTROLLER.dpoEmail}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm text-blue-700">{DATA_CONTROLLER.phone}</span>
+                  <span className="text-sm text-blue-700">
+                    {DATA_CONTROLLER.phone}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         );
 
-      case 'security':
+      case "security":
         return (
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground">
-              Implementamos medidas técnicas e organizativas adequadas para proteger 
-              os seus dados pessoais:
+              Implementamos medidas técnicas e organizativas adequadas para
+              proteger os seus dados pessoais:
             </p>
 
             <div className="grid gap-4">
@@ -469,7 +528,9 @@ export default function PrivacyPolicyAngola() {
                 <CardContent className="pt-6">
                   <h4 className="font-semibold mb-3">Medidas Organizativas</h4>
                   <ul className="text-sm text-muted-foreground space-y-2">
-                    <li>• Políticas de acesso baseadas no princípio da necessidade</li>
+                    <li>
+                      • Políticas de acesso baseadas no princípio da necessidade
+                    </li>
                     <li>• Formação regular em proteção de dados</li>
                     <li>• Contratos de confidencialidade com funcionários</li>
                     <li>• Auditorias de segurança periódicas</li>
@@ -480,11 +541,13 @@ export default function PrivacyPolicyAngola() {
 
               <Card>
                 <CardContent className="pt-6">
-                  <h4 className="font-semibold mb-3">Comunicação de Violações</h4>
+                  <h4 className="font-semibold mb-3">
+                    Comunicação de Violações
+                  </h4>
                   <p className="text-sm text-muted-foreground">
-                    Em caso de violação de dados que apresente riscos para os seus direitos 
-                    e liberdades, ser-lhe-á comunicado no prazo de 72 horas, conforme 
-                    previsto na legislação.
+                    Em caso de violação de dados que apresente riscos para os
+                    seus direitos e liberdades, ser-lhe-á comunicado no prazo de
+                    72 horas, conforme previsto na legislação.
                   </p>
                 </CardContent>
               </Card>
@@ -492,24 +555,29 @@ export default function PrivacyPolicyAngola() {
           </div>
         );
 
-      case 'contact':
+      case "contact":
         return (
           <div className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Contactos para Questões de Privacidade</CardTitle>
                 <CardDescription>
-                  Para dúvidas sobre esta política ou exercício dos seus direitos
+                  Para dúvidas sobre esta política ou exercício dos seus
+                  direitos
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-3">Encarregado de Proteção de Dados</h4>
+                    <h4 className="font-semibold mb-3">
+                      Encarregado de Proteção de Dados
+                    </h4>
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4 text-clinic-accent" />
-                        <span className="text-sm">{DATA_CONTROLLER.dpoEmail}</span>
+                        <span className="text-sm">
+                          {DATA_CONTROLLER.dpoEmail}
+                        </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
                         Resposta em até 30 dias úteis
@@ -537,9 +605,9 @@ export default function PrivacyPolicyAngola() {
                 <div>
                   <h4 className="font-semibold mb-3">Autoridade de Controlo</h4>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Tem o direito de apresentar reclamação junto da autoridade de controlo 
-                    competente em Angola, caso considere que o tratamento dos seus dados 
-                    viola a Lei n.º 22/11.
+                    Tem o direito de apresentar reclamação junto da autoridade
+                    de controlo competente em Angola, caso considere que o
+                    tratamento dos seus dados viola a Lei n.º 22/11.
                   </p>
                   <Badge variant="outline">
                     Ministério das Telecomunicações e Tecnologias de Informação
@@ -566,7 +634,10 @@ export default function PrivacyPolicyAngola() {
             <Calendar className="w-4 h-4" />
             <span>Última atualização: {formatLastUpdated()}</span>
           </div>
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 border-green-200"
+          >
             <Shield className="w-3 h-3 mr-1" />
             Conforme Lei n.º 22/11
           </Badge>
@@ -588,8 +659,8 @@ export default function PrivacyPolicyAngola() {
                     onClick={() => setCurrentSection(section.id)}
                     className={`w-full text-left p-3 rounded-lg transition-colors flex items-center gap-3 ${
                       currentSection === section.id
-                        ? 'bg-clinic-gradient text-white'
-                        : 'hover:bg-clinic-light/30 text-muted-foreground'
+                        ? "bg-clinic-gradient text-white"
+                        : "hover:bg-clinic-light/30 text-muted-foreground"
                     }`}
                   >
                     <section.icon className="w-4 h-4" />

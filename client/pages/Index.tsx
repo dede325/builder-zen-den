@@ -911,7 +911,7 @@ export default function Index() {
                       size="xl"
                       className="border-white/50 text-white hover:bg-white hover:text-primary backdrop-blur-sm w-full sm:w-auto btn-hover-lift focus-ring-enhanced"
                     >
-                      <span style={{ color: 'rgb(32, 141, 150)' }}>
+                      <span style={{ color: "rgb(32, 141, 150)" }}>
                         Entrar em Contato
                       </span>
                     </Button>

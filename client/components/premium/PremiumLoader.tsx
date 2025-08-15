@@ -3,28 +3,28 @@ import { Heart, Stethoscope, Activity, Zap } from "lucide-react";
 import { GlassmorphismCard } from "./AnimatedComponents";
 
 interface PremiumLoaderProps {
-  variant?: 'page' | 'component' | 'inline';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "page" | "component" | "inline";
+  size?: "sm" | "md" | "lg";
   message?: string;
   showLogo?: boolean;
 }
 
 export default function PremiumLoader({
-  variant = 'component',
-  size = 'md',
-  message = 'Carregando...',
-  showLogo = true
+  variant = "component",
+  size = "md",
+  message = "Carregando...",
+  showLogo = true,
 }: PremiumLoaderProps) {
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12', 
-    lg: 'w-16 h-16'
+    sm: "w-8 h-8",
+    md: "w-12 h-12",
+    lg: "w-16 h-16",
   };
 
   const containerSizes = {
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8'
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8",
   };
 
   // Heartbeat animation for medical theme
@@ -34,9 +34,9 @@ export default function PremiumLoader({
       transition: {
         duration: 1.5,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   // Pulse rings animation
@@ -47,9 +47,9 @@ export default function PremiumLoader({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   // Stethoscope wave animation
@@ -59,9 +59,9 @@ export default function PremiumLoader({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   // Medical icons rotation
@@ -71,9 +71,9 @@ export default function PremiumLoader({
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "linear"
-      }
-    }
+        ease: "linear",
+      },
+    },
   };
 
   // Dot sequence animation
@@ -85,12 +85,12 @@ export default function PremiumLoader({
         duration: 0.8,
         repeat: Infinity,
         delay: i * 0.2,
-        ease: "easeInOut"
-      }
-    })
+        ease: "easeInOut",
+      },
+    }),
   };
 
-  if (variant === 'page') {
+  if (variant === "page") {
     return (
       <div className="fixed inset-0 bg-white/90 backdrop-blur-md z-50 flex items-center justify-center">
         <div className="text-center space-y-8">
@@ -109,10 +109,10 @@ export default function PremiumLoader({
             <motion.div
               variants={pulseVariants}
               animate="animate"
-              style={{ animationDelay: '0.5s' }}
+              style={{ animationDelay: "0.5s" }}
               className="absolute inset-2 rounded-full bg-clinic-gradient opacity-30"
             />
-            
+
             {/* Main Logo */}
             <div className="absolute inset-4 bg-clinic-gradient rounded-full flex items-center justify-center shadow-2xl">
               <Heart className="w-8 h-8 text-white" />
@@ -146,7 +146,7 @@ export default function PremiumLoader({
             className="space-y-4"
           >
             <p className="text-gray-600">{message}</p>
-            
+
             {/* Loading Dots */}
             <div className="flex justify-center space-x-2">
               {[0, 1, 2].map((i) => (
@@ -165,12 +165,12 @@ export default function PremiumLoader({
               <motion.div
                 className="h-full bg-clinic-gradient"
                 animate={{
-                  x: ['-100%', '100%'],
+                  x: ["-100%", "100%"],
                 }}
                 transition={{
                   duration: 1.5,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
               />
             </div>
@@ -180,10 +180,10 @@ export default function PremiumLoader({
     );
   }
 
-  if (variant === 'component') {
+  if (variant === "component") {
     return (
-      <GlassmorphismCard 
-        intensity="light" 
+      <GlassmorphismCard
+        intensity="light"
         className={`text-center ${containerSizes[size]} bg-white/90 border-clinic-accent/20`}
       >
         <div className="space-y-4">
@@ -194,9 +194,11 @@ export default function PremiumLoader({
               className={`relative mx-auto ${sizeClasses[size]}`}
             >
               <div className="absolute inset-0 bg-clinic-gradient rounded-full flex items-center justify-center shadow-lg">
-                <Heart className={`${size === 'sm' ? 'w-4 h-4' : size === 'md' ? 'w-6 h-6' : 'w-8 h-8'} text-white`} />
+                <Heart
+                  className={`${size === "sm" ? "w-4 h-4" : size === "md" ? "w-6 h-6" : "w-8 h-8"} text-white`}
+                />
               </div>
-              
+
               {/* Rotating Ring */}
               <motion.div
                 variants={iconRotateVariants}
@@ -207,10 +209,12 @@ export default function PremiumLoader({
           )}
 
           <div className="space-y-2">
-            <p className={`text-gray-600 ${size === 'sm' ? 'text-sm' : 'text-base'}`}>
+            <p
+              className={`text-gray-600 ${size === "sm" ? "text-sm" : "text-base"}`}
+            >
               {message}
             </p>
-            
+
             <div className="flex justify-center space-x-1">
               {[0, 1, 2].map((i) => (
                 <motion.div
@@ -218,7 +222,7 @@ export default function PremiumLoader({
                   variants={dotVariants}
                   animate="animate"
                   custom={i}
-                  className={`${size === 'sm' ? 'w-2 h-2' : 'w-3 h-3'} bg-clinic-gradient rounded-full`}
+                  className={`${size === "sm" ? "w-2 h-2" : "w-3 h-3"} bg-clinic-gradient rounded-full`}
                 />
               ))}
             </div>
@@ -236,13 +240,17 @@ export default function PremiumLoader({
         animate="animate"
         className={`${sizeClasses[size]} bg-clinic-gradient rounded-full flex items-center justify-center`}
       >
-        <Heart className={`${size === 'sm' ? 'w-3 h-3' : size === 'md' ? 'w-4 h-4' : 'w-6 h-6'} text-white`} />
+        <Heart
+          className={`${size === "sm" ? "w-3 h-3" : size === "md" ? "w-4 h-4" : "w-6 h-6"} text-white`}
+        />
       </motion.div>
-      
-      <span className={`text-gray-600 ${size === 'sm' ? 'text-sm' : 'text-base'}`}>
+
+      <span
+        className={`text-gray-600 ${size === "sm" ? "text-sm" : "text-base"}`}
+      >
         {message}
       </span>
-      
+
       <div className="flex space-x-1">
         {[0, 1, 2].map((i) => (
           <motion.div
@@ -250,7 +258,7 @@ export default function PremiumLoader({
             variants={dotVariants}
             animate="animate"
             custom={i}
-            className={`${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'} bg-clinic-gradient rounded-full`}
+            className={`${size === "sm" ? "w-1 h-1" : "w-2 h-2"} bg-clinic-gradient rounded-full`}
           />
         ))}
       </div>
@@ -269,7 +277,7 @@ export function MedicalSkeleton({ className = "" }: { className?: string }) {
           <div className="h-3 bg-clinic-light/20 rounded w-1/2"></div>
         </div>
       </div>
-      
+
       <div className="space-y-3">
         <div className="h-4 bg-clinic-light/30 rounded"></div>
         <div className="h-4 bg-clinic-light/20 rounded w-5/6"></div>
@@ -295,24 +303,24 @@ export function AppointmentLoader() {
       >
         <Stethoscope className="w-full h-full text-clinic-accent" />
       </motion.div>
-      
+
       <div className="space-y-2">
         <h3 className="font-semibold text-gray-800">Processando Agendamento</h3>
         <p className="text-sm text-gray-600">
           A verificar disponibilidade de horários...
         </p>
       </div>
-      
+
       <div className="w-48 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden">
         <motion.div
           className="h-full bg-clinic-gradient"
           animate={{
-            x: ['-100%', '100%'],
+            x: ["-100%", "100%"],
           }}
           transition={{
             duration: 1.5,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       </div>
@@ -324,20 +332,20 @@ export function ExamLoader() {
   return (
     <div className="text-center space-y-4 p-6">
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1, 1.1, 1],
-          rotate: [0, 5, -5, 0]
+          rotate: [0, 5, -5, 0],
         }}
-        transition={{ 
-          duration: 2, 
-          repeat: Infinity, 
-          ease: "easeInOut" 
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
         className="w-16 h-16 mx-auto"
       >
         <Activity className="w-full h-full text-clinic-accent" />
       </motion.div>
-      
+
       <div className="space-y-2">
         <h3 className="font-semibold text-gray-800">Processando Exame</h3>
         <p className="text-sm text-gray-600">
@@ -352,27 +360,25 @@ export function EmergencyLoader() {
   return (
     <div className="text-center space-y-4 p-6 bg-red-50 border border-red-200 rounded-lg">
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1, 1.3, 1],
-          opacity: [1, 0.7, 1]
+          opacity: [1, 0.7, 1],
         }}
-        transition={{ 
-          duration: 0.8, 
-          repeat: Infinity, 
-          ease: "easeInOut" 
+        transition={{
+          duration: 0.8,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
         className="w-16 h-16 mx-auto"
       >
         <Zap className="w-full h-full text-red-500" />
       </motion.div>
-      
+
       <div className="space-y-2">
         <h3 className="font-semibold text-red-800">Situação de Emergência</h3>
-        <p className="text-sm text-red-600">
-          A processar pedido urgente...
-        </p>
+        <p className="text-sm text-red-600">A processar pedido urgente...</p>
       </div>
-      
+
       <div className="text-xs text-red-500 font-medium">
         Para emergências imediatas: 112
       </div>

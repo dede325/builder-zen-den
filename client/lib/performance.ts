@@ -25,7 +25,7 @@ export const VITALS_THRESHOLDS = {
   fid: { good: 100, needsImprovement: 300 },
   cls: { good: 0.1, needsImprovement: 0.25 },
   fcp: { good: 1800, needsImprovement: 3000 },
-  ttfb: { good: 800, needsImprovement: 1800 }
+  ttfb: { good: 800, needsImprovement: 1800 },
 };
 
 class PerformanceMonitor {
@@ -34,7 +34,7 @@ class PerformanceMonitor {
   private isMonitoring = false;
 
   constructor() {
-    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
+    if (typeof window !== "undefined" && "PerformanceObserver" in window) {
       this.initializeMonitoring();
     }
   }
@@ -44,69 +44,75 @@ class PerformanceMonitor {
       // Monitor LCP (Largest Contentful Paint)
       this.observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.entryType === 'largest-contentful-paint') {
+          if (entry.entryType === "largest-contentful-paint") {
             this.metrics.lcp = entry.startTime;
-            this.reportMetric('LCP', entry.startTime);
+            this.reportMetric("LCP", entry.startTime);
           }
         }
       });
 
-      this.observer.observe({ entryTypes: ['largest-contentful-paint'] });
+      this.observer.observe({ entryTypes: ["largest-contentful-paint"] });
 
       // Monitor FID (First Input Delay)
       const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.entryType === 'first-input') {
+          if (entry.entryType === "first-input") {
             this.metrics.fid = (entry as any).processingStart - entry.startTime;
-            this.reportMetric('FID', this.metrics.fid);
+            this.reportMetric("FID", this.metrics.fid);
           }
         }
       });
 
-      fidObserver.observe({ entryTypes: ['first-input'] });
+      fidObserver.observe({ entryTypes: ["first-input"] });
 
       // Monitor CLS (Cumulative Layout Shift)
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
+          if (
+            entry.entryType === "layout-shift" &&
+            !(entry as any).hadRecentInput
+          ) {
             clsValue += (entry as any).value;
             this.metrics.cls = clsValue;
           }
         }
-        this.reportMetric('CLS', clsValue);
+        this.reportMetric("CLS", clsValue);
       });
 
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
+      clsObserver.observe({ entryTypes: ["layout-shift"] });
 
       // Monitor Navigation Timing
       this.monitorNavigationTiming();
 
       this.isMonitoring = true;
-      console.log('[Performance] Monitoring initialized');
-
+      console.log("[Performance] Monitoring initialized");
     } catch (error) {
-      console.error('[Performance] Failed to initialize monitoring:', error);
+      console.error("[Performance] Failed to initialize monitoring:", error);
     }
   }
 
   private monitorNavigationTiming() {
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
       setTimeout(() => {
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-        
+        const navigation = performance.getEntriesByType(
+          "navigation",
+        )[0] as PerformanceNavigationTiming;
+
         if (navigation) {
           const metrics = {
             ttfb: navigation.responseStart - navigation.requestStart,
-            domContentLoaded: navigation.domContentLoadedEventEnd - navigation.navigationStart,
+            domContentLoaded:
+              navigation.domContentLoadedEventEnd - navigation.navigationStart,
             loadComplete: navigation.loadEventEnd - navigation.navigationStart,
-            domInteractive: navigation.domInteractive - navigation.navigationStart,
-            domComplete: navigation.domComplete - navigation.navigationStart
+            domInteractive:
+              navigation.domInteractive - navigation.navigationStart,
+            domComplete: navigation.domComplete - navigation.navigationStart,
           };
 
           this.metrics.ttfb = metrics.ttfb;
-          
-          console.log('[Performance] Navigation metrics:', metrics);
+
+          console.log("[Performance] Navigation metrics:", metrics);
           this.reportNavigationMetrics(metrics);
         }
       }, 0);
@@ -114,17 +120,18 @@ class PerformanceMonitor {
   }
 
   private reportMetric(name: string, value: number) {
-    const threshold = VITALS_THRESHOLDS[name.toLowerCase() as keyof typeof VITALS_THRESHOLDS];
+    const threshold =
+      VITALS_THRESHOLDS[name.toLowerCase() as keyof typeof VITALS_THRESHOLDS];
     const status = this.getMetricStatus(value, threshold);
-    
+
     console.log(`[Performance] ${name}: ${value.toFixed(2)}ms (${status})`);
-    
+
     // Send to analytics in production
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', {
+    if (typeof gtag !== "undefined") {
+      gtag("event", "web_vitals", {
         metric_name: name,
         metric_value: Math.round(value),
-        metric_status: status
+        metric_status: status,
       });
     }
 
@@ -133,47 +140,51 @@ class PerformanceMonitor {
   }
 
   private reportNavigationMetrics(metrics: any) {
-    console.log('[Performance] Page load metrics:', metrics);
-    
+    console.log("[Performance] Page load metrics:", metrics);
+
     // Send to analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'page_load_timing', {
+    if (typeof gtag !== "undefined") {
+      gtag("event", "page_load_timing", {
         ttfb: Math.round(metrics.ttfb),
         dom_content_loaded: Math.round(metrics.domContentLoaded),
-        load_complete: Math.round(metrics.loadComplete)
+        load_complete: Math.round(metrics.loadComplete),
       });
     }
   }
 
-  private getMetricStatus(value: number, threshold?: { good: number; needsImprovement: number }) {
-    if (!threshold) return 'unknown';
-    
-    if (value <= threshold.good) return 'good';
-    if (value <= threshold.needsImprovement) return 'needs-improvement';
-    return 'poor';
+  private getMetricStatus(
+    value: number,
+    threshold?: { good: number; needsImprovement: number },
+  ) {
+    if (!threshold) return "unknown";
+
+    if (value <= threshold.good) return "good";
+    if (value <= threshold.needsImprovement) return "needs-improvement";
+    return "poor";
   }
 
   private async sendToAnalytics(metric: string, value: number, status: string) {
     try {
       // Only send in production and with user consent
-      if (process.env.NODE_ENV === 'production' && navigator.onLine) {
-        await fetch('/api/analytics/performance', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+      if (process.env.NODE_ENV === "production" && navigator.onLine) {
+        await fetch("/api/analytics/performance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             metric,
             value: Math.round(value),
             status,
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
-            connection: (navigator as any).connection?.effectiveType || 'unknown',
+            connection:
+              (navigator as any).connection?.effectiveType || "unknown",
             url: window.location.href,
-            referrer: document.referrer
-          })
+            referrer: document.referrer,
+          }),
         });
       }
     } catch (error) {
-      console.warn('[Performance] Failed to send analytics:', error);
+      console.warn("[Performance] Failed to send analytics:", error);
     }
   }
 
@@ -182,28 +193,34 @@ class PerformanceMonitor {
   }
 
   public getPageLoadMetrics(): PageLoadMetrics | null {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === "undefined") return null;
 
     try {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      const paint = performance.getEntriesByType('paint');
-      
+      const navigation = performance.getEntriesByType(
+        "navigation",
+      )[0] as PerformanceNavigationTiming;
+      const paint = performance.getEntriesByType("paint");
+
       if (!navigation) return null;
 
-      const firstPaint = paint.find(entry => entry.name === 'first-paint')?.startTime || 0;
-      const firstContentfulPaint = paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0;
+      const firstPaint =
+        paint.find((entry) => entry.name === "first-paint")?.startTime || 0;
+      const firstContentfulPaint =
+        paint.find((entry) => entry.name === "first-contentful-paint")
+          ?.startTime || 0;
 
       return {
-        domContentLoaded: navigation.domContentLoadedEventEnd - navigation.navigationStart,
+        domContentLoaded:
+          navigation.domContentLoadedEventEnd - navigation.navigationStart,
         loadComplete: navigation.loadEventEnd - navigation.navigationStart,
         firstPaint,
         firstContentfulPaint,
         largestContentfulPaint: this.metrics.lcp || 0,
         firstInputDelay: this.metrics.fid,
-        cumulativeLayoutShift: this.metrics.cls || 0
+        cumulativeLayoutShift: this.metrics.cls || 0,
       };
     } catch (error) {
-      console.error('[Performance] Failed to get page load metrics:', error);
+      console.error("[Performance] Failed to get page load metrics:", error);
       return null;
     }
   }
@@ -222,7 +239,7 @@ export class ImageOptimizer {
   private static imageCache = new Map<string, HTMLImageElement>();
 
   static preloadCriticalImages(urls: string[]) {
-    urls.forEach(url => this.preloadImage(url));
+    urls.forEach((url) => this.preloadImage(url));
   }
 
   static preloadImage(url: string): Promise<HTMLImageElement> {
@@ -243,33 +260,37 @@ export class ImageOptimizer {
   }
 
   static async lazyLoadImages() {
-    if ('IntersectionObserver' in window) {
+    if ("IntersectionObserver" in window) {
       const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const img = entry.target as HTMLImageElement;
             if (img.dataset.src) {
               img.src = img.dataset.src;
-              img.classList.remove('lazy');
+              img.classList.remove("lazy");
               observer.unobserve(img);
             }
           }
         });
       });
 
-      document.querySelectorAll('img[data-src]').forEach(img => {
+      document.querySelectorAll("img[data-src]").forEach((img) => {
         imageObserver.observe(img);
       });
     }
   }
 
-  static getOptimizedImageUrl(url: string, width?: number, quality = 80): string {
+  static getOptimizedImageUrl(
+    url: string,
+    width?: number,
+    quality = 80,
+  ): string {
     // For Unsplash images
-    if (url.includes('unsplash.com')) {
+    if (url.includes("unsplash.com")) {
       const params = new URLSearchParams();
-      if (width) params.set('w', width.toString());
-      params.set('q', quality.toString());
-      params.set('auto', 'format');
+      if (width) params.set("w", width.toString());
+      params.set("q", quality.toString());
+      params.set("auto", "format");
       return `${url}&${params.toString()}`;
     }
 
@@ -282,34 +303,40 @@ export class ImageOptimizer {
 export class ResourceLoader {
   private static prefetchedResources = new Set<string>();
 
-  static prefetchResource(url: string, type: 'script' | 'style' | 'image' | 'fetch' = 'fetch') {
+  static prefetchResource(
+    url: string,
+    type: "script" | "style" | "image" | "fetch" = "fetch",
+  ) {
     if (this.prefetchedResources.has(url)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.as = type;
     link.href = url;
-    
+
     document.head.appendChild(link);
     this.prefetchedResources.add(url);
   }
 
-  static preloadResource(url: string, type: 'script' | 'style' | 'image' | 'fetch' | 'font' = 'fetch') {
-    const link = document.createElement('link');
-    link.rel = 'preload';
+  static preloadResource(
+    url: string,
+    type: "script" | "style" | "image" | "fetch" | "font" = "fetch",
+  ) {
+    const link = document.createElement("link");
+    link.rel = "preload";
     link.as = type;
     link.href = url;
-    
-    if (type === 'font') {
-      link.crossOrigin = 'anonymous';
+
+    if (type === "font") {
+      link.crossOrigin = "anonymous";
     }
-    
+
     document.head.appendChild(link);
   }
 
   static async loadScriptAsync(src: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = src;
       script.async = true;
       script.onload = () => resolve();
@@ -322,8 +349,8 @@ export class ResourceLoader {
 // Connection quality monitoring
 export class ConnectionMonitor {
   private static instance: ConnectionMonitor;
-  private connectionType: string = 'unknown';
-  private effectiveType: string = 'unknown';
+  private connectionType: string = "unknown";
+  private effectiveType: string = "unknown";
   private downlink: number = 0;
   private rtt: number = 0;
 
@@ -339,28 +366,28 @@ export class ConnectionMonitor {
   }
 
   private initializeConnectionMonitoring() {
-    if ('navigator' in window && 'connection' in navigator) {
+    if ("navigator" in window && "connection" in navigator) {
       const connection = (navigator as any).connection;
-      
+
       this.updateConnectionInfo(connection);
-      
-      connection.addEventListener('change', () => {
+
+      connection.addEventListener("change", () => {
         this.updateConnectionInfo(connection);
       });
     }
   }
 
   private updateConnectionInfo(connection: any) {
-    this.connectionType = connection.type || 'unknown';
-    this.effectiveType = connection.effectiveType || 'unknown';
+    this.connectionType = connection.type || "unknown";
+    this.effectiveType = connection.effectiveType || "unknown";
     this.downlink = connection.downlink || 0;
     this.rtt = connection.rtt || 0;
 
-    console.log('[Connection] Updated:', {
+    console.log("[Connection] Updated:", {
       type: this.connectionType,
       effectiveType: this.effectiveType,
       downlink: this.downlink,
-      rtt: this.rtt
+      rtt: this.rtt,
     });
 
     // Adapt content based on connection
@@ -368,18 +395,21 @@ export class ConnectionMonitor {
   }
 
   private adaptToConnection() {
-    const isSlowConnection = this.effectiveType === 'slow-2g' || this.effectiveType === '2g' || this.downlink < 1;
-    
+    const isSlowConnection =
+      this.effectiveType === "slow-2g" ||
+      this.effectiveType === "2g" ||
+      this.downlink < 1;
+
     if (isSlowConnection) {
       // Disable auto-playing videos
-      document.querySelectorAll('video[autoplay]').forEach(video => {
+      document.querySelectorAll("video[autoplay]").forEach((video) => {
         (video as HTMLVideoElement).autoplay = false;
       });
 
       // Reduce image quality
-      document.querySelectorAll('img').forEach(img => {
+      document.querySelectorAll("img").forEach((img) => {
         const src = img.src;
-        if (src.includes('unsplash.com') && !src.includes('&q=')) {
+        if (src.includes("unsplash.com") && !src.includes("&q=")) {
           img.src = ImageOptimizer.getOptimizedImageUrl(src, undefined, 60);
         }
       });
@@ -390,8 +420,9 @@ export class ConnectionMonitor {
   }
 
   private notifySlowConnection() {
-    const notification = document.createElement('div');
-    notification.className = 'fixed top-4 right-4 bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-2 rounded-lg text-sm z-50';
+    const notification = document.createElement("div");
+    notification.className =
+      "fixed top-4 right-4 bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-2 rounded-lg text-sm z-50";
     notification.innerHTML = `
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -401,9 +432,9 @@ export class ConnectionMonitor {
         <button onclick="this.parentElement.parentElement.remove()" class="ml-2 font-bold">×</button>
       </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       if (notification.parentElement) {
         notification.remove();
@@ -417,7 +448,10 @@ export class ConnectionMonitor {
       effectiveType: this.effectiveType,
       downlink: this.downlink,
       rtt: this.rtt,
-      isSlowConnection: this.effectiveType === 'slow-2g' || this.effectiveType === '2g' || this.downlink < 1
+      isSlowConnection:
+        this.effectiveType === "slow-2g" ||
+        this.effectiveType === "2g" ||
+        this.downlink < 1,
     };
   }
 }
@@ -428,11 +462,16 @@ export class BundleAnalyzer {
 
   static trackChunkLoad(chunkName: string, size: number) {
     this.chunks.set(chunkName, size);
-    console.log(`[Bundle] Loaded chunk: ${chunkName} (${(size / 1024).toFixed(2)}KB)`);
+    console.log(
+      `[Bundle] Loaded chunk: ${chunkName} (${(size / 1024).toFixed(2)}KB)`,
+    );
   }
 
   static getTotalBundleSize(): number {
-    return Array.from(this.chunks.values()).reduce((total, size) => total + size, 0);
+    return Array.from(this.chunks.values()).reduce(
+      (total, size) => total + size,
+      0,
+    );
   }
 
   static getChunkSizes(): Map<string, number> {
@@ -461,19 +500,19 @@ export class PerformanceManager {
 
   private initializeOptimizations() {
     // Preload critical resources
-    ResourceLoader.preloadResource('/fonts/inter-var.woff2', 'font');
-    
+    ResourceLoader.preloadResource("/fonts/inter-var.woff2", "font");
+
     // Initialize lazy loading
     ImageOptimizer.lazyLoadImages();
-    
+
     // Preload critical images
     const criticalImages = [
-      '/icons/icon-192x192.png',
-      '/images/clinic-logo.webp'
+      "/icons/icon-192x192.png",
+      "/images/clinic-logo.webp",
     ];
     ImageOptimizer.preloadCriticalImages(criticalImages);
 
-    console.log('[Performance] Performance manager initialized');
+    console.log("[Performance] Performance manager initialized");
   }
 
   public async generatePerformanceReport(): Promise<any> {
@@ -486,9 +525,9 @@ export class PerformanceManager {
       webVitals: metrics,
       pageLoad: pageMetrics,
       connection,
-      bundleSize: (bundleSize / 1024).toFixed(2) + 'KB',
+      bundleSize: (bundleSize / 1024).toFixed(2) + "KB",
       timestamp: new Date().toISOString(),
-      url: window.location.href
+      url: window.location.href,
     };
   }
 
@@ -498,19 +537,27 @@ export class PerformanceManager {
     const connection = this.connectionMonitor.getConnectionInfo();
 
     if (metrics.lcp && metrics.lcp > VITALS_THRESHOLDS.lcp.needsImprovement) {
-      recommendations.push('Optimize Largest Contentful Paint - consider image optimization and server response times');
+      recommendations.push(
+        "Optimize Largest Contentful Paint - consider image optimization and server response times",
+      );
     }
 
     if (metrics.fid && metrics.fid > VITALS_THRESHOLDS.fid.needsImprovement) {
-      recommendations.push('Reduce First Input Delay - minimize JavaScript execution time');
+      recommendations.push(
+        "Reduce First Input Delay - minimize JavaScript execution time",
+      );
     }
 
     if (metrics.cls && metrics.cls > VITALS_THRESHOLDS.cls.needsImprovement) {
-      recommendations.push('Improve Cumulative Layout Shift - specify image dimensions and avoid dynamic content injection');
+      recommendations.push(
+        "Improve Cumulative Layout Shift - specify image dimensions and avoid dynamic content injection",
+      );
     }
 
     if (connection.isSlowConnection) {
-      recommendations.push('Optimize for slow connections - implement adaptive loading and reduce bundle size');
+      recommendations.push(
+        "Optimize for slow connections - implement adaptive loading and reduce bundle size",
+      );
     }
 
     return recommendations;
@@ -526,7 +573,7 @@ export {
   ImageOptimizer,
   ResourceLoader,
   ConnectionMonitor,
-  BundleAnalyzer
+  BundleAnalyzer,
 };
 
-console.log('[Performance] Performance utilities loaded');
+console.log("[Performance] Performance utilities loaded");

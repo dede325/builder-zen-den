@@ -12,7 +12,10 @@ html {
 /* Enhanced body with improved font rendering */
 body {
   @apply antialiased;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -42,7 +45,7 @@ body {
 }
 
 .btn-clinic-premium::before {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   @apply bg-gradient-to-r from-white/20 to-transparent;
   @apply opacity-0 transition-opacity duration-300;
@@ -98,7 +101,7 @@ body {
 }
 
 .card-medical-premium::before {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   @apply bg-gradient-to-br from-clinic-primary/5 via-transparent to-clinic-secondary/5;
   @apply rounded-2xl opacity-0;
@@ -137,7 +140,7 @@ body {
 }
 
 .heading-medical::after {
-  content: '';
+  content: "";
   @apply absolute -bottom-2 left-0;
   @apply w-12 h-1;
   @apply bg-gradient-to-r from-clinic-accent to-clinic-secondary;
@@ -155,7 +158,9 @@ body {
 .text-medical {
   @apply text-gray-600;
   @apply leading-relaxed;
-  font-feature-settings: "kern" 1, "liga" 1;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1;
 }
 
 /* ===== ENHANCED NAVIGATION ===== */
@@ -189,7 +194,7 @@ body {
 }
 
 .nav-item-premium::before {
-  content: '';
+  content: "";
   @apply absolute bottom-0 left-1/2;
   @apply w-0 h-0.5;
   @apply bg-clinic-gradient;
@@ -212,7 +217,7 @@ body {
 }
 
 .hero-premium::before {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   @apply bg-gradient-to-r from-clinic-primary/5 to-clinic-secondary/5;
   animation: heroGlow 10s ease-in-out infinite;
@@ -225,11 +230,16 @@ body {
 }
 
 .section-premium::before {
-  content: '';
+  content: "";
   @apply absolute top-0 left-0 right-0;
   @apply h-px;
   @apply bg-gradient-to-r from-transparent to-transparent;
-  background-image: linear-gradient(to right, transparent, hsl(var(--clinic-accent) / 0.3), transparent);
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--clinic-accent) / 0.3),
+    transparent
+  );
 }
 
 /* ===== SPECIALTY CARDS ENHANCEMENT ===== */
@@ -251,7 +261,7 @@ body {
 }
 
 .specialty-card-premium::before {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   @apply bg-gradient-to-br from-clinic-primary/5 via-transparent to-clinic-secondary/5;
   @apply rounded-2xl opacity-0;
@@ -323,7 +333,8 @@ body {
 
 /* Floating animation */
 @keyframes cardFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   33% {
@@ -336,7 +347,8 @@ body {
 
 /* Gradient shift animation */
 @keyframes gradientShift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -346,7 +358,8 @@ body {
 
 /* Hero glow animation */
 @keyframes heroGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -368,11 +381,14 @@ body {
 
 /* Pulse glow animation */
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(121, 203, 203, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(121, 203, 203, 0.6), 0 0 60px rgba(121, 203, 203, 0.4);
+    box-shadow:
+      0 0 40px rgba(121, 203, 203, 0.6),
+      0 0 60px rgba(121, 203, 203, 0.4);
   }
 }
 
@@ -413,19 +429,19 @@ body {
 
 /* Premium shadows */
 .shadow-premium {
-  box-shadow: 
+  box-shadow:
     0 4px 20px rgba(121, 203, 203, 0.15),
     0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .shadow-premium-lg {
-  box-shadow: 
+  box-shadow:
     0 10px 40px rgba(121, 203, 203, 0.2),
     0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .shadow-premium-xl {
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(121, 203, 203, 0.25),
     0 8px 24px rgba(0, 0, 0, 0.2);
 }
@@ -448,16 +464,16 @@ body {
   .card-medical-premium {
     @apply mx-2 rounded-xl;
   }
-  
+
   .btn-clinic-premium {
     @apply rounded-lg text-sm;
     min-height: 44px;
   }
-  
+
   .specialty-card-premium {
     @apply p-4 rounded-xl;
   }
-  
+
   .specialty-icon-premium {
     @apply w-12 h-12 rounded-xl;
   }
@@ -468,7 +484,7 @@ body {
   .hero-premium {
     @apply min-h-[80vh];
   }
-  
+
   .section-premium {
     @apply py-16 lg:py-24;
   }
@@ -480,7 +496,7 @@ body {
     @apply scale-105;
     transform: translateY(-8px) scale(1.05);
   }
-  
+
   .specialty-card-premium:hover {
     transform: translateY(-10px) scale(1.05) rotateY(5deg);
   }
@@ -514,11 +530,11 @@ body {
   .btn-clinic-premium {
     @apply border-2 border-clinic-primary;
   }
-  
+
   .card-medical-premium {
     @apply border-2 border-clinic-accent;
   }
-  
+
   .nav-item-premium:focus {
     @apply outline-2 outline-clinic-primary;
   }
@@ -531,7 +547,7 @@ body {
   .hero-premium::before {
     animation: none !important;
   }
-  
+
   .card-medical-premium,
   .specialty-card-premium,
   .btn-clinic-premium {
@@ -547,7 +563,7 @@ body {
   .btn-clinic-premium {
     @apply text-black bg-white;
   }
-  
+
   .card-medical-premium {
     @apply border border-gray-300 shadow-none;
   }
@@ -560,7 +576,7 @@ body {
 }
 
 .loading-premium::after {
-  content: '';
+  content: "";
   @apply absolute inset-0;
   @apply bg-gradient-to-r from-transparent via-clinic-light/50 to-transparent;
   animation: loadingShimmer 1.5s infinite linear;
@@ -584,7 +600,8 @@ body {
 }
 
 @keyframes skeletonGlow {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 200% 0;
   }
   50% {

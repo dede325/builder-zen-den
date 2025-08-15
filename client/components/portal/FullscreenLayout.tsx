@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Heart,
   Menu,
@@ -34,8 +34,8 @@ import {
   Wifi,
   WifiOff,
   Battery,
-} from 'lucide-react';
-import { useAuthStore } from '@/store/auth-portal';
+} from "lucide-react";
+import { useAuthStore } from "@/store/auth-portal";
 
 interface NavigationItem {
   id: string;
@@ -59,32 +59,34 @@ export default function FullscreenLayout({
   defaultSection,
   showHeader = true,
   showSidebar = true,
-  className = '',
+  className = "",
 }: FullscreenLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
-  
-  const [activeSection, setActiveSection] = useState(defaultSection || sections[0]?.id);
+
+  const [activeSection, setActiveSection] = useState(
+    defaultSection || sections[0]?.id,
+  );
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [notifications, setNotifications] = useState(3);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Monitor online status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -104,15 +106,15 @@ export default function FullscreenLayout({
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
-          case 'ArrowLeft':
+          case "ArrowLeft":
             e.preventDefault();
-            navigateSection('prev');
+            navigateSection("prev");
             break;
-          case 'ArrowRight':
+          case "ArrowRight":
             e.preventDefault();
-            navigateSection('next');
+            navigateSection("next");
             break;
-          case 'f':
+          case "f":
             e.preventDefault();
             toggleFullscreen();
             break;
@@ -120,31 +122,32 @@ export default function FullscreenLayout({
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [activeSection]);
 
-  const navigateSection = (direction: 'next' | 'prev') => {
-    const currentIndex = sections.findIndex(s => s.id === activeSection);
+  const navigateSection = (direction: "next" | "prev") => {
+    const currentIndex = sections.findIndex((s) => s.id === activeSection);
     if (currentIndex === -1) return;
 
-    const nextIndex = direction === 'next' 
-      ? (currentIndex + 1) % sections.length
-      : (currentIndex - 1 + sections.length) % sections.length;
-    
+    const nextIndex =
+      direction === "next"
+        ? (currentIndex + 1) % sections.length
+        : (currentIndex - 1 + sections.length) % sections.length;
+
     setActiveSection(sections[nextIndex].id);
   };
 
-  const currentSection = sections.find(s => s.id === activeSection);
+  const currentSection = sections.find((s) => s.id === activeSection);
   const CurrentComponent = currentSection?.component;
 
   const handleLogout = () => {
     logout();
-    navigate('/portal/login');
+    navigate("/portal/login");
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`h-screen w-screen overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 ${className}`}
     >
@@ -164,10 +167,14 @@ export default function FullscreenLayout({
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="lg:hidden"
               >
-                {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                {sidebarOpen ? (
+                  <X className="h-4 w-4" />
+                ) : (
+                  <Menu className="h-4 w-4" />
+                )}
               </Button>
             )}
-            
+
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-clinic-gradient rounded-lg flex items-center justify-center">
                 <Heart className="w-4 h-4 text-white" />
@@ -191,8 +198,8 @@ export default function FullscreenLayout({
                 onClick={() => setActiveSection(section.id)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   section.id === activeSection
-                    ? 'bg-clinic-primary w-8'
-                    : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
+                    ? "bg-clinic-primary w-8"
+                    : "bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500"
                 }`}
                 aria-label={`Ir para ${section.label}`}
               />
@@ -210,12 +217,12 @@ export default function FullscreenLayout({
                   <WifiOff className="w-4 h-4 text-red-500" />
                 )}
                 <span className="text-xs text-gray-500">
-                  {isOnline ? 'Online' : 'Offline'}
+                  {isOnline ? "Online" : "Offline"}
                 </span>
               </div>
-              
+
               <Battery className="w-4 h-4 text-gray-500" />
-              
+
               <button
                 onClick={toggleFullscreen}
                 className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -246,16 +253,25 @@ export default function FullscreenLayout({
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2 h-auto p-2">
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2 h-auto p-2"
+                >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.avatar} />
                     <AvatarFallback>
-                      {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      {user?.name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="hidden sm:block text-left">
                     <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user?.role}
+                    </p>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
@@ -270,14 +286,17 @@ export default function FullscreenLayout({
                   ) : (
                     <Moon className="mr-2 h-4 w-4" />
                   )}
-                  {isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
+                  {isDarkMode ? "Modo Claro" : "Modo Escuro"}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Globe className="mr-2 h-4 w-4" />
                   Idioma (PT-AO)
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-red-600"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Sair
                 </DropdownMenuItem>
@@ -296,7 +315,7 @@ export default function FullscreenLayout({
                 initial={{ x: -300 }}
                 animate={{ x: 0 }}
                 exit={{ x: -300 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 flex flex-col relative z-40"
               >
                 {/* Sidebar Header */}
@@ -305,7 +324,11 @@ export default function FullscreenLayout({
                     <Avatar className="h-16 w-16 mx-auto mb-3">
                       <AvatarImage src={user?.avatar} />
                       <AvatarFallback className="bg-clinic-gradient text-white text-lg">
-                        {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        {user?.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <h3 className="font-semibold text-gray-900 dark:text-white">
@@ -322,7 +345,7 @@ export default function FullscreenLayout({
                   {sections.map((section) => {
                     const Icon = section.icon;
                     const isActive = section.id === activeSection;
-                    
+
                     return (
                       <motion.button
                         key={section.id}
@@ -332,9 +355,9 @@ export default function FullscreenLayout({
                         whileTap={{ scale: 0.98 }}
                         className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                           isActive
-                            ? 'bg-clinic-gradient text-white shadow-lg'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                        } ${section.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            ? "bg-clinic-gradient text-white shadow-lg"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                        } ${section.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         <Icon className="h-5 w-5" />
                         <span className="font-medium">{section.label}</span>
@@ -354,7 +377,7 @@ export default function FullscreenLayout({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => navigateSection('prev')}
+                      onClick={() => navigateSection("prev")}
                       className="flex-1 mr-1"
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -362,7 +385,7 @@ export default function FullscreenLayout({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => navigateSection('next')}
+                      onClick={() => navigateSection("next")}
                       className="flex-1 ml-1"
                     >
                       <ChevronRight className="h-4 w-4" />
@@ -383,11 +406,11 @@ export default function FullscreenLayout({
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                transition={{ 
-                  type: 'spring',
+                transition={{
+                  type: "spring",
                   damping: 25,
                   stiffness: 200,
-                  duration: 0.3
+                  duration: 0.3,
                 }}
                 className="h-full w-full"
               >
@@ -410,15 +433,15 @@ export default function FullscreenLayout({
               {sections.slice(0, 5).map((section) => {
                 const Icon = section.icon;
                 const isActive = section.id === activeSection;
-                
+
                 return (
                   <button
                     key={section.id}
                     onClick={() => setActiveSection(section.id)}
                     className={`p-3 rounded-xl transition-all duration-200 ${
                       isActive
-                        ? 'bg-clinic-gradient text-white'
-                        : 'text-gray-600 dark:text-gray-400'
+                        ? "bg-clinic-gradient text-white"
+                        : "text-gray-600 dark:text-gray-400"
                     }`}
                   >
                     <Icon className="h-5 w-5" />

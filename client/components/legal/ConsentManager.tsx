@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { 
+import {
   Cookie,
   Shield,
   Settings,
@@ -15,7 +21,7 @@ import {
   Eye,
   BarChart3,
   Target,
-  Zap
+  Zap,
 } from "lucide-react";
 import { angolaFormatter } from "@/lib/locale-angola";
 
@@ -39,49 +45,74 @@ interface CookieCategory {
 
 const COOKIE_CATEGORIES: CookieCategory[] = [
   {
-    id: 'necessary',
-    name: 'Estritamente Necessários',
-    description: 'Essenciais para o funcionamento básico do website e serviços.',
+    id: "necessary",
+    name: "Estritamente Necessários",
+    description:
+      "Essenciais para o funcionamento básico do website e serviços.",
     icon: Zap,
     required: true,
-    examples: ['Autenticação', 'Segurança', 'Carrinho de compras', 'Preferências de idioma'],
-    retention: 'Sessão até 1 ano',
-    purposes: ['Funcionalidade básica', 'Segurança', 'Prevenção de fraude']
+    examples: [
+      "Autenticação",
+      "Segurança",
+      "Carrinho de compras",
+      "Preferências de idioma",
+    ],
+    retention: "Sessão até 1 ano",
+    purposes: ["Funcionalidade básica", "Segurança", "Prevenção de fraude"],
   },
   {
-    id: 'analytics',
-    name: 'Análise e Performance',
-    description: 'Ajudam-nos a entender como usa o website para melhorar a experiência.',
+    id: "analytics",
+    name: "Análise e Performance",
+    description:
+      "Ajudam-nos a entender como usa o website para melhorar a experiência.",
     icon: BarChart3,
     required: false,
-    examples: ['Google Analytics', 'Mapas de calor', 'Métricas de performance'],
-    retention: '2 anos',
-    purposes: ['Análise de tráfego', 'Melhoria da experiência', 'Estatísticas anónimas']
+    examples: ["Google Analytics", "Mapas de calor", "Métricas de performance"],
+    retention: "2 anos",
+    purposes: [
+      "Análise de tráfego",
+      "Melhoria da experiência",
+      "Estatísticas anónimas",
+    ],
   },
   {
-    id: 'marketing',
-    name: 'Marketing e Publicidade',
-    description: 'Utilizados para mostrar publicidade relevante e personalizada.',
+    id: "marketing",
+    name: "Marketing e Publicidade",
+    description:
+      "Utilizados para mostrar publicidade relevante e personalizada.",
     icon: Target,
     required: false,
-    examples: ['Facebook Pixel', 'Google Ads', 'Remarketing'],
-    retention: '13 meses',
-    purposes: ['Publicidade direcionada', 'Remarketing', 'Medição de campanhas']
+    examples: ["Facebook Pixel", "Google Ads", "Remarketing"],
+    retention: "13 meses",
+    purposes: [
+      "Publicidade direcionada",
+      "Remarketing",
+      "Medição de campanhas",
+    ],
   },
   {
-    id: 'personalization',
-    name: 'Personalização',
-    description: 'Personalizam o conteúdo e funcionalidades baseadas nas suas preferências.',
+    id: "personalization",
+    name: "Personalização",
+    description:
+      "Personalizam o conteúdo e funcionalidades baseadas nas suas preferências.",
     icon: Eye,
     required: false,
-    examples: ['Preferências de conteúdo', 'Recomendações', 'Configurações de UI'],
-    retention: '1 ano',
-    purposes: ['Experiência personalizada', 'Recomendações', 'Configurações do utilizador']
-  }
+    examples: [
+      "Preferências de conteúdo",
+      "Recomendações",
+      "Configurações de UI",
+    ],
+    retention: "1 ano",
+    purposes: [
+      "Experiência personalizada",
+      "Recomendações",
+      "Configurações do utilizador",
+    ],
+  },
 ];
 
-const CONSENT_STORAGE_KEY = 'clinica-bem-cuidar-consent';
-const CONSENT_VERSION = '1.0';
+const CONSENT_STORAGE_KEY = "clinica-bem-cuidar-consent";
+const CONSENT_VERSION = "1.0";
 
 export default function ConsentManager() {
   const [isVisible, setIsVisible] = useState(false);
@@ -90,7 +121,7 @@ export default function ConsentManager() {
     necessary: true,
     analytics: false,
     marketing: false,
-    personalization: false
+    personalization: false,
   });
   const [hasExistingConsent, setHasExistingConsent] = useState(false);
 
@@ -103,13 +134,16 @@ export default function ConsentManager() {
       const storedConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
       if (storedConsent) {
         const consentData = JSON.parse(storedConsent);
-        
+
         // Check if consent is still valid (within 1 year)
         const consentDate = new Date(consentData.timestamp);
         const oneYearAgo = new Date();
         oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-        
-        if (consentDate > oneYearAgo && consentData.version === CONSENT_VERSION) {
+
+        if (
+          consentDate > oneYearAgo &&
+          consentData.version === CONSENT_VERSION
+        ) {
           setPreferences(consentData.preferences);
           setHasExistingConsent(true);
           applyConsentPreferences(consentData.preferences);
@@ -122,7 +156,7 @@ export default function ConsentManager() {
         setIsVisible(true);
       }
     } catch (error) {
-      console.error('Error checking consent:', error);
+      console.error("Error checking consent:", error);
       setIsVisible(true);
     }
   };
@@ -132,9 +166,9 @@ export default function ConsentManager() {
       preferences: newPreferences,
       timestamp: new Date().toISOString(),
       version: CONSENT_VERSION,
-      locale: 'pt-AO',
+      locale: "pt-AO",
       userAgent: navigator.userAgent,
-      angolaTime: angolaFormatter.formatDateTime(new Date())
+      angolaTime: angolaFormatter.formatDateTime(new Date()),
     };
 
     try {
@@ -143,11 +177,11 @@ export default function ConsentManager() {
       setHasExistingConsent(true);
       applyConsentPreferences(newPreferences);
       setIsVisible(false);
-      
+
       // Log consent for audit trail (in production, this would be sent to server)
-      console.log('[Consent] User consent saved:', consentData);
+      console.log("[Consent] User consent saved:", consentData);
     } catch (error) {
-      console.error('Error saving consent:', error);
+      console.error("Error saving consent:", error);
     }
   };
 
@@ -155,42 +189,44 @@ export default function ConsentManager() {
     // Apply analytics consent
     if (prefs.analytics) {
       // Initialize analytics (Google Analytics, etc.)
-      if (typeof gtag !== 'undefined') {
-        gtag('consent', 'update', {
-          analytics_storage: 'granted'
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          analytics_storage: "granted",
         });
       }
     } else {
-      if (typeof gtag !== 'undefined') {
-        gtag('consent', 'update', {
-          analytics_storage: 'denied'
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          analytics_storage: "denied",
         });
       }
     }
 
     // Apply marketing consent
     if (prefs.marketing) {
-      if (typeof gtag !== 'undefined') {
-        gtag('consent', 'update', {
-          ad_storage: 'granted',
-          ad_user_data: 'granted',
-          ad_personalization: 'granted'
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
         });
       }
     } else {
-      if (typeof gtag !== 'undefined') {
-        gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied'
+      if (typeof gtag !== "undefined") {
+        gtag("consent", "update", {
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied",
         });
       }
     }
 
     // Dispatch custom event for other scripts
-    window.dispatchEvent(new CustomEvent('consentUpdated', {
-      detail: prefs
-    }));
+    window.dispatchEvent(
+      new CustomEvent("consentUpdated", {
+        detail: prefs,
+      }),
+    );
   };
 
   const handleAcceptAll = () => {
@@ -198,7 +234,7 @@ export default function ConsentManager() {
       necessary: true,
       analytics: true,
       marketing: true,
-      personalization: true
+      personalization: true,
     };
     saveConsent(allAcceptedPreferences);
   };
@@ -208,7 +244,7 @@ export default function ConsentManager() {
       necessary: true,
       analytics: false,
       marketing: false,
-      personalization: false
+      personalization: false,
     };
     saveConsent(minimalPreferences);
   };
@@ -217,10 +253,13 @@ export default function ConsentManager() {
     saveConsent(preferences);
   };
 
-  const handlePreferenceChange = (category: keyof ConsentPreferences, value: boolean) => {
-    setPreferences(prev => ({
+  const handlePreferenceChange = (
+    category: keyof ConsentPreferences,
+    value: boolean,
+  ) => {
+    setPreferences((prev) => ({
       ...prev,
-      [category]: value
+      [category]: value,
     }));
   };
 
@@ -275,15 +314,16 @@ export default function ConsentManager() {
           {/* Main message */}
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Utilizamos cookies e tecnologias similares para melhorar a sua experiência, 
-              personalizar conteúdo e analisar o tráfego do nosso website. 
-              Pode escolher quais categorias de cookies aceita.
+              Utilizamos cookies e tecnologias similares para melhorar a sua
+              experiência, personalizar conteúdo e analisar o tráfego do nosso
+              website. Pode escolher quais categorias de cookies aceita.
             </p>
 
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Info className="w-4 h-4" />
               <span>
-                Os seus dados são tratados com a máxima segurança e confidencialidade.
+                Os seus dados são tratados com a máxima segurança e
+                confidencialidade.
               </span>
             </div>
           </div>
@@ -296,7 +336,10 @@ export default function ConsentManager() {
               </h3>
 
               {COOKIE_CATEGORIES.map((category) => (
-                <div key={category.id} className="border rounded-lg p-4 space-y-3">
+                <div
+                  key={category.id}
+                  className="border rounded-lg p-4 space-y-3"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <category.icon className="w-5 h-5 text-clinic-accent" />
@@ -311,7 +354,9 @@ export default function ConsentManager() {
                     </div>
                     <Switch
                       checked={preferences[category.id]}
-                      onCheckedChange={(checked) => handlePreferenceChange(category.id, checked)}
+                      onCheckedChange={(checked) =>
+                        handlePreferenceChange(category.id, checked)
+                      }
                       disabled={category.required}
                     />
                   </div>
@@ -349,7 +394,7 @@ export default function ConsentManager() {
 
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Informações Adicionais</h4>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   <div>
                     <h5 className="font-medium mb-2">Os Seus Direitos:</h5>
@@ -386,7 +431,9 @@ export default function ConsentManager() {
               </Button>
             )}
 
-            <div className={`grid gap-3 ${showDetails ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
+            <div
+              className={`grid gap-3 ${showDetails ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-1 sm:grid-cols-2"}`}
+            >
               {showDetails && (
                 <Button
                   onClick={handleSaveCustom}
@@ -396,7 +443,7 @@ export default function ConsentManager() {
                   Guardar Preferências
                 </Button>
               )}
-              
+
               <Button
                 onClick={handleAcceptAll}
                 className="bg-clinic-gradient hover:opacity-90 text-white text-sm"
@@ -404,7 +451,7 @@ export default function ConsentManager() {
                 <Check className="w-4 h-4 mr-2" />
                 Aceitar Todos
               </Button>
-              
+
               <Button
                 onClick={handleRejectOptional}
                 variant="outline"
@@ -445,7 +492,7 @@ export const useConsent = () => {
     necessary: true,
     analytics: false,
     marketing: false,
-    personalization: false
+    personalization: false,
   });
 
   useEffect(() => {
@@ -457,7 +504,7 @@ export const useConsent = () => {
           setConsent(consentData.preferences);
         }
       } catch (error) {
-        console.error('Error loading consent:', error);
+        console.error("Error loading consent:", error);
       }
     };
 
@@ -468,10 +515,16 @@ export const useConsent = () => {
       setConsent(event.detail);
     };
 
-    window.addEventListener('consentUpdated', handleConsentUpdate as EventListener);
-    
+    window.addEventListener(
+      "consentUpdated",
+      handleConsentUpdate as EventListener,
+    );
+
     return () => {
-      window.removeEventListener('consentUpdated', handleConsentUpdate as EventListener);
+      window.removeEventListener(
+        "consentUpdated",
+        handleConsentUpdate as EventListener,
+      );
     };
   }, []);
 
@@ -487,7 +540,7 @@ export const hasConsent = (category: keyof ConsentPreferences): boolean => {
       return consentData.preferences[category] || false;
     }
   } catch (error) {
-    console.error('Error checking consent:', error);
+    console.error("Error checking consent:", error);
   }
   return false;
 };
@@ -500,21 +553,23 @@ export const logConsentEvent = (event: string, details?: any) => {
     angolaTime: angolaFormatter.formatDateTime(new Date()),
     userAgent: navigator.userAgent,
     url: window.location.href,
-    details
+    details,
   };
 
   // In production, send this to your audit log endpoint
-  console.log('[Consent Audit]', logData);
-  
+  console.log("[Consent Audit]", logData);
+
   // Store locally for potential sync later
   try {
-    const existingLogs = JSON.parse(localStorage.getItem('consent-audit-logs') || '[]');
+    const existingLogs = JSON.parse(
+      localStorage.getItem("consent-audit-logs") || "[]",
+    );
     existingLogs.push(logData);
-    
+
     // Keep only last 100 entries
     const recentLogs = existingLogs.slice(-100);
-    localStorage.setItem('consent-audit-logs', JSON.stringify(recentLogs));
+    localStorage.setItem("consent-audit-logs", JSON.stringify(recentLogs));
   } catch (error) {
-    console.error('Error storing consent audit log:', error);
+    console.error("Error storing consent audit log:", error);
   }
 };
