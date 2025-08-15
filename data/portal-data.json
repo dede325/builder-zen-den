@@ -102,6 +102,17 @@
       "address": "Endereço demo, Luanda",
       "createdAt": "2025-08-15T10:13:45.177Z",
       "updatedAt": "2025-08-15T10:13:45.177Z"
+    },
+    {
+      "id": "1755253421993",
+      "name": "Medico",
+      "email": "medico@bemcuidar.co.ao",
+      "phone": "+244 945 123 456",
+      "birthDate": "1990-01-01",
+      "cpf": "000.000.000-00",
+      "address": "Endereço demo, Luanda",
+      "createdAt": "2025-08-15T10:23:41.993Z",
+      "updatedAt": "2025-08-15T10:23:41.993Z"
     }
   ],
   "appointments": [

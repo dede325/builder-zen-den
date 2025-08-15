@@ -107,6 +107,7 @@ export default function Portal() {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<Patient | null>(null);
+  const [currentUserRole, setCurrentUserRole] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
