@@ -557,5 +557,3 @@ export const AnimatedProgress = ({
     </div>
   );
 };
-
-export { useState };
