@@ -418,7 +418,7 @@ export default function Index() {
       icon: Activity,
       description: "Sistema digestivo",
       detailedDescription:
-        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, fígado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
+        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, f��gado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
       conditions: [
         "Gastrite",
         "Úlcera péptica",
@@ -965,9 +965,9 @@ export default function Index() {
               </CardContent>
             </Card>
 
-            <Card className="text-center border-0 shadow-lg sm:col-span-2 lg:col-span-1">
+            <Card className="card-medical-premium text-center sm:col-span-2 lg:col-span-1">
               <CardContent className="pt-6 sm:pt-8 p-4 sm:p-6">
-                <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4 equipment-hover">
                   <Award className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-semibold mb-2">
