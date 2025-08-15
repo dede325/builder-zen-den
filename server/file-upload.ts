@@ -40,7 +40,7 @@ async function ensureDirectories() {
 ensureDirectories();
 
 // Multer configuration
-const storage = multer.diskStorage({
+const storage = multer ? multer.diskStorage({
   destination: (req, file, cb) => {
     const isImage = file.mimetype.startsWith('image/');
     const uploadPath = isImage ? IMAGES_DIR : DOCUMENTS_DIR;
@@ -50,10 +50,10 @@ const storage = multer.diskStorage({
     const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   }
-});
+}) : null;
 
 // File filter
-const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = multer ? (req: any, file: Express.Multer.File, cb: any) => {
   // Define allowed file types
   const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
   const allowedDocumentTypes = [
@@ -73,7 +73,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCa
   } else {
     cb(new Error(`File type ${file.mimetype} is not allowed`));
   }
-};
+} : null;
 
 // Create multer instance
 export const upload = multer ? multer({
