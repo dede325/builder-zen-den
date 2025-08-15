@@ -488,7 +488,503 @@ export default function AppointmentForm() {
               </motion.div>
             )}
 
-            {/* Steps 3 & 4 would continue here... */}
+            {/* Step 3: Medical Information */}
+            {currentStep === 3 && (
+              <motion.div
+                key="step3"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Stethoscope className="w-5 h-5" />
+                      Informações Médicas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="specialty"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Especialidade *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Seleccione a especialidade" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {specialties.map((specialty) => (
+                                  <SelectItem key={specialty.value} value={specialty.value}>
+                                    {specialty.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="appointmentType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Tipo de Consulta *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Seleccione o tipo" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {appointmentTypes.map((type) => (
+                                  <SelectItem key={type.value} value={type.value}>
+                                    <div className="flex items-center gap-2">
+                                      <type.icon className="w-4 h-4" />
+                                      {type.label}
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="preferredDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data Preferida *</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="date"
+                                {...field}
+                                min={new Date().toISOString().split('T')[0]}
+                                onChange={(e) => {
+                                  field.onChange(e.target.value);
+                                  // Check if date is a holiday
+                                  const holiday = isNationalHoliday(e.target.value);
+                                  if (holiday.isHoliday) {
+                                    alert(`Atenção: ${e.target.value} é feriado nacional (${holiday.holiday?.name})`);
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              Consulte os nossos horários de funcionamento
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="preferredTime"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Hora Preferida *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Seleccione a hora" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {Array.from({ length: 11 }, (_, i) => {
+                                  const hour = 7 + i;
+                                  const time = `${hour.toString().padStart(2, '0')}:00`;
+                                  return (
+                                    <SelectItem key={time} value={time}>
+                                      {time}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>
+                              Horário: Segunda a Sexta 07:00-19:00, Sábado 07:00-13:00
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-foreground">Informações Clínicas (Opcional)</h4>
+
+                      <FormField
+                        control={form.control}
+                        name="symptoms"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Sintomas Actuais</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Descreva os sintomas que está a sentir..."
+                                className="min-h-[80px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="medications"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Medicamentos Actuais</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Liste os medicamentos que toma regularmente..."
+                                  className="min-h-[60px]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="allergies"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Alergias Conhecidas</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Alergias a medicamentos, alimentos, etc..."
+                                  className="min-h-[60px]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="medicalHistory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Histórico Médico Relevante</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Cirurgias anteriores, doenças crónicas, hospitalizações..."
+                                className="min-h-[80px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Separator />
+
+                    {/* Insurance Information */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-foreground">Seguro de Saúde</h4>
+
+                      <FormField
+                        control={form.control}
+                        name="hasInsurance"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Tenho seguro de saúde
+                              </FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      {form.watch('hasInsurance') && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-4"
+                        >
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <FormField
+                              control={form.control}
+                              name="insuranceProvider"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Seguradora</FormLabel>
+                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione a seguradora" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {insuranceProviders.map((provider) => (
+                                        <SelectItem key={provider} value={provider}>
+                                          {provider}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="policyNumber"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Número da Apólice</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Número da sua apólice de seguro"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* Step 4: Consent and Emergency Contact */}
+            {currentStep === 4 && (
+              <motion.div
+                key="step4"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                <div className="space-y-6">
+                  {/* Emergency Contact */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Phone className="w-5 h-5" />
+                        Contacto de Emergência
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="emergencyContactName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nome Completo *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Nome do contacto de emergência" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="emergencyContactRelation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Relação *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Seleccione a relação" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="spouse">Cônjuge</SelectItem>
+                                  <SelectItem value="parent">Pai/Mãe</SelectItem>
+                                  <SelectItem value="child">Filho/a</SelectItem>
+                                  <SelectItem value="sibling">Irmão/Irmã</SelectItem>
+                                  <SelectItem value="friend">Amigo/a</SelectItem>
+                                  <SelectItem value="other">Outro</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="emergencyContactPhone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Telefone *</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="+244 923 123 456"
+                                {...field}
+                                onChange={(e) => {
+                                  const formatted = formatPhoneNumber(e.target.value);
+                                  field.onChange(formatted);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Legal Consent */}
+                  <Card className="border-warning/20 bg-warning/5">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Shield className="w-5 h-5 text-warning" />
+                        Consentimentos Legais (Obrigatório)
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        Conforme a Lei n.º 22/11 de Protecção de Dados Pessoais de Angola
+                      </p>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <Alert className="border-info/20 bg-info/5">
+                        <Info className="h-4 w-4 text-info" />
+                        <AlertDescription className="text-info-foreground">
+                          Os seus dados pessoais serão processados exclusivamente para fins de prestação
+                          de cuidados de saúde e gestão da sua consulta médica. Pode exercer os seus direitos
+                          de acesso, rectificação e eliminação contactando dpo@bemcuidar.co.ao
+                        </AlertDescription>
+                      </Alert>
+
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="dataProcessingConsent"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-border rounded-lg">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="text-sm font-medium">
+                                  Consentimento para Processamento de Dados Pessoais *
+                                </FormLabel>
+                                <p className="text-xs text-muted-foreground">
+                                  Consinto que os meus dados pessoais sejam processados pela Clínica Bem Cuidar
+                                  para fins de agendamento e prestação de cuidados de saúde, conforme a Política de Privacidade.
+                                </p>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="healthDataConsent"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-warning/30 rounded-lg bg-warning/5">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="text-sm font-medium">
+                                  Consentimento para Processamento de Dados de Saúde *
+                                </FormLabel>
+                                <p className="text-xs text-muted-foreground">
+                                  Consinto expressamente que os meus dados de saúde (dados especiais) sejam processados
+                                  pelos profissionais de saúde da clínica para fins de diagnóstico, tratamento e seguimento médico.
+                                </p>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="communicationConsent"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-border rounded-lg">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="text-sm font-medium">
+                                  Comunicações Promocionais (Opcional)
+                                </FormLabel>
+                                <p className="text-xs text-muted-foreground">
+                                  Aceito receber comunicações sobre serviços de saúde, campanhas de prevenção
+                                  e novidades da clínica por email e SMS.
+                                </p>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Nota Legal:</strong> Pode retirar o seu consentimento a qualquer momento
+                          contactando-nos. A retirada do consentimento não afecta a licitude do processamento
+                          efectuado até essa data. Para mais informações, consulte a nossa{' '}
+                          <button className="text-primary hover:underline">
+                            Política de Privacidade
+                          </button>.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
 
           {/* Navigation Buttons */}
