@@ -67,7 +67,7 @@
     /* Estados de sucesso e aviso */
     --success: 142 76% 25%; /* Verde escuro */
     --success-foreground: 0 0% 98%; /* Contraste: 7.8:1 ✓ */
-    
+
     --warning: 43 96% 35%; /* Amarelo-laranja escuro */
     --warning-foreground: 222.2 84% 4.9%; /* Contraste: 8.1:1 ✓ */
 
@@ -130,7 +130,7 @@
     /* Estados de sucesso e aviso em modo escuro */
     --success: 142 76% 65%; /* Verde claro */
     --success-foreground: 222.2 84% 4.9%; /* Contraste: 7.2:1 ✓ */
-    
+
     --warning: 43 96% 65%; /* Amarelo-laranja claro */
     --warning-foreground: 222.2 84% 4.9%; /* Contraste: 7.8:1 ✓ */
 
@@ -187,7 +187,11 @@
 
   /* Gradiente com cores acessíveis */
   .clinic-gradient-accessible {
-    background: linear-gradient(135deg, hsl(var(--clinic-primary)) 0%, hsl(var(--clinic-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--clinic-primary)) 0%,
+      hsl(var(--clinic-secondary)) 100%
+    );
   }
 
   /* Estados de hover para cards */

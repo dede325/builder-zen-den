@@ -37,7 +37,7 @@
 }
 
 .link-hover::after {
-  content: '';
+  content: "";
   @apply absolute bottom-0 left-0 w-0 h-0.5 bg-current;
   @apply transition-all duration-200 ease-in-out;
 }
@@ -61,7 +61,7 @@
 }
 
 .nav-item-hover.active::before {
-  content: '';
+  content: "";
   @apply absolute left-0 top-1/2 w-1 h-6 bg-primary-foreground rounded-r;
   transform: translateY(-50%);
 }
@@ -247,7 +247,7 @@
 }
 
 .loading-state::after {
-  content: '';
+  content: "";
   @apply absolute inset-0 bg-gradient-to-r from-transparent via-background/50 to-transparent;
   animation: shimmer 1.5s infinite linear;
 }
