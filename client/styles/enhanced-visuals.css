@@ -163,8 +163,8 @@ body {
 /* Premium navigation bar */
 .nav-premium {
   @apply relative;
-  @apply bg-white/95;
-  @apply border-b border-clinic-accent/20;
+  background-color: rgba(255, 255, 255, 0.95);
+  @apply border-b border-clinic-accent border-opacity-20;
   @apply shadow-lg;
   @apply transition-all duration-300;
   backdrop-filter: blur(20px);
