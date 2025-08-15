@@ -53,9 +53,26 @@ export const handleLogin: RequestHandler = async (req, res) => {
       });
     }
 
+    // Get user role and permissions
+    const userRole = getUserRole(email) || UserRole.PATIENT;
+    const userPermissions = getUserPermissions(email);
+
+    // Create user object with permissions
+    const user = {
+      id: patient.id,
+      name: patient.name,
+      email: patient.email,
+      role: userRole,
+      permissions: userPermissions,
+      isActive: true,
+      createdAt: patient.createdAt || new Date().toISOString(),
+      updatedAt: patient.updatedAt || new Date().toISOString(),
+    };
+
     const response: LoginResponse = {
       success: true,
       patient,
+      user,
       token: `mock-token-${patient.id}`, // In production, use JWT
       message: "Login realizado com sucesso",
     };
