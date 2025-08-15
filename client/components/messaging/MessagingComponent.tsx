@@ -254,8 +254,59 @@ export default function MessagingComponent() {
     const files = event.target.files;
     if (!files || files.length === 0 || !selectedContact || !user) return;
 
-    // Handle file upload logic here
-    console.log('File selected:', files[0]);
+    const file = files[0];
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Arquivo muito grande. Máximo 10MB permitido.');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      formData.append('userId', user.id);
+      formData.append('category', 'document');
+
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: formData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedFile = data.data[0];
+
+        // Send message with file attachment
+        if (ws) {
+          const messageData = {
+            type: 'message',
+            data: {
+              to_user_id: selectedContact.id,
+              message: `📎 ${file.name}`,
+              type: file.type.startsWith('image/') ? 'image' : 'file',
+              file_url: uploadedFile.url,
+              file_name: file.name,
+              file_size: file.size
+            }
+          };
+          ws.send(JSON.stringify(messageData));
+        }
+      } else {
+        alert('Erro ao enviar arquivo');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Erro ao enviar arquivo');
+    }
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const filteredContacts = contacts.filter(contact =>
@@ -435,7 +486,46 @@ export default function MessagingComponent() {
                             : 'bg-gray-100 text-gray-900'
                         }`}
                       >
-                        <p className="text-sm">{message.message}</p>
+                        {message.type === 'image' && message.file_url ? (
+                          <div className="space-y-2">
+                            <img
+                              src={message.file_url}
+                              alt={message.file_name || 'Image'}
+                              className="max-w-full h-auto rounded cursor-pointer"
+                              onClick={() => window.open(message.file_url, '_blank')}
+                            />
+                            <p className="text-sm">{message.message}</p>
+                          </div>
+                        ) : message.type === 'file' && message.file_url ? (
+                          <div className="space-y-2">
+                            <div className={`flex items-center space-x-2 p-2 rounded border ${
+                              message.from_user_id === user?.id
+                                ? 'border-blue-300 bg-blue-400/20'
+                                : 'border-gray-300 bg-gray-50'
+                            }`}>
+                              <FileText className="w-4 h-4" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-medium truncate">{message.file_name}</p>
+                                <p className="text-xs opacity-70">
+                                  {message.file_size ? `${Math.round(message.file_size / 1024)} KB` : ''}
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0"
+                                asChild
+                              >
+                                <a href={message.file_url} target="_blank" rel="noopener noreferrer">
+                                  <Eye className="w-3 h-3" />
+                                </a>
+                              </Button>
+                            </div>
+                            <p className="text-sm">{message.message}</p>
+                          </div>
+                        ) : (
+                          <p className="text-sm">{message.message}</p>
+                        )}
                         <div className={`flex items-center justify-between mt-1 text-xs ${
                           message.from_user_id === user?.id ? 'text-blue-100' : 'text-gray-500'
                         }`}>
@@ -474,13 +564,29 @@ export default function MessagingComponent() {
               {/* Message Input */}
               <div className="p-4 border-t bg-white">
                 <div className="flex items-center space-x-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={handleFileUpload}
-                  >
-                    <Paperclip className="w-4 h-4" />
-                  </Button>
+                  <div className="flex space-x-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={handleFileUpload}
+                      title="Anexar arquivo"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        if (fileInputRef.current) {
+                          fileInputRef.current.accept = 'image/*';
+                          fileInputRef.current.click();
+                        }
+                      }}
+                      title="Enviar imagem"
+                    >
+                      <Image className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <div className="flex-1">
                     <Input
                       placeholder="Digite sua mensagem..."
@@ -510,7 +616,7 @@ export default function MessagingComponent() {
                   type="file"
                   className="hidden"
                   onChange={onFileSelected}
-                  accept="image/*,application/pdf,.doc,.docx"
+                  accept="image/*,application/pdf,.doc,.docx,.txt,.xls,.xlsx"
                 />
               </div>
             </>
