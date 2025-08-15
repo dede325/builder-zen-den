@@ -60,6 +60,7 @@ export default function Index() {
   const [selectedSpecialty, setSelectedSpecialty] =
     useState<SpecialtyInfo | null>(null);
   const [isSpecialtyModalOpen, setIsSpecialtyModalOpen] = useState(false);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   const heroImages = [
     {
