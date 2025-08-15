@@ -1063,7 +1063,7 @@ export default function Index() {
               Sobre a Clínica Bem Cuidar
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              H�� mais de uma década cuidando da sua saúde com dedicação e
+              Há mais de uma década cuidando da sua saúde com dedicação e
               humanização
             </p>
           </div>
