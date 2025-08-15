@@ -20,6 +20,8 @@ import NotFound from "./pages/NotFound";
 import Sobre from "./pages/Sobre";
 import Exames from "./pages/Exames";
 import Contato from "./pages/Contato";
+import Equipe from "./pages/Equipe";
+import Galeria from "./pages/Galeria";
 
 // Specialty pages
 import Cardiologia from "./pages/specialties/Cardiologia";
@@ -41,6 +43,8 @@ const App = () => (
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/exames" element={<Exames />} />
           <Route path="/contato" element={<Contato />} />
+          <Route path="/equipe" element={<Equipe />} />
+          <Route path="/galeria" element={<Galeria />} />
 
           {/* Specialty Routes */}
           <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
