@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/auth';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import Dashboard from '@/components/dashboard/Dashboard';
+import AppointmentsPage from '@/components/dashboard/AppointmentsPage';
 import {
   ArrowLeft,
   Eye,
