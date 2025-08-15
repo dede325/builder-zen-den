@@ -675,6 +675,8 @@ export default function Index() {
             <button
               className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? (
                 <X className="w-6 h-6" />
