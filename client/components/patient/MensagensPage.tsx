@@ -44,7 +44,7 @@ function getStatusIcon(tipo: ContatoChat['tipo']) {
     case 'medico':
       return <Stethoscope className="h-4 w-4" />;
     case 'enfermagem':
-      return <UserNurse className="h-4 w-4" />;
+      return <Heart className="h-4 w-4" />;
     case 'secretaria':
       return <Users className="h-4 w-4" />;
     default:
