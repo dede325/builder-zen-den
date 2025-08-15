@@ -238,7 +238,7 @@ export default function Index() {
       icon: Brain,
       description: "Cuidados do sistema nervoso",
       detailedDescription:
-        "A neurologia trata das doenças do sistema nervoso central e periférico. Nossa equipe neurológica está preparada para diagnosticar e tratar condições que afetam o cérebro, medula espinhal, nervos e músculos.",
+        "A neurologia trata das doenças do sistema nervoso central e periférico. Nossa equipe neurológica está preparada para diagnosticar e tratar condi��ões que afetam o cérebro, medula espinhal, nervos e músculos.",
       conditions: [
         "Enxaqueca",
         "Epilepsia",
@@ -695,7 +695,7 @@ export default function Index() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  In��cio
+                  Início
                 </a>
                 <a
                   href="#especialidades"
