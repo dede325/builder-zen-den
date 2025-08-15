@@ -62,40 +62,40 @@ export default function DashboardLayout() {
       name: "Dashboard",
       href: "/portal/dashboard",
       icon: LayoutDashboard,
-      color: "text-blue-600",
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
       name: "Consultas",
       href: "/portal/appointments",
       icon: Calendar,
       badge: pendingAppointments,
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
     },
     {
       name: "Exames",
       href: "/portal/exams",
       icon: FileText,
       badge: newExamResults,
-      color: "text-purple-600",
+      color: "text-purple-600 dark:text-purple-400",
     },
     {
       name: "Mensagens",
       href: "/portal/messages",
       icon: MessageSquare,
       badge: unreadMessages,
-      color: "text-orange-600",
+      color: "text-orange-600 dark:text-orange-400",
     },
     {
       name: "Faturas",
       href: "/portal/invoices",
       icon: CreditCard,
-      color: "text-red-600",
+      color: "text-red-600 dark:text-red-400",
     },
     {
       name: "Perfil",
       href: "/portal/profile",
       icon: User,
-      color: "text-gray-600",
+      color: "text-gray-600 dark:text-gray-400",
     },
   ];
 
@@ -191,14 +191,14 @@ export default function DashboardLayout() {
                   to={item.href}
                   className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-clinic-light text-clinic-primary dark:bg-gray-700 dark:text-blue-400"
-                      : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                      ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary"
+                      : "text-foreground/80 hover:bg-accent hover:text-accent-foreground"
                   }`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <div className="flex items-center space-x-3">
                     <Icon
-                      className={`w-5 h-5 ${isActive ? "text-clinic-primary dark:text-blue-400" : item.color}`}
+                      className={`w-5 h-5 ${isActive ? "text-primary" : item.color}`}
                     />
                     <span>{item.name}</span>
                   </div>
