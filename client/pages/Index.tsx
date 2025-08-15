@@ -683,7 +683,7 @@ export default function Index() {
       <section id="sobre" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-foreground mb-4">Sobre a Cl��nica Bem Cuidar</h3>
+            <h3 className="text-3xl font-bold text-foreground mb-4">Sobre a Clínica Bem Cuidar</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               H�� mais de uma década cuidando da sua saúde com dedicação e humanização
             </p>
@@ -1045,6 +1045,13 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      {/* Specialty Modal */}
+      <SpecialtyModal
+        specialty={selectedSpecialty}
+        isOpen={isSpecialtyModalOpen}
+        onClose={closeSpecialtyModal}
+      />
     </div>
   );
 }
