@@ -494,6 +494,21 @@ export default function Contato() {
                     </div>
                   </div>
 
+                  {/* Honeypot field - hidden from users */}
+                  <div style={{ display: 'none' }}>
+                    <Label htmlFor="website">Website (não preencher)</Label>
+                    <Input
+                      id="website"
+                      name="website"
+                      value={formData.honeypot}
+                      onChange={(e) =>
+                        handleInputChange("honeypot", e.target.value)
+                      }
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
+
                   <div>
                     <Label htmlFor="message">Mensagem *</Label>
                     <Textarea
