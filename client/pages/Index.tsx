@@ -312,7 +312,7 @@ export default function Index() {
         "Infiltrações",
         "Artroscopia",
         "Cirurgia de coluna",
-        "Pr��teses articulares",
+        "Próteses articulares",
         "Fisioterapia",
       ],
       imageUrl:
@@ -615,8 +615,8 @@ export default function Index() {
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h1 className="text-xl font-bold text-primary">
-                  Clínica Bem Cuidar
+                <h1 className="text-xl font-bold text-foreground">
+                  Cl��nica Bem Cuidar
                 </h1>
                 <p className="text-xs text-muted-foreground">Cuidar é Amar</p>
               </div>
@@ -626,31 +626,31 @@ export default function Index() {
             <nav className="hidden md:flex items-center space-x-8">
               <a
                 href="#inicio"
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors font-medium"
               >
                 Início
               </a>
               <a
                 href="#especialidades"
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors font-medium"
               >
                 Especialidades
               </a>
               <Link
                 to="/exames"
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors font-medium"
               >
                 Exames
               </Link>
               <Link
                 to="/sobre"
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors font-medium"
               >
                 Sobre
               </Link>
               <Link
                 to="/contato"
-                className="text-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors font-medium"
               >
                 Contato
               </Link>
