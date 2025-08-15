@@ -208,7 +208,7 @@ class PortalStorage {
           status: "viewed",
           resultUrl: "/exam-result-6.pdf",
           notes:
-            "Campos pulmonares livres. Silhueta cardíaca normal. Ausência de alteraç��es pleuropulmonares.",
+            "Campos pulmonares livres. Silhueta cardíaca normal. Ausência de alterações pleuropulmonares.",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
