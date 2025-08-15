@@ -1044,7 +1044,7 @@ export default function Index() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h3 className="heading-medical text-2xl sm:text-3xl font-bold text-foreground mb-4">
-              Exames Dispon��veis
+              Exames Disponíveis
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Tecnologia moderna para exames precisos e confiáveis
@@ -1052,9 +1052,9 @@ export default function Index() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <Card className="text-center">
+            <Card className="card-medical-premium text-center">
               <CardContent className="p-4 sm:p-6">
-                <Activity className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4" />
+                <Activity className="w-10 h-10 sm:w-12 sm:h-12 text-clinic-accent mx-auto mb-4 equipment-hover" />
                 <h4 className="text-lg font-semibold mb-2">
                   Eletrocardiograma
                 </h4>
