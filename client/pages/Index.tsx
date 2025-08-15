@@ -86,7 +86,7 @@ export default function Index() {
     {
       url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       title: "Ambiente Moderno",
-      subtitle: "Instalações confortáveis e seguras",
+      subtitle: "Instalaç��es confortáveis e seguras",
     },
   ];
 
@@ -761,7 +761,7 @@ export default function Index() {
       </header>
 
       {/* Hero Section with Slider */}
-      <section id="inicio" className="relative h-screen overflow-hidden">
+      <section id="inicio" className="relative h-screen overflow-hidden -mt-20">
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
             <div
