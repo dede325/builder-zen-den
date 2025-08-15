@@ -85,13 +85,16 @@ body {
 /* Premium medical cards */
 .card-medical-premium {
   @apply relative;
-  @apply bg-white/95;
-  @apply border border-clinic-accent/20;
+  background-color: rgba(255, 255, 255, 0.95);
+  @apply border border-clinic-accent border-opacity-20;
   @apply rounded-2xl shadow-lg;
   @apply transition-all duration-500 ease-in-out;
   @apply hover:shadow-2xl hover:scale-[1.02];
-  @apply hover:border-clinic-accent/40;
   backdrop-filter: blur(10px);
+}
+
+.card-medical-premium:hover {
+  @apply border-clinic-accent border-opacity-40;
 }
 
 .card-medical-premium::before {
