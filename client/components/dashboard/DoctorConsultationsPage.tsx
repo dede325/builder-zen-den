@@ -1,36 +1,35 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar as CalendarIcon } from "@/components/ui/calendar";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import { Calendar as CalendarIcon } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useAuthStore } from '@/store/auth';
-import { useDoctorStore, DoctorConsultation } from '@/store/doctor';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useAuthStore } from "@/store/auth";
+import { useDoctorStore, DoctorConsultation } from "@/store/doctor";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import {
   Calendar,
   Clock,
@@ -49,97 +48,110 @@ import {
   AlertCircle,
   CheckCircle,
   CalendarDays,
-  Timer
-} from 'lucide-react';
-import { format } from 'date-fns';
+  Timer,
+} from "lucide-react";
+import { format } from "date-fns";
 
 export default function DoctorConsultationsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('day');
+  const [viewMode, setViewMode] = useState<"day" | "week" | "month">("day");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedConsultation, setSelectedConsultation] = useState<DoctorConsultation | null>(null);
-  
+  const [selectedConsultation, setSelectedConsultation] =
+    useState<DoctorConsultation | null>(null);
+
   const { user } = useAuthStore();
-  const { 
-    consultations, 
-    patients, 
-    fetchConsultations, 
-    fetchPatients, 
-    createConsultation, 
+  const {
+    consultations,
+    patients,
+    fetchConsultations,
+    fetchPatients,
+    createConsultation,
     updateConsultation,
-    deleteConsultation 
+    deleteConsultation,
   } = useDoctorStore();
   const { toast } = useToast();
 
   // Form data para nova consulta
   const [consultationForm, setConsultationForm] = useState({
-    patientId: '',
-    patientName: '',
-    date: '',
-    time: '',
+    patientId: "",
+    patientName: "",
+    date: "",
+    time: "",
     duration: 30,
-    type: 'consultation' as const,
-    chiefComplaint: '',
-    clinicalNotes: '',
-    diagnosis: '',
-    treatment: '',
-    prescriptions: '',
-    followUpDate: '',
+    type: "consultation" as const,
+    chiefComplaint: "",
+    clinicalNotes: "",
+    diagnosis: "",
+    treatment: "",
+    prescriptions: "",
+    followUpDate: "",
     vitalSigns: {
-      bloodPressure: '',
-      heartRate: '',
-      temperature: '',
-      weight: '',
-      height: ''
-    }
+      bloodPressure: "",
+      heartRate: "",
+      temperature: "",
+      weight: "",
+      height: "",
+    },
   });
 
   useEffect(() => {
-    if (user && user.role === 'doctor') {
+    if (user && user.role === "doctor") {
       fetchConsultations(user.id);
       fetchPatients(user.id);
     }
   }, [user, fetchConsultations, fetchPatients]);
 
   // Filtrar consultas
-  const filteredConsultations = consultations.filter(consultation => {
-    const matchesSearch = 
-      consultation.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      consultation.chiefComplaint?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredConsultations = consultations.filter((consultation) => {
+    const matchesSearch =
+      consultation.patientName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      consultation.chiefComplaint
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       consultation.diagnosis?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesFilter = filterStatus === 'all' || consultation.status === filterStatus;
-    
+
+    const matchesFilter =
+      filterStatus === "all" || consultation.status === filterStatus;
+
     // Filtro por data selecionada
     const consultationDate = new Date(consultation.date);
     const selectedDateOnly = new Date(selectedDate);
     selectedDateOnly.setHours(0, 0, 0, 0);
     consultationDate.setHours(0, 0, 0, 0);
-    
-    const matchesDate = viewMode === 'day' 
-      ? consultationDate.getTime() === selectedDateOnly.getTime()
-      : true; // Para week/month implementar lógica específica depois
-    
+
+    const matchesDate =
+      viewMode === "day"
+        ? consultationDate.getTime() === selectedDateOnly.getTime()
+        : true; // Para week/month implementar lógica específica depois
+
     return matchesSearch && matchesFilter && matchesDate;
   });
 
   // Agrupar consultas por status
   const groupedConsultations = {
-    today: consultations.filter(consult => {
-      const today = new Date().toISOString().split('T')[0];
+    today: consultations.filter((consult) => {
+      const today = new Date().toISOString().split("T")[0];
       return consult.date === today;
     }),
-    scheduled: filteredConsultations.filter(consult => consult.status === 'scheduled'),
-    completed: filteredConsultations.filter(consult => consult.status === 'completed'),
-    cancelled: filteredConsultations.filter(consult => consult.status === 'cancelled')
+    scheduled: filteredConsultations.filter(
+      (consult) => consult.status === "scheduled",
+    ),
+    completed: filteredConsultations.filter(
+      (consult) => consult.status === "completed",
+    ),
+    cancelled: filteredConsultations.filter(
+      (consult) => consult.status === "cancelled",
+    ),
   };
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) return;
 
     try {
@@ -150,7 +162,7 @@ export default function DoctorConsultationsPage() {
         date: consultationForm.date,
         time: consultationForm.time,
         duration: consultationForm.duration,
-        status: 'scheduled',
+        status: "scheduled",
         type: consultationForm.type,
         chiefComplaint: consultationForm.chiefComplaint,
         clinicalNotes: consultationForm.clinicalNotes,
@@ -158,39 +170,41 @@ export default function DoctorConsultationsPage() {
         treatment: consultationForm.treatment,
         prescriptions: consultationForm.prescriptions,
         followUpDate: consultationForm.followUpDate,
-        vitalSigns: consultationForm.vitalSigns
+        vitalSigns: consultationForm.vitalSigns,
       });
 
       toast({
-        title: 'Consulta criada com sucesso!',
-        description: `Consulta com ${consultationForm.patientName} agendada para ${new Date(consultationForm.date).toLocaleDateString('pt-AO')} às ${consultationForm.time}.`,
+        title: "Consulta criada com sucesso!",
+        description: `Consulta com ${consultationForm.patientName} agendada para ${new Date(consultationForm.date).toLocaleDateString("pt-AO")} às ${consultationForm.time}.`,
       });
 
       setIsCreateDialogOpen(false);
       resetForm();
     } catch (error) {
       toast({
-        title: 'Erro ao criar consulta',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        title: "Erro ao criar consulta",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
       });
     }
   };
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedConsultation) return;
 
     try {
       await updateConsultation(selectedConsultation.id, {
         ...consultationForm,
-        status: consultationForm.diagnosis ? 'completed' : selectedConsultation.status
+        status: consultationForm.diagnosis
+          ? "completed"
+          : selectedConsultation.status,
       });
 
       toast({
-        title: 'Consulta atualizada com sucesso!',
-        description: 'As informações da consulta foram salvas.',
+        title: "Consulta atualizada com sucesso!",
+        description: "As informações da consulta foram salvas.",
       });
 
       setIsEditDialogOpen(false);
@@ -198,9 +212,9 @@ export default function DoctorConsultationsPage() {
       resetForm();
     } catch (error) {
       toast({
-        title: 'Erro ao atualizar consulta',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        title: "Erro ao atualizar consulta",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
       });
     }
   };
@@ -208,44 +222,44 @@ export default function DoctorConsultationsPage() {
   const handleDeleteConsultation = async (consultationId: string) => {
     try {
       await deleteConsultation(consultationId);
-      
+
       toast({
-        title: 'Consulta cancelada',
-        description: 'A consulta foi cancelada com sucesso.',
+        title: "Consulta cancelada",
+        description: "A consulta foi cancelada com sucesso.",
       });
-      
+
       setIsEditDialogOpen(false);
       setSelectedConsultation(null);
     } catch (error) {
       toast({
-        title: 'Erro ao cancelar consulta',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        title: "Erro ao cancelar consulta",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
       });
     }
   };
 
   const resetForm = () => {
     setConsultationForm({
-      patientId: '',
-      patientName: '',
-      date: '',
-      time: '',
+      patientId: "",
+      patientName: "",
+      date: "",
+      time: "",
       duration: 30,
-      type: 'consultation',
-      chiefComplaint: '',
-      clinicalNotes: '',
-      diagnosis: '',
-      treatment: '',
-      prescriptions: '',
-      followUpDate: '',
+      type: "consultation",
+      chiefComplaint: "",
+      clinicalNotes: "",
+      diagnosis: "",
+      treatment: "",
+      prescriptions: "",
+      followUpDate: "",
       vitalSigns: {
-        bloodPressure: '',
-        heartRate: '',
-        temperature: '',
-        weight: '',
-        height: ''
-      }
+        bloodPressure: "",
+        heartRate: "",
+        temperature: "",
+        weight: "",
+        height: "",
+      },
     });
   };
 
@@ -258,40 +272,45 @@ export default function DoctorConsultationsPage() {
       time: consultation.time,
       duration: consultation.duration,
       type: consultation.type,
-      chiefComplaint: consultation.chiefComplaint || '',
-      clinicalNotes: consultation.clinicalNotes || '',
-      diagnosis: consultation.diagnosis || '',
-      treatment: consultation.treatment || '',
-      prescriptions: consultation.prescriptions || '',
-      followUpDate: consultation.followUpDate || '',
+      chiefComplaint: consultation.chiefComplaint || "",
+      clinicalNotes: consultation.clinicalNotes || "",
+      diagnosis: consultation.diagnosis || "",
+      treatment: consultation.treatment || "",
+      prescriptions: consultation.prescriptions || "",
+      followUpDate: consultation.followUpDate || "",
       vitalSigns: consultation.vitalSigns || {
-        bloodPressure: '',
-        heartRate: '',
-        temperature: '',
-        weight: '',
-        height: ''
-      }
+        bloodPressure: "",
+        heartRate: "",
+        temperature: "",
+        weight: "",
+        height: "",
+      },
     });
     setIsEditDialogOpen(true);
   };
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      scheduled: { label: 'Agendada', variant: 'default' as const },
-      in_progress: { label: 'Em Andamento', variant: 'secondary' as const },
-      completed: { label: 'Concluída', variant: 'secondary' as const },
-      cancelled: { label: 'Cancelada', variant: 'destructive' as const }
+      scheduled: { label: "Agendada", variant: "default" as const },
+      in_progress: { label: "Em Andamento", variant: "secondary" as const },
+      completed: { label: "Concluída", variant: "secondary" as const },
+      cancelled: { label: "Cancelada", variant: "destructive" as const },
     };
 
-    return badges[status as keyof typeof badges] || { label: status, variant: 'outline' as const };
+    return (
+      badges[status as keyof typeof badges] || {
+        label: status,
+        variant: "outline" as const,
+      }
+    );
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-AO', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("pt-AO", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   };
 
@@ -299,15 +318,23 @@ export default function DoctorConsultationsPage() {
     return timeString.slice(0, 5);
   };
 
-  const ConsultationCard = ({ consultation }: { consultation: DoctorConsultation }) => {
+  const ConsultationCard = ({
+    consultation,
+  }: {
+    consultation: DoctorConsultation;
+  }) => {
     const badge = getStatusBadge(consultation.status);
-    const isToday = consultation.date === new Date().toISOString().split('T')[0];
-    const isPast = new Date(`${consultation.date}T${consultation.time}`) < new Date();
+    const isToday =
+      consultation.date === new Date().toISOString().split("T")[0];
+    const isPast =
+      new Date(`${consultation.date}T${consultation.time}`) < new Date();
 
     return (
-      <Card 
+      <Card
         className={`cursor-pointer hover:shadow-md transition-shadow ${
-          isToday && consultation.status === 'scheduled' ? 'border-blue-200 bg-blue-50 dark:bg-blue-900/10' : ''
+          isToday && consultation.status === "scheduled"
+            ? "border-blue-200 bg-blue-50 dark:bg-blue-900/10"
+            : ""
         }`}
         onClick={() => openEditDialog(consultation)}
       >
@@ -318,15 +345,19 @@ export default function DoctorConsultationsPage() {
                 <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">{consultation.patientName}</h3>
+                <h3 className="font-semibold text-lg">
+                  {consultation.patientName}
+                </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {consultation.type === 'follow_up' ? 'Consulta de Retorno' : 'Consulta'}
+                  {consultation.type === "follow_up"
+                    ? "Consulta de Retorno"
+                    : "Consulta"}
                 </p>
               </div>
             </div>
             <div className="flex flex-col items-end space-y-2">
               <Badge variant={badge.variant}>{badge.label}</Badge>
-              {isToday && consultation.status === 'scheduled' && (
+              {isToday && consultation.status === "scheduled" && (
                 <Badge variant="outline" className="bg-blue-100 text-blue-800">
                   Hoje
                 </Badge>
@@ -339,10 +370,12 @@ export default function DoctorConsultationsPage() {
               <CalendarDays className="w-4 h-4 mr-2" />
               <span>{formatDate(consultation.date)}</span>
             </div>
-            
+
             <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <Clock className="w-4 h-4 mr-2" />
-              <span>{formatTime(consultation.time)} ({consultation.duration} min)</span>
+              <span>
+                {formatTime(consultation.time)} ({consultation.duration} min)
+              </span>
             </div>
 
             {consultation.chiefComplaint && (
@@ -375,7 +408,7 @@ export default function DoctorConsultationsPage() {
               }}
             >
               <Edit className="w-4 h-4 mr-1" />
-              {consultation.status === 'scheduled' ? 'Atender' : 'Ver detalhes'}
+              {consultation.status === "scheduled" ? "Atender" : "Ver detalhes"}
             </Button>
           </div>
         </CardContent>
@@ -384,18 +417,21 @@ export default function DoctorConsultationsPage() {
   };
 
   const ConsultationForm = ({ isEdit = false }: { isEdit?: boolean }) => (
-    <form onSubmit={isEdit ? handleUpdateSubmit : handleCreateSubmit} className="space-y-6">
+    <form
+      onSubmit={isEdit ? handleUpdateSubmit : handleCreateSubmit}
+      className="space-y-6"
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="patient">Paciente</Label>
           <Select
             value={consultationForm.patientId}
             onValueChange={(value) => {
-              const patient = patients.find(p => p.id === value);
-              setConsultationForm({ 
-                ...consultationForm, 
+              const patient = patients.find((p) => p.id === value);
+              setConsultationForm({
+                ...consultationForm,
                 patientId: value,
-                patientName: patient?.name || ''
+                patientName: patient?.name || "",
               });
             }}
             disabled={isEdit}
@@ -417,9 +453,9 @@ export default function DoctorConsultationsPage() {
           <Label htmlFor="type">Tipo de Consulta</Label>
           <Select
             value={consultationForm.type}
-            onValueChange={(value: 'consultation' | 'follow_up' | 'emergency' | 'procedure') => 
-              setConsultationForm({ ...consultationForm, type: value })
-            }
+            onValueChange={(
+              value: "consultation" | "follow_up" | "emergency" | "procedure",
+            ) => setConsultationForm({ ...consultationForm, type: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -439,19 +475,23 @@ export default function DoctorConsultationsPage() {
             id="date"
             type="date"
             value={consultationForm.date}
-            onChange={(e) => setConsultationForm({ ...consultationForm, date: e.target.value })}
-            min={new Date().toISOString().split('T')[0]}
+            onChange={(e) =>
+              setConsultationForm({ ...consultationForm, date: e.target.value })
+            }
+            min={new Date().toISOString().split("T")[0]}
             required
           />
         </div>
-        
+
         <div>
           <Label htmlFor="time">Horário</Label>
           <Input
             id="time"
             type="time"
             value={consultationForm.time}
-            onChange={(e) => setConsultationForm({ ...consultationForm, time: e.target.value })}
+            onChange={(e) =>
+              setConsultationForm({ ...consultationForm, time: e.target.value })
+            }
             required
           />
         </div>
@@ -462,7 +502,12 @@ export default function DoctorConsultationsPage() {
         <Textarea
           id="chiefComplaint"
           value={consultationForm.chiefComplaint}
-          onChange={(e) => setConsultationForm({ ...consultationForm, chiefComplaint: e.target.value })}
+          onChange={(e) =>
+            setConsultationForm({
+              ...consultationForm,
+              chiefComplaint: e.target.value,
+            })
+          }
           placeholder="Descreva a queixa principal do paciente..."
           rows={3}
         />
@@ -476,28 +521,38 @@ export default function DoctorConsultationsPage() {
               <Input
                 id="bloodPressure"
                 value={consultationForm.vitalSigns.bloodPressure}
-                onChange={(e) => setConsultationForm({ 
-                  ...consultationForm, 
-                  vitalSigns: { ...consultationForm.vitalSigns, bloodPressure: e.target.value }
-                })}
+                onChange={(e) =>
+                  setConsultationForm({
+                    ...consultationForm,
+                    vitalSigns: {
+                      ...consultationForm.vitalSigns,
+                      bloodPressure: e.target.value,
+                    },
+                  })
+                }
                 placeholder="120/80"
               />
             </div>
-            
+
             <div>
               <Label htmlFor="heartRate">FC (bpm)</Label>
               <Input
                 id="heartRate"
                 type="number"
                 value={consultationForm.vitalSigns.heartRate}
-                onChange={(e) => setConsultationForm({ 
-                  ...consultationForm, 
-                  vitalSigns: { ...consultationForm.vitalSigns, heartRate: e.target.value }
-                })}
+                onChange={(e) =>
+                  setConsultationForm({
+                    ...consultationForm,
+                    vitalSigns: {
+                      ...consultationForm.vitalSigns,
+                      heartRate: e.target.value,
+                    },
+                  })
+                }
                 placeholder="72"
               />
             </div>
-            
+
             <div>
               <Label htmlFor="temperature">Temperatura (°C)</Label>
               <Input
@@ -505,10 +560,15 @@ export default function DoctorConsultationsPage() {
                 type="number"
                 step="0.1"
                 value={consultationForm.vitalSigns.temperature}
-                onChange={(e) => setConsultationForm({ 
-                  ...consultationForm, 
-                  vitalSigns: { ...consultationForm.vitalSigns, temperature: e.target.value }
-                })}
+                onChange={(e) =>
+                  setConsultationForm({
+                    ...consultationForm,
+                    vitalSigns: {
+                      ...consultationForm.vitalSigns,
+                      temperature: e.target.value,
+                    },
+                  })
+                }
                 placeholder="36.5"
               />
             </div>
@@ -519,7 +579,12 @@ export default function DoctorConsultationsPage() {
             <Textarea
               id="clinicalNotes"
               value={consultationForm.clinicalNotes}
-              onChange={(e) => setConsultationForm({ ...consultationForm, clinicalNotes: e.target.value })}
+              onChange={(e) =>
+                setConsultationForm({
+                  ...consultationForm,
+                  clinicalNotes: e.target.value,
+                })
+              }
               placeholder="Observações do exame físico, sintomas, etc..."
               rows={4}
             />
@@ -530,7 +595,12 @@ export default function DoctorConsultationsPage() {
             <Textarea
               id="diagnosis"
               value={consultationForm.diagnosis}
-              onChange={(e) => setConsultationForm({ ...consultationForm, diagnosis: e.target.value })}
+              onChange={(e) =>
+                setConsultationForm({
+                  ...consultationForm,
+                  diagnosis: e.target.value,
+                })
+              }
               placeholder="Diagnóstico médico..."
               rows={3}
             />
@@ -541,7 +611,12 @@ export default function DoctorConsultationsPage() {
             <Textarea
               id="treatment"
               value={consultationForm.treatment}
-              onChange={(e) => setConsultationForm({ ...consultationForm, treatment: e.target.value })}
+              onChange={(e) =>
+                setConsultationForm({
+                  ...consultationForm,
+                  treatment: e.target.value,
+                })
+              }
               placeholder="Plano de tratamento..."
               rows={3}
             />
@@ -552,7 +627,12 @@ export default function DoctorConsultationsPage() {
             <Textarea
               id="prescriptions"
               value={consultationForm.prescriptions}
-              onChange={(e) => setConsultationForm({ ...consultationForm, prescriptions: e.target.value })}
+              onChange={(e) =>
+                setConsultationForm({
+                  ...consultationForm,
+                  prescriptions: e.target.value,
+                })
+              }
               placeholder="Medicamentos prescritos..."
               rows={3}
             />
@@ -564,8 +644,13 @@ export default function DoctorConsultationsPage() {
               id="followUpDate"
               type="date"
               value={consultationForm.followUpDate}
-              onChange={(e) => setConsultationForm({ ...consultationForm, followUpDate: e.target.value })}
-              min={new Date().toISOString().split('T')[0]}
+              onChange={(e) =>
+                setConsultationForm({
+                  ...consultationForm,
+                  followUpDate: e.target.value,
+                })
+              }
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
         </>
@@ -587,7 +672,7 @@ export default function DoctorConsultationsPage() {
         >
           Cancelar
         </Button>
-        {isEdit && selectedConsultation?.status === 'scheduled' && (
+        {isEdit && selectedConsultation?.status === "scheduled" && (
           <Button
             type="button"
             variant="destructive"
@@ -599,7 +684,7 @@ export default function DoctorConsultationsPage() {
         )}
         <Button type="submit">
           <Save className="w-4 h-4 mr-2" />
-          {isEdit ? 'Salvar' : 'Criar Consulta'}
+          {isEdit ? "Salvar" : "Criar Consulta"}
         </Button>
       </div>
     </form>
@@ -610,12 +695,14 @@ export default function DoctorConsultationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Agenda Médica</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Agenda Médica
+          </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Gerencie suas consultas e atendimentos
           </p>
         </div>
-        
+
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-clinic-gradient hover:opacity-90">
@@ -639,7 +726,11 @@ export default function DoctorConsultationsPage() {
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[240px] pl-3 text-left">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {selectedDate ? format(selectedDate, "PPP") : <span>Selecione uma data</span>}
+                {selectedDate ? (
+                  format(selectedDate, "PPP")
+                ) : (
+                  <span>Selecione uma data</span>
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -654,23 +745,23 @@ export default function DoctorConsultationsPage() {
 
           <div className="flex space-x-1">
             <Button
-              variant={viewMode === 'day' ? 'default' : 'outline'}
+              variant={viewMode === "day" ? "default" : "outline"}
               size="sm"
-              onClick={() => setViewMode('day')}
+              onClick={() => setViewMode("day")}
             >
               Dia
             </Button>
             <Button
-              variant={viewMode === 'week' ? 'default' : 'outline'}
+              variant={viewMode === "week" ? "default" : "outline"}
               size="sm"
-              onClick={() => setViewMode('week')}
+              onClick={() => setViewMode("week")}
             >
               Semana
             </Button>
             <Button
-              variant={viewMode === 'month' ? 'default' : 'outline'}
+              variant={viewMode === "month" ? "default" : "outline"}
               size="sm"
-              onClick={() => setViewMode('month')}
+              onClick={() => setViewMode("month")}
             >
               Mês
             </Button>
@@ -687,7 +778,7 @@ export default function DoctorConsultationsPage() {
               className="pl-10 w-64"
             />
           </div>
-          
+
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-[150px]">
               <Filter className="w-4 h-4 mr-2" />
@@ -707,29 +798,43 @@ export default function DoctorConsultationsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{groupedConsultations.today.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {groupedConsultations.today.length}
+            </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">Hoje</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{groupedConsultations.scheduled.length}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Agendadas</div>
+            <div className="text-2xl font-bold text-green-600">
+              {groupedConsultations.scheduled.length}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Agendadas
+            </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-gray-600">{groupedConsultations.completed.length}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Concluídas</div>
+            <div className="text-2xl font-bold text-gray-600">
+              {groupedConsultations.completed.length}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Concluídas
+            </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-red-600">{groupedConsultations.cancelled.length}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Canceladas</div>
+            <div className="text-2xl font-bold text-red-600">
+              {groupedConsultations.cancelled.length}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Canceladas
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -750,7 +855,9 @@ export default function DoctorConsultationsPage() {
                 Nenhuma consulta encontrada
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {searchQuery ? 'Nenhuma consulta corresponde à sua busca' : 'Não há consultas agendadas para esta data'}
+                {searchQuery
+                  ? "Nenhuma consulta corresponde à sua busca"
+                  : "Não há consultas agendadas para esta data"}
               </p>
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 Agendar Nova Consulta
@@ -761,7 +868,10 @@ export default function DoctorConsultationsPage() {
               {filteredConsultations
                 .sort((a, b) => a.time.localeCompare(b.time))
                 .map((consultation) => (
-                  <ConsultationCard key={consultation.id} consultation={consultation} />
+                  <ConsultationCard
+                    key={consultation.id}
+                    consultation={consultation}
+                  />
                 ))}
             </div>
           )}
@@ -773,7 +883,9 @@ export default function DoctorConsultationsPage() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedConsultation?.status === 'scheduled' ? 'Atender Paciente' : 'Detalhes da Consulta'}
+              {selectedConsultation?.status === "scheduled"
+                ? "Atender Paciente"
+                : "Detalhes da Consulta"}
             </DialogTitle>
           </DialogHeader>
           <ConsultationForm isEdit={true} />

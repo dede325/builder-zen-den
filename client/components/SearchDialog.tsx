@@ -52,7 +52,8 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
     {
       id: "cardiologia",
       title: "Cardiologia",
-      description: "Cuidados especializados do coração e sistema cardiovascular",
+      description:
+        "Cuidados especializados do coração e sistema cardiovascular",
       category: "Especialidade",
       url: "/especialidades/cardiologia",
       icon: Heart,
@@ -92,7 +93,8 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
     {
       id: "ortopedia",
       title: "Ortopedia",
-      description: "Cuidados com ossos, articulações e sistema musculoesquelético",
+      description:
+        "Cuidados com ossos, articulações e sistema musculoesquelético",
       category: "Especialidade",
       url: "#",
       icon: Activity,
@@ -281,18 +283,23 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
       return;
     }
 
-    const filtered = searchData.filter((item) =>
-      item.title.toLowerCase().includes(query.toLowerCase()) ||
-      item.description.toLowerCase().includes(query.toLowerCase()) ||
-      item.category.toLowerCase().includes(query.toLowerCase())
+    const filtered = searchData.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.description.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase()),
     );
 
     setResults(filtered.slice(0, 8)); // Limit to 8 results
   }, [query]);
 
   const handleResultClick = (result: SearchResult) => {
-    if (result.url.startsWith('http') || result.url.startsWith('tel:') || result.url.startsWith('mailto:')) {
-      window.open(result.url, '_blank');
+    if (
+      result.url.startsWith("http") ||
+      result.url.startsWith("tel:") ||
+      result.url.startsWith("mailto:")
+    ) {
+      window.open(result.url, "_blank");
     } else {
       navigate(result.url);
     }
@@ -307,13 +314,13 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   };
 
   const categoryColors: Record<string, string> = {
-    "Especialidade": "bg-blue-100 text-blue-800",
-    "Médico": "bg-green-100 text-green-800",
-    "Exame": "bg-purple-100 text-purple-800",
-    "Página": "bg-gray-100 text-gray-800",
-    "Serviço": "bg-orange-100 text-orange-800",
-    "Contato": "bg-red-100 text-red-800",
-    "Localização": "bg-yellow-100 text-yellow-800",
+    Especialidade: "bg-blue-100 text-blue-800",
+    Médico: "bg-green-100 text-green-800",
+    Exame: "bg-purple-100 text-purple-800",
+    Página: "bg-gray-100 text-gray-800",
+    Serviço: "bg-orange-100 text-orange-800",
+    Contato: "bg-red-100 text-red-800",
+    Localização: "bg-yellow-100 text-yellow-800",
   };
 
   return (
@@ -325,7 +332,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             Buscar na Clínica Bem Cuidar
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -357,9 +364,9 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                             <h4 className="font-medium text-foreground truncate">
                               {result.title}
                             </h4>
-                            <Badge 
-                              variant="secondary" 
-                              className={`ml-2 text-xs ${categoryColors[result.category] || 'bg-gray-100 text-gray-800'}`}
+                            <Badge
+                              variant="secondary"
+                              className={`ml-2 text-xs ${categoryColors[result.category] || "bg-gray-100 text-gray-800"}`}
                             >
                               {result.category}
                             </Badge>
@@ -377,7 +384,8 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                   <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p>Nenhum resultado encontrado para "{query}"</p>
                   <p className="text-sm mt-2">
-                    Tente buscar por especialidades, nomes de médicos ou tipos de exames
+                    Tente buscar por especialidades, nomes de médicos ou tipos
+                    de exames
                   </p>
                 </div>
               )}

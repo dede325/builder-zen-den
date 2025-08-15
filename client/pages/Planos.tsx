@@ -47,14 +47,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Cirurgias", "Urgência"],
       specialties: ["Todas as especialidades"],
       status: "partner",
-      description: "Plano de saúde nacional com ampla cobertura e rede credenciada em todo o país.",
+      description:
+        "Plano de saúde nacional com ampla cobertura e rede credenciada em todo o país.",
       benefits: [
         "Cobertura nacional completa",
         "Atendimento 24h",
         "Todas as especialidades",
         "Exames laboratoriais inclusos",
-        "Cirurgias sem carência"
-      ]
+        "Cirurgias sem carência",
+      ],
     },
     {
       id: "2",
@@ -62,16 +63,22 @@ export default function Planos() {
       logo: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
       category: "privado",
       coverage: ["Consultas", "Exames", "Internamento"],
-      specialties: ["Cardiologia", "Pediatria", "Cirurgia Geral", "Dermatologia"],
+      specialties: [
+        "Cardiologia",
+        "Pediatria",
+        "Cirurgia Geral",
+        "Dermatologia",
+      ],
       status: "accepted",
-      description: "Plano médico privado com foco em qualidade e atendimento personalizado.",
+      description:
+        "Plano médico privado com foco em qualidade e atendimento personalizado.",
       benefits: [
         "Atendimento personalizado",
         "Médicos especializados",
         "Exames de última geração",
         "Sem filas de espera",
-        "Telemedicina incluída"
-      ]
+        "Telemedicina incluída",
+      ],
     },
     {
       id: "3",
@@ -81,14 +88,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Cirurgias", "Medicina Preventiva"],
       specialties: ["Todas as especialidades", "Medicina do Trabalho"],
       status: "partner",
-      description: "Cobertura internacional com foco em medicina preventiva e corporativa.",
+      description:
+        "Cobertura internacional com foco em medicina preventiva e corporativa.",
       benefits: [
         "Cobertura internacional",
         "Medicina preventiva",
         "Check-ups regulares",
         "Vacinação incluída",
-        "Assistência no exterior"
-      ]
+        "Assistência no exterior",
+      ],
     },
     {
       id: "4",
@@ -98,14 +106,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Urgência"],
       specialties: ["Pediatria", "Ginecologia", "Cardiologia", "Neurologia"],
       status: "accepted",
-      description: "Plano de saúde focado em especialidades médicas essenciais com atendimento rápido.",
+      description:
+        "Plano de saúde focado em especialidades médicas essenciais com atendimento rápido.",
       benefits: [
         "Agendamento rápido",
         "Especialistas qualificados",
         "Urgência 24h",
         "Exames no mesmo dia",
-        "App móvel próprio"
-      ]
+        "App móvel próprio",
+      ],
     },
     {
       id: "5",
@@ -115,14 +124,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Medicina do Trabalho"],
       specialties: ["Medicina do Trabalho", "Cardiologia", "Ortopedia"],
       status: "partner",
-      description: "Plano corporativo com foco em saúde ocupacional e bem-estar empresarial.",
+      description:
+        "Plano corporativo com foco em saúde ocupacional e bem-estar empresarial.",
       benefits: [
         "Medicina do trabalho",
         "Exames ocupacionais",
         "Consultas no local",
         "Relatórios corporativos",
-        "Campanhas de prevenção"
-      ]
+        "Campanhas de prevenção",
+      ],
     },
     {
       id: "6",
@@ -132,14 +142,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Pediatria", "Ginecologia"],
       specialties: ["Pediatria", "Ginecologia", "Clínica Geral"],
       status: "accepted",
-      description: "Plano familiar com cobertura especial para crianças, gestantes e idosos.",
+      description:
+        "Plano familiar com cobertura especial para crianças, gestantes e idosos.",
       benefits: [
         "Plano familiar completo",
         "Pediatria especializada",
         "Acompanhamento gestacional",
         "Cuidados geriátricos",
-        "Vacinação infantil"
-      ]
+        "Vacinação infantil",
+      ],
     },
     {
       id: "7",
@@ -149,14 +160,15 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Cirurgias", "Internamento"],
       specialties: ["Todas as especialidades"],
       status: "negotiating",
-      description: "Cooperativa médica com ampla rede e foco na qualidade do atendimento.",
+      description:
+        "Cooperativa médica com ampla rede e foco na qualidade do atendimento.",
       benefits: [
         "Rede cooperativa",
         "Médicos cooperados",
         "Qualidade garantida",
         "Preços acessíveis",
-        "Atendimento humanizado"
-      ]
+        "Atendimento humanizado",
+      ],
     },
     {
       id: "8",
@@ -166,15 +178,16 @@ export default function Planos() {
       coverage: ["Consultas", "Exames", "Cirurgias", "Internamento", "UTI"],
       specialties: ["Todas as especialidades", "Cirurgia Cardíaca"],
       status: "partner",
-      description: "Plano hospitalar com cobertura completa e atendimento de alta complexidade.",
+      description:
+        "Plano hospitalar com cobertura completa e atendimento de alta complexidade.",
       benefits: [
         "Hospital próprio",
         "UTI especializada",
         "Cirurgias complexas",
         "Atendimento 24h",
-        "Medicina de urgência"
-      ]
-    }
+        "Medicina de urgência",
+      ],
+    },
   ];
 
   const categories = [
@@ -191,18 +204,19 @@ export default function Planos() {
   const statusColors = {
     accepted: "bg-green-100 text-green-800",
     partner: "bg-blue-100 text-blue-800",
-    negotiating: "bg-orange-100 text-orange-800"
+    negotiating: "bg-orange-100 text-orange-800",
   };
 
   const statusLabels = {
     accepted: "Aceito",
     partner: "Parceiro",
-    negotiating: "Em Negociação"
+    negotiating: "Em Negociação",
   };
 
-  const filteredPlans = selectedCategory === "all" 
-    ? insurancePlans 
-    : insurancePlans.filter(plan => plan.category === selectedCategory);
+  const filteredPlans =
+    selectedCategory === "all"
+      ? insurancePlans
+      : insurancePlans.filter((plan) => plan.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -340,9 +354,9 @@ export default function Planos() {
               </h1>
             </div>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Aceitamos os principais planos de saúde de Angola. Verifique se seu
-              convênio está em nossa rede credenciada e desfrute de atendimento
-              médico de qualidade.
+              Aceitamos os principais planos de saúde de Angola. Verifique se
+              seu convênio está em nossa rede credenciada e desfrute de
+              atendimento médico de qualidade.
             </p>
           </div>
         </div>
@@ -361,7 +375,7 @@ export default function Planos() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Clock className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
@@ -371,7 +385,7 @@ export default function Planos() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Award className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
@@ -381,7 +395,7 @@ export default function Planos() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center">
               <CardContent className="pt-6">
                 <FileText className="w-12 h-12 text-clinic-accent mx-auto mb-4" />
@@ -404,7 +418,9 @@ export default function Planos() {
               return (
                 <Button
                   key={category.id}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  variant={
+                    selectedCategory === category.id ? "default" : "outline"
+                  }
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center space-x-2 ${
                     selectedCategory === category.id ? "bg-clinic-gradient" : ""
@@ -424,7 +440,10 @@ export default function Planos() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPlans.map((plan) => (
-              <Card key={plan.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
+              <Card
+                key={plan.id}
+                className="overflow-hidden hover:shadow-lg transition-all duration-300"
+              >
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between mb-4">
                     <img
@@ -443,7 +462,7 @@ export default function Planos() {
                     {plan.description}
                   </p>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-sm text-foreground mb-2">
@@ -451,7 +470,11 @@ export default function Planos() {
                     </h4>
                     <div className="flex flex-wrap gap-1">
                       {plan.coverage.map((item, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {item}
                         </Badge>
                       ))}
@@ -464,7 +487,11 @@ export default function Planos() {
                     </h4>
                     <div className="flex flex-wrap gap-1">
                       {plan.specialties.slice(0, 3).map((specialty, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {specialty}
                         </Badge>
                       ))}
@@ -482,7 +509,10 @@ export default function Planos() {
                     </h4>
                     <ul className="space-y-1">
                       {plan.benefits.slice(0, 3).map((benefit, index) => (
-                        <li key={index} className="flex items-center text-xs text-muted-foreground">
+                        <li
+                          key={index}
+                          className="flex items-center text-xs text-muted-foreground"
+                        >
                           <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
                           {benefit}
                         </li>
@@ -491,8 +521,8 @@ export default function Planos() {
                   </div>
 
                   <div className="pt-4 space-y-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="w-full bg-clinic-gradient hover:opacity-90"
                       asChild
                     >
@@ -501,10 +531,10 @@ export default function Planos() {
                         Agendar Consulta
                       </Link>
                     </Button>
-                    
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="w-full text-clinic-primary hover:bg-clinic-light"
                       asChild
                     >
@@ -528,7 +558,7 @@ export default function Planos() {
             <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
               Informações Importantes
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               <Card>
                 <CardHeader>
@@ -600,11 +630,15 @@ export default function Planos() {
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
             Entre em contato conosco! Estamos sempre expandindo nossa rede
-            credenciada e podemos verificar a possibilidade de atendimento
-            para seu plano de saúde.
+            credenciada e podemos verificar a possibilidade de atendimento para
+            seu plano de saúde.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-clinic-gradient hover:opacity-90" asChild>
+            <Button
+              size="lg"
+              className="bg-clinic-gradient hover:opacity-90"
+              asChild
+            >
               <Link to="/contato">
                 <Mail className="w-5 h-5 mr-2" />
                 Entrar em Contato

@@ -5,12 +5,14 @@ Sistema completo de portal do paciente desenvolvido em React + Vite com armazena
 ## 🚀 Funcionalidades Implementadas
 
 ### ✅ **Sistema de Autenticação**
+
 - Login seguro com validação
 - Sessão persistente (localStorage)
 - Rotas protegidas
 - Logout com limpeza de sessão
 
 ### ✅ **Dashboard Principal**
+
 - Visão geral de consultas, exames e mensagens
 - Estatísticas em tempo real
 - Próximas consultas
@@ -18,7 +20,8 @@ Sistema completo de portal do paciente desenvolvido em React + Vite com armazena
 - Mensagens não lidas
 - Informações de contato da clínica
 
-### ✅ **Módulo de Consultas** 
+### ✅ **Módulo de Consultas**
+
 - ✅ **Listagem completa** de consultas (próximas, anteriores, canceladas)
 - ✅ **Agendamento** de novas consultas
 - ✅ **Filtros e busca** por médico, especialidade ou motivo
@@ -27,12 +30,14 @@ Sistema completo de portal do paciente desenvolvido em React + Vite com armazena
 - ✅ **Status tracking** (agendada, confirmada, concluída, cancelada)
 
 ### 📋 **Módulos Preparados** (estrutura criada)
+
 - **Exames**: Resultados, downloads, visualização
 - **Mensagens**: Chat seguro com a clínica
 - **Faturas**: Visualização e download de PDFs
 - **Perfil**: Dados pessoais e configurações
 
 ### 🎨 **Interface e UX**
+
 - Design moderno estilo SaaS médico
 - Layout responsivo (mobile-first)
 - Sidebar fixa com navegação intuitiva
@@ -71,17 +76,19 @@ client/
 ## 🔐 Contas de Teste
 
 ### **Pacientes**
+
 ```
 Email: paciente@example.com
 Senha: 123456
 Usuário: Maria Silva Santos
 
-Email: carlos@example.com  
+Email: carlos@example.com
 Senha: 123456
 Usuário: Carlos Alberto Mendes
 ```
 
 ### **Admin** (futura implementação)
+
 ```
 Email: admin@bemcuidar.co.ao
 Senha: admin123
@@ -94,6 +101,7 @@ Senha: admin123
 3. **Navegue** pelos módulos disponíveis
 
 ### **URLs do Dashboard**
+
 - `/portal` - Login
 - `/portal/dashboard` - Dashboard principal
 - `/portal/appointments` - Consultas
@@ -105,21 +113,25 @@ Senha: admin123
 ## 🏗️ Dados Mock Inclusos
 
 ### **Consultas**
+
 - Consultas agendadas, concluídas e canceladas
 - Médicos de diferentes especialidades
 - Histórico completo com datas, horários e observações
 
 ### **Exames**
+
 - Resultados com status (pendente, finalizado)
 - Interpretações médicas
 - Sistema de visualização/download
 
 ### **Mensagens**
+
 - Chat com médicos e recepção
 - Status de leitura
 - Diferentes tipos (consulta, exame, emergência)
 
 ### **Faturas**
+
 - Status de pagamento
 - Itens detalhados
 - Links para download
@@ -127,6 +139,7 @@ Senha: admin123
 ## 🔧 Funcionalidades do Módulo de Consultas
 
 ### **Agendamento**
+
 ```typescript
 - 12 especialidades disponíveis
 - 2+ médicos por especialidade
@@ -136,6 +149,7 @@ Senha: admin123
 ```
 
 ### **Gestão**
+
 ```typescript
 - Visualização por abas (próximas/anteriores/canceladas)
 - Busca por médico, especialidade ou motivo
@@ -145,6 +159,7 @@ Senha: admin123
 ```
 
 ### **Interface**
+
 ```typescript
 - Cards responsivos com informações essenciais
 - Badges de status coloridos
@@ -155,18 +170,21 @@ Senha: admin123
 ## 🎯 Próximos Passos de Desenvolvimento
 
 ### **1. Completar Módulos Restantes**
+
 - [ ] Página de Exames com visualização de resultados
 - [ ] Sistema de Mensagens com chat em tempo real
 - [ ] Geração e download de faturas em PDF
 - [ ] Edição completa de perfil com upload de foto
 
 ### **2. Integração com Backend Real**
+
 - [ ] Migrar de mock data para SQLite
 - [ ] APIs RESTful para todos os módulos
 - [ ] Autenticação JWT
 - [ ] Upload de arquivos
 
 ### **3. Funcionalidades Avançadas**
+
 - [ ] Notificações push
 - [ ] Lembretes por email/SMS
 - [ ] Chat em tempo real
@@ -174,6 +192,7 @@ Senha: admin123
 - [ ] App mobile (React Native)
 
 ### **4. Segurança e Performance**
+
 - [ ] Validação robusta no backend
 - [ ] Rate limiting
 - [ ] Cache otimizado
@@ -201,6 +220,7 @@ pnpm db:setup
 ## 📋 Checklist de Implementação
 
 ### ✅ **Concluído**
+
 - [x] Sistema de autenticação completo
 - [x] Layout responsivo com sidebar
 - [x] Dashboard principal com estatísticas
@@ -211,12 +231,14 @@ pnpm db:setup
 - [x] Mock data realístico
 
 ### 🔄 **Em Desenvolvimento**
+
 - [ ] Módulo de Exames
 - [ ] Sistema de Mensagens
 - [ ] Gestão de Faturas
 - [ ] Edição de Perfil
 
 ### 📅 **Planejado**
+
 - [ ] Integração SQLite
 - [ ] APIs backend
 - [ ] Notificações
@@ -226,14 +248,16 @@ pnpm db:setup
 ## 🎨 Design System
 
 ### **Cores Principais**
+
 ```css
---clinic-primary: hsl(189 8% 36%)     /* Azul-acinzentado médico */
---clinic-secondary: hsl(180 46% 64%)   /* Azul-claro */
---clinic-accent: hsl(180 46% 64%)      /* Destaque */
---clinic-light: hsl(180 46% 96%)       /* Fundo claro */
+--clinic-primary: hsl(189 8% 36%) /* Azul-acinzentado médico */
+  --clinic-secondary: hsl(180 46% 64%) /* Azul-claro */
+  --clinic-accent: hsl(180 46% 64%) /* Destaque */
+  --clinic-light: hsl(180 46% 96%) /* Fundo claro */;
 ```
 
 ### **Componentes**
+
 - Cards com hover states
 - Badges contextuais
 - Botões com estados de loading
@@ -251,4 +275,4 @@ Para dúvidas sobre implementação ou extensão do dashboard:
 ---
 
 **🎉 Dashboard do Paciente - Clínica Bem Cuidar**  
-*Sistema completo, moderno e escalável para gestão de saúde digital*
+_Sistema completo, moderno e escalável para gestão de saúde digital_

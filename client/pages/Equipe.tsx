@@ -61,18 +61,19 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Agostinho Neto",
         "Especialização em Cardiologia - Hospital de Santa Marta (Portugal)",
-        "Fellowship em Cardiologia Intervencionista - Instituto do Coração (Brasil)"
+        "Fellowship em Cardiologia Intervencionista - Instituto do Coração (Brasil)",
       ],
       certifications: [
         "Certificação Europeia de Cardiologia",
         "Membro da Sociedade Angolana de Cardiologia",
-        "Certificação em Ecocardiografia"
+        "Certificação em Ecocardiografia",
       ],
       languages: ["Português", "Inglês", "Francês"],
-      photo: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Segunda", "Terça", "Quinta", "Sexta"],
       rating: 4.9,
-      reviews: 127
+      reviews: 127,
     },
     {
       id: "2",
@@ -84,18 +85,19 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Católica de Angola",
         "Residência em Pediatria - Hospital Pediátrico de Luanda",
-        "Especialização em Neonatologia - Hospital Dona Estefânia (Portugal)"
+        "Especialização em Neonatologia - Hospital Dona Estefânia (Portugal)",
       ],
       certifications: [
         "Especialista em Pediatria (CMA)",
         "Certificação em Reanimação Pediátrica",
-        "Membro da Sociedade Angolana de Pediatria"
+        "Membro da Sociedade Angolana de Pediatria",
       ],
       languages: ["Português", "Inglês"],
-      photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Segunda", "Quarta", "Quinta", "Sábado"],
       rating: 4.8,
-      reviews: 94
+      reviews: 94,
     },
     {
       id: "3",
@@ -107,18 +109,19 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Agostinho Neto",
         "Residência em Cirurgia Geral - Hospital Central de Luanda",
-        "Fellowship em Cirurgia Laparoscópica - Hospital das Clínicas (Brasil)"
+        "Fellowship em Cirurgia Laparoscópica - Hospital das Clínicas (Brasil)",
       ],
       certifications: [
         "Especialista em Cirurgia Geral (CMA)",
         "Certificação em Cirurgia Laparoscópica",
-        "Membro do Colégio Brasileiro de Cirurgiões"
+        "Membro do Colégio Brasileiro de Cirurgiões",
       ],
       languages: ["Português", "Inglês", "Espanhol"],
-      photo: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Terça", "Quarta", "Quinta", "Sexta"],
       rating: 4.7,
-      reviews: 156
+      reviews: 156,
     },
     {
       id: "4",
@@ -130,18 +133,19 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Católica de Angola",
         "Residência em Dermatologia - Hospital Curry Cabral (Portugal)",
-        "Curso de Dermatologia Estética - Academia Europeia de Dermatologia"
+        "Curso de Dermatologia Estética - Academia Europeia de Dermatologia",
       ],
       certifications: [
         "Especialista em Dermatologia (CMA)",
         "Certificação em Dermatoscopia",
-        "Membro da Sociedade Portuguesa de Dermatologia"
+        "Membro da Sociedade Portuguesa de Dermatologia",
       ],
       languages: ["Português", "Inglês", "Francês"],
-      photo: "https://images.unsplash.com/photo-1594824532983-3b31ed80b04c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1594824532983-3b31ed80b04c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Segunda", "Terça", "Quarta", "Sexta"],
       rating: 4.9,
-      reviews: 89
+      reviews: 89,
     },
     {
       id: "5",
@@ -153,18 +157,19 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Agostinho Neto",
         "Residência em Neurologia - Hospital Júlio de Matos (Portugal)",
-        "Fellowship em Neurofisiologia - Hospital São João (Portugal)"
+        "Fellowship em Neurofisiologia - Hospital São João (Portugal)",
       ],
       certifications: [
         "Especialista em Neurologia (CMA)",
         "Certificação em Eletroencefalografia",
-        "Membro da Liga Portuguesa Contra a Epilepsia"
+        "Membro da Liga Portuguesa Contra a Epilepsia",
       ],
       languages: ["Português", "Inglês"],
-      photo: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Segunda", "Quarta", "Quinta", "Sexta"],
       rating: 4.8,
-      reviews: 112
+      reviews: 112,
     },
     {
       id: "6",
@@ -176,26 +181,31 @@ export default function Equipe() {
       education: [
         "Medicina - Universidade Católica de Angola",
         "Residência em Ginecologia-Obstetrícia - Maternidade Alfredo da Costa (Portugal)",
-        "Curso de Medicina Materno-Fetal - King's College London"
+        "Curso de Medicina Materno-Fetal - King's College London",
       ],
       certifications: [
         "Especialista em Ginecologia-Obstetrícia (CMA)",
         "Certificação em Medicina Materno-Fetal",
-        "Membro da Federação das Sociedades Portuguesas de Obstetrícia"
+        "Membro da Federação das Sociedades Portuguesas de Obstetrícia",
       ],
       languages: ["Português", "Inglês", "Francês"],
-      photo: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      photo:
+        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       consultationDays: ["Segunda", "Terça", "Quinta", "Sábado"],
       rating: 4.9,
-      reviews: 143
-    }
+      reviews: 143,
+    },
   ];
 
-  const specialties = ["all", ...Array.from(new Set(doctors.flatMap(doc => doc.specialties)))];
+  const specialties = [
+    "all",
+    ...Array.from(new Set(doctors.flatMap((doc) => doc.specialties))),
+  ];
 
-  const filteredDoctors = selectedSpecialty === "all" 
-    ? doctors 
-    : doctors.filter(doc => doc.specialties.includes(selectedSpecialty));
+  const filteredDoctors =
+    selectedSpecialty === "all"
+      ? doctors
+      : doctors.filter((doc) => doc.specialties.includes(selectedSpecialty));
 
   return (
     <div className="min-h-screen bg-background">
@@ -330,8 +340,8 @@ export default function Equipe() {
               Nossa <span className="text-clinic-primary">Equipe Médica</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Profissionais altamente qualificados e experientes, dedicados a oferecer
-              o melhor cuidado para sua saúde e bem-estar.
+              Profissionais altamente qualificados e experientes, dedicados a
+              oferecer o melhor cuidado para sua saúde e bem-estar.
             </p>
           </div>
         </div>
@@ -344,9 +354,13 @@ export default function Equipe() {
             {specialties.map((specialty) => (
               <Button
                 key={specialty}
-                variant={selectedSpecialty === specialty ? "default" : "outline"}
+                variant={
+                  selectedSpecialty === specialty ? "default" : "outline"
+                }
                 onClick={() => setSelectedSpecialty(specialty)}
-                className={selectedSpecialty === specialty ? "bg-clinic-gradient" : ""}
+                className={
+                  selectedSpecialty === specialty ? "bg-clinic-gradient" : ""
+                }
               >
                 {specialty === "all" ? "Todas as Especialidades" : specialty}
               </Button>
@@ -360,7 +374,10 @@ export default function Equipe() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredDoctors.map((doctor) => (
-              <Card key={doctor.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
+              <Card
+                key={doctor.id}
+                className="overflow-hidden hover:shadow-lg transition-all duration-300"
+              >
                 <div className="relative">
                   <img
                     src={doctor.photo}
@@ -370,18 +387,28 @@ export default function Equipe() {
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current" />
                     <span className="text-sm font-medium">{doctor.rating}</span>
-                    <span className="text-xs text-muted-foreground">({doctor.reviews})</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({doctor.reviews})
+                    </span>
                   </div>
                 </div>
-                
+
                 <CardContent className="p-6">
                   <div className="mb-4">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{doctor.name}</h3>
-                    <p className="text-clinic-primary font-medium mb-2">{doctor.title}</p>
-                    
+                    <h3 className="text-xl font-bold text-foreground mb-1">
+                      {doctor.name}
+                    </h3>
+                    <p className="text-clinic-primary font-medium mb-2">
+                      {doctor.title}
+                    </p>
+
                     <div className="flex flex-wrap gap-1 mb-3">
                       {doctor.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {specialty}
                         </Badge>
                       ))}
@@ -397,7 +424,7 @@ export default function Equipe() {
                       <GraduationCap className="w-4 h-4 mr-2 text-clinic-accent" />
                       <span>{doctor.experience} de experiência</span>
                     </div>
-                    
+
                     <div className="flex items-center text-sm text-muted-foreground">
                       <CalendarIcon className="w-4 h-4 mr-2 text-clinic-accent" />
                       <span>{doctor.consultationDays.join(", ")}</span>
@@ -410,8 +437,8 @@ export default function Equipe() {
                   </div>
 
                   <div className="space-y-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="w-full bg-clinic-gradient hover:opacity-90"
                       asChild
                     >
@@ -420,10 +447,10 @@ export default function Equipe() {
                         Agendar Consulta
                       </Link>
                     </Button>
-                    
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="w-full text-clinic-primary hover:bg-clinic-light"
                     >
                       Ver Perfil Completo
@@ -443,11 +470,15 @@ export default function Equipe() {
             Pronto para cuidar da sua saúde?
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            Nossa equipe está preparada para oferecer o melhor atendimento médico.
-            Agende sua consulta hoje mesmo.
+            Nossa equipe está preparada para oferecer o melhor atendimento
+            médico. Agende sua consulta hoje mesmo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-clinic-gradient hover:opacity-90" asChild>
+            <Button
+              size="lg"
+              className="bg-clinic-gradient hover:opacity-90"
+              asChild
+            >
               <Link to="/contato">
                 <Calendar className="w-5 h-5 mr-2" />
                 Agendar Consulta

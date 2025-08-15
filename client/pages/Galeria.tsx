@@ -3,14 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import InteractiveGallery from "@/components/InteractiveGallery";
-import {
-  Menu,
-  X,
-  Camera,
-  Building2,
-  Users,
-  Stethoscope,
-} from "lucide-react";
+import { Menu, X, Camera, Building2, Users, Stethoscope } from "lucide-react";
 
 export default function Galeria() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -164,8 +157,9 @@ export default function Galeria() {
               </h1>
             </div>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Conheça nossas instalações modernas, equipamentos de última geração
-              e ambientes preparados para oferecer o melhor cuidado médico.
+              Conheça nossas instalações modernas, equipamentos de última
+              geração e ambientes preparados para oferecer o melhor cuidado
+              médico.
             </p>
           </div>
         </div>
@@ -179,27 +173,33 @@ export default function Galeria() {
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Building2 className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Instalações Modernas</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Instalações Modernas
+              </h3>
               <p className="text-muted-foreground">
                 Ambientes projetados para conforto e funcionalidade
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Stethoscope className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Equipamentos Avançados</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Equipamentos Avançados
+              </h3>
               <p className="text-muted-foreground">
                 Tecnologia de ponta para diagnósticos precisos
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Ambientes Acolhedores</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Ambientes Acolhedores
+              </h3>
               <p className="text-muted-foreground">
                 Espaços pensados para seu bem-estar e tranquilidade
               </p>
@@ -221,7 +221,7 @@ export default function Galeria() {
               excelência médica.
             </p>
           </div>
-          
+
           <InteractiveGallery />
         </div>
       </section>
@@ -233,11 +233,15 @@ export default function Galeria() {
             Venha nos conhecer pessoalmente
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            Gostaria de uma visita guiada? Entre em contato conosco e agende
-            uma visita para conhecer nossas instalações e equipe.
+            Gostaria de uma visita guiada? Entre em contato conosco e agende uma
+            visita para conhecer nossas instalações e equipe.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-clinic-gradient hover:opacity-90" asChild>
+            <Button
+              size="lg"
+              className="bg-clinic-gradient hover:opacity-90"
+              asChild
+            >
               <Link to="/contato">
                 <Building2 className="w-5 h-5 mr-2" />
                 Agendar Visita

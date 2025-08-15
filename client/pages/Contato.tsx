@@ -503,7 +503,7 @@ export default function Contato() {
                   </div>
 
                   {/* Honeypot field - hidden from users */}
-                  <div style={{ display: 'none' }}>
+                  <div style={{ display: "none" }}>
                     <Label htmlFor="website">Website (não preencher)</Label>
                     <Input
                       id="website"

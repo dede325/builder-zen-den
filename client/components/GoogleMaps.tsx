@@ -16,18 +16,19 @@ interface GoogleMapsProps {
   className?: string;
 }
 
-export default function GoogleMaps({ 
-  showDirections = true, 
+export default function GoogleMaps({
+  showDirections = true,
   showBusinessHours = true,
-  className = ""
+  className = "",
 }: GoogleMapsProps) {
-  const clinicAddress = "Avenida 21 de Janeiro, Nº 351, Benfica, Luanda, Angola";
+  const clinicAddress =
+    "Avenida 21 de Janeiro, Nº 351, Benfica, Luanda, Angola";
   const clinicCoordinates = "-8.8163, 13.2302"; // Approximate coordinates for Benfica, Luanda
-  
+
   // Google Maps URLs
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clinicAddress)}`;
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(clinicAddress)}`;
-  
+
   // Embedded map URL
   const embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3942.1234567890123!2d13.2302!3d-8.8163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwNDknMDUuOSJTIDEzwrAxMyczMC43IkU!5e0!3m2!1spt!2sao!4v1234567890`;
 
@@ -64,7 +65,7 @@ export default function GoogleMaps({
               title="Localização da Clínica Bem Cuidar"
               className="w-full h-full"
             />
-            
+
             {/* Overlay with clinic info */}
             <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg">
               <div className="flex items-start justify-between">
@@ -80,14 +81,14 @@ export default function GoogleMaps({
                     <span>Seg-Sex: 07:00-19:00 • Sáb: 07:00-13:00</span>
                   </div>
                 </div>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
                   asChild
                   className="ml-4 flex-shrink-0"
                 >
-                  <a 
+                  <a
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -124,11 +125,13 @@ export default function GoogleMaps({
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <Bus className="w-5 h-5 text-clinic-accent mt-0.5" />
                   <div>
-                    <h5 className="font-medium text-foreground">Transporte Público</h5>
+                    <h5 className="font-medium text-foreground">
+                      Transporte Público
+                    </h5>
                     <p className="text-sm text-muted-foreground">
                       Candongueiros e táxis passam regularmente pela região.
                       Próximo aos pontos de transporte de Benfica.
@@ -138,12 +141,12 @@ export default function GoogleMaps({
               </div>
 
               <div className="flex space-x-2">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="bg-clinic-gradient hover:opacity-90 flex-1"
                   asChild
                 >
-                  <a 
+                  <a
                     href={directionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -152,12 +155,8 @@ export default function GoogleMaps({
                     Ver Direções
                   </a>
                 </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  asChild
-                >
+
+                <Button variant="outline" size="sm" asChild>
                   <a href="tel:+244945344650">
                     <Phone className="w-4 h-4 mr-2" />
                     Ligar
@@ -182,13 +181,13 @@ export default function GoogleMaps({
                 {businessHours.map((schedule, index) => {
                   const isToday = new Date().getDay() === (index + 1) % 7;
                   const isClosed = schedule.hours === "Fechado";
-                  
+
                   return (
                     <div
                       key={schedule.day}
                       className={`flex justify-between items-center p-2 rounded ${
-                        isToday 
-                          ? "bg-clinic-light text-clinic-primary font-medium" 
+                        isToday
+                          ? "bg-clinic-light text-clinic-primary font-medium"
                           : ""
                       }`}
                     >
@@ -196,12 +195,12 @@ export default function GoogleMaps({
                         {schedule.day}
                         {isToday && " (hoje)"}
                       </span>
-                      <span 
+                      <span
                         className={`text-sm font-medium ${
-                          isClosed 
-                            ? "text-red-600" 
-                            : isToday 
-                              ? "text-clinic-primary" 
+                          isClosed
+                            ? "text-red-600"
+                            : isToday
+                              ? "text-clinic-primary"
                               : "text-muted-foreground"
                         }`}
                       >
@@ -211,7 +210,7 @@ export default function GoogleMaps({
                   );
                 })}
               </div>
-              
+
               <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-800 font-medium">
                   <Clock className="w-4 h-4 inline mr-1" />

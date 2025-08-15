@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAuthStore } from '@/store/auth';
-import { useDoctorStore } from '@/store/doctor';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuthStore } from "@/store/auth";
+import { useDoctorStore } from "@/store/doctor";
 import {
   Calendar,
   Users,
@@ -25,24 +25,24 @@ import {
   AlertTriangle,
   Plus,
   Eye,
-  Download
-} from 'lucide-react';
+  Download,
+} from "lucide-react";
 
 export default function DoctorDashboard() {
   const { user } = useAuthStore();
-  const { 
+  const {
     patients,
-    consultations, 
-    exams, 
+    consultations,
+    exams,
     messages,
     fetchPatients,
     fetchConsultations,
     fetchExams,
-    fetchMessages
+    fetchMessages,
   } = useDoctorStore();
 
   useEffect(() => {
-    if (user && user.role === 'doctor') {
+    if (user && user.role === "doctor") {
       fetchPatients(user.id);
       fetchConsultations(user.id);
       fetchExams(user.id);
@@ -50,59 +50,84 @@ export default function DoctorDashboard() {
     }
   }, [user, fetchPatients, fetchConsultations, fetchExams, fetchMessages]);
 
-  if (!user || user.role !== 'doctor') {
+  if (!user || user.role !== "doctor") {
     return null;
   }
 
   // Calcular estatísticas
-  const today = new Date().toISOString().split('T')[0];
-  const todayConsultations = consultations.filter(consult => consult.date === today);
-  const upcomingConsultations = consultations.filter(consult => 
-    consult.status === 'scheduled' && new Date(consult.date) >= new Date()
+  const today = new Date().toISOString().split("T")[0];
+  const todayConsultations = consultations.filter(
+    (consult) => consult.date === today,
+  );
+  const upcomingConsultations = consultations.filter(
+    (consult) =>
+      consult.status === "scheduled" && new Date(consult.date) >= new Date(),
   ).length;
-  
-  const unreadMessages = messages.filter(msg => !msg.read && msg.recipientId === user.id).length;
-  const urgentMessages = messages.filter(msg => 
-    !msg.read && msg.priority === 'urgent' && msg.recipientId === user.id
+
+  const unreadMessages = messages.filter(
+    (msg) => !msg.read && msg.recipientId === user.id,
   ).length;
-  
-  const pendingExams = exams.filter(exam => 
-    exam.status === 'requested' || exam.status === 'scheduled'
+  const urgentMessages = messages.filter(
+    (msg) =>
+      !msg.read && msg.priority === "urgent" && msg.recipientId === user.id,
   ).length;
-  
-  const completedExams = exams.filter(exam => 
-    exam.status === 'completed' && !exam.resultDate
+
+  const pendingExams = exams.filter(
+    (exam) => exam.status === "requested" || exam.status === "scheduled",
+  ).length;
+
+  const completedExams = exams.filter(
+    (exam) => exam.status === "completed" && !exam.resultDate,
   ).length;
 
   // Próximas consultas do dia
   const todayScheduled = consultations
-    .filter(consult => consult.date === today && consult.status === 'scheduled')
+    .filter(
+      (consult) => consult.date === today && consult.status === "scheduled",
+    )
     .sort((a, b) => a.time.localeCompare(b.time))
     .slice(0, 3);
 
   // Exames pendentes
   const recentExams = exams
-    .filter(exam => exam.status === 'requested' || exam.status === 'scheduled' || 
-                   (exam.status === 'completed' && !exam.resultDate))
-    .sort((a, b) => new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime())
+    .filter(
+      (exam) =>
+        exam.status === "requested" ||
+        exam.status === "scheduled" ||
+        (exam.status === "completed" && !exam.resultDate),
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime(),
+    )
     .slice(0, 3);
 
   // Mensagens urgentes
   const urgentMessagesList = messages
-    .filter(msg => !msg.read && msg.priority === 'urgent' && msg.recipientId === user.id)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .filter(
+      (msg) =>
+        !msg.read && msg.priority === "urgent" && msg.recipientId === user.id,
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
     .slice(0, 3);
 
   // Pacientes com status crítico/monitoramento
   const criticalPatients = patients
-    .filter(patient => patient.clinicalStatus === 'critical' || patient.clinicalStatus === 'monitoring')
+    .filter(
+      (patient) =>
+        patient.clinicalStatus === "critical" ||
+        patient.clinicalStatus === "monitoring",
+    )
     .slice(0, 3);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-AO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("pt-AO", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -110,39 +135,47 @@ export default function DoctorDashboard() {
     return timeString.slice(0, 5);
   };
 
-  const getStatusBadge = (status: string, type: 'consultation' | 'exam' | 'patient') => {
+  const getStatusBadge = (
+    status: string,
+    type: "consultation" | "exam" | "patient",
+  ) => {
     const badges = {
       consultation: {
-        scheduled: { label: 'Agendada', variant: 'default' as const },
-        in_progress: { label: 'Em Andamento', variant: 'secondary' as const },
-        completed: { label: 'Concluída', variant: 'secondary' as const }
+        scheduled: { label: "Agendada", variant: "default" as const },
+        in_progress: { label: "Em Andamento", variant: "secondary" as const },
+        completed: { label: "Concluída", variant: "secondary" as const },
       },
       exam: {
-        requested: { label: 'Solicitado', variant: 'default' as const },
-        scheduled: { label: 'Agendado', variant: 'default' as const },
-        completed: { label: 'Concluído', variant: 'secondary' as const }
+        requested: { label: "Solicitado", variant: "default" as const },
+        scheduled: { label: "Agendado", variant: "default" as const },
+        completed: { label: "Concluído", variant: "secondary" as const },
       },
       patient: {
-        stable: { label: 'Estável', variant: 'secondary' as const },
-        monitoring: { label: 'Monitoramento', variant: 'default' as const },
-        critical: { label: 'Crítico', variant: 'destructive' as const },
-        recovered: { label: 'Recuperado', variant: 'secondary' as const }
-      }
+        stable: { label: "Estável", variant: "secondary" as const },
+        monitoring: { label: "Monitoramento", variant: "default" as const },
+        critical: { label: "Crítico", variant: "destructive" as const },
+        recovered: { label: "Recuperado", variant: "secondary" as const },
+      },
     };
 
-    const badge = badges[type]?.[status as keyof typeof badges[typeof type]];
-    return badge || { label: status, variant: 'outline' as const };
+    const badge = badges[type]?.[status as keyof (typeof badges)[typeof type]];
+    return badge || { label: status, variant: "outline" as const };
   };
 
   const getPriorityBadge = (priority: string) => {
     const badges = {
-      low: { label: 'Baixa', variant: 'outline' as const },
-      normal: { label: 'Normal', variant: 'default' as const },
-      high: { label: 'Alta', variant: 'secondary' as const },
-      urgent: { label: 'Urgente', variant: 'destructive' as const }
+      low: { label: "Baixa", variant: "outline" as const },
+      normal: { label: "Normal", variant: "default" as const },
+      high: { label: "Alta", variant: "secondary" as const },
+      urgent: { label: "Urgente", variant: "destructive" as const },
     };
 
-    return badges[priority as keyof typeof badges] || { label: priority, variant: 'outline' as const };
+    return (
+      badges[priority as keyof typeof badges] || {
+        label: priority,
+        variant: "outline" as const,
+      }
+    );
   };
 
   return (
@@ -152,10 +185,11 @@ export default function DoctorDashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
-              Bom dia, Dr. {user.name.split(' ')[1]}!
+              Bom dia, Dr. {user.name.split(" ")[1]}!
             </h1>
             <p className="text-blue-100">
-              Você tem {todayConsultations.length} consulta(s) agendada(s) para hoje.
+              Você tem {todayConsultations.length} consulta(s) agendada(s) para
+              hoje.
             </p>
           </div>
           <div className="hidden md:block">
@@ -281,15 +315,23 @@ export default function DoctorDashboard() {
                 <Calendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>Nenhuma consulta agendada para hoje</p>
                 <Button variant="outline" size="sm" className="mt-2" asChild>
-                  <Link to="/portal/doctor/consultations">Gerenciar Agenda</Link>
+                  <Link to="/portal/doctor/consultations">
+                    Gerenciar Agenda
+                  </Link>
                 </Button>
               </div>
             ) : (
               <div className="space-y-4">
                 {todayScheduled.map((consultation) => {
-                  const badge = getStatusBadge(consultation.status, 'consultation');
+                  const badge = getStatusBadge(
+                    consultation.status,
+                    "consultation",
+                  );
                   return (
-                    <div key={consultation.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div
+                      key={consultation.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                           <User className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -299,7 +341,10 @@ export default function DoctorDashboard() {
                             {consultation.patientName}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {formatTime(consultation.time)} - {consultation.type === 'follow_up' ? 'Retorno' : 'Consulta'}
+                            {formatTime(consultation.time)} -{" "}
+                            {consultation.type === "follow_up"
+                              ? "Retorno"
+                              : "Consulta"}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {consultation.chiefComplaint}
@@ -340,9 +385,12 @@ export default function DoctorDashboard() {
             ) : (
               <div className="space-y-4">
                 {recentExams.map((exam) => {
-                  const badge = getStatusBadge(exam.status, 'exam');
+                  const badge = getStatusBadge(exam.status, "exam");
                   return (
-                    <div key={exam.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div
+                      key={exam.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
                           <Activity className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -377,7 +425,8 @@ export default function DoctorDashboard() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center">
                 <MessageSquare className="w-5 h-5 mr-2 text-red-600" />
-                Mensagens {urgentMessages > 0 && (
+                Mensagens{" "}
+                {urgentMessages > 0 && (
                   <Badge variant="destructive" className="ml-2">
                     {urgentMessages} urgente(s)
                   </Badge>
@@ -397,7 +446,9 @@ export default function DoctorDashboard() {
                 <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>Nenhuma mensagem urgente</p>
                 <p className="text-sm mt-2">
-                  {unreadMessages > 0 ? `${unreadMessages} mensagem(ns) não lida(s)` : 'Todas as mensagens foram lidas'}
+                  {unreadMessages > 0
+                    ? `${unreadMessages} mensagem(ns) não lida(s)`
+                    : "Todas as mensagens foram lidas"}
                 </p>
               </div>
             ) : (
@@ -405,22 +456,31 @@ export default function DoctorDashboard() {
                 {urgentMessagesList.map((message) => {
                   const priorityBadge = getPriorityBadge(message.priority);
                   return (
-                    <div key={message.id} className="p-4 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <div
+                      key={message.id}
+                      className="p-4 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg"
+                    >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center space-x-2">
                           <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
                           <p className="font-medium text-gray-900 dark:text-white">
                             {message.senderName}
                           </p>
-                          <Badge variant={priorityBadge.variant} className="text-xs">
+                          <Badge
+                            variant={priorityBadge.variant}
+                            className="text-xs"
+                          >
                             {priorityBadge.label}
                           </Badge>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {new Date(message.createdAt).toLocaleTimeString('pt-AO', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                          {new Date(message.createdAt).toLocaleTimeString(
+                            "pt-AO",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            },
+                          )}
                         </p>
                       </div>
                       <p className="font-medium text-sm text-gray-900 dark:text-white mb-1">
@@ -458,9 +518,15 @@ export default function DoctorDashboard() {
               </div>
             ) : (
               criticalPatients.map((patient) => {
-                const statusBadge = getStatusBadge(patient.clinicalStatus, 'patient');
+                const statusBadge = getStatusBadge(
+                  patient.clinicalStatus,
+                  "patient",
+                );
                 return (
-                  <div key={patient.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  <div
+                    key={patient.id}
+                    className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <p className="font-medium text-sm text-gray-900 dark:text-white">
                         {patient.name}
@@ -481,7 +547,7 @@ export default function DoctorDashboard() {
                 );
               })
             )}
-            
+
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <Button size="sm" className="w-full" asChild>
                 <Link to="/portal/doctor/patients">

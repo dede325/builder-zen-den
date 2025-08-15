@@ -26,74 +26,82 @@ export default function Certifications() {
       id: "1",
       name: "Certificação de Qualidade em Saúde",
       organization: "Ministério da Saúde de Angola",
-      description: "Certificação oficial que garante nossos padrões de qualidade e segurança no atendimento médico.",
+      description:
+        "Certificação oficial que garante nossos padrões de qualidade e segurança no atendimento médico.",
       icon: Shield,
       status: "certified",
-      year: "2024"
+      year: "2024",
     },
     {
       id: "2",
       name: "Membro do Colégio Médico de Angola",
       organization: "CMA - Colégio Médico de Angola",
-      description: "Todos os nossos médicos são registrados e reconhecidos pelo órgão regulador da medicina em Angola.",
+      description:
+        "Todos os nossos médicos são registrados e reconhecidos pelo órgão regulador da medicina em Angola.",
       icon: UserCheck,
       status: "member",
-      year: "2020"
+      year: "2020",
     },
     {
       id: "3",
       name: "Acreditação Hospitalar",
       organization: "Sistema Nacional de Saúde",
-      description: "Reconhecimento da excelência em gestão hospitalar e qualidade dos serviços médicos.",
+      description:
+        "Reconhecimento da excelência em gestão hospitalar e qualidade dos serviços médicos.",
       icon: Building2,
       status: "accredited",
-      year: "2023"
+      year: "2023",
     },
     {
       id: "4",
       name: "Certificação ISO 9001",
       organization: "International Organization for Standardization",
-      description: "Padrão internacional de gestão da qualidade aplicado aos nossos processos e atendimento.",
+      description:
+        "Padrão internacional de gestão da qualidade aplicado aos nossos processos e atendimento.",
       icon: Award,
       status: "certified",
-      year: "2024"
+      year: "2024",
     },
     {
       id: "5",
       name: "Selo de Excelência em Cardiologia",
       organization: "Sociedade Angolana de Cardiologia",
-      description: "Reconhecimento da qualidade excepcional dos nossos serviços cardiológicos.",
+      description:
+        "Reconhecimento da qualidade excepcional dos nossos serviços cardiológicos.",
       icon: Heart,
       status: "certified",
-      year: "2023"
+      year: "2023",
     },
     {
       id: "6",
       name: "Parceiro Oficial OMS",
       organization: "Organização Mundial da Saúde",
-      description: "Colaboração em programas de saúde pública e implementação de melhores práticas médicas.",
+      description:
+        "Colaboração em programas de saúde pública e implementação de melhores práticas médicas.",
       icon: Globe,
       status: "partner",
-      year: "2022"
+      year: "2022",
     },
     {
       id: "7",
       name: "Centro de Referência em Medicina Preventiva",
       organization: "Instituto Nacional de Saúde Pública",
-      description: "Designação como centro de referência para programas de medicina preventiva e promoção da saúde.",
+      description:
+        "Designação como centro de referência para programas de medicina preventiva e promoção da saúde.",
       icon: CheckCircle,
       status: "accredited",
-      year: "2024"
+      year: "2024",
     },
     {
       id: "8",
       name: "Certificação em Segurança do Paciente",
       organization: "Agência Nacional de Segurança Sanitária",
-      description: "Certificação que atesta nosso compromisso com a segurança e bem-estar dos pacientes.",
+      description:
+        "Certificação que atesta nosso compromisso com a segurança e bem-estar dos pacientes.",
       icon: Shield,
       status: "certified",
-      year: "2024"
-    }
+      year: "2024",
+    },
   ];
 
   const statusColors = {
@@ -148,11 +156,11 @@ export default function Certifications() {
                   <h4 className="font-semibold text-foreground mb-2 group-hover:text-clinic-primary transition-colors">
                     {cert.name}
                   </h4>
-                  
+
                   <p className="text-sm font-medium text-clinic-accent mb-2">
                     {cert.organization}
                   </p>
-                  
+
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {cert.description}
                   </p>
@@ -167,38 +175,54 @@ export default function Certifications() {
           <h4 className="text-2xl font-bold text-center text-foreground mb-8">
             Indicadores de Qualidade
           </h4>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl font-bold text-clinic-primary mb-1">99.5%</div>
-              <div className="text-sm text-muted-foreground">Taxa de Sucesso Cirúrgico</div>
+              <div className="text-2xl font-bold text-clinic-primary mb-1">
+                99.5%
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Taxa de Sucesso Cirúrgico
+              </div>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl font-bold text-clinic-primary mb-1">0%</div>
-              <div className="text-sm text-muted-foreground">Infecções Hospitalares</div>
+              <div className="text-2xl font-bold text-clinic-primary mb-1">
+                0%
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Infecções Hospitalares
+              </div>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Star className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl font-bold text-clinic-primary mb-1">15min</div>
-              <div className="text-sm text-muted-foreground">Tempo Médio de Atendimento</div>
+              <div className="text-2xl font-bold text-clinic-primary mb-1">
+                15min
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Tempo Médio de Atendimento
+              </div>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8 text-white" />
               </div>
-              <div className="text-2xl font-bold text-clinic-primary mb-1">98%</div>
-              <div className="text-sm text-muted-foreground">Satisfação do Paciente</div>
+              <div className="text-2xl font-bold text-clinic-primary mb-1">
+                98%
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Satisfação do Paciente
+              </div>
             </div>
           </div>
         </div>
@@ -213,8 +237,8 @@ export default function Certifications() {
               Na Clínica Bem Cuidar, nosso compromisso com a qualidade vai além
               das certificações. Trabalhamos continuamente para manter os mais
               altos padrões de atendimento médico, investindo em tecnologia,
-              capacitação profissional e processos que garantam sua segurança
-              e satisfação.
+              capacitação profissional e processos que garantam sua segurança e
+              satisfação.
             </p>
           </div>
         </div>

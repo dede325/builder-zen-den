@@ -1,18 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
-import { useAuthStore } from '@/store/auth';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import Dashboard from '@/components/dashboard/Dashboard';
-import AppointmentsPage from '@/components/dashboard/AppointmentsPage';
-import DoctorLayout from '@/components/dashboard/DoctorLayout';
-import DoctorDashboard from '@/components/dashboard/DoctorDashboard';
+import { useState, useEffect } from "react";
+import {
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
+import { useAuthStore } from "@/store/auth";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import Dashboard from "@/components/dashboard/Dashboard";
+import AppointmentsPage from "@/components/dashboard/AppointmentsPage";
+import DoctorLayout from "@/components/dashboard/DoctorLayout";
+import DoctorDashboard from "@/components/dashboard/DoctorDashboard";
 import {
   ArrowLeft,
   Eye,
@@ -24,8 +31,8 @@ import {
   User,
   AlertCircle,
   CheckCircle,
-  Stethoscope
-} from 'lucide-react';
+  Stethoscope,
+} from "lucide-react";
 
 // Placeholder components para as páginas do dashboard
 
@@ -37,7 +44,9 @@ function ExamsPage() {
       </div>
       <Card>
         <CardContent className="p-6">
-          <p className="text-center text-gray-500">Página de exames em desenvolvimento...</p>
+          <p className="text-center text-gray-500">
+            Página de exames em desenvolvimento...
+          </p>
         </CardContent>
       </Card>
     </div>
@@ -53,7 +62,9 @@ function MessagesPage() {
       </div>
       <Card>
         <CardContent className="p-6">
-          <p className="text-center text-gray-500">Página de mensagens em desenvolvimento...</p>
+          <p className="text-center text-gray-500">
+            Página de mensagens em desenvolvimento...
+          </p>
         </CardContent>
       </Card>
     </div>
@@ -68,7 +79,9 @@ function InvoicesPage() {
       </div>
       <Card>
         <CardContent className="p-6">
-          <p className="text-center text-gray-500">Página de faturas em desenvolvimento...</p>
+          <p className="text-center text-gray-500">
+            Página de faturas em desenvolvimento...
+          </p>
         </CardContent>
       </Card>
     </div>
@@ -84,7 +97,9 @@ function ProfilePage() {
       </div>
       <Card>
         <CardContent className="p-6">
-          <p className="text-center text-gray-500">Página de perfil em desenvolvimento...</p>
+          <p className="text-center text-gray-500">
+            Página de perfil em desenvolvimento...
+          </p>
         </CardContent>
       </Card>
     </div>
@@ -94,12 +109,12 @@ function ProfilePage() {
 // Componente de Login
 function LoginForm() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const { login, isLoading } = useAuthStore();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -112,10 +127,10 @@ function LoginForm() {
     // Validação básica
     const newErrors: Record<string, string> = {};
     if (!formData.email.trim()) {
-      newErrors.email = 'E-mail é obrigatório';
+      newErrors.email = "E-mail é obrigatório";
     }
     if (!formData.password.trim()) {
-      newErrors.password = 'Senha é obrigatória';
+      newErrors.password = "Senha é obrigatória";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -124,30 +139,30 @@ function LoginForm() {
     }
 
     const success = await login(formData.email, formData.password);
-    
+
     if (success) {
       toast({
-        title: 'Login realizado com sucesso!',
-        description: 'Bem-vindo ao Portal do Paciente.',
+        title: "Login realizado com sucesso!",
+        description: "Bem-vindo ao Portal do Paciente.",
       });
-      
+
       // Redirecionar para o dashboard apropriado baseado no role do usuário
       const user = useAuthStore.getState().user;
-      let redirectPath = '/portal/dashboard';
+      let redirectPath = "/portal/dashboard";
 
-      if (user?.role === 'doctor') {
-        redirectPath = '/portal/doctor/dashboard';
-      } else if (user?.role === 'admin') {
-        redirectPath = '/portal/admin/dashboard';
+      if (user?.role === "doctor") {
+        redirectPath = "/portal/doctor/dashboard";
+      } else if (user?.role === "admin") {
+        redirectPath = "/portal/admin/dashboard";
       }
 
       const from = (location.state as any)?.from?.pathname || redirectPath;
       navigate(from, { replace: true });
     } else {
       toast({
-        title: 'Erro no login',
-        description: 'E-mail ou senha incorretos.',
-        variant: 'destructive',
+        title: "Erro no login",
+        description: "E-mail ou senha incorretos.",
+        variant: "destructive",
       });
     }
   };
@@ -162,7 +177,9 @@ function LoginForm() {
               <Heart className="w-6 h-6 text-white" />
             </div>
           </Link>
-          <h2 className="text-3xl font-bold text-gray-900">Portal do Paciente</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            Portal do Paciente
+          </h2>
           <p className="mt-2 text-gray-600">
             Acesse sua conta para gerenciar suas consultas e exames
           </p>
@@ -172,11 +189,16 @@ function LoginForm() {
         <Alert>
           <AlertCircle className="w-4 h-4" />
           <AlertDescription>
-            <strong>Contas de demonstração:</strong><br />
-            <strong>Pacientes:</strong><br />
-            <code>paciente@example.com</code> / <code>123456</code><br />
-            <code>carlos@example.com</code> / <code>123456</code><br />
-            <strong>Médico:</strong><br />
+            <strong>Contas de demonstração:</strong>
+            <br />
+            <strong>Pacientes:</strong>
+            <br />
+            <code>paciente@example.com</code> / <code>123456</code>
+            <br />
+            <code>carlos@example.com</code> / <code>123456</code>
+            <br />
+            <strong>Médico:</strong>
+            <br />
             <code>medico@bemcuidar.co.ao</code> / <code>medico123</code>
           </AlertDescription>
         </Alert>
@@ -197,8 +219,10 @@ function LoginForm() {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className={errors.email ? 'border-red-500' : ''}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className={errors.email ? "border-red-500" : ""}
                   placeholder="seu@email.com"
                   disabled={isLoading}
                 />
@@ -212,10 +236,14 @@ function LoginForm() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    className={
+                      errors.password ? "border-red-500 pr-10" : "pr-10"
+                    }
                     placeholder="Sua senha"
                     disabled={isLoading}
                   />
@@ -270,7 +298,7 @@ function LoginForm() {
 
         {/* Back to Site */}
         <div className="text-center">
-          <Link 
+          <Link
             to="/"
             className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
@@ -293,16 +321,21 @@ export default function Portal() {
       <Route
         path="/"
         element={
-          isAuthenticated ?
-            <Navigate to={
-              useAuthStore.getState().user?.role === 'doctor' ?
-              '/portal/doctor/dashboard' :
-              '/portal/dashboard'
-            } replace /> :
+          isAuthenticated ? (
+            <Navigate
+              to={
+                useAuthStore.getState().user?.role === "doctor"
+                  ? "/portal/doctor/dashboard"
+                  : "/portal/dashboard"
+              }
+              replace
+            />
+          ) : (
             <LoginForm />
+          )
         }
       />
-      
+
       {/* Rotas protegidas do dashboard do paciente */}
       <Route
         path="/*"
@@ -332,13 +365,28 @@ export default function Portal() {
         }
       >
         <Route path="dashboard" element={<DoctorDashboard />} />
-        <Route path="patients" element={<div>Pacientes em desenvolvimento...</div>} />
-        <Route path="consultations" element={<div>Consultas em desenvolvimento...</div>} />
+        <Route
+          path="patients"
+          element={<div>Pacientes em desenvolvimento...</div>}
+        />
+        <Route
+          path="consultations"
+          element={<div>Consultas em desenvolvimento...</div>}
+        />
         <Route path="exams" element={<div>Exames em desenvolvimento...</div>} />
-        <Route path="messages" element={<div>Mensagens em desenvolvimento...</div>} />
-        <Route path="profile" element={<div>Perfil em desenvolvimento...</div>} />
+        <Route
+          path="messages"
+          element={<div>Mensagens em desenvolvimento...</div>}
+        />
+        <Route
+          path="profile"
+          element={<div>Perfil em desenvolvimento...</div>}
+        />
         {/* Redirecionar rotas desconhecidas para dashboard médico */}
-        <Route path="*" element={<Navigate to="/portal/doctor/dashboard" replace />} />
+        <Route
+          path="*"
+          element={<Navigate to="/portal/doctor/dashboard" replace />}
+        />
       </Route>
     </Routes>
   );

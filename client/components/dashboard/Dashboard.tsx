@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAuthStore } from '@/store/auth';
-import { useMedicalStore } from '@/store/medical';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuthStore } from "@/store/auth";
+import { useMedicalStore } from "@/store/medical";
 import {
   Calendar,
   FileText,
@@ -24,20 +24,20 @@ import {
   Eye,
   ArrowRight,
   Bell,
-  Stethoscope
-} from 'lucide-react';
+  Stethoscope,
+} from "lucide-react";
 
 export default function Dashboard() {
   const { user } = useAuthStore();
-  const { 
-    appointments, 
-    examResults, 
-    messages, 
+  const {
+    appointments,
+    examResults,
+    messages,
     invoices,
     fetchAppointments,
     fetchExamResults,
     fetchMessages,
-    fetchInvoices
+    fetchInvoices,
   } = useMedicalStore();
 
   useEffect(() => {
@@ -54,39 +54,56 @@ export default function Dashboard() {
   }
 
   // Calcular estatísticas
-  const upcomingAppointments = appointments.filter(apt => 
-    apt.status === 'scheduled' && new Date(apt.date) >= new Date()
+  const upcomingAppointments = appointments.filter(
+    (apt) => apt.status === "scheduled" && new Date(apt.date) >= new Date(),
   ).length;
-  
-  const completedAppointments = appointments.filter(apt => 
-    apt.status === 'completed'
+
+  const completedAppointments = appointments.filter(
+    (apt) => apt.status === "completed",
   ).length;
-  
-  const unreadMessages = messages.filter(msg => !msg.read).length;
-  const newExamResults = examResults.filter(exam => !exam.viewed).length;
-  const pendingInvoices = invoices.filter(inv => inv.status === 'sent').length;
+
+  const unreadMessages = messages.filter((msg) => !msg.read).length;
+  const newExamResults = examResults.filter((exam) => !exam.viewed).length;
+  const pendingInvoices = invoices.filter(
+    (inv) => inv.status === "sent",
+  ).length;
 
   // Próximas consultas
   const nextAppointments = appointments
-    .filter(apt => apt.status === 'scheduled' && new Date(`${apt.date}T${apt.time}`) >= new Date())
-    .sort((a, b) => new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime())
+    .filter(
+      (apt) =>
+        apt.status === "scheduled" &&
+        new Date(`${apt.date}T${apt.time}`) >= new Date(),
+    )
+    .sort(
+      (a, b) =>
+        new Date(`${a.date}T${a.time}`).getTime() -
+        new Date(`${b.date}T${b.time}`).getTime(),
+    )
     .slice(0, 3);
 
   // Exames recentes
   const recentExams = examResults
-    .sort((a, b) => new Date(b.resultDate || b.examDate).getTime() - new Date(a.resultDate || a.examDate).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.resultDate || b.examDate).getTime() -
+        new Date(a.resultDate || a.examDate).getTime(),
+    )
     .slice(0, 3);
 
   // Mensagens recentes
   const recentMessages = messages
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
     .slice(0, 3);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-AO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("pt-AO", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -94,29 +111,34 @@ export default function Dashboard() {
     return timeString.slice(0, 5);
   };
 
-  const getStatusBadge = (status: string, type: 'appointment' | 'exam' | 'invoice') => {
+  const getStatusBadge = (
+    status: string,
+    type: "appointment" | "exam" | "invoice",
+  ) => {
     const badges = {
       appointment: {
-        scheduled: { label: 'Agendada', variant: 'default' as const },
-        confirmed: { label: 'Confirmada', variant: 'default' as const },
-        completed: { label: 'Concluída', variant: 'secondary' as const },
-        cancelled: { label: 'Cancelada', variant: 'destructive' as const }
+        scheduled: { label: "Agendada", variant: "default" as const },
+        confirmed: { label: "Confirmada", variant: "default" as const },
+        completed: { label: "Concluída", variant: "secondary" as const },
+        cancelled: { label: "Cancelada", variant: "destructive" as const },
       },
       exam: {
-        pending: { label: 'Pendente', variant: 'default' as const },
-        in_progress: { label: 'Em Andamento', variant: 'default' as const },
-        final: { label: 'Finalizado', variant: 'secondary' as const }
+        pending: { label: "Pendente", variant: "default" as const },
+        in_progress: { label: "Em Andamento", variant: "default" as const },
+        final: { label: "Finalizado", variant: "secondary" as const },
       },
       invoice: {
-        draft: { label: 'Rascunho', variant: 'outline' as const },
-        sent: { label: 'Enviada', variant: 'default' as const },
-        paid: { label: 'Paga', variant: 'secondary' as const },
-        overdue: { label: 'Vencida', variant: 'destructive' as const }
-      }
+        draft: { label: "Rascunho", variant: "outline" as const },
+        sent: { label: "Enviada", variant: "default" as const },
+        paid: { label: "Paga", variant: "secondary" as const },
+        overdue: { label: "Vencida", variant: "destructive" as const },
+      },
     };
 
-    const badge = badges[type]?.[status as keyof typeof badges[typeof type]];
-    return badge ? { label: badge.label, variant: badge.variant } : { label: status, variant: 'outline' as const };
+    const badge = badges[type]?.[status as keyof (typeof badges)[typeof type]];
+    return badge
+      ? { label: badge.label, variant: badge.variant }
+      : { label: status, variant: "outline" as const };
   };
 
   return (
@@ -126,7 +148,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
-              Bem-vindo, {user.name.split(' ')[0]}!
+              Bem-vindo, {user.name.split(" ")[0]}!
             </h1>
             <p className="text-blue-100">
               Aqui você pode acompanhar suas consultas, exames e muito mais.
@@ -255,9 +277,15 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {nextAppointments.map((appointment) => {
-                  const badge = getStatusBadge(appointment.status, 'appointment');
+                  const badge = getStatusBadge(
+                    appointment.status,
+                    "appointment",
+                  );
                   return (
-                    <div key={appointment.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div
+                      key={appointment.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                           <Stethoscope className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -270,7 +298,8 @@ export default function Dashboard() {
                             {appointment.specialty}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {formatDate(appointment.date)} às {formatTime(appointment.time)}
+                            {formatDate(appointment.date)} às{" "}
+                            {formatTime(appointment.time)}
                           </p>
                         </div>
                       </div>
@@ -308,13 +337,20 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {recentExams.map((exam) => {
-                  const badge = getStatusBadge(exam.status, 'exam');
+                  const badge = getStatusBadge(exam.status, "exam");
                   return (
-                    <div key={exam.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div
+                      key={exam.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          exam.viewed ? 'bg-gray-100 dark:bg-gray-800' : 'bg-purple-100 dark:bg-purple-900'
-                        }`}>
+                        <div
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            exam.viewed
+                              ? "bg-gray-100 dark:bg-gray-800"
+                              : "bg-purple-100 dark:bg-purple-900"
+                          }`}
+                        >
                           {exam.viewed ? (
                             <Eye className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                           ) : (
@@ -336,7 +372,9 @@ export default function Dashboard() {
                       <div className="flex flex-col items-end space-y-1">
                         <Badge variant={badge.variant}>{badge.label}</Badge>
                         {!exam.viewed && (
-                          <Badge variant="destructive" className="text-xs">Novo</Badge>
+                          <Badge variant="destructive" className="text-xs">
+                            Novo
+                          </Badge>
                         )}
                       </div>
                     </div>
@@ -375,18 +413,23 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {recentMessages.map((message) => (
-                  <div key={message.id} className={`p-4 border rounded-lg ${
-                    message.read 
-                      ? 'border-gray-200 dark:border-gray-700' 
-                      : 'border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20'
-                  }`}>
+                  <div
+                    key={message.id}
+                    className={`p-4 border rounded-lg ${
+                      message.read
+                        ? "border-gray-200 dark:border-gray-700"
+                        : "border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20"
+                    }`}
+                  >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <p className="font-medium text-gray-900 dark:text-white">
                           {message.fromUserName}
                         </p>
                         {!message.read && (
-                          <Badge variant="destructive" className="text-xs">Nova</Badge>
+                          <Badge variant="destructive" className="text-xs">
+                            Nova
+                          </Badge>
                         )}
                       </div>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -423,15 +466,17 @@ export default function Dashboard() {
                   <p className="text-xs text-gray-500">+244 945 344 650</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-gray-500" />
                 <div>
                   <p className="text-sm font-medium">Endereço</p>
-                  <p className="text-xs text-gray-500">Av. 21 de Janeiro, 351, Benfica</p>
+                  <p className="text-xs text-gray-500">
+                    Av. 21 de Janeiro, 351, Benfica
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <Clock className="w-4 h-4 text-gray-500" />
                 <div>
@@ -441,7 +486,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            
+
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <Button size="sm" className="w-full" asChild>
                 <Link to="/portal/messages">

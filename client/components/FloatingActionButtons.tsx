@@ -7,22 +7,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Calendar,
-  MessageCircle,
-  Phone,
-  Plus,
-  X,
-} from "lucide-react";
+import { Calendar, MessageCircle, Phone, Plus, X } from "lucide-react";
 
 export default function FloatingActionButtons() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const whatsappNumber = "+244945344650";
   const whatsappMessage = encodeURIComponent(
-    "Olá! Gostaria de agendar uma consulta na Clínica Bem Cuidar. Poderiam me ajudar?"
+    "Olá! Gostaria de agendar uma consulta na Clínica Bem Cuidar. Poderiam me ajudar?",
   );
-  const whatsappUrl = `https://wa.me/${whatsappNumber.replace('+', '')}?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/${whatsappNumber.replace("+", "")}?text=${whatsappMessage}`;
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -65,7 +59,7 @@ export default function FloatingActionButtons() {
                       className="bg-green-500 hover:bg-green-600 text-white shadow-lg"
                       asChild
                     >
-                      <a 
+                      <a
                         href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -112,8 +106,8 @@ export default function FloatingActionButtons() {
                 onClick={toggleExpanded}
                 size="lg"
                 className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 ${
-                  isExpanded 
-                    ? "bg-red-500 hover:bg-red-600 rotate-45" 
+                  isExpanded
+                    ? "bg-red-500 hover:bg-red-600 rotate-45"
                     : "bg-clinic-gradient hover:opacity-90"
                 }`}
               >
