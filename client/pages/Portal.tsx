@@ -309,11 +309,8 @@ export default function Portal() {
           path="consultations"
           element={<div>Consultas em desenvolvimento...</div>}
         />
-        <Route path="exams" element={<div>Exames em desenvolvimento...</div>} />
-        <Route
-          path="messages"
-          element={<div>Mensagens em desenvolvimento...</div>}
-        />
+        <Route path="exams" element={<DoctorExamsPage />} />
+        <Route path="messages" element={<DoctorMessagesPage />} />
         <Route
           path="profile"
           element={<div>Perfil em desenvolvimento...</div>}
