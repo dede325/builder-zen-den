@@ -1103,7 +1103,7 @@ export default function Index() {
               Sobre a Clínica Bem Cuidar
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Há mais de uma década cuidando da sua saúde com dedicação e
+              H�� mais de uma década cuidando da sua saúde com dedicação e
               humanização
             </p>
           </div>
@@ -1384,7 +1384,7 @@ export default function Index() {
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
                       }
-                      className={`min-h-[44px] ${formErrors.email ? "border-red-500" : ""}`}
+                      className={`input-premium min-h-[44px] ${formErrors.email ? "error-premium" : ""}`}
                       disabled={isSubmitting}
                       placeholder="exemplo@email.com"
                     />
