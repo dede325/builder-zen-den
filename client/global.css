@@ -5,6 +5,9 @@
 /* Importar hover states e animações */
 @import "./styles/hover-states.css";
 
+/* Importar estilos visuais aprimorados */
+@import "./styles/enhanced-visuals.css";
+
 @layer base {
   /**
    * Tailwind CSS theme
