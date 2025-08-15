@@ -11,10 +11,11 @@ html {
 
 /* Enhanced body with improved font rendering */
 body {
-  @apply antialiased text-rendering-optimizeLegibility;
+  @apply antialiased;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* ===== PREMIUM BUTTON STYLES ===== */
@@ -56,13 +57,14 @@ body {
 /* Glassmorphism button variant */
 .btn-glass {
   @apply relative;
-  @apply bg-white/20 backdrop-blur-md;
+  @apply bg-white/20;
   @apply border border-white/30;
   @apply text-white font-medium;
   @apply rounded-xl shadow-lg;
   @apply transition-all duration-300 ease-in-out;
   @apply hover:bg-white/30 hover:shadow-xl;
   @apply focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent;
+  backdrop-filter: blur(12px);
 }
 
 .btn-glass:hover {
@@ -75,12 +77,13 @@ body {
 /* Premium medical cards */
 .card-medical-premium {
   @apply relative;
-  @apply bg-white/95 backdrop-blur-lg;
+  @apply bg-white/95;
   @apply border border-clinic-accent/20;
   @apply rounded-2xl shadow-lg;
   @apply transition-all duration-500 ease-in-out;
   @apply hover:shadow-2xl hover:scale-[1.02];
   @apply hover:border-clinic-accent/40;
+  backdrop-filter: blur(10px);
 }
 
 .card-medical-premium::before {
@@ -149,10 +152,11 @@ body {
 /* Premium navigation bar */
 .nav-premium {
   @apply relative;
-  @apply bg-white/95 backdrop-blur-xl;
+  @apply bg-white/95;
   @apply border-b border-clinic-accent/20;
   @apply shadow-lg;
   @apply transition-all duration-300;
+  backdrop-filter: blur(20px);
 }
 
 .nav-premium.scrolled {
@@ -216,13 +220,14 @@ body {
 
 .specialty-card-premium {
   @apply group relative;
-  @apply bg-white/90 backdrop-blur-sm;
+  @apply bg-white/90;
   @apply border border-clinic-accent/20;
   @apply rounded-2xl p-6;
   @apply shadow-lg hover:shadow-2xl;
   @apply transition-all duration-500 ease-out;
   @apply cursor-pointer;
   @apply hover:scale-105 hover:border-clinic-accent/40;
+  backdrop-filter: blur(8px);
 }
 
 .specialty-card-premium::before {
@@ -266,13 +271,14 @@ body {
 
 .input-premium {
   @apply w-full;
-  @apply bg-white/90 backdrop-blur-sm;
+  @apply bg-white/90;
   @apply border border-clinic-accent/30;
   @apply rounded-xl px-4 py-3;
   @apply text-gray-700 placeholder:text-gray-400;
   @apply transition-all duration-300;
   @apply focus:outline-none focus:ring-2 focus:ring-clinic-accent/50 focus:border-clinic-accent;
   @apply hover:border-clinic-accent/50 hover:shadow-md;
+  backdrop-filter: blur(8px);
 }
 
 .input-premium:focus {
@@ -399,11 +405,6 @@ body {
 /* Premium borders */
 .border-premium {
   @apply border border-clinic-accent/30;
-  border-image: linear-gradient(45deg, 
-    rgb(121, 203, 203), 
-    rgb(86, 98, 100), 
-    rgb(121, 203, 203)
-  ) 1;
 }
 
 /* Enhanced backdrop blur */
@@ -464,7 +465,7 @@ body {
 }
 
 .dark .btn-clinic-premium {
-  @apply shadow-clinic-accent/20;
+  box-shadow: 0 4px 20px rgba(121, 203, 203, 0.2);
 }
 
 .dark .nav-premium {
@@ -576,5 +577,3 @@ body {
   @apply border-yellow-300 bg-yellow-50;
   @apply focus:border-yellow-500 focus:ring-yellow-500/20;
 }
-
-console.log('[Styles] Enhanced visual styles loaded');
