@@ -1,609 +1,520 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Shield,
+import { 
   Cookie,
-  BarChart3,
-  Target,
+  Shield,
   Settings,
-  Info,
-  Eye,
-  Lock,
-  FileText,
-  ExternalLink,
-  Calendar,
-  User,
   Check,
   X,
+  Info,
+  ExternalLink,
+  Eye,
+  BarChart3,
+  Target,
+  Zap
 } from "lucide-react";
+import { angolaFormatter } from "@/lib/locale-angola";
 
-interface ConsentSettings {
+interface ConsentPreferences {
   necessary: boolean;
-  functional: boolean;
   analytics: boolean;
   marketing: boolean;
-  healthData: boolean;
+  personalization: boolean;
 }
 
-interface ConsentRecord {
-  id: string;
-  timestamp: Date;
-  settings: ConsentSettings;
-  ipAddress: string;
-  userAgent: string;
-  policyVersion: string;
-  consentMethod: "banner" | "settings" | "form";
+interface CookieCategory {
+  id: keyof ConsentPreferences;
+  name: string;
+  description: string;
+  icon: React.ElementType;
+  required: boolean;
+  examples: string[];
+  retention: string;
+  purposes: string[];
 }
 
-const CURRENT_POLICY_VERSION = "2024.1";
-const CONSENT_STORAGE_KEY = "bem-cuidar-consent";
-const CONSENT_LOG_KEY = "bem-cuidar-consent-log";
-
-const consentCategories = [
+const COOKIE_CATEGORIES: CookieCategory[] = [
   {
-    id: "necessary" as keyof ConsentSettings,
-    title: "Estritamente Necessários",
-    description:
-      "Estes cookies são essenciais para o funcionamento do website.",
-    icon: Shield,
+    id: 'necessary',
+    name: 'Estritamente Necessários',
+    description: 'Essenciais para o funcionamento básico do website e serviços.',
+    icon: Zap,
     required: true,
-    examples: [
-      "Cookies de sessão",
-      "Preferências de segurança",
-      "Funcionalidades básicas",
-    ],
-    legal:
-      "Base legal: Interesse legítimo (Art. 6º, n.º 1, f) RGPD / Lei 22/11)",
+    examples: ['Autenticação', 'Segurança', 'Carrinho de compras', 'Preferências de idioma'],
+    retention: 'Sessão até 1 ano',
+    purposes: ['Funcionalidade básica', 'Segurança', 'Prevenção de fraude']
   },
   {
-    id: "functional" as keyof ConsentSettings,
-    title: "Funcionais",
-    description: "Melhoram a funcionalidade e personalização do website.",
-    icon: Settings,
-    required: false,
-    examples: [
-      "Preferências de idioma",
-      "Configurações de interface",
-      "Lembrança de escolhas",
-    ],
-    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
-  },
-  {
-    id: "analytics" as keyof ConsentSettings,
-    title: "Análise e Performance",
-    description: "Ajudam-nos a entender como os visitantes usam o website.",
+    id: 'analytics',
+    name: 'Análise e Performance',
+    description: 'Ajudam-nos a entender como usa o website para melhorar a experiência.',
     icon: BarChart3,
     required: false,
-    examples: [
-      "Google Analytics",
-      "Estatísticas de uso",
-      "Relatórios de performance",
-    ],
-    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
+    examples: ['Google Analytics', 'Mapas de calor', 'Métricas de performance'],
+    retention: '2 anos',
+    purposes: ['Análise de tráfego', 'Melhoria da experiência', 'Estatísticas anónimas']
   },
   {
-    id: "marketing" as keyof ConsentSettings,
-    title: "Marketing e Publicidade",
-    description: "Usados para publicidade dirigida e campanhas de marketing.",
+    id: 'marketing',
+    name: 'Marketing e Publicidade',
+    description: 'Utilizados para mostrar publicidade relevante e personalizada.',
     icon: Target,
     required: false,
-    examples: ["Anúncios personalizados", "Remarketing", "Redes sociais"],
-    legal: "Base legal: Consentimento (Art. 6º, n.º 1, a) RGPD / Lei 22/11)",
+    examples: ['Facebook Pixel', 'Google Ads', 'Remarketing'],
+    retention: '13 meses',
+    purposes: ['Publicidade direcionada', 'Remarketing', 'Medição de campanhas']
   },
   {
-    id: "healthData" as keyof ConsentSettings,
-    title: "Dados de Saúde (Especiais)",
-    description:
-      "Processamento de dados sensíveis de saúde para prestação de cuidados médicos.",
-    icon: FileText,
+    id: 'personalization',
+    name: 'Personalização',
+    description: 'Personalizam o conteúdo e funcionalidades baseadas nas suas preferências.',
+    icon: Eye,
     required: false,
-    examples: [
-      "Histórico médico",
-      "Informações de consultas",
-      "Dados clínicos",
-    ],
-    legal:
-      "Base legal: Consentimento explícito (Art. 9º, n.º 2, a) RGPD / Lei 22/11)",
-    special: true,
-  },
+    examples: ['Preferências de conteúdo', 'Recomendações', 'Configurações de UI'],
+    retention: '1 ano',
+    purposes: ['Experiência personalizada', 'Recomendações', 'Configurações do utilizador']
+  }
 ];
 
-interface ConsentManagerProps {
-  onConsentChange?: (settings: ConsentSettings) => void;
-}
+const CONSENT_STORAGE_KEY = 'clinica-bem-cuidar-consent';
+const CONSENT_VERSION = '1.0';
 
-export default function ConsentManager({
-  onConsentChange,
-}: ConsentManagerProps) {
-  const [showBanner, setShowBanner] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+export default function ConsentManager() {
+  const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<
-    keyof ConsentSettings | null
-  >(null);
-
-  const [consentSettings, setConsentSettings] = useState<ConsentSettings>({
+  const [preferences, setPreferences] = useState<ConsentPreferences>({
     necessary: true,
-    functional: false,
     analytics: false,
     marketing: false,
-    healthData: false,
+    personalization: false
   });
+  const [hasExistingConsent, setHasExistingConsent] = useState(false);
 
-  const [hasConsent, setHasConsent] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Check existing consent on mount
   useEffect(() => {
-    const existingConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
-
-    if (existingConsent) {
-      try {
-        const parsed = JSON.parse(existingConsent);
-        setConsentSettings(parsed.settings);
-        setHasConsent(true);
-      } catch (error) {
-        console.error("Error parsing consent:", error);
-        setShowBanner(true);
-      }
-    } else {
-      // Show banner after 2 seconds if no consent
-      const timer = setTimeout(() => setShowBanner(true), 2000);
-      return () => clearTimeout(timer);
-    }
+    checkExistingConsent();
   }, []);
 
-  // Log consent record
-  const logConsent = async (
-    settings: ConsentSettings,
-    method: ConsentRecord["consentMethod"],
-  ) => {
-    const record: ConsentRecord = {
-      id: `consent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date(),
-      settings,
-      ipAddress: "hidden-for-privacy", // In production, get from backend
-      userAgent: navigator.userAgent,
-      policyVersion: CURRENT_POLICY_VERSION,
-      consentMethod: method,
-    };
-
-    // Store locally (in production, also send to backend)
-    const existingLogs = JSON.parse(
-      localStorage.getItem(CONSENT_LOG_KEY) || "[]",
-    );
-    existingLogs.push(record);
-    localStorage.setItem(CONSENT_LOG_KEY, JSON.stringify(existingLogs));
-
-    console.log("[Consent] Logged consent record:", record);
-  };
-
-  // Save consent
-  const saveConsent = async (
-    settings: ConsentSettings,
-    method: ConsentRecord["consentMethod"],
-  ) => {
-    setIsLoading(true);
-
+  const checkExistingConsent = () => {
     try {
-      const consentData = {
-        settings,
-        timestamp: new Date().toISOString(),
-        version: CURRENT_POLICY_VERSION,
-      };
-
-      localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consentData));
-      await logConsent(settings, method);
-
-      setConsentSettings(settings);
-      setHasConsent(true);
-      setShowBanner(false);
-      setShowSettings(false);
-
-      onConsentChange?.(settings);
-
-      // In production, sync with backend
-      // await fetch('/api/consent', { method: 'POST', body: JSON.stringify(consentData) });
+      const storedConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
+      if (storedConsent) {
+        const consentData = JSON.parse(storedConsent);
+        
+        // Check if consent is still valid (within 1 year)
+        const consentDate = new Date(consentData.timestamp);
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+        
+        if (consentDate > oneYearAgo && consentData.version === CONSENT_VERSION) {
+          setPreferences(consentData.preferences);
+          setHasExistingConsent(true);
+          applyConsentPreferences(consentData.preferences);
+        } else {
+          // Consent expired or version changed
+          localStorage.removeItem(CONSENT_STORAGE_KEY);
+          setIsVisible(true);
+        }
+      } else {
+        setIsVisible(true);
+      }
     } catch (error) {
-      console.error("Error saving consent:", error);
-    } finally {
-      setIsLoading(false);
+      console.error('Error checking consent:', error);
+      setIsVisible(true);
     }
   };
 
-  // Accept all cookies
-  const acceptAll = () => {
-    const allAccepted: ConsentSettings = {
+  const saveConsent = (newPreferences: ConsentPreferences) => {
+    const consentData = {
+      preferences: newPreferences,
+      timestamp: new Date().toISOString(),
+      version: CONSENT_VERSION,
+      locale: 'pt-AO',
+      userAgent: navigator.userAgent,
+      angolaTime: angolaFormatter.formatDateTime(new Date())
+    };
+
+    try {
+      localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consentData));
+      setPreferences(newPreferences);
+      setHasExistingConsent(true);
+      applyConsentPreferences(newPreferences);
+      setIsVisible(false);
+      
+      // Log consent for audit trail (in production, this would be sent to server)
+      console.log('[Consent] User consent saved:', consentData);
+    } catch (error) {
+      console.error('Error saving consent:', error);
+    }
+  };
+
+  const applyConsentPreferences = (prefs: ConsentPreferences) => {
+    // Apply analytics consent
+    if (prefs.analytics) {
+      // Initialize analytics (Google Analytics, etc.)
+      if (typeof gtag !== 'undefined') {
+        gtag('consent', 'update', {
+          analytics_storage: 'granted'
+        });
+      }
+    } else {
+      if (typeof gtag !== 'undefined') {
+        gtag('consent', 'update', {
+          analytics_storage: 'denied'
+        });
+      }
+    }
+
+    // Apply marketing consent
+    if (prefs.marketing) {
+      if (typeof gtag !== 'undefined') {
+        gtag('consent', 'update', {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted'
+        });
+      }
+    } else {
+      if (typeof gtag !== 'undefined') {
+        gtag('consent', 'update', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied'
+        });
+      }
+    }
+
+    // Dispatch custom event for other scripts
+    window.dispatchEvent(new CustomEvent('consentUpdated', {
+      detail: prefs
+    }));
+  };
+
+  const handleAcceptAll = () => {
+    const allAcceptedPreferences: ConsentPreferences = {
       necessary: true,
-      functional: true,
       analytics: true,
       marketing: true,
-      healthData: false, // Health data requires explicit opt-in
+      personalization: true
     };
-    saveConsent(allAccepted, "banner");
+    saveConsent(allAcceptedPreferences);
   };
 
-  // Accept only necessary
-  const acceptNecessary = () => {
-    const necessaryOnly: ConsentSettings = {
+  const handleRejectOptional = () => {
+    const minimalPreferences: ConsentPreferences = {
       necessary: true,
-      functional: false,
       analytics: false,
       marketing: false,
-      healthData: false,
+      personalization: false
     };
-    saveConsent(necessaryOnly, "banner");
+    saveConsent(minimalPreferences);
   };
 
-  // Update specific consent
-  const updateConsent = (category: keyof ConsentSettings, value: boolean) => {
-    const updated = { ...consentSettings, [category]: value };
-    setConsentSettings(updated);
+  const handleSaveCustom = () => {
+    saveConsent(preferences);
   };
 
-  // Save custom settings
-  const saveCustomSettings = () => {
-    saveConsent(consentSettings, "settings");
+  const handlePreferenceChange = (category: keyof ConsentPreferences, value: boolean) => {
+    setPreferences(prev => ({
+      ...prev,
+      [category]: value
+    }));
   };
 
-  const bannerVariants = {
-    hidden: { y: 100, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
-    exit: { y: 100, opacity: 0 },
+  const reopenConsentPanel = () => {
+    setIsVisible(true);
+    setShowDetails(true);
   };
 
-  const settingsVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.95 },
-  };
+  if (!isVisible) {
+    // Show small consent management button when banner is hidden
+    return (
+      <div className="fixed bottom-4 left-4 z-50">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={reopenConsentPanel}
+          className="bg-white/95 backdrop-blur-sm shadow-lg"
+        >
+          <Cookie className="w-4 h-4 mr-2" />
+          Gerir Cookies
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {/* Consent Banner */}
-      <AnimatePresence>
-        {showBanner && (
-          <motion.div
-            variants={bannerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/95 backdrop-blur-lg border-t border-border shadow-2xl"
-          >
-            <div className="container mx-auto max-w-6xl">
-              <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
-                <div className="flex items-start gap-3 flex-1">
-                  <Cookie className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Proteção de Dados Pessoais
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Este website utiliza cookies e processa dados pessoais
-                      para melhorar a sua experiência. Ao utilizar os nossos
-                      serviços de saúde, poderemos processar dados sensíveis
-                      mediante o seu consentimento explícito, conforme a{" "}
-                      <button
-                        onClick={() => setShowDetails(true)}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Lei n.º 22/11 de Angola
-                      </button>
-                      .
-                    </p>
-                    <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Shield className="w-3 h-3" />
-                        Dados protegidos
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Lock className="w-3 h-3" />
-                        HTTPS seguro
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        Versão {CURRENT_POLICY_VERSION}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-2 lg:flex-shrink-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowSettings(true)}
-                    className="whitespace-nowrap"
-                  >
-                    <Settings className="w-4 h-4 mr-2" />
-                    Personalizar
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={acceptNecessary}
-                    className="whitespace-nowrap"
-                  >
-                    Apenas Necessários
-                  </Button>
-                  <Button
-                    variant="clinic"
-                    size="sm"
-                    onClick={acceptAll}
-                    disabled={isLoading}
-                    className="whitespace-nowrap"
-                  >
-                    {isLoading ? "A guardar..." : "Aceitar Todos"}
-                  </Button>
-                </div>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+      <Card className="w-full max-w-2xl max-h-[90vh] overflow-hidden">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-clinic-gradient rounded-full flex items-center justify-center">
+                <Cookie className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">
+                  Gestão de Cookies e Privacidade
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Conforme Lei n.º 22/11 de Proteção de Dados de Angola
+                </CardDescription>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Badge variant="outline" className="text-xs">
+              <Shield className="w-3 h-3 mr-1" />
+              Seguro
+            </Badge>
+          </div>
+        </CardHeader>
 
-      {/* Consent Settings Dialog */}
-      <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-primary" />
-              Definições de Privacidade
-            </DialogTitle>
-            <DialogDescription>
-              Escolha quais cookies e dados pretende partilhar connosco. Pode
-              alterar estas preferências a qualquer momento.
-            </DialogDescription>
-          </DialogHeader>
+        <CardContent className="space-y-6">
+          {/* Main message */}
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Utilizamos cookies e tecnologias similares para melhorar a sua experiência, 
+              personalizar conteúdo e analisar o tráfego do nosso website. 
+              Pode escolher quais categorias de cookies aceita.
+            </p>
 
-          <div className="space-y-6 py-4">
-            {consentCategories.map((category) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`border rounded-lg p-4 ${category.special ? "border-warning bg-warning/5" : "border-border"}`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3 flex-1">
-                    <div
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        category.special ? "bg-warning/10" : "bg-primary/10"
-                      }`}
-                    >
-                      <category.icon
-                        className={`w-5 h-5 ${
-                          category.special ? "text-warning" : "text-primary"
-                        }`}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold">{category.title}</h4>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Info className="w-4 h-4" />
+              <span>
+                Os seus dados são tratados com a máxima segurança e confidencialidade.
+              </span>
+            </div>
+          </div>
+
+          {showDetails && (
+            <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
+              <h3 className="font-semibold text-sm flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Categorias de Cookies
+              </h3>
+
+              {COOKIE_CATEGORIES.map((category) => (
+                <div key={category.id} className="border rounded-lg p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <category.icon className="w-5 h-5 text-clinic-accent" />
+                      <div>
+                        <h4 className="font-medium text-sm">{category.name}</h4>
                         {category.required && (
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs mt-1">
                             Obrigatório
                           </Badge>
                         )}
-                        {category.special && (
-                          <Badge
-                            variant="outline"
-                            className="text-xs border-warning text-warning"
-                          >
-                            Dados Especiais
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {category.description}
-                      </p>
-                      <div className="text-xs text-muted-foreground">
-                        <strong>Exemplos:</strong>{" "}
-                        {category.examples.join(", ")}
-                      </div>
-                      <div className="text-xs text-info mt-2">
-                        {category.legal}
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedCategory(category.id)}
-                      className="p-1"
-                    >
-                      <Info className="w-4 h-4" />
-                    </Button>
-                    <Checkbox
-                      checked={consentSettings[category.id]}
-                      onCheckedChange={(checked) =>
-                        updateConsent(category.id, !!checked)
-                      }
+                    <Switch
+                      checked={preferences[category.id]}
+                      onCheckedChange={(checked) => handlePreferenceChange(category.id, checked)}
                       disabled={category.required}
-                      className="scale-125"
                     />
                   </div>
+
+                  <p className="text-xs text-muted-foreground">
+                    {category.description}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <h5 className="font-medium mb-1">Exemplos:</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        {category.examples.map((example, idx) => (
+                          <li key={idx}>• {example}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-1">Finalidades:</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        {category.purposes.map((purpose, idx) => (
+                          <li key={idx}>• {purpose}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-muted-foreground">
+                    <strong>Retenção:</strong> {category.retention}
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
 
-            <Separator />
+              <Separator />
 
-            <div className="bg-info/5 border border-info/20 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-info mt-0.5" />
-                <div className="text-sm">
-                  <p className="font-medium text-info-foreground mb-2">
-                    Informação Importante sobre Dados de Saúde
-                  </p>
-                  <p className="text-info-foreground/80 leading-relaxed">
-                    Os dados de saúde são considerados dados pessoais especiais
-                    e são processados apenas mediante o seu consentimento
-                    explícito, conforme o Art. 9º da Lei n.º 22/11. Estes dados
-                    são essenciais para a prestação de cuidados médicos
-                    adequados e são protegidos com as mais altas medidas de
-                    segurança.
-                  </p>
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm">Informações Adicionais</h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <h5 className="font-medium mb-2">Os Seus Direitos:</h5>
+                    <ul className="text-muted-foreground space-y-1">
+                      <li>• Retirar consentimento a qualquer momento</li>
+                      <li>• Aceder aos seus dados pessoais</li>
+                      <li>• Solicitar correção ou eliminação</li>
+                      <li>• Apresentar reclamação</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mb-2">Contactos:</h5>
+                    <ul className="text-muted-foreground space-y-1">
+                      <li>• DPO: dpo@bemcuidar.co.ao</li>
+                      <li>• Geral: recepcao@bemcuidar.co.ao</li>
+                      <li>• Telefone: +244 945 344 650</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
+          )}
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          {/* Action buttons */}
+          <div className="space-y-3">
+            {!showDetails && (
               <Button
                 variant="outline"
-                onClick={() => setShowSettings(false)}
-                className="flex-1"
+                onClick={() => setShowDetails(true)}
+                className="w-full text-sm"
               >
-                Cancelar
+                <Settings className="w-4 h-4 mr-2" />
+                Personalizar Preferências
               </Button>
-              <Button
-                variant="clinic"
-                onClick={saveCustomSettings}
-                disabled={isLoading}
-                className="flex-1"
-              >
-                {isLoading ? "A guardar..." : "Guardar Preferências"}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+            )}
 
-      {/* Legal Information Dialog */}
-      <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
-              Lei n.º 22/11 - Proteção de Dados Pessoais (Angola)
-            </DialogTitle>
-            <DialogDescription>
-              Informações sobre os seus direitos e como protegemos os seus dados
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-6 py-4">
-            <div>
-              <h4 className="font-semibold mb-3">Os Seus Direitos</h4>
-              <div className="space-y-3">
-                {[
-                  {
-                    icon: Eye,
-                    title: "Direito de Acesso",
-                    desc: "Consultar que dados pessoais processamos",
-                  },
-                  {
-                    icon: Settings,
-                    title: "Direito de Retificação",
-                    desc: "Corrigir dados incorretos ou incompletos",
-                  },
-                  {
-                    icon: X,
-                    title: "Direito de Eliminação",
-                    desc: "Solicitar a eliminação dos seus dados",
-                  },
-                  {
-                    icon: Lock,
-                    title: "Direito de Limitação",
-                    desc: "Restringir o processamento dos seus dados",
-                  },
-                  {
-                    icon: User,
-                    title: "Direito de Portabilidade",
-                    desc: "Receber os seus dados em formato estruturado",
-                  },
-                ].map((right) => (
-                  <div
-                    key={right.title}
-                    className="flex items-start gap-3 p-3 border border-border rounded-lg"
-                  >
-                    <right.icon className="w-5 h-5 text-primary mt-0.5" />
-                    <div>
-                      <div className="font-medium">{right.title}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {right.desc}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <Separator />
-
-            <div>
-              <h4 className="font-semibold mb-3">Contactos</h4>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-primary" />
-                  <div>
-                    <div className="font-medium">
-                      Encarregado de Proteção de Dados (DPO)
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      dpo@bemcuidar.co.ao
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <div>
-                    <div className="font-medium">Questões Legais</div>
-                    <div className="text-sm text-muted-foreground">
-                      legal@bemcuidar.co.ao
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                Para mais informações sobre a Lei n.º 22/11, consulte:{" "}
-                <a
-                  href="https://lex.ao"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline inline-flex items-center gap-1"
+            <div className={`grid gap-3 ${showDetails ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
+              {showDetails && (
+                <Button
+                  onClick={handleSaveCustom}
+                  className="bg-clinic-gradient hover:opacity-90 text-white text-sm"
                 >
-                  Lex.AO <ExternalLink className="w-3 h-3" />
-                </a>
-              </p>
+                  <Check className="w-4 h-4 mr-2" />
+                  Guardar Preferências
+                </Button>
+              )}
+              
+              <Button
+                onClick={handleAcceptAll}
+                className="bg-clinic-gradient hover:opacity-90 text-white text-sm"
+              >
+                <Check className="w-4 h-4 mr-2" />
+                Aceitar Todos
+              </Button>
+              
+              <Button
+                onClick={handleRejectOptional}
+                variant="outline"
+                className="text-sm"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Apenas Necessários
+              </Button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
 
-      {/* Floating consent settings button for users who have already consented */}
-      {hasConsent && !showBanner && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          onClick={() => setShowSettings(true)}
-          className="fixed bottom-4 left-4 z-40 w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
-          title="Definições de Privacidade"
-        >
-          <Shield className="w-5 h-5" />
-        </motion.button>
-      )}
-    </>
+          {/* Footer links */}
+          <div className="pt-3 border-t border-border">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+              <button className="flex items-center gap-1 hover:text-clinic-primary">
+                <ExternalLink className="w-3 h-3" />
+                Política de Privacidade
+              </button>
+              <button className="flex items-center gap-1 hover:text-clinic-primary">
+                <ExternalLink className="w-3 h-3" />
+                Termos de Uso
+              </button>
+              <span>|</span>
+              <span>
+                Última atualização: {angolaFormatter.formatDate(new Date())}
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
-// Export utilities for other components
-export { CONSENT_STORAGE_KEY, CURRENT_POLICY_VERSION };
-export type { ConsentSettings, ConsentRecord };
+// Hook for other components to check consent status
+export const useConsent = () => {
+  const [consent, setConsent] = useState<ConsentPreferences>({
+    necessary: true,
+    analytics: false,
+    marketing: false,
+    personalization: false
+  });
+
+  useEffect(() => {
+    const loadConsent = () => {
+      try {
+        const storedConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
+        if (storedConsent) {
+          const consentData = JSON.parse(storedConsent);
+          setConsent(consentData.preferences);
+        }
+      } catch (error) {
+        console.error('Error loading consent:', error);
+      }
+    };
+
+    loadConsent();
+
+    // Listen for consent updates
+    const handleConsentUpdate = (event: CustomEvent) => {
+      setConsent(event.detail);
+    };
+
+    window.addEventListener('consentUpdated', handleConsentUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('consentUpdated', handleConsentUpdate as EventListener);
+    };
+  }, []);
+
+  return consent;
+};
+
+// Utility function to check if specific consent is granted
+export const hasConsent = (category: keyof ConsentPreferences): boolean => {
+  try {
+    const storedConsent = localStorage.getItem(CONSENT_STORAGE_KEY);
+    if (storedConsent) {
+      const consentData = JSON.parse(storedConsent);
+      return consentData.preferences[category] || false;
+    }
+  } catch (error) {
+    console.error('Error checking consent:', error);
+  }
+  return false;
+};
+
+// Utility function to log consent events for audit
+export const logConsentEvent = (event: string, details?: any) => {
+  const logData = {
+    event,
+    timestamp: new Date().toISOString(),
+    angolaTime: angolaFormatter.formatDateTime(new Date()),
+    userAgent: navigator.userAgent,
+    url: window.location.href,
+    details
+  };
+
+  // In production, send this to your audit log endpoint
+  console.log('[Consent Audit]', logData);
+  
+  // Store locally for potential sync later
+  try {
+    const existingLogs = JSON.parse(localStorage.getItem('consent-audit-logs') || '[]');
+    existingLogs.push(logData);
+    
+    // Keep only last 100 entries
+    const recentLogs = existingLogs.slice(-100);
+    localStorage.setItem('consent-audit-logs', JSON.stringify(recentLogs));
+  } catch (error) {
+    console.error('Error storing consent audit log:', error);
+  }
+};
