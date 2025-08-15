@@ -1,17 +1,43 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  FileText, 
-  Download, 
-  Eye, 
-  Calendar, 
-  Search, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  FileText,
+  Download,
+  Eye,
+  Calendar,
+  Search,
   CreditCard,
   DollarSign,
   Clock,
@@ -20,15 +46,15 @@ import {
   Building,
   User,
   Phone,
-  Mail
-} from 'lucide-react';
-import { FaturaPaciente } from '@shared/patient-types';
-import PatientDataService from '@/services/patientData';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+  Mail,
+} from "lucide-react";
+import { FaturaPaciente } from "@shared/patient-types";
+import PatientDataService from "@/services/patientData";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface FaturaDetailsProps {
   fatura: FaturaPaciente;
@@ -38,12 +64,12 @@ interface FaturaDetailsProps {
 
 function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
   const [generatingPDF, setGeneratingPDF] = useState(false);
-  
+
   const statusConfig = {
-    pago: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-    pendente: { color: 'bg-yellow-100 text-yellow-800', icon: Clock },
-    vencido: { color: 'bg-red-100 text-red-800', icon: AlertTriangle },
-    cancelado: { color: 'bg-gray-100 text-gray-800', icon: AlertTriangle }
+    pago: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+    pendente: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+    vencido: { color: "bg-red-100 text-red-800", icon: AlertTriangle },
+    cancelado: { color: "bg-gray-100 text-gray-800", icon: AlertTriangle },
   };
 
   const StatusIcon = statusConfig[fatura.status].icon;
@@ -53,7 +79,7 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
     try {
       await generateFaturaPDF(fatura);
     } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
+      console.error("Erro ao gerar PDF:", error);
     } finally {
       setGeneratingPDF(false);
     }
@@ -70,14 +96,16 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
           Fatura #{fatura.id} - Clínica Bem Cuidar
         </DialogDescription>
       </DialogHeader>
-      
+
       <div id={`fatura-${fatura.id}`} className="space-y-6 bg-white p-6">
         {/* Cabeçalho da Fatura */}
         <div className="flex items-start justify-between border-b pb-6">
           <div>
             <div className="flex items-center space-x-2 mb-2">
               <Building className="h-6 w-6 text-clinic-primary" />
-              <h1 className="text-2xl font-bold text-clinic-primary">Clínica Bem Cuidar</h1>
+              <h1 className="text-2xl font-bold text-clinic-primary">
+                Clínica Bem Cuidar
+              </h1>
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
               <div className="flex items-center space-x-2">
@@ -92,17 +120,17 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
               <p>CNPJ: 12.345.678/0001-90</p>
             </div>
           </div>
-          
+
           <div className="text-right">
             <h2 className="text-xl font-bold">FATURA</h2>
             <p className="text-lg font-mono">#{fatura.id}</p>
             <div className="mt-2">
               <Badge className={statusConfig[fatura.status].color}>
                 <StatusIcon className="h-3 w-3 mr-1" />
-                {fatura.status === 'pago' && 'PAGO'}
-                {fatura.status === 'pendente' && 'PENDENTE'}
-                {fatura.status === 'vencido' && 'VENCIDO'}
-                {fatura.status === 'cancelado' && 'CANCELADO'}
+                {fatura.status === "pago" && "PAGO"}
+                {fatura.status === "pendente" && "PENDENTE"}
+                {fatura.status === "vencido" && "VENCIDO"}
+                {fatura.status === "cancelado" && "CANCELADO"}
               </Badge>
             </div>
           </div>
@@ -116,26 +144,52 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
               <span>Dados do Paciente</span>
             </h3>
             <div className="space-y-1 text-sm">
-              <p><strong>Nome:</strong> Maria Silva Santos</p>
-              <p><strong>Email:</strong> maria.silva@email.com</p>
-              <p><strong>Telefone:</strong> (11) 99999-1234</p>
-              <p><strong>Convênio:</strong> Plano Saúde ABC</p>
+              <p>
+                <strong>Nome:</strong> Maria Silva Santos
+              </p>
+              <p>
+                <strong>Email:</strong> maria.silva@email.com
+              </p>
+              <p>
+                <strong>Telefone:</strong> (11) 99999-1234
+              </p>
+              <p>
+                <strong>Convênio:</strong> Plano Saúde ABC
+              </p>
             </div>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-3 flex items-center space-x-2">
               <Calendar className="h-4 w-4" />
               <span>Informações da Fatura</span>
             </h3>
             <div className="space-y-1 text-sm">
-              <p><strong>Data de Emissão:</strong> {format(new Date(fatura.data_emissao), 'dd/MM/yyyy', { locale: ptBR })}</p>
-              <p><strong>Data de Vencimento:</strong> {format(new Date(fatura.data_vencimento), 'dd/MM/yyyy', { locale: ptBR })}</p>
+              <p>
+                <strong>Data de Emissão:</strong>{" "}
+                {format(new Date(fatura.data_emissao), "dd/MM/yyyy", {
+                  locale: ptBR,
+                })}
+              </p>
+              <p>
+                <strong>Data de Vencimento:</strong>{" "}
+                {format(new Date(fatura.data_vencimento), "dd/MM/yyyy", {
+                  locale: ptBR,
+                })}
+              </p>
               {fatura.data_pagamento && (
-                <p><strong>Data de Pagamento:</strong> {format(new Date(fatura.data_pagamento), 'dd/MM/yyyy', { locale: ptBR })}</p>
+                <p>
+                  <strong>Data de Pagamento:</strong>{" "}
+                  {format(new Date(fatura.data_pagamento), "dd/MM/yyyy", {
+                    locale: ptBR,
+                  })}
+                </p>
               )}
               {fatura.forma_pagamento && (
-                <p><strong>Forma de Pagamento:</strong> <span className="capitalize">{fatura.forma_pagamento}</span></p>
+                <p>
+                  <strong>Forma de Pagamento:</strong>{" "}
+                  <span className="capitalize">{fatura.forma_pagamento}</span>
+                </p>
               )}
             </div>
           </div>
@@ -157,12 +211,20 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
               {fatura.servicos.map((servico) => (
                 <TableRow key={servico.id}>
                   <TableCell>{servico.descricao}</TableCell>
-                  <TableCell className="text-center">{servico.quantidade}</TableCell>
+                  <TableCell className="text-center">
+                    {servico.quantidade}
+                  </TableCell>
                   <TableCell className="text-right">
-                    R$ {servico.valor_unitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {servico.valor_unitario.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
                   </TableCell>
                   <TableCell className="text-right font-medium">
-                    R$ {servico.valor_total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {servico.valor_total.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
                   </TableCell>
                 </TableRow>
               ))}
@@ -176,10 +238,18 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
             <div className="text-right">
               <p className="text-lg">
                 <strong>Subtotal: </strong>
-                R$ {fatura.servicos.reduce((sum, s) => sum + s.valor_total, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                R${" "}
+                {fatura.servicos
+                  .reduce((sum, s) => sum + s.valor_total, 0)
+                  .toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xl font-bold text-clinic-primary">
-                <strong>Total: R$ {fatura.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+                <strong>
+                  Total: R${" "}
+                  {fatura.valor.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
+                </strong>
               </p>
             </div>
           </div>
@@ -187,7 +257,9 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
 
         {/* Observações */}
         <div className="border-t pt-4 text-sm text-muted-foreground">
-          <p><strong>Observações:</strong></p>
+          <p>
+            <strong>Observações:</strong>
+          </p>
           <p>• Esta fatura é válida por 30 dias após a data de emissão</p>
           <p>• Em caso de dúvidas, entre em contato conosco</p>
           <p>• Mantenha este documento para seus registros</p>
@@ -199,13 +271,13 @@ function FaturaDetails({ fatura, onClose, onDownloadPDF }: FaturaDetailsProps) {
         <Button variant="outline" onClick={onClose} className="flex-1">
           Fechar
         </Button>
-        <Button 
-          onClick={handleGeneratePDF} 
-          disabled={generatingPDF} 
+        <Button
+          onClick={handleGeneratePDF}
+          disabled={generatingPDF}
           className="flex-1"
         >
           <Download className="h-4 w-4 mr-2" />
-          {generatingPDF ? 'Gerando PDF...' : 'Baixar PDF'}
+          {generatingPDF ? "Gerando PDF..." : "Baixar PDF"}
         </Button>
       </div>
     </DialogContent>
@@ -222,33 +294,33 @@ async function generateFaturaPDF(fatura: FaturaPaciente) {
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff'
+      backgroundColor: "#ffffff",
     });
 
     // Criar PDF
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgData = canvas.toDataURL('image/png');
-    
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgData = canvas.toDataURL("image/png");
+
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
     const imgWidth = canvas.width;
     const imgHeight = canvas.height;
-    
+
     // Calcular dimensões mantendo proporção
     const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
     const finalWidth = imgWidth * ratio;
     const finalHeight = imgHeight * ratio;
-    
+
     // Centralizar na página
     const x = (pdfWidth - finalWidth) / 2;
     const y = (pdfHeight - finalHeight) / 2;
-    
-    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-    
+
+    pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
+
     // Baixar PDF
-    pdf.save(`fatura_${fatura.id}_${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+    pdf.save(`fatura_${fatura.id}_${format(new Date(), "yyyy-MM-dd")}.pdf`);
   } catch (error) {
-    console.error('Erro ao gerar PDF:', error);
+    console.error("Erro ao gerar PDF:", error);
     throw error;
   }
 }
@@ -257,18 +329,20 @@ export default function FaturasPage() {
   const [faturas, setFaturas] = useState<FaturaPaciente[]>([]);
   const [filteredFaturas, setFilteredFaturas] = useState<FaturaPaciente[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedFatura, setSelectedFatura] = useState<FaturaPaciente | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedFatura, setSelectedFatura] = useState<FaturaPaciente | null>(
+    null,
+  );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     const loadFaturas = async () => {
       try {
-        const data = await PatientDataService.getFaturas('pac_001');
+        const data = await PatientDataService.getFaturas("pac_001");
         setFaturas(data);
         setFilteredFaturas(data);
       } catch (error) {
-        console.error('Erro ao carregar faturas:', error);
+        console.error("Erro ao carregar faturas:", error);
       } finally {
         setLoading(false);
       }
@@ -281,14 +355,15 @@ export default function FaturasPage() {
     let filtered = faturas;
 
     if (searchTerm) {
-      filtered = filtered.filter(fatura =>
-        fatura.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fatura.id.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (fatura) =>
+          fatura.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          fatura.id.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(fatura => fatura.status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((fatura) => fatura.status === statusFilter);
     }
 
     setFilteredFaturas(filtered);
@@ -296,13 +371,17 @@ export default function FaturasPage() {
 
   const statusCounts = {
     total: faturas.length,
-    pago: faturas.filter(f => f.status === 'pago').length,
-    pendente: faturas.filter(f => f.status === 'pendente').length,
-    vencido: faturas.filter(f => f.status === 'vencido').length
+    pago: faturas.filter((f) => f.status === "pago").length,
+    pendente: faturas.filter((f) => f.status === "pendente").length,
+    vencido: faturas.filter((f) => f.status === "vencido").length,
   };
 
-  const totalPago = faturas.filter(f => f.status === 'pago').reduce((sum, f) => sum + f.valor, 0);
-  const totalPendente = faturas.filter(f => f.status === 'pendente').reduce((sum, f) => sum + f.valor, 0);
+  const totalPago = faturas
+    .filter((f) => f.status === "pago")
+    .reduce((sum, f) => sum + f.valor, 0);
+  const totalPendente = faturas
+    .filter((f) => f.status === "pendente")
+    .reduce((sum, f) => sum + f.valor, 0);
 
   if (loading) {
     return (
@@ -335,7 +414,9 @@ export default function FaturasPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total de Faturas</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Faturas
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{statusCounts.total}</div>
@@ -348,9 +429,12 @@ export default function FaturasPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              R$ {totalPago.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R${" "}
+              {totalPago.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
-            <p className="text-xs text-muted-foreground">{statusCounts.pago} faturas</p>
+            <p className="text-xs text-muted-foreground">
+              {statusCounts.pago} faturas
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -359,9 +443,14 @@ export default function FaturasPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-yellow-600">
-              R$ {totalPendente.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R${" "}
+              {totalPendente.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
             </div>
-            <p className="text-xs text-muted-foreground">{statusCounts.pendente} faturas</p>
+            <p className="text-xs text-muted-foreground">
+              {statusCounts.pendente} faturas
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -369,7 +458,9 @@ export default function FaturasPage() {
             <CardTitle className="text-sm font-medium">Vencidas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{statusCounts.vencido}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {statusCounts.vencido}
+            </div>
             <p className="text-xs text-muted-foreground">Precisam atenção</p>
           </CardContent>
         </Card>
@@ -416,17 +507,29 @@ export default function FaturasPage() {
           <div className="space-y-4">
             {filteredFaturas.map((fatura) => {
               const statusConfig = {
-                pago: { color: 'bg-green-100 text-green-800 border-green-200', icon: CheckCircle },
-                pendente: { color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: Clock },
-                vencido: { color: 'bg-red-100 text-red-800 border-red-200', icon: AlertTriangle },
-                cancelado: { color: 'bg-gray-100 text-gray-800 border-gray-200', icon: AlertTriangle }
+                pago: {
+                  color: "bg-green-100 text-green-800 border-green-200",
+                  icon: CheckCircle,
+                },
+                pendente: {
+                  color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+                  icon: Clock,
+                },
+                vencido: {
+                  color: "bg-red-100 text-red-800 border-red-200",
+                  icon: AlertTriangle,
+                },
+                cancelado: {
+                  color: "bg-gray-100 text-gray-800 border-gray-200",
+                  icon: AlertTriangle,
+                },
               };
 
               const StatusIcon = statusConfig[fatura.status].icon;
 
               return (
-                <div 
-                  key={fatura.id} 
+                <div
+                  key={fatura.id}
                   className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center justify-between">
@@ -435,35 +538,58 @@ export default function FaturasPage() {
                         <h3 className="font-medium">Fatura #{fatura.id}</h3>
                         <Badge className={statusConfig[fatura.status].color}>
                           <StatusIcon className="h-3 w-3 mr-1" />
-                          {fatura.status === 'pago' && 'Pago'}
-                          {fatura.status === 'pendente' && 'Pendente'}
-                          {fatura.status === 'vencido' && 'Vencido'}
-                          {fatura.status === 'cancelado' && 'Cancelado'}
+                          {fatura.status === "pago" && "Pago"}
+                          {fatura.status === "pendente" && "Pendente"}
+                          {fatura.status === "vencido" && "Vencido"}
+                          {fatura.status === "cancelado" && "Cancelado"}
                         </Badge>
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground mb-2">{fatura.descricao}</p>
-                      
+
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {fatura.descricao}
+                      </p>
+
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="text-muted-foreground">Valor: </span>
                           <span className="font-medium text-lg">
-                            R$ {fatura.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {fatura.valor.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Vencimento: </span>
-                          <span>{format(new Date(fatura.data_vencimento), 'dd/MM/yyyy', { locale: ptBR })}</span>
+                          <span className="text-muted-foreground">
+                            Vencimento:{" "}
+                          </span>
+                          <span>
+                            {format(
+                              new Date(fatura.data_vencimento),
+                              "dd/MM/yyyy",
+                              { locale: ptBR },
+                            )}
+                          </span>
                         </div>
                       </div>
 
                       {fatura.forma_pagamento && (
                         <div className="mt-2 text-sm">
-                          <span className="text-muted-foreground">Pagamento: </span>
-                          <span className="capitalize">{fatura.forma_pagamento}</span>
+                          <span className="text-muted-foreground">
+                            Pagamento:{" "}
+                          </span>
+                          <span className="capitalize">
+                            {fatura.forma_pagamento}
+                          </span>
                           {fatura.data_pagamento && (
                             <span className="text-muted-foreground">
-                              {' '}em {format(new Date(fatura.data_pagamento), 'dd/MM/yyyy', { locale: ptBR })}
+                              {" "}
+                              em{" "}
+                              {format(
+                                new Date(fatura.data_pagamento),
+                                "dd/MM/yyyy",
+                                { locale: ptBR },
+                              )}
                             </span>
                           )}
                         </div>
@@ -473,8 +599,8 @@ export default function FaturasPage() {
                     <div className="flex space-x-2">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => setSelectedFatura(fatura)}
                           >
@@ -486,7 +612,9 @@ export default function FaturasPage() {
                           <FaturaDetails
                             fatura={selectedFatura}
                             onClose={() => setSelectedFatura(null)}
-                            onDownloadPDF={() => generateFaturaPDF(selectedFatura)}
+                            onDownloadPDF={() =>
+                              generateFaturaPDF(selectedFatura)
+                            }
                           />
                         )}
                       </Dialog>
@@ -500,11 +628,13 @@ export default function FaturasPage() {
           {filteredFaturas.length === 0 && (
             <div className="text-center py-12">
               <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-medium mb-2">Nenhuma fatura encontrada</h3>
+              <h3 className="text-lg font-medium mb-2">
+                Nenhuma fatura encontrada
+              </h3>
               <p className="text-muted-foreground">
-                {searchTerm || statusFilter !== 'all'
-                  ? 'Tente ajustar os filtros para ver mais resultados.'
-                  : 'Você ainda não possui faturas cadastradas.'}
+                {searchTerm || statusFilter !== "all"
+                  ? "Tente ajustar os filtros para ver mais resultados."
+                  : "Você ainda não possui faturas cadastradas."}
               </p>
             </div>
           )}

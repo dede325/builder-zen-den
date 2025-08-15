@@ -1,38 +1,65 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  DollarSign, 
-  Search, 
-  Filter, 
-  Eye, 
-  Download, 
-  FileText, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DollarSign,
+  Search,
+  Filter,
+  Eye,
+  Download,
+  FileText,
   CreditCard,
   AlertTriangle,
   TrendingUp,
   TrendingDown,
   Plus,
-  CheckCircle
-} from 'lucide-react';
-import { Fatura, ReceitaPeriodo } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
-import { cn } from '@/lib/utils';
+  CheckCircle,
+} from "lucide-react";
+import { Fatura, ReceitaPeriodo } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
+import { cn } from "@/lib/utils";
 
 interface FaturaDetailsProps {
   fatura: Fatura;
   onClose: () => void;
-  onMarkAsPaid: (id: string, formaPagamento: Fatura['formaPagamento']) => void;
+  onMarkAsPaid: (id: string, formaPagamento: Fatura["formaPagamento"]) => void;
 }
 
 function FaturaDetails({ fatura, onClose, onMarkAsPaid }: FaturaDetailsProps) {
-  const [formaPagamento, setFormaPagamento] = useState<Fatura['formaPagamento']>('dinheiro');
+  const [formaPagamento, setFormaPagamento] =
+    useState<Fatura["formaPagamento"]>("dinheiro");
 
   const handleMarkAsPaid = () => {
     onMarkAsPaid(fatura.id, formaPagamento);
@@ -47,7 +74,7 @@ function FaturaDetails({ fatura, onClose, onMarkAsPaid }: FaturaDetailsProps) {
           Informações de cobrança e pagamento
         </DialogDescription>
       </DialogHeader>
-      
+
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -57,30 +84,41 @@ function FaturaDetails({ fatura, onClose, onMarkAsPaid }: FaturaDetailsProps) {
           <div>
             <label className="text-sm font-medium">Valor</label>
             <p className="text-lg font-bold text-green-600">
-              R$ {fatura.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R${" "}
+              {fatura.valor.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
             </p>
           </div>
           <div>
             <label className="text-sm font-medium">Data de Vencimento</label>
-            <p>{new Date(fatura.dataVencimento).toLocaleDateString('pt-BR')}</p>
+            <p>{new Date(fatura.dataVencimento).toLocaleDateString("pt-BR")}</p>
           </div>
           {fatura.dataPagamento && (
             <div>
               <label className="text-sm font-medium">Data de Pagamento</label>
-              <p>{new Date(fatura.dataPagamento).toLocaleDateString('pt-BR')}</p>
+              <p>
+                {new Date(fatura.dataPagamento).toLocaleDateString("pt-BR")}
+              </p>
             </div>
           )}
           <div>
             <label className="text-sm font-medium">Status</label>
-            <Badge variant={
-              fatura.status === 'pago' ? 'outline' :
-              fatura.status === 'pendente' ? 'secondary' :
-              fatura.status === 'vencido' ? 'destructive' : 'default'
-            }>
-              {fatura.status === 'pago' && 'Pago'}
-              {fatura.status === 'pendente' && 'Pendente'}
-              {fatura.status === 'vencido' && 'Vencido'}
-              {fatura.status === 'cancelado' && 'Cancelado'}
+            <Badge
+              variant={
+                fatura.status === "pago"
+                  ? "outline"
+                  : fatura.status === "pendente"
+                    ? "secondary"
+                    : fatura.status === "vencido"
+                      ? "destructive"
+                      : "default"
+              }
+            >
+              {fatura.status === "pago" && "Pago"}
+              {fatura.status === "pendente" && "Pendente"}
+              {fatura.status === "vencido" && "Vencido"}
+              {fatura.status === "cancelado" && "Cancelado"}
             </Badge>
           </div>
           {fatura.formaPagamento && (
@@ -96,11 +134,16 @@ function FaturaDetails({ fatura, onClose, onMarkAsPaid }: FaturaDetailsProps) {
           <p className="mt-1 p-3 bg-muted rounded-lg">{fatura.descricao}</p>
         </div>
 
-        {fatura.status === 'pendente' && (
+        {fatura.status === "pendente" && (
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium">Forma de Pagamento</label>
-              <Select value={formaPagamento} onValueChange={(value) => setFormaPagamento(value as Fatura['formaPagamento'])}>
+              <Select
+                value={formaPagamento}
+                onValueChange={(value) =>
+                  setFormaPagamento(value as Fatura["formaPagamento"])
+                }
+              >
                 <SelectTrigger className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
@@ -125,7 +168,7 @@ function FaturaDetails({ fatura, onClose, onMarkAsPaid }: FaturaDetailsProps) {
           </div>
         )}
 
-        {fatura.status === 'pago' && (
+        {fatura.status === "pago" && (
           <Button variant="outline" className="w-full">
             <Download className="h-4 w-4 mr-2" />
             Download Comprovante
@@ -141,8 +184,8 @@ export function FinanceiroManager() {
   const [filteredFaturas, setFilteredFaturas] = useState<Fatura[]>([]);
   const [receitaPeriodo, setReceitaPeriodo] = useState<ReceitaPeriodo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selectedFatura, setSelectedFatura] = useState<Fatura | null>(null);
 
   useEffect(() => {
@@ -150,13 +193,13 @@ export function FinanceiroManager() {
       try {
         const [faturasData, receitaData] = await Promise.all([
           ManagerDataService.getFaturas(),
-          ManagerDataService.getReceitaPeriodo()
+          ManagerDataService.getReceitaPeriodo(),
         ]);
         setFaturas(faturasData);
         setFilteredFaturas(faturasData);
         setReceitaPeriodo(receitaData);
       } catch (error) {
-        console.error('Erro ao carregar dados financeiros:', error);
+        console.error("Erro ao carregar dados financeiros:", error);
       } finally {
         setLoading(false);
       }
@@ -169,53 +212,67 @@ export function FinanceiroManager() {
     let filtered = faturas;
 
     if (searchTerm) {
-      filtered = filtered.filter(fatura =>
-        fatura.pacienteNome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fatura.descricao.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (fatura) =>
+          fatura.pacienteNome
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          fatura.descricao.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(fatura => fatura.status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((fatura) => fatura.status === statusFilter);
     }
 
     setFilteredFaturas(filtered);
   }, [faturas, searchTerm, statusFilter]);
 
-  const handleMarkAsPaid = (id: string, formaPagamento: Fatura['formaPagamento']) => {
-    setFaturas(prev => prev.map(f => 
-      f.id === id ? { 
-        ...f, 
-        status: 'pago' as const,
-        dataPagamento: new Date().toISOString().split('T')[0],
-        formaPagamento
-      } : f
-    ));
+  const handleMarkAsPaid = (
+    id: string,
+    formaPagamento: Fatura["formaPagamento"],
+  ) => {
+    setFaturas((prev) =>
+      prev.map((f) =>
+        f.id === id
+          ? {
+              ...f,
+              status: "pago" as const,
+              dataPagamento: new Date().toISOString().split("T")[0],
+              formaPagamento,
+            }
+          : f,
+      ),
+    );
   };
 
   const handleExportCSV = () => {
     const csvContent = [
-      ['Paciente', 'Valor', 'Data Vencimento', 'Status', 'Descrição'].join(','),
-      ...filteredFaturas.map(f => [
-        f.pacienteNome,
-        f.valor,
-        f.dataVencimento,
-        f.status,
-        f.descricao
-      ].join(','))
-    ].join('\n');
+      ["Paciente", "Valor", "Data Vencimento", "Status", "Descrição"].join(","),
+      ...filteredFaturas.map((f) =>
+        [f.pacienteNome, f.valor, f.dataVencimento, f.status, f.descricao].join(
+          ",",
+        ),
+      ),
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'faturas.csv';
+    a.download = "faturas.csv";
     a.click();
   };
 
-  const totalReceita = faturas.filter(f => f.status === 'pago').reduce((sum, f) => sum + f.valor, 0);
-  const totalPendente = faturas.filter(f => f.status === 'pendente').reduce((sum, f) => sum + f.valor, 0);
-  const totalVencido = faturas.filter(f => f.status === 'vencido').reduce((sum, f) => sum + f.valor, 0);
+  const totalReceita = faturas
+    .filter((f) => f.status === "pago")
+    .reduce((sum, f) => sum + f.valor, 0);
+  const totalPendente = faturas
+    .filter((f) => f.status === "pendente")
+    .reduce((sum, f) => sum + f.valor, 0);
+  const totalVencido = faturas
+    .filter((f) => f.status === "vencido")
+    .reduce((sum, f) => sum + f.valor, 0);
 
   return (
     <div className="space-y-6">
@@ -243,11 +300,16 @@ export function FinanceiroManager() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Receita Total
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  R$ {totalReceita.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  R${" "}
+                  {totalReceita.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
                 <p className="text-xs text-muted-foreground">Faturas pagas</p>
               </CardContent>
@@ -258,9 +320,14 @@ export function FinanceiroManager() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-yellow-600">
-                  R$ {totalPendente.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  R${" "}
+                  {totalPendente.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
-                <p className="text-xs text-muted-foreground">Aguardando pagamento</p>
+                <p className="text-xs text-muted-foreground">
+                  Aguardando pagamento
+                </p>
               </CardContent>
             </Card>
             <Card>
@@ -269,18 +336,27 @@ export function FinanceiroManager() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-red-600">
-                  R$ {totalVencido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  R${" "}
+                  {totalVencido.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
-                <p className="text-xs text-muted-foreground">Pagamentos em atraso</p>
+                <p className="text-xs text-muted-foreground">
+                  Pagamentos em atraso
+                </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total de Faturas</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total de Faturas
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{faturas.length}</div>
-                <p className="text-xs text-muted-foreground">Cadastradas no sistema</p>
+                <p className="text-xs text-muted-foreground">
+                  Cadastradas no sistema
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -351,50 +427,64 @@ export function FinanceiroManager() {
                   <TableBody>
                     {filteredFaturas.map((fatura) => (
                       <TableRow key={fatura.id}>
-                        <TableCell className="font-medium">{fatura.pacienteNome}</TableCell>
+                        <TableCell className="font-medium">
+                          {fatura.pacienteNome}
+                        </TableCell>
                         <TableCell className="font-bold">
-                          R$ {fatura.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                          R${" "}
+                          {fatura.valor.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
                         </TableCell>
                         <TableCell>
-                          {new Date(fatura.dataVencimento).toLocaleDateString('pt-BR')}
+                          {new Date(fatura.dataVencimento).toLocaleDateString(
+                            "pt-BR",
+                          )}
                         </TableCell>
                         <TableCell>
-                          {fatura.dataPagamento 
-                            ? new Date(fatura.dataPagamento).toLocaleDateString('pt-BR')
-                            : '-'
-                          }
+                          {fatura.dataPagamento
+                            ? new Date(fatura.dataPagamento).toLocaleDateString(
+                                "pt-BR",
+                              )
+                            : "-"}
                         </TableCell>
                         <TableCell>
-                          <Badge variant={
-                            fatura.status === 'pago' ? 'outline' :
-                            fatura.status === 'pendente' ? 'secondary' :
-                            fatura.status === 'vencido' ? 'destructive' : 'default'
-                          }>
-                            {fatura.status === 'pago' && (
+                          <Badge
+                            variant={
+                              fatura.status === "pago"
+                                ? "outline"
+                                : fatura.status === "pendente"
+                                  ? "secondary"
+                                  : fatura.status === "vencido"
+                                    ? "destructive"
+                                    : "default"
+                            }
+                          >
+                            {fatura.status === "pago" && (
                               <>
                                 <CheckCircle className="h-3 w-3 mr-1" />
                                 Pago
                               </>
                             )}
-                            {fatura.status === 'pendente' && 'Pendente'}
-                            {fatura.status === 'vencido' && (
+                            {fatura.status === "pendente" && "Pendente"}
+                            {fatura.status === "vencido" && (
                               <>
                                 <AlertTriangle className="h-3 w-3 mr-1" />
                                 Vencido
                               </>
                             )}
-                            {fatura.status === 'cancelado' && 'Cancelado'}
+                            {fatura.status === "cancelado" && "Cancelado"}
                           </Badge>
                         </TableCell>
                         <TableCell className="capitalize">
-                          {fatura.formaPagamento || '-'}
+                          {fatura.formaPagamento || "-"}
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   size="sm"
                                   onClick={() => setSelectedFatura(fatura)}
                                 >
@@ -441,44 +531,62 @@ export function FinanceiroManager() {
                     <div key={periodo.mes} className="border-b pb-4">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-medium">
-                          {new Date(periodo.mes + '-01').toLocaleDateString('pt-BR', { 
-                            month: 'long', 
-                            year: 'numeric' 
-                          })}
+                          {new Date(periodo.mes + "-01").toLocaleDateString(
+                            "pt-BR",
+                            {
+                              month: "long",
+                              year: "numeric",
+                            },
+                          )}
                         </span>
-                        <Badge variant={periodo.lucro > 0 ? 'outline' : 'destructive'}>
-                          {periodo.lucro > 0 ? '+' : ''}
-                          {periodo.lucro.toLocaleString('pt-BR', { 
-                            style: 'currency', 
-                            currency: 'BRL' 
+                        <Badge
+                          variant={
+                            periodo.lucro > 0 ? "outline" : "destructive"
+                          }
+                        >
+                          {periodo.lucro > 0 ? "+" : ""}
+                          {periodo.lucro.toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL",
                           })}
                         </Badge>
                       </div>
                       <div className="grid grid-cols-3 gap-2 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Receita:</span>
+                          <span className="text-muted-foreground">
+                            Receita:
+                          </span>
                           <p className="font-medium text-green-600">
-                            {periodo.receita.toLocaleString('pt-BR', { 
-                              style: 'currency', 
-                              currency: 'BRL' 
+                            {periodo.receita.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
                             })}
                           </p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Despesas:</span>
+                          <span className="text-muted-foreground">
+                            Despesas:
+                          </span>
                           <p className="font-medium text-red-600">
-                            {periodo.despesas.toLocaleString('pt-BR', { 
-                              style: 'currency', 
-                              currency: 'BRL' 
+                            {periodo.despesas.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
                             })}
                           </p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Lucro:</span>
-                          <p className={cn("font-medium", periodo.lucro > 0 ? "text-green-600" : "text-red-600")}>
-                            {periodo.lucro.toLocaleString('pt-BR', { 
-                              style: 'currency', 
-                              currency: 'BRL' 
+                          <p
+                            className={cn(
+                              "font-medium",
+                              periodo.lucro > 0
+                                ? "text-green-600"
+                                : "text-red-600",
+                            )}
+                          >
+                            {periodo.lucro.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
                             })}
                           </p>
                         </div>
@@ -501,30 +609,40 @@ export function FinanceiroManager() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['dinheiro', 'cartao', 'pix', 'convenio'].map((forma) => {
-                    const faturasPorForma = faturas.filter(f => f.formaPagamento === forma && f.status === 'pago');
-                    const totalPorForma = faturasPorForma.reduce((sum, f) => sum + f.valor, 0);
-                    const percentual = totalReceita > 0 ? (totalPorForma / totalReceita) * 100 : 0;
-                    
+                  {["dinheiro", "cartao", "pix", "convenio"].map((forma) => {
+                    const faturasPorForma = faturas.filter(
+                      (f) => f.formaPagamento === forma && f.status === "pago",
+                    );
+                    const totalPorForma = faturasPorForma.reduce(
+                      (sum, f) => sum + f.valor,
+                      0,
+                    );
+                    const percentual =
+                      totalReceita > 0
+                        ? (totalPorForma / totalReceita) * 100
+                        : 0;
+
                     return (
                       <div key={forma} className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="capitalize font-medium">{forma}</span>
+                          <span className="capitalize font-medium">
+                            {forma}
+                          </span>
                           <span className="text-sm text-muted-foreground">
                             {percentual.toFixed(1)}%
                           </span>
                         </div>
                         <div className="w-full bg-secondary rounded-full h-2">
-                          <div 
-                            className="bg-primary h-2 rounded-full" 
+                          <div
+                            className="bg-primary h-2 rounded-full"
                             style={{ width: `${percentual}%` }}
                           />
                         </div>
                         <div className="text-sm">
                           <span className="font-medium">
-                            {totalPorForma.toLocaleString('pt-BR', { 
-                              style: 'currency', 
-                              currency: 'BRL' 
+                            {totalPorForma.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
                             })}
                           </span>
                           <span className="text-muted-foreground ml-2">

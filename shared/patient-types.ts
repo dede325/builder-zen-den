@@ -17,7 +17,7 @@ export interface ExamePaciente {
   paciente_id: string;
   tipo: string;
   data: string;
-  status: 'pendente' | 'coletado' | 'resultado_disponivel' | 'entregue';
+  status: "pendente" | "coletado" | "resultado_disponivel" | "entregue";
   resultado_url?: string;
   resultado_texto?: string;
   medico_solicitante: string;
@@ -39,11 +39,11 @@ export interface Mensagem {
   conversa_id: string;
   remetente_id: string;
   remetente_nome: string;
-  remetente_tipo: 'paciente' | 'medico' | 'secretaria' | 'enfermagem';
+  remetente_tipo: "paciente" | "medico" | "secretaria" | "enfermagem";
   texto: string;
   enviado_em: string;
   lido: boolean;
-  tipo_arquivo?: 'imagem' | 'documento' | 'audio';
+  tipo_arquivo?: "imagem" | "documento" | "audio";
   arquivo_url?: string;
 }
 
@@ -52,11 +52,11 @@ export interface FaturaPaciente {
   paciente_id: string;
   valor: number;
   descricao: string;
-  status: 'pago' | 'pendente' | 'vencido' | 'cancelado';
+  status: "pago" | "pendente" | "vencido" | "cancelado";
   data_emissao: string;
   data_vencimento: string;
   data_pagamento?: string;
-  forma_pagamento?: 'dinheiro' | 'cartao' | 'pix' | 'convenio';
+  forma_pagamento?: "dinheiro" | "cartao" | "pix" | "convenio";
   servicos: ServicoFatura[];
   created_at: string;
   updated_at: string;
@@ -74,10 +74,10 @@ export interface ServicoFatura {
 export interface ContatoChat {
   id: string;
   nome: string;
-  tipo: 'medico' | 'secretaria' | 'enfermagem';
+  tipo: "medico" | "secretaria" | "enfermagem";
   especialidade?: string;
   foto_url?: string;
-  status: 'online' | 'offline' | 'ocupado';
+  status: "online" | "offline" | "ocupado";
   ultima_mensagem?: string;
   ultima_atividade: string;
   mensagens_nao_lidas: number;
@@ -90,9 +90,9 @@ export interface UploadResult {
 }
 
 export interface FiltroExames {
-  periodo: '7dias' | '30dias' | 'todos';
+  periodo: "7dias" | "30dias" | "todos";
   tipo?: string;
-  status?: ExamePaciente['status'];
+  status?: ExamePaciente["status"];
 }
 
 export interface ConfiguracoesPaciente {
@@ -102,6 +102,6 @@ export interface ConfiguracoesPaciente {
   notificacoes_push: boolean;
   privacidade_dados: boolean;
   compartilhar_exames: boolean;
-  tema: 'claro' | 'escuro' | 'sistema';
+  tema: "claro" | "escuro" | "sistema";
   idioma: string;
 }

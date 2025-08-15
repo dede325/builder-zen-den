@@ -1,23 +1,29 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Bell, 
-  Shield, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  User,
+  Mail,
+  Phone,
+  Bell,
+  Shield,
   Camera,
   Save,
-  Key
-} from 'lucide-react';
-import { PerfilGestor as PerfilGestorType } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
+  Key,
+} from "lucide-react";
+import { PerfilGestor as PerfilGestorType } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
 
 export function PerfilGestor() {
   const [perfil, setPerfil] = useState<PerfilGestorType | null>(null);
@@ -30,7 +36,7 @@ export function PerfilGestor() {
         const data = await ManagerDataService.getPerfilGestor();
         setPerfil(data);
       } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
+        console.error("Erro ao carregar perfil:", error);
       } finally {
         setLoading(false);
       }
@@ -46,14 +52,17 @@ export function PerfilGestor() {
     }, 1000);
   };
 
-  const handleNotificationChange = (key: keyof PerfilGestorType['notificacoes'], value: boolean) => {
+  const handleNotificationChange = (
+    key: keyof PerfilGestorType["notificacoes"],
+    value: boolean,
+  ) => {
     if (perfil) {
       setPerfil({
         ...perfil,
         notificacoes: {
           ...perfil.notificacoes,
-          [key]: value
-        }
+          [key]: value,
+        },
       });
     }
   };
@@ -94,7 +103,10 @@ export function PerfilGestor() {
                   <Avatar className="h-20 w-20">
                     <AvatarImage src={perfil.fotoPerfil} />
                     <AvatarFallback>
-                      {perfil.nome.split(' ').map(n => n[0]).join('')}
+                      {perfil.nome
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <Button variant="outline" size="sm">
@@ -109,7 +121,9 @@ export function PerfilGestor() {
                     <Input
                       id="nome"
                       value={perfil.nome}
-                      onChange={(e) => setPerfil({ ...perfil, nome: e.target.value })}
+                      onChange={(e) =>
+                        setPerfil({ ...perfil, nome: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -118,7 +132,9 @@ export function PerfilGestor() {
                       id="email"
                       type="email"
                       value={perfil.email}
-                      onChange={(e) => setPerfil({ ...perfil, email: e.target.value })}
+                      onChange={(e) =>
+                        setPerfil({ ...perfil, email: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -126,7 +142,9 @@ export function PerfilGestor() {
                     <Input
                       id="telefone"
                       value={perfil.telefone}
-                      onChange={(e) => setPerfil({ ...perfil, telefone: e.target.value })}
+                      onChange={(e) =>
+                        setPerfil({ ...perfil, telefone: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -134,14 +152,20 @@ export function PerfilGestor() {
                     <Input
                       id="cargo"
                       value={perfil.cargo}
-                      onChange={(e) => setPerfil({ ...perfil, cargo: e.target.value })}
+                      onChange={(e) =>
+                        setPerfil({ ...perfil, cargo: e.target.value })
+                      }
                     />
                   </div>
                 </div>
 
-                <Button onClick={handleSave} disabled={saving} className="w-full">
+                <Button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="w-full"
+                >
                   <Save className="h-4 w-4 mr-2" />
-                  {saving ? 'Salvando...' : 'Salvar Alterações'}
+                  {saving ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </CardContent>
             </Card>
@@ -156,21 +180,27 @@ export function PerfilGestor() {
                     <Mail className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">{perfil.email}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {perfil.email}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm font-medium">Telefone</p>
-                      <p className="text-sm text-muted-foreground">{perfil.telefone}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {perfil.telefone}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Shield className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm font-medium">Cargo</p>
-                      <p className="text-sm text-muted-foreground">{perfil.cargo}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {perfil.cargo}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -196,7 +226,9 @@ export function PerfilGestor() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="email-notif">Notificações por Email</Label>
+                      <Label htmlFor="email-notif">
+                        Notificações por Email
+                      </Label>
                       <p className="text-sm text-muted-foreground">
                         Receba notificações importantes por email
                       </p>
@@ -204,7 +236,9 @@ export function PerfilGestor() {
                     <Switch
                       id="email-notif"
                       checked={perfil.notificacoes.email}
-                      onCheckedChange={(checked) => handleNotificationChange('email', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("email", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -217,7 +251,9 @@ export function PerfilGestor() {
                     <Switch
                       id="sms-notif"
                       checked={perfil.notificacoes.sms}
-                      onCheckedChange={(checked) => handleNotificationChange('sms', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("sms", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -230,7 +266,9 @@ export function PerfilGestor() {
                     <Switch
                       id="push-notif"
                       checked={perfil.notificacoes.push}
-                      onCheckedChange={(checked) => handleNotificationChange('push', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("push", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -241,7 +279,9 @@ export function PerfilGestor() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="financeiro-notif">Alertas Financeiros</Label>
+                      <Label htmlFor="financeiro-notif">
+                        Alertas Financeiros
+                      </Label>
                       <p className="text-sm text-muted-foreground">
                         Faturas vencidas, pagamentos recebidos
                       </p>
@@ -249,7 +289,9 @@ export function PerfilGestor() {
                     <Switch
                       id="financeiro-notif"
                       checked={perfil.notificacoes.financeiro}
-                      onCheckedChange={(checked) => handleNotificationChange('financeiro', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("financeiro", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -262,12 +304,16 @@ export function PerfilGestor() {
                     <Switch
                       id="estoque-notif"
                       checked={perfil.notificacoes.estoque}
-                      onCheckedChange={(checked) => handleNotificationChange('estoque', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("estoque", checked)
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="consultas-notif">Consultas e Exames</Label>
+                      <Label htmlFor="consultas-notif">
+                        Consultas e Exames
+                      </Label>
                       <p className="text-sm text-muted-foreground">
                         Agendamentos, cancelamentos e resultados
                       </p>
@@ -275,7 +321,9 @@ export function PerfilGestor() {
                     <Switch
                       id="consultas-notif"
                       checked={perfil.notificacoes.consultas}
-                      onCheckedChange={(checked) => handleNotificationChange('consultas', checked)}
+                      onCheckedChange={(checked) =>
+                        handleNotificationChange("consultas", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -283,7 +331,7 @@ export function PerfilGestor() {
 
               <Button onClick={handleSave} disabled={saving} className="w-full">
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Salvando...' : 'Salvar Preferências'}
+                {saving ? "Salvando..." : "Salvar Preferências"}
               </Button>
             </CardContent>
           </Card>
@@ -321,7 +369,9 @@ export function PerfilGestor() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="confirm-password">Confirmar Nova Senha</Label>
+                    <Label htmlFor="confirm-password">
+                      Confirmar Nova Senha
+                    </Label>
                     <Input
                       id="confirm-password"
                       type="password"
@@ -329,9 +379,7 @@ export function PerfilGestor() {
                     />
                   </div>
                 </div>
-                <Button className="w-full">
-                  Alterar Senha
-                </Button>
+                <Button className="w-full">Alterar Senha</Button>
               </div>
 
               <div className="space-y-4">

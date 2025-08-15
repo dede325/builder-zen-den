@@ -1,31 +1,57 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { 
-  FileText, 
-  Search, 
-  Filter, 
-  Eye, 
-  Download, 
-  Upload, 
-  CheckCircle, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  FileText,
+  Search,
+  Filter,
+  Eye,
+  Download,
+  Upload,
+  CheckCircle,
   Clock,
   Plus,
-  Calendar
-} from 'lucide-react';
-import { Exame } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
-import { cn } from '@/lib/utils';
+  Calendar,
+} from "lucide-react";
+import { Exame } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
+import { cn } from "@/lib/utils";
 
 interface ExameDetailsProps {
   exame: Exame;
   onClose: () => void;
-  onUpdateStatus: (id: string, status: Exame['status']) => void;
+  onUpdateStatus: (id: string, status: Exame["status"]) => void;
 }
 
 function ExameDetails({ exame, onClose, onUpdateStatus }: ExameDetailsProps) {
@@ -37,7 +63,7 @@ function ExameDetails({ exame, onClose, onUpdateStatus }: ExameDetailsProps) {
           Informações completas e ações disponíveis
         </DialogDescription>
       </DialogHeader>
-      
+
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -54,25 +80,32 @@ function ExameDetails({ exame, onClose, onUpdateStatus }: ExameDetailsProps) {
           </div>
           <div>
             <label className="text-sm font-medium">Data da Coleta</label>
-            <p>{new Date(exame.dataColeta).toLocaleDateString('pt-BR')}</p>
+            <p>{new Date(exame.dataColeta).toLocaleDateString("pt-BR")}</p>
           </div>
           {exame.dataResultado && (
             <div>
               <label className="text-sm font-medium">Data do Resultado</label>
-              <p>{new Date(exame.dataResultado).toLocaleDateString('pt-BR')}</p>
+              <p>{new Date(exame.dataResultado).toLocaleDateString("pt-BR")}</p>
             </div>
           )}
           <div>
             <label className="text-sm font-medium">Status</label>
-            <Badge variant={
-              exame.status === 'pendente' ? 'secondary' :
-              exame.status === 'coletado' ? 'default' :
-              exame.status === 'resultado_disponivel' ? 'outline' : 'destructive'
-            }>
-              {exame.status === 'pendente' && 'Pendente'}
-              {exame.status === 'coletado' && 'Coletado'}
-              {exame.status === 'resultado_disponivel' && 'Resultado Disponível'}
-              {exame.status === 'entregue' && 'Entregue'}
+            <Badge
+              variant={
+                exame.status === "pendente"
+                  ? "secondary"
+                  : exame.status === "coletado"
+                    ? "default"
+                    : exame.status === "resultado_disponivel"
+                      ? "outline"
+                      : "destructive"
+              }
+            >
+              {exame.status === "pendente" && "Pendente"}
+              {exame.status === "coletado" && "Coletado"}
+              {exame.status === "resultado_disponivel" &&
+                "Resultado Disponível"}
+              {exame.status === "entregue" && "Entregue"}
             </Badge>
           </div>
         </div>
@@ -85,25 +118,34 @@ function ExameDetails({ exame, onClose, onUpdateStatus }: ExameDetailsProps) {
         )}
 
         <div className="flex space-x-2">
-          {exame.status === 'pendente' && (
-            <Button onClick={() => onUpdateStatus(exame.id, 'coletado')} className="flex-1">
+          {exame.status === "pendente" && (
+            <Button
+              onClick={() => onUpdateStatus(exame.id, "coletado")}
+              className="flex-1"
+            >
               <CheckCircle className="h-4 w-4 mr-2" />
               Marcar como Coletado
             </Button>
           )}
-          {exame.status === 'coletado' && (
-            <Button onClick={() => onUpdateStatus(exame.id, 'resultado_disponivel')} className="flex-1">
+          {exame.status === "coletado" && (
+            <Button
+              onClick={() => onUpdateStatus(exame.id, "resultado_disponivel")}
+              className="flex-1"
+            >
               <Upload className="h-4 w-4 mr-2" />
               Disponibilizar Resultado
             </Button>
           )}
-          {exame.status === 'resultado_disponivel' && (
+          {exame.status === "resultado_disponivel" && (
             <>
               <Button variant="outline" className="flex-1">
                 <Download className="h-4 w-4 mr-2" />
                 Download PDF
               </Button>
-              <Button onClick={() => onUpdateStatus(exame.id, 'entregue')} className="flex-1">
+              <Button
+                onClick={() => onUpdateStatus(exame.id, "entregue")}
+                className="flex-1"
+              >
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Marcar como Entregue
               </Button>
@@ -119,9 +161,9 @@ export function ExamesManager() {
   const [exames, setExames] = useState<Exame[]>([]);
   const [filteredExames, setFilteredExames] = useState<Exame[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [tipoFilter, setTipoFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [tipoFilter, setTipoFilter] = useState("all");
   const [selectedExame, setSelectedExame] = useState<Exame | null>(null);
 
   useEffect(() => {
@@ -131,7 +173,7 @@ export function ExamesManager() {
         setExames(data);
         setFilteredExames(data);
       } catch (error) {
-        console.error('Erro ao carregar exames:', error);
+        console.error("Erro ao carregar exames:", error);
       } finally {
         setLoading(false);
       }
@@ -144,36 +186,46 @@ export function ExamesManager() {
     let filtered = exames;
 
     if (searchTerm) {
-      filtered = filtered.filter(exame =>
-        exame.pacienteNome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        exame.medicoSolicitante.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        exame.tipoExame.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (exame) =>
+          exame.pacienteNome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          exame.medicoSolicitante
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          exame.tipoExame.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(exame => exame.status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((exame) => exame.status === statusFilter);
     }
 
-    if (tipoFilter !== 'all') {
-      filtered = filtered.filter(exame => exame.tipoExame === tipoFilter);
+    if (tipoFilter !== "all") {
+      filtered = filtered.filter((exame) => exame.tipoExame === tipoFilter);
     }
 
     setFilteredExames(filtered);
   }, [exames, searchTerm, statusFilter, tipoFilter]);
 
-  const handleUpdateStatus = (id: string, status: Exame['status']) => {
-    setExames(prev => prev.map(e => 
-      e.id === id ? { 
-        ...e, 
-        status,
-        dataResultado: status === 'resultado_disponivel' ? new Date().toISOString().split('T')[0] : e.dataResultado
-      } : e
-    ));
+  const handleUpdateStatus = (id: string, status: Exame["status"]) => {
+    setExames((prev) =>
+      prev.map((e) =>
+        e.id === id
+          ? {
+              ...e,
+              status,
+              dataResultado:
+                status === "resultado_disponivel"
+                  ? new Date().toISOString().split("T")[0]
+                  : e.dataResultado,
+            }
+          : e,
+      ),
+    );
     setSelectedExame(null);
   };
 
-  const tiposExame = Array.from(new Set(exames.map(e => e.tipoExame)));
+  const tiposExame = Array.from(new Set(exames.map((e) => e.tipoExame)));
 
   return (
     <div className="space-y-6">
@@ -207,7 +259,7 @@ export function ExamesManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-600">
-              {exames.filter(e => e.status === 'pendente').length}
+              {exames.filter((e) => e.status === "pendente").length}
             </div>
             <p className="text-xs text-muted-foreground">Aguardando coleta</p>
           </CardContent>
@@ -218,9 +270,11 @@ export function ExamesManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
-              {exames.filter(e => e.status === 'coletado').length}
+              {exames.filter((e) => e.status === "coletado").length}
             </div>
-            <p className="text-xs text-muted-foreground">Processando resultado</p>
+            <p className="text-xs text-muted-foreground">
+              Processando resultado
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -229,9 +283,11 @@ export function ExamesManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {exames.filter(e => e.status === 'resultado_disponivel').length}
+              {exames.filter((e) => e.status === "resultado_disponivel").length}
             </div>
-            <p className="text-xs text-muted-foreground">Resultado disponível</p>
+            <p className="text-xs text-muted-foreground">
+              Resultado disponível
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -263,7 +319,9 @@ export function ExamesManager() {
                 <SelectItem value="all">Todos os status</SelectItem>
                 <SelectItem value="pendente">Pendentes</SelectItem>
                 <SelectItem value="coletado">Coletados</SelectItem>
-                <SelectItem value="resultado_disponivel">Resultado Disponível</SelectItem>
+                <SelectItem value="resultado_disponivel">
+                  Resultado Disponível
+                </SelectItem>
                 <SelectItem value="entregue">Entregues</SelectItem>
               </SelectContent>
             </Select>
@@ -273,8 +331,10 @@ export function ExamesManager() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os tipos</SelectItem>
-                {tiposExame.map(tipo => (
-                  <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
+                {tiposExame.map((tipo) => (
+                  <SelectItem key={tipo} value={tipo}>
+                    {tipo}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -309,41 +369,51 @@ export function ExamesManager() {
               <TableBody>
                 {filteredExames.map((exame) => (
                   <TableRow key={exame.id}>
-                    <TableCell className="font-medium">{exame.pacienteNome}</TableCell>
+                    <TableCell className="font-medium">
+                      {exame.pacienteNome}
+                    </TableCell>
                     <TableCell>{exame.tipoExame}</TableCell>
                     <TableCell>{exame.medicoSolicitante}</TableCell>
                     <TableCell>
-                      {new Date(exame.dataColeta).toLocaleDateString('pt-BR')}
+                      {new Date(exame.dataColeta).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell>
-                      {exame.dataResultado 
-                        ? new Date(exame.dataResultado).toLocaleDateString('pt-BR')
-                        : '-'
-                      }
+                      {exame.dataResultado
+                        ? new Date(exame.dataResultado).toLocaleDateString(
+                            "pt-BR",
+                          )
+                        : "-"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={
-                        exame.status === 'pendente' ? 'secondary' :
-                        exame.status === 'coletado' ? 'default' :
-                        exame.status === 'resultado_disponivel' ? 'outline' : 'destructive'
-                      }>
-                        {exame.status === 'pendente' && (
+                      <Badge
+                        variant={
+                          exame.status === "pendente"
+                            ? "secondary"
+                            : exame.status === "coletado"
+                              ? "default"
+                              : exame.status === "resultado_disponivel"
+                                ? "outline"
+                                : "destructive"
+                        }
+                      >
+                        {exame.status === "pendente" && (
                           <>
                             <Clock className="h-3 w-3 mr-1" />
                             Pendente
                           </>
                         )}
-                        {exame.status === 'coletado' && 'Coletado'}
-                        {exame.status === 'resultado_disponivel' && 'Resultado Disponível'}
-                        {exame.status === 'entregue' && 'Entregue'}
+                        {exame.status === "coletado" && "Coletado"}
+                        {exame.status === "resultado_disponivel" &&
+                          "Resultado Disponível"}
+                        {exame.status === "entregue" && "Entregue"}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => setSelectedExame(exame)}
                             >
@@ -358,7 +428,7 @@ export function ExamesManager() {
                             />
                           )}
                         </Dialog>
-                        {exame.status === 'resultado_disponivel' && (
+                        {exame.status === "resultado_disponivel" && (
                           <Button variant="outline" size="sm">
                             <Download className="h-4 w-4" />
                           </Button>

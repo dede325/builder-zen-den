@@ -1,26 +1,52 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { 
-  Calendar, 
-  Search, 
-  Filter, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  CheckCircle, 
-  XCircle, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Calendar,
+  Search,
+  Filter,
+  Eye,
+  Edit,
+  Trash2,
+  CheckCircle,
+  XCircle,
   Clock,
-  Plus
-} from 'lucide-react';
-import { Consulta } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
-import { cn } from '@/lib/utils';
+  Plus,
+} from "lucide-react";
+import { Consulta } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
+import { cn } from "@/lib/utils";
 
 interface ConsultaDetailsProps {
   consulta: Consulta;
@@ -30,7 +56,13 @@ interface ConsultaDetailsProps {
   onReschedule: (id: string) => void;
 }
 
-function ConsultaDetails({ consulta, onClose, onApprove, onCancel, onReschedule }: ConsultaDetailsProps) {
+function ConsultaDetails({
+  consulta,
+  onClose,
+  onApprove,
+  onCancel,
+  onReschedule,
+}: ConsultaDetailsProps) {
   return (
     <DialogContent className="max-w-2xl">
       <DialogHeader>
@@ -39,7 +71,7 @@ function ConsultaDetails({ consulta, onClose, onApprove, onCancel, onReschedule 
           Informações completas e ações disponíveis
         </DialogDescription>
       </DialogHeader>
-      
+
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -56,7 +88,11 @@ function ConsultaDetails({ consulta, onClose, onApprove, onCancel, onReschedule 
           </div>
           <div>
             <label className="text-sm font-medium">Data e Hora</label>
-            <p>{new Date(`${consulta.data}T${consulta.hora}`).toLocaleString('pt-BR')}</p>
+            <p>
+              {new Date(`${consulta.data}T${consulta.hora}`).toLocaleString(
+                "pt-BR",
+              )}
+            </p>
           </div>
           <div>
             <label className="text-sm font-medium">Tipo</label>
@@ -64,15 +100,21 @@ function ConsultaDetails({ consulta, onClose, onApprove, onCancel, onReschedule 
           </div>
           <div>
             <label className="text-sm font-medium">Status</label>
-            <Badge variant={
-              consulta.status === 'agendada' ? 'secondary' :
-              consulta.status === 'em_andamento' ? 'default' :
-              consulta.status === 'concluida' ? 'outline' : 'destructive'
-            }>
-              {consulta.status === 'agendada' && 'Agendada'}
-              {consulta.status === 'em_andamento' && 'Em Andamento'}
-              {consulta.status === 'concluida' && 'Concluída'}
-              {consulta.status === 'cancelada' && 'Cancelada'}
+            <Badge
+              variant={
+                consulta.status === "agendada"
+                  ? "secondary"
+                  : consulta.status === "em_andamento"
+                    ? "default"
+                    : consulta.status === "concluida"
+                      ? "outline"
+                      : "destructive"
+              }
+            >
+              {consulta.status === "agendada" && "Agendada"}
+              {consulta.status === "em_andamento" && "Em Andamento"}
+              {consulta.status === "concluida" && "Concluída"}
+              {consulta.status === "cancelada" && "Cancelada"}
             </Badge>
           </div>
         </div>
@@ -80,28 +122,38 @@ function ConsultaDetails({ consulta, onClose, onApprove, onCancel, onReschedule 
         {consulta.observacoes && (
           <div>
             <label className="text-sm font-medium">Observações</label>
-            <p className="mt-1 p-3 bg-muted rounded-lg">{consulta.observacoes}</p>
+            <p className="mt-1 p-3 bg-muted rounded-lg">
+              {consulta.observacoes}
+            </p>
           </div>
         )}
 
         <div className="flex space-x-2">
-          {consulta.status === 'agendada' && (
+          {consulta.status === "agendada" && (
             <>
               <Button onClick={() => onApprove(consulta.id)} className="flex-1">
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Confirmar
               </Button>
-              <Button variant="outline" onClick={() => onReschedule(consulta.id)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => onReschedule(consulta.id)}
+                className="flex-1"
+              >
                 <Calendar className="h-4 w-4 mr-2" />
                 Reagendar
               </Button>
-              <Button variant="destructive" onClick={() => onCancel(consulta.id)} className="flex-1">
+              <Button
+                variant="destructive"
+                onClick={() => onCancel(consulta.id)}
+                className="flex-1"
+              >
                 <XCircle className="h-4 w-4 mr-2" />
                 Cancelar
               </Button>
             </>
           )}
-          {consulta.status === 'em_andamento' && (
+          {consulta.status === "em_andamento" && (
             <Button onClick={() => onApprove(consulta.id)} className="flex-1">
               <CheckCircle className="h-4 w-4 mr-2" />
               Finalizar Consulta
@@ -117,10 +169,12 @@ export function ConsultasManager() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
   const [filteredConsultas, setFilteredConsultas] = useState<Consulta[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [especialidadeFilter, setEspecialidadeFilter] = useState('all');
-  const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [especialidadeFilter, setEspecialidadeFilter] = useState("all");
+  const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(
+    null,
+  );
 
   useEffect(() => {
     const loadConsultas = async () => {
@@ -129,7 +183,7 @@ export function ConsultasManager() {
         setConsultas(data);
         setFilteredConsultas(data);
       } catch (error) {
-        console.error('Erro ao carregar consultas:', error);
+        console.error("Erro ao carregar consultas:", error);
       } finally {
         setLoading(false);
       }
@@ -142,43 +196,56 @@ export function ConsultasManager() {
     let filtered = consultas;
 
     if (searchTerm) {
-      filtered = filtered.filter(consulta =>
-        consulta.pacienteNome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        consulta.medicoNome.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (consulta) =>
+          consulta.pacienteNome
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          consulta.medicoNome.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(consulta => consulta.status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(
+        (consulta) => consulta.status === statusFilter,
+      );
     }
 
-    if (especialidadeFilter !== 'all') {
-      filtered = filtered.filter(consulta => consulta.especialidade === especialidadeFilter);
+    if (especialidadeFilter !== "all") {
+      filtered = filtered.filter(
+        (consulta) => consulta.especialidade === especialidadeFilter,
+      );
     }
 
     setFilteredConsultas(filtered);
   }, [consultas, searchTerm, statusFilter, especialidadeFilter]);
 
   const handleApprove = (id: string) => {
-    setConsultas(prev => prev.map(c => 
-      c.id === id ? { ...c, status: 'em_andamento' as const } : c
-    ));
+    setConsultas((prev) =>
+      prev.map((c) =>
+        c.id === id ? { ...c, status: "em_andamento" as const } : c,
+      ),
+    );
     setSelectedConsulta(null);
   };
 
   const handleCancel = (id: string) => {
-    setConsultas(prev => prev.map(c => 
-      c.id === id ? { ...c, status: 'cancelada' as const } : c
-    ));
+    setConsultas((prev) =>
+      prev.map((c) =>
+        c.id === id ? { ...c, status: "cancelada" as const } : c,
+      ),
+    );
     setSelectedConsulta(null);
   };
 
   const handleReschedule = (id: string) => {
-    console.log('Reagendar consulta:', id);
+    console.log("Reagendar consulta:", id);
     setSelectedConsulta(null);
   };
 
-  const especialidades = Array.from(new Set(consultas.map(c => c.especialidade)));
+  const especialidades = Array.from(
+    new Set(consultas.map((c) => c.especialidade)),
+  );
 
   return (
     <div className="space-y-6">
@@ -203,7 +270,9 @@ export function ConsultasManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{consultas.length}</div>
-            <p className="text-xs text-muted-foreground">Consultas cadastradas</p>
+            <p className="text-xs text-muted-foreground">
+              Consultas cadastradas
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -212,9 +281,11 @@ export function ConsultasManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
-              {consultas.filter(c => c.status === 'agendada').length}
+              {consultas.filter((c) => c.status === "agendada").length}
             </div>
-            <p className="text-xs text-muted-foreground">Aguardando confirmação</p>
+            <p className="text-xs text-muted-foreground">
+              Aguardando confirmação
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -223,7 +294,7 @@ export function ConsultasManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {consultas.filter(c => c.status === 'em_andamento').length}
+              {consultas.filter((c) => c.status === "em_andamento").length}
             </div>
             <p className="text-xs text-muted-foreground">Acontecendo agora</p>
           </CardContent>
@@ -234,7 +305,7 @@ export function ConsultasManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-600">
-              {consultas.filter(c => c.status === 'concluida').length}
+              {consultas.filter((c) => c.status === "concluida").length}
             </div>
             <p className="text-xs text-muted-foreground">Finalizadas</p>
           </CardContent>
@@ -272,14 +343,19 @@ export function ConsultasManager() {
                 <SelectItem value="cancelada">Canceladas</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={especialidadeFilter} onValueChange={setEspecialidadeFilter}>
+            <Select
+              value={especialidadeFilter}
+              onValueChange={setEspecialidadeFilter}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Especialidade" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas as especialidades</SelectItem>
-                {especialidades.map(esp => (
-                  <SelectItem key={esp} value={esp}>{esp}</SelectItem>
+                {especialidades.map((esp) => (
+                  <SelectItem key={esp} value={esp}>
+                    {esp}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -314,41 +390,53 @@ export function ConsultasManager() {
               <TableBody>
                 {filteredConsultas.map((consulta) => (
                   <TableRow key={consulta.id}>
-                    <TableCell className="font-medium">{consulta.pacienteNome}</TableCell>
+                    <TableCell className="font-medium">
+                      {consulta.pacienteNome}
+                    </TableCell>
                     <TableCell>{consulta.medicoNome}</TableCell>
                     <TableCell>{consulta.especialidade}</TableCell>
                     <TableCell>
-                      {new Date(`${consulta.data}T${consulta.hora}`).toLocaleString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
+                      {new Date(
+                        `${consulta.data}T${consulta.hora}`,
+                      ).toLocaleString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
                       })}
                     </TableCell>
-                    <TableCell className="capitalize">{consulta.tipo}</TableCell>
+                    <TableCell className="capitalize">
+                      {consulta.tipo}
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={
-                        consulta.status === 'agendada' ? 'secondary' :
-                        consulta.status === 'em_andamento' ? 'default' :
-                        consulta.status === 'concluida' ? 'outline' : 'destructive'
-                      }>
-                        {consulta.status === 'agendada' && (
+                      <Badge
+                        variant={
+                          consulta.status === "agendada"
+                            ? "secondary"
+                            : consulta.status === "em_andamento"
+                              ? "default"
+                              : consulta.status === "concluida"
+                                ? "outline"
+                                : "destructive"
+                        }
+                      >
+                        {consulta.status === "agendada" && (
                           <>
                             <Clock className="h-3 w-3 mr-1" />
                             Agendada
                           </>
                         )}
-                        {consulta.status === 'em_andamento' && 'Em Andamento'}
-                        {consulta.status === 'concluida' && 'Concluída'}
-                        {consulta.status === 'cancelada' && 'Cancelada'}
+                        {consulta.status === "em_andamento" && "Em Andamento"}
+                        {consulta.status === "concluida" && "Concluída"}
+                        {consulta.status === "cancelada" && "Cancelada"}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => setSelectedConsulta(consulta)}
                             >

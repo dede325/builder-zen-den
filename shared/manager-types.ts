@@ -15,8 +15,8 @@ export interface Consulta {
   especialidade: string;
   data: string;
   hora: string;
-  status: 'agendada' | 'concluida' | 'cancelada' | 'em_andamento';
-  tipo: 'consulta' | 'retorno';
+  status: "agendada" | "concluida" | "cancelada" | "em_andamento";
+  tipo: "consulta" | "retorno";
   observacoes?: string;
 }
 
@@ -28,7 +28,7 @@ export interface Exame {
   tipoExame: string;
   dataColeta: string;
   dataResultado?: string;
-  status: 'pendente' | 'coletado' | 'resultado_disponivel' | 'entregue';
+  status: "pendente" | "coletado" | "resultado_disponivel" | "entregue";
   observacoes?: string;
 }
 
@@ -37,10 +37,10 @@ export interface Usuario {
   nome: string;
   email: string;
   telefone: string;
-  tipo: 'medico' | 'enfermeira' | 'secretaria' | 'paciente' | 'gestor';
+  tipo: "medico" | "enfermeira" | "secretaria" | "paciente" | "gestor";
   especialidade?: string;
   crm?: string;
-  status: 'ativo' | 'inativo' | 'suspenso';
+  status: "ativo" | "inativo" | "suspenso";
   dataCadastro: string;
   ultimoLogin?: string;
 }
@@ -52,9 +52,9 @@ export interface Fatura {
   valor: number;
   dataVencimento: string;
   dataPagamento?: string;
-  status: 'pendente' | 'pago' | 'vencido' | 'cancelado';
+  status: "pendente" | "pago" | "vencido" | "cancelado";
   descricao: string;
-  formaPagamento?: 'dinheiro' | 'cartao' | 'pix' | 'convenio';
+  formaPagamento?: "dinheiro" | "cartao" | "pix" | "convenio";
 }
 
 export interface MensagemInterna {
@@ -68,13 +68,13 @@ export interface MensagemInterna {
   dataEnvio: string;
   lida: boolean;
   arquivada: boolean;
-  prioridade: 'baixa' | 'normal' | 'alta' | 'urgente';
+  prioridade: "baixa" | "normal" | "alta" | "urgente";
 }
 
 export interface ItemEstoque {
   id: string;
   nome: string;
-  categoria: 'medicamento' | 'material' | 'equipamento';
+  categoria: "medicamento" | "material" | "equipamento";
   quantidade: number;
   quantidadeMinima: number;
   unidade: string;
@@ -88,7 +88,7 @@ export interface MovimentacaoEstoque {
   id: string;
   itemId: string;
   itemNome: string;
-  tipo: 'entrada' | 'saida';
+  tipo: "entrada" | "saida";
   quantidade: number;
   motivo: string;
   responsavel: string;

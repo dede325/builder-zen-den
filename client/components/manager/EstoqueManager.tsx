@@ -1,44 +1,70 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Package, 
-  Search, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Package,
+  Search,
   Plus,
   AlertTriangle,
   TrendingDown,
   TrendingUp,
-  Filter
-} from 'lucide-react';
-import { ItemEstoque, MovimentacaoEstoque } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
-import { cn } from '@/lib/utils';
+  Filter,
+} from "lucide-react";
+import { ItemEstoque, MovimentacaoEstoque } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
+import { cn } from "@/lib/utils";
 
 export function EstoqueManager() {
   const [estoque, setEstoque] = useState<ItemEstoque[]>([]);
   const [movimentacoes, setMovimentacoes] = useState<MovimentacaoEstoque[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoriaFilter, setCategoriaFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoriaFilter, setCategoriaFilter] = useState("all");
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const [estoqueData, movData] = await Promise.all([
           ManagerDataService.getEstoque(),
-          ManagerDataService.getMovimentacoes()
+          ManagerDataService.getMovimentacoes(),
         ]);
         setEstoque(estoqueData);
         setMovimentacoes(movData);
       } catch (error) {
-        console.error('Erro ao carregar estoque:', error);
+        console.error("Erro ao carregar estoque:", error);
       } finally {
         setLoading(false);
       }
@@ -47,13 +73,18 @@ export function EstoqueManager() {
     loadData();
   }, []);
 
-  const filteredEstoque = estoque.filter(item => {
-    const matchSearch = item.nome.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchCategoria = categoriaFilter === 'all' || item.categoria === categoriaFilter;
+  const filteredEstoque = estoque.filter((item) => {
+    const matchSearch = item.nome
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchCategoria =
+      categoriaFilter === "all" || item.categoria === categoriaFilter;
     return matchSearch && matchCategoria;
   });
 
-  const alertasEstoque = estoque.filter(item => item.quantidade <= item.quantidadeMinima);
+  const alertasEstoque = estoque.filter(
+    (item) => item.quantidade <= item.quantidadeMinima,
+  );
 
   return (
     <div className="space-y-6">
@@ -82,7 +113,9 @@ export function EstoqueManager() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total de Itens</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total de Itens
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{estoque.length}</div>
@@ -91,11 +124,13 @@ export function EstoqueManager() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Medicamentos</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Medicamentos
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-blue-600">
-                  {estoque.filter(i => i.categoria === 'medicamento').length}
+                  {estoque.filter((i) => i.categoria === "medicamento").length}
                 </div>
                 <p className="text-xs text-muted-foreground">Em estoque</p>
               </CardContent>
@@ -106,7 +141,7 @@ export function EstoqueManager() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  {estoque.filter(i => i.categoria === 'material').length}
+                  {estoque.filter((i) => i.categoria === "material").length}
                 </div>
                 <p className="text-xs text-muted-foreground">Disponíveis</p>
               </CardContent>
@@ -143,7 +178,10 @@ export function EstoqueManager() {
                     className="pl-10"
                   />
                 </div>
-                <Select value={categoriaFilter} onValueChange={setCategoriaFilter}>
+                <Select
+                  value={categoriaFilter}
+                  onValueChange={setCategoriaFilter}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Categoria" />
                   </SelectTrigger>
@@ -181,19 +219,28 @@ export function EstoqueManager() {
                   {filteredEstoque.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">{item.nome}</TableCell>
-                      <TableCell className="capitalize">{item.categoria}</TableCell>
+                      <TableCell className="capitalize">
+                        {item.categoria}
+                      </TableCell>
                       <TableCell>
-                        <span className={cn(
-                          "font-medium",
-                          item.quantidade <= item.quantidadeMinima ? "text-red-600" : "text-green-600"
-                        )}>
+                        <span
+                          className={cn(
+                            "font-medium",
+                            item.quantidade <= item.quantidadeMinima
+                              ? "text-red-600"
+                              : "text-green-600",
+                          )}
+                        >
                           {item.quantidade}
                         </span>
                       </TableCell>
                       <TableCell>{item.quantidadeMinima}</TableCell>
                       <TableCell>{item.unidade}</TableCell>
                       <TableCell>
-                        R$ {item.valorUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        R${" "}
+                        {item.valorUnitario.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}
                       </TableCell>
                       <TableCell>{item.fornecedor}</TableCell>
                       <TableCell>
@@ -234,10 +281,16 @@ export function EstoqueManager() {
                 <TableBody>
                   {movimentacoes.map((mov) => (
                     <TableRow key={mov.id}>
-                      <TableCell className="font-medium">{mov.itemNome}</TableCell>
+                      <TableCell className="font-medium">
+                        {mov.itemNome}
+                      </TableCell>
                       <TableCell>
-                        <Badge variant={mov.tipo === 'entrada' ? 'outline' : 'secondary'}>
-                          {mov.tipo === 'entrada' ? (
+                        <Badge
+                          variant={
+                            mov.tipo === "entrada" ? "outline" : "secondary"
+                          }
+                        >
+                          {mov.tipo === "entrada" ? (
                             <>
                               <TrendingUp className="h-3 w-3 mr-1" />
                               Entrada
@@ -252,7 +305,9 @@ export function EstoqueManager() {
                       </TableCell>
                       <TableCell>{mov.quantidade}</TableCell>
                       <TableCell>{mov.responsavel}</TableCell>
-                      <TableCell>{new Date(mov.data).toLocaleDateString('pt-BR')}</TableCell>
+                      <TableCell>
+                        {new Date(mov.data).toLocaleDateString("pt-BR")}
+                      </TableCell>
                       <TableCell>{mov.motivo}</TableCell>
                     </TableRow>
                   ))}
@@ -276,12 +331,18 @@ export function EstoqueManager() {
             <CardContent>
               <div className="space-y-4">
                 {alertasEstoque.map((item) => (
-                  <div key={item.id} className="border border-red-200 rounded-lg p-4 bg-red-50 dark:bg-red-950/20">
+                  <div
+                    key={item.id}
+                    className="border border-red-200 rounded-lg p-4 bg-red-50 dark:bg-red-950/20"
+                  >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium text-red-900 dark:text-red-100">{item.nome}</h3>
+                        <h3 className="font-medium text-red-900 dark:text-red-100">
+                          {item.nome}
+                        </h3>
                         <p className="text-sm text-red-700 dark:text-red-300">
-                          Estoque atual: {item.quantidade} {item.unidade} | Mínimo: {item.quantidadeMinima} {item.unidade}
+                          Estoque atual: {item.quantidade} {item.unidade} |
+                          Mínimo: {item.quantidadeMinima} {item.unidade}
                         </p>
                       </div>
                       <Button variant="outline" size="sm">

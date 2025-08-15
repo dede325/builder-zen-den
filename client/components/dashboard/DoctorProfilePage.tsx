@@ -1,23 +1,35 @@
-import { useEffect, useState, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  User, 
-  Camera, 
-  Save, 
-  Upload, 
-  Mail, 
-  Phone, 
-  MapPin, 
+import { useEffect, useState, useRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  User,
+  Camera,
+  Save,
+  Upload,
+  Mail,
+  Phone,
+  MapPin,
   Calendar,
   Shield,
   Bell,
@@ -33,11 +45,11 @@ import {
   Settings,
   FileText,
   Globe,
-  Lock
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+  Lock,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface DoctorProfile {
   id: string;
@@ -106,11 +118,11 @@ interface DoctorProfile {
       shareStatistics: boolean;
     };
     interface: {
-      theme: 'light' | 'dark' | 'system';
+      theme: "light" | "dark" | "system";
       language: string;
       timezone: string;
       dateFormat: string;
-      timeFormat: '12h' | '24h';
+      timeFormat: "12h" | "24h";
     };
   };
   statistics: {
@@ -130,59 +142,59 @@ interface DoctorProfile {
 }
 
 const mockDoctorProfile: DoctorProfile = {
-  id: 'doc_001',
+  id: "doc_001",
   personalInfo: {
-    firstName: 'João',
-    lastName: 'Carvalho Santos',
-    email: 'joao.carvalho@bemcuidar.com.br',
-    phone: '(11) 99999-1234',
-    dateOfBirth: '1980-05-15',
-    cpf: '123.456.789-00',
-    rg: '12.345.678-9',
+    firstName: "João",
+    lastName: "Carvalho Santos",
+    email: "joao.carvalho@bemcuidar.com.br",
+    phone: "(11) 99999-1234",
+    dateOfBirth: "1980-05-15",
+    cpf: "123.456.789-00",
+    rg: "12.345.678-9",
     address: {
-      street: 'Rua dos Médicos',
-      number: '123',
-      complement: 'Apartamento 45',
-      neighborhood: 'Vila Médica',
-      city: 'São Paulo',
-      state: 'SP',
-      zipCode: '01234-567'
+      street: "Rua dos Médicos",
+      number: "123",
+      complement: "Apartamento 45",
+      neighborhood: "Vila Médica",
+      city: "São Paulo",
+      state: "SP",
+      zipCode: "01234-567",
     },
-    avatar: '/avatars/doctor.jpg'
+    avatar: "/avatars/doctor.jpg",
   },
   professionalInfo: {
-    crm: '123456',
-    crmState: 'SP',
-    specialty: 'Cardiologia',
-    subspecialties: ['Ecocardiografia', 'Cardiologia Intervencionista'],
-    medicalSchool: 'Universidade de São Paulo (USP)',
-    graduationYear: '2005',
-    residency: 'Hospital das Clínicas - USP',
-    residencyYear: '2008',
-    fellowships: ['Fellowship em Cardiologia Intervencionista - InCor'],
+    crm: "123456",
+    crmState: "SP",
+    specialty: "Cardiologia",
+    subspecialties: ["Ecocardiografia", "Cardiologia Intervencionista"],
+    medicalSchool: "Universidade de São Paulo (USP)",
+    graduationYear: "2005",
+    residency: "Hospital das Clínicas - USP",
+    residencyYear: "2008",
+    fellowships: ["Fellowship em Cardiologia Intervencionista - InCor"],
     certifications: [
-      'Título de Especialista em Cardiologia - SBC',
-      'Certificação em Ecocardiografia - SBC',
-      'ACLS - American Heart Association'
+      "Título de Especialista em Cardiologia - SBC",
+      "Certificação em Ecocardiografia - SBC",
+      "ACLS - American Heart Association",
     ],
-    languages: ['Português', 'Inglês', 'Espanhol']
+    languages: ["Português", "Inglês", "Espanhol"],
   },
   workInfo: {
-    position: 'Médico Cardiologista',
-    department: 'Cardiologia',
-    hireDate: '2010-03-01',
+    position: "Médico Cardiologista",
+    department: "Cardiologia",
+    hireDate: "2010-03-01",
     workSchedule: {
-      monday: { start: '08:00', end: '18:00', active: true },
-      tuesday: { start: '08:00', end: '18:00', active: true },
-      wednesday: { start: '08:00', end: '18:00', active: true },
-      thursday: { start: '08:00', end: '18:00', active: true },
-      friday: { start: '08:00', end: '18:00', active: true },
-      saturday: { start: '08:00', end: '14:00', active: true },
-      sunday: { start: '', end: '', active: false }
+      monday: { start: "08:00", end: "18:00", active: true },
+      tuesday: { start: "08:00", end: "18:00", active: true },
+      wednesday: { start: "08:00", end: "18:00", active: true },
+      thursday: { start: "08:00", end: "18:00", active: true },
+      friday: { start: "08:00", end: "18:00", active: true },
+      saturday: { start: "08:00", end: "14:00", active: true },
+      sunday: { start: "", end: "", active: false },
     },
     consultationDuration: 30,
     acceptsEmergency: true,
-    acceptsTelemedicine: true
+    acceptsTelemedicine: true,
   },
   preferences: {
     notifications: {
@@ -191,21 +203,21 @@ const mockDoctorProfile: DoctorProfile = {
       push: true,
       appointmentReminders: true,
       urgentMessages: true,
-      systemUpdates: true
+      systemUpdates: true,
     },
     privacy: {
       showPhoneToPatients: false,
       showEmailToPatients: false,
       allowPatientReviews: true,
-      shareStatistics: true
+      shareStatistics: true,
     },
     interface: {
-      theme: 'light',
-      language: 'pt-BR',
-      timezone: 'America/Sao_Paulo',
-      dateFormat: 'dd/MM/yyyy',
-      timeFormat: '24h'
-    }
+      theme: "light",
+      language: "pt-BR",
+      timezone: "America/Sao_Paulo",
+      dateFormat: "dd/MM/yyyy",
+      timeFormat: "24h",
+    },
   },
   statistics: {
     totalConsultations: 2456,
@@ -213,14 +225,14 @@ const mockDoctorProfile: DoctorProfile = {
     totalPatients: 892,
     yearsOfExperience: 19,
     consultationsThisMonth: 85,
-    patientSatisfaction: 96
+    patientSatisfaction: 96,
   },
   documents: {
-    diploma: '/documents/diploma.pdf',
-    crmCertificate: '/documents/crm.pdf',
-    specialtyCertificates: ['/documents/cardio_cert.pdf'],
-    cv: '/documents/cv.pdf'
-  }
+    diploma: "/documents/diploma.pdf",
+    crmCertificate: "/documents/crm.pdf",
+    specialtyCertificates: ["/documents/cardio_cert.pdf"],
+    cv: "/documents/cv.pdf",
+  },
 };
 
 interface PhotoUploadProps {
@@ -229,13 +241,17 @@ interface PhotoUploadProps {
   disabled?: boolean;
 }
 
-function PhotoUpload({ currentPhoto, onPhotoChange, disabled }: PhotoUploadProps) {
+function PhotoUpload({
+  currentPhoto,
+  onPhotoChange,
+  disabled,
+}: PhotoUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentPhoto || null);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (file: File) => {
-    if (file.type.startsWith('image/')) {
+    if (file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
@@ -256,7 +272,7 @@ function PhotoUpload({ currentPhoto, onPhotoChange, disabled }: PhotoUploadProps
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    
+
     const file = e.dataTransfer.files[0];
     if (file) {
       handleFileSelect(file);
@@ -267,7 +283,7 @@ function PhotoUpload({ currentPhoto, onPhotoChange, disabled }: PhotoUploadProps
     setPreview(null);
     onPhotoChange(null, null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -280,7 +296,7 @@ function PhotoUpload({ currentPhoto, onPhotoChange, disabled }: PhotoUploadProps
             <User className="h-16 w-16" />
           </AvatarFallback>
         </Avatar>
-        
+
         {!disabled && (
           <Button
             variant="outline"
@@ -299,7 +315,7 @@ function PhotoUpload({ currentPhoto, onPhotoChange, disabled }: PhotoUploadProps
             className={cn(
               "border-2 border-dashed rounded-lg p-4 text-center transition-colors",
               dragOver ? "border-blue-500 bg-blue-50" : "border-gray-300",
-              "hover:border-gray-400"
+              "hover:border-gray-400",
             )}
             onDragOver={(e) => {
               e.preventDefault();
@@ -359,18 +375,18 @@ export default function DoctorProfilePage() {
   const [saving, setSaving] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Mudança de senha
   const [passwordData, setPasswordData] = useState({
-    current: '',
-    new: '',
-    confirm: ''
+    current: "",
+    new: "",
+    confirm: "",
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
-    confirm: false
+    confirm: false,
   });
 
   useEffect(() => {
@@ -380,29 +396,31 @@ export default function DoctorProfilePage() {
   const validateForm = (section: string) => {
     const newErrors: Record<string, string> = {};
 
-    if (section === 'personal') {
+    if (section === "personal") {
       if (!profile.personalInfo.firstName?.trim()) {
-        newErrors.firstName = 'Nome é obrigatório';
+        newErrors.firstName = "Nome é obrigatório";
       }
       if (!profile.personalInfo.lastName?.trim()) {
-        newErrors.lastName = 'Sobrenome é obrigatório';
+        newErrors.lastName = "Sobrenome é obrigatório";
       }
       if (!profile.personalInfo.email?.trim()) {
-        newErrors.email = 'Email é obrigatório';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.personalInfo.email)) {
-        newErrors.email = 'Email inválido';
+        newErrors.email = "Email é obrigatório";
+      } else if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.personalInfo.email)
+      ) {
+        newErrors.email = "Email inválido";
       }
       if (!profile.personalInfo.phone?.trim()) {
-        newErrors.phone = 'Telefone é obrigatório';
+        newErrors.phone = "Telefone é obrigatório";
       }
     }
 
-    if (section === 'professional') {
+    if (section === "professional") {
       if (!profile.professionalInfo.crm?.trim()) {
-        newErrors.crm = 'CRM é obrigatório';
+        newErrors.crm = "CRM é obrigatório";
       }
       if (!profile.professionalInfo.specialty?.trim()) {
-        newErrors.specialty = 'Especialidade é obrigatória';
+        newErrors.specialty = "Especialidade é obrigatória";
       }
     }
 
@@ -414,35 +432,35 @@ export default function DoctorProfilePage() {
     if (!validateForm(section)) return;
 
     setSaving(true);
-    setSuccessMessage('');
-    
+    setSuccessMessage("");
+
     try {
       // Upload da foto se houver
       if (photoFile) {
         setUploadingPhoto(true);
         // Simular upload
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const photoUrl = `/uploads/avatars/${Date.now()}_${photoFile.name}`;
-        setProfile(prev => ({
+        setProfile((prev) => ({
           ...prev,
           personalInfo: {
             ...prev.personalInfo,
-            avatar: photoUrl
-          }
+            avatar: photoUrl,
+          },
         }));
         setUploadingPhoto(false);
       }
 
       // Simular salvamento
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setSuccessMessage('Perfil atualizado com sucesso!');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setSuccessMessage("Perfil atualizado com sucesso!");
       setPhotoFile(null);
-      
+
       // Limpar mensagem após 3 segundos
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      console.error('Erro ao salvar:', error);
-      setErrors({ general: 'Erro ao salvar as alterações. Tente novamente.' });
+      console.error("Erro ao salvar:", error);
+      setErrors({ general: "Erro ao salvar as alterações. Tente novamente." });
     } finally {
       setSaving(false);
       setUploadingPhoto(false);
@@ -453,27 +471,27 @@ export default function DoctorProfilePage() {
     const newErrors: Record<string, string> = {};
 
     if (!passwordData.current) {
-      newErrors.current = 'Senha atual é obrigatória';
+      newErrors.current = "Senha atual é obrigatória";
     }
 
     if (!passwordData.new) {
-      newErrors.new = 'Nova senha é obrigatória';
+      newErrors.new = "Nova senha é obrigatória";
     } else if (passwordData.new.length < 8) {
-      newErrors.new = 'Nova senha deve ter pelo menos 8 caracteres';
+      newErrors.new = "Nova senha deve ter pelo menos 8 caracteres";
     }
 
     if (passwordData.new !== passwordData.confirm) {
-      newErrors.confirm = 'Senhas não coincidem';
+      newErrors.confirm = "Senhas não coincidem";
     }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       setSaving(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setPasswordData({ current: '', new: '', confirm: '' });
-      setSuccessMessage('Senha alterada com sucesso!');
-      setTimeout(() => setSuccessMessage(''), 3000);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setPasswordData({ current: "", new: "", confirm: "" });
+      setSuccessMessage("Senha alterada com sucesso!");
+      setTimeout(() => setSuccessMessage(""), 3000);
       setSaving(false);
     }
   };
@@ -484,53 +502,53 @@ export default function DoctorProfilePage() {
   };
 
   const formatPhoneInput = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
+    const numbers = value.replace(/\D/g, "");
     if (numbers.length <= 11) {
-      return numbers.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+      return numbers.replace(/(\d{2})(\d{4,5})(\d{4})/, "($1) $2-$3");
     }
     return value;
   };
 
   const updatePersonalInfo = (field: string, value: any) => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       personalInfo: {
         ...prev.personalInfo,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const updateProfessionalInfo = (field: string, value: any) => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       professionalInfo: {
         ...prev.professionalInfo,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const updateWorkInfo = (field: string, value: any) => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       workInfo: {
         ...prev.workInfo,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const updatePreferences = (section: string, field: string, value: any) => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       preferences: {
         ...prev.preferences,
         [section]: {
           ...prev.preferences[section as keyof typeof prev.preferences],
-          [field]: value
-        }
-      }
+          [field]: value,
+        },
+      },
     }));
   };
 
@@ -596,7 +614,9 @@ export default function DoctorProfilePage() {
                 {uploadingPhoto && (
                   <div className="text-center mt-4">
                     <Loader2 className="h-4 w-4 animate-spin mx-auto" />
-                    <p className="text-sm text-muted-foreground">Enviando foto...</p>
+                    <p className="text-sm text-muted-foreground">
+                      Enviando foto...
+                    </p>
                   </div>
                 )}
               </CardContent>
@@ -614,7 +634,8 @@ export default function DoctorProfilePage() {
                     <div>
                       <p className="text-sm font-medium">CRM</p>
                       <p className="text-sm text-muted-foreground">
-                        {profile.professionalInfo.crm}/{profile.professionalInfo.crmState}
+                        {profile.professionalInfo.crm}/
+                        {profile.professionalInfo.crmState}
                       </p>
                     </div>
                   </div>
@@ -632,7 +653,11 @@ export default function DoctorProfilePage() {
                     <div>
                       <p className="text-sm font-medium">Contratação</p>
                       <p className="text-sm text-muted-foreground">
-                        {format(new Date(profile.workInfo.hireDate), 'dd/MM/yyyy', { locale: ptBR })}
+                        {format(
+                          new Date(profile.workInfo.hireDate),
+                          "dd/MM/yyyy",
+                          { locale: ptBR },
+                        )}
                       </p>
                     </div>
                   </div>
@@ -656,57 +681,82 @@ export default function DoctorProfilePage() {
                   <Input
                     id="firstName"
                     value={profile.personalInfo.firstName}
-                    onChange={(e) => updatePersonalInfo('firstName', e.target.value)}
-                    className={errors.firstName ? 'border-red-500' : ''}
+                    onChange={(e) =>
+                      updatePersonalInfo("firstName", e.target.value)
+                    }
+                    className={errors.firstName ? "border-red-500" : ""}
                   />
-                  {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.firstName}
+                    </p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="lastName">Sobrenome</Label>
                   <Input
                     id="lastName"
                     value={profile.personalInfo.lastName}
-                    onChange={(e) => updatePersonalInfo('lastName', e.target.value)}
-                    className={errors.lastName ? 'border-red-500' : ''}
+                    onChange={(e) =>
+                      updatePersonalInfo("lastName", e.target.value)
+                    }
+                    className={errors.lastName ? "border-red-500" : ""}
                   />
-                  {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.lastName}
+                    </p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
                     value={profile.personalInfo.email}
-                    onChange={(e) => updatePersonalInfo('email', e.target.value)}
-                    className={errors.email ? 'border-red-500' : ''}
+                    onChange={(e) =>
+                      updatePersonalInfo("email", e.target.value)
+                    }
+                    className={errors.email ? "border-red-500" : ""}
                   />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="phone">Telefone</Label>
                   <Input
                     id="phone"
                     value={profile.personalInfo.phone}
-                    onChange={(e) => updatePersonalInfo('phone', formatPhoneInput(e.target.value))}
+                    onChange={(e) =>
+                      updatePersonalInfo(
+                        "phone",
+                        formatPhoneInput(e.target.value),
+                      )
+                    }
                     placeholder="(11) 99999-9999"
-                    className={errors.phone ? 'border-red-500' : ''}
+                    className={errors.phone ? "border-red-500" : ""}
                   />
-                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="dateOfBirth">Data de Nascimento</Label>
                   <Input
                     id="dateOfBirth"
                     type="date"
                     value={profile.personalInfo.dateOfBirth}
-                    onChange={(e) => updatePersonalInfo('dateOfBirth', e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("dateOfBirth", e.target.value)
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="cpf">CPF</Label>
                   <Input
@@ -721,8 +771,8 @@ export default function DoctorProfilePage() {
                 </div>
               </div>
 
-              <Button 
-                onClick={() => handleSave('personal')} 
+              <Button
+                onClick={() => handleSave("personal")}
                 disabled={saving || uploadingPhoto}
                 className="w-full"
               >
@@ -760,17 +810,23 @@ export default function DoctorProfilePage() {
                   <Input
                     id="crm"
                     value={profile.professionalInfo.crm}
-                    onChange={(e) => updateProfessionalInfo('crm', e.target.value)}
-                    className={errors.crm ? 'border-red-500' : ''}
+                    onChange={(e) =>
+                      updateProfessionalInfo("crm", e.target.value)
+                    }
+                    className={errors.crm ? "border-red-500" : ""}
                   />
-                  {errors.crm && <p className="text-red-500 text-sm mt-1">{errors.crm}</p>}
+                  {errors.crm && (
+                    <p className="text-red-500 text-sm mt-1">{errors.crm}</p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="crmState">Estado do CRM</Label>
-                  <Select 
-                    value={profile.professionalInfo.crmState} 
-                    onValueChange={(value) => updateProfessionalInfo('crmState', value)}
+                  <Select
+                    value={profile.professionalInfo.crmState}
+                    onValueChange={(value) =>
+                      updateProfessionalInfo("crmState", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -806,42 +862,54 @@ export default function DoctorProfilePage() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="specialty">Especialidade Principal</Label>
                   <Input
                     id="specialty"
                     value={profile.professionalInfo.specialty}
-                    onChange={(e) => updateProfessionalInfo('specialty', e.target.value)}
-                    className={errors.specialty ? 'border-red-500' : ''}
+                    onChange={(e) =>
+                      updateProfessionalInfo("specialty", e.target.value)
+                    }
+                    className={errors.specialty ? "border-red-500" : ""}
                   />
-                  {errors.specialty && <p className="text-red-500 text-sm mt-1">{errors.specialty}</p>}
+                  {errors.specialty && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.specialty}
+                    </p>
+                  )}
                 </div>
-                
+
                 <div>
                   <Label htmlFor="medicalSchool">Faculdade de Medicina</Label>
                   <Input
                     id="medicalSchool"
                     value={profile.professionalInfo.medicalSchool}
-                    onChange={(e) => updateProfessionalInfo('medicalSchool', e.target.value)}
+                    onChange={(e) =>
+                      updateProfessionalInfo("medicalSchool", e.target.value)
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="graduationYear">Ano de Formatura</Label>
                   <Input
                     id="graduationYear"
                     value={profile.professionalInfo.graduationYear}
-                    onChange={(e) => updateProfessionalInfo('graduationYear', e.target.value)}
+                    onChange={(e) =>
+                      updateProfessionalInfo("graduationYear", e.target.value)
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="residency">Residência Médica</Label>
                   <Input
                     id="residency"
-                    value={profile.professionalInfo.residency || ''}
-                    onChange={(e) => updateProfessionalInfo('residency', e.target.value)}
+                    value={profile.professionalInfo.residency || ""}
+                    onChange={(e) =>
+                      updateProfessionalInfo("residency", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -850,15 +918,20 @@ export default function DoctorProfilePage() {
                 <Label htmlFor="certifications">Certificações</Label>
                 <Textarea
                   id="certifications"
-                  value={profile.professionalInfo.certifications.join('\n')}
-                  onChange={(e) => updateProfessionalInfo('certifications', e.target.value.split('\n').filter(Boolean))}
+                  value={profile.professionalInfo.certifications.join("\n")}
+                  onChange={(e) =>
+                    updateProfessionalInfo(
+                      "certifications",
+                      e.target.value.split("\n").filter(Boolean),
+                    )
+                  }
                   placeholder="Digite uma certificação por linha"
                   rows={4}
                 />
               </div>
 
-              <Button 
-                onClick={() => handleSave('professional')} 
+              <Button
+                onClick={() => handleSave("professional")}
                 disabled={saving}
                 className="w-full"
               >
@@ -896,28 +969,37 @@ export default function DoctorProfilePage() {
                   <Input
                     id="position"
                     value={profile.workInfo.position}
-                    onChange={(e) => updateWorkInfo('position', e.target.value)}
+                    onChange={(e) => updateWorkInfo("position", e.target.value)}
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="department">Departamento</Label>
                   <Input
                     id="department"
                     value={profile.workInfo.department}
-                    onChange={(e) => updateWorkInfo('department', e.target.value)}
+                    onChange={(e) =>
+                      updateWorkInfo("department", e.target.value)
+                    }
                   />
                 </div>
-                
+
                 <div>
-                  <Label htmlFor="consultationDuration">Duração da Consulta (minutos)</Label>
+                  <Label htmlFor="consultationDuration">
+                    Duração da Consulta (minutos)
+                  </Label>
                   <Input
                     id="consultationDuration"
                     type="number"
                     min="15"
                     max="120"
                     value={profile.workInfo.consultationDuration}
-                    onChange={(e) => updateWorkInfo('consultationDuration', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateWorkInfo(
+                        "consultationDuration",
+                        parseInt(e.target.value),
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -934,10 +1016,12 @@ export default function DoctorProfilePage() {
                     </div>
                     <Switch
                       checked={profile.workInfo.acceptsEmergency}
-                      onCheckedChange={(checked) => updateWorkInfo('acceptsEmergency', checked)}
+                      onCheckedChange={(checked) =>
+                        updateWorkInfo("acceptsEmergency", checked)
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label>Telemedicina</Label>
@@ -947,14 +1031,16 @@ export default function DoctorProfilePage() {
                     </div>
                     <Switch
                       checked={profile.workInfo.acceptsTelemedicine}
-                      onCheckedChange={(checked) => updateWorkInfo('acceptsTelemedicine', checked)}
+                      onCheckedChange={(checked) =>
+                        updateWorkInfo("acceptsTelemedicine", checked)
+                      }
                     />
                   </div>
                 </div>
               </div>
 
-              <Button 
-                onClick={() => handleSave('work')} 
+              <Button
+                onClick={() => handleSave("work")}
                 disabled={saving}
                 className="w-full"
               >
@@ -987,7 +1073,7 @@ export default function DoctorProfilePage() {
                 <p className="text-sm text-muted-foreground">Desde o início</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Avaliação Média</CardTitle>
@@ -999,7 +1085,7 @@ export default function DoctorProfilePage() {
                 <p className="text-sm text-muted-foreground">De 5.0 estrelas</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Pacientes Ativos</CardTitle>
@@ -1011,7 +1097,7 @@ export default function DoctorProfilePage() {
                 <p className="text-sm text-muted-foreground">Cadastrados</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Experiência</CardTitle>
@@ -1023,7 +1109,7 @@ export default function DoctorProfilePage() {
                 <p className="text-sm text-muted-foreground">Anos de prática</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Este Mês</CardTitle>
@@ -1032,10 +1118,12 @@ export default function DoctorProfilePage() {
                 <div className="text-3xl font-bold text-orange-600">
                   {profile.statistics.consultationsThisMonth}
                 </div>
-                <p className="text-sm text-muted-foreground">Consultas realizadas</p>
+                <p className="text-sm text-muted-foreground">
+                  Consultas realizadas
+                </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Satisfação</CardTitle>
@@ -1069,10 +1157,12 @@ export default function DoctorProfilePage() {
                   </div>
                   <Switch
                     checked={profile.preferences.notifications.email}
-                    onCheckedChange={(checked) => updatePreferences('notifications', 'email', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePreferences("notifications", "email", checked)
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>SMS</Label>
@@ -1082,10 +1172,12 @@ export default function DoctorProfilePage() {
                   </div>
                   <Switch
                     checked={profile.preferences.notifications.sms}
-                    onCheckedChange={(checked) => updatePreferences('notifications', 'sms', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePreferences("notifications", "sms", checked)
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Push</Label>
@@ -1095,7 +1187,9 @@ export default function DoctorProfilePage() {
                   </div>
                   <Switch
                     checked={profile.preferences.notifications.push}
-                    onCheckedChange={(checked) => updatePreferences('notifications', 'push', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePreferences("notifications", "push", checked)
+                    }
                   />
                 </div>
               </div>
@@ -1113,9 +1207,11 @@ export default function DoctorProfilePage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <Label htmlFor="theme">Tema</Label>
-                  <Select 
-                    value={profile.preferences.interface.theme} 
-                    onValueChange={(value: 'light' | 'dark' | 'system') => updatePreferences('interface', 'theme', value)}
+                  <Select
+                    value={profile.preferences.interface.theme}
+                    onValueChange={(value: "light" | "dark" | "system") =>
+                      updatePreferences("interface", "theme", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1127,12 +1223,14 @@ export default function DoctorProfilePage() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="timeFormat">Formato de Hora</Label>
-                  <Select 
-                    value={profile.preferences.interface.timeFormat} 
-                    onValueChange={(value: '12h' | '24h') => updatePreferences('interface', 'timeFormat', value)}
+                  <Select
+                    value={profile.preferences.interface.timeFormat}
+                    onValueChange={(value: "12h" | "24h") =>
+                      updatePreferences("interface", "timeFormat", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1165,22 +1263,40 @@ export default function DoctorProfilePage() {
                 <div className="relative">
                   <Input
                     id="current-password"
-                    type={showPasswords.current ? 'text' : 'password'}
+                    type={showPasswords.current ? "text" : "password"}
                     value={passwordData.current}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, current: e.target.value }))}
-                    className={errors.current ? 'border-red-500 pr-10' : 'pr-10'}
+                    onChange={(e) =>
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        current: e.target.value,
+                      }))
+                    }
+                    className={
+                      errors.current ? "border-red-500 pr-10" : "pr-10"
+                    }
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
+                    onClick={() =>
+                      setShowPasswords((prev) => ({
+                        ...prev,
+                        current: !prev.current,
+                      }))
+                    }
                   >
-                    {showPasswords.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPasswords.current ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
-                {errors.current && <p className="text-red-500 text-sm mt-1">{errors.current}</p>}
+                {errors.current && (
+                  <p className="text-red-500 text-sm mt-1">{errors.current}</p>
+                )}
               </div>
 
               <div>
@@ -1188,22 +1304,35 @@ export default function DoctorProfilePage() {
                 <div className="relative">
                   <Input
                     id="new-password"
-                    type={showPasswords.new ? 'text' : 'password'}
+                    type={showPasswords.new ? "text" : "password"}
                     value={passwordData.new}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, new: e.target.value }))}
-                    className={errors.new ? 'border-red-500 pr-10' : 'pr-10'}
+                    onChange={(e) =>
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        new: e.target.value,
+                      }))
+                    }
+                    className={errors.new ? "border-red-500 pr-10" : "pr-10"}
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
+                    onClick={() =>
+                      setShowPasswords((prev) => ({ ...prev, new: !prev.new }))
+                    }
                   >
-                    {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPasswords.new ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
-                {errors.new && <p className="text-red-500 text-sm mt-1">{errors.new}</p>}
+                {errors.new && (
+                  <p className="text-red-500 text-sm mt-1">{errors.new}</p>
+                )}
               </div>
 
               <div>
@@ -1211,25 +1340,47 @@ export default function DoctorProfilePage() {
                 <div className="relative">
                   <Input
                     id="confirm-password"
-                    type={showPasswords.confirm ? 'text' : 'password'}
+                    type={showPasswords.confirm ? "text" : "password"}
                     value={passwordData.confirm}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, confirm: e.target.value }))}
-                    className={errors.confirm ? 'border-red-500 pr-10' : 'pr-10'}
+                    onChange={(e) =>
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        confirm: e.target.value,
+                      }))
+                    }
+                    className={
+                      errors.confirm ? "border-red-500 pr-10" : "pr-10"
+                    }
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
+                    onClick={() =>
+                      setShowPasswords((prev) => ({
+                        ...prev,
+                        confirm: !prev.confirm,
+                      }))
+                    }
                   >
-                    {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPasswords.confirm ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
-                {errors.confirm && <p className="text-red-500 text-sm mt-1">{errors.confirm}</p>}
+                {errors.confirm && (
+                  <p className="text-red-500 text-sm mt-1">{errors.confirm}</p>
+                )}
               </div>
 
-              <Button onClick={handlePasswordChange} disabled={saving} className="w-full">
+              <Button
+                onClick={handlePasswordChange}
+                disabled={saving}
+                className="w-full"
+              >
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />

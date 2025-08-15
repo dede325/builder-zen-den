@@ -1,39 +1,44 @@
-import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  FileText, 
-  DollarSign, 
-  Users, 
-  MessageSquare, 
-  BarChart3, 
-  Package, 
-  User, 
-  Menu, 
+import { useState } from "react";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Calendar,
+  FileText,
+  DollarSign,
+  Users,
+  MessageSquare,
+  BarChart3,
+  Package,
+  User,
+  Menu,
   X,
   Bell,
   Settings,
   LogOut,
   Sun,
-  Moon
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils';
+  Moon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/manager' },
-  { icon: Calendar, label: 'Consultas', path: '/manager/consultas' },
-  { icon: FileText, label: 'Exames', path: '/manager/exames' },
-  { icon: DollarSign, label: 'Financeiro', path: '/manager/financeiro' },
-  { icon: Users, label: 'Usuários', path: '/manager/usuarios' },
-  { icon: MessageSquare, label: 'Mensagens', path: '/manager/mensagens', badge: 3 },
-  { icon: BarChart3, label: 'Relatórios', path: '/manager/relatorios' },
-  { icon: Package, label: 'Estoque', path: '/manager/estoque' },
-  { icon: User, label: 'Perfil', path: '/manager/perfil' },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/manager" },
+  { icon: Calendar, label: "Consultas", path: "/manager/consultas" },
+  { icon: FileText, label: "Exames", path: "/manager/exames" },
+  { icon: DollarSign, label: "Financeiro", path: "/manager/financeiro" },
+  { icon: Users, label: "Usuários", path: "/manager/usuarios" },
+  {
+    icon: MessageSquare,
+    label: "Mensagens",
+    path: "/manager/mensagens",
+    badge: 3,
+  },
+  { icon: BarChart3, label: "Relatórios", path: "/manager/relatorios" },
+  { icon: Package, label: "Estoque", path: "/manager/estoque" },
+  { icon: User, label: "Perfil", path: "/manager/perfil" },
 ];
 
 export function ManagerLayout() {
@@ -43,28 +48,30 @@ export function ManagerLayout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile menu overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={cn(
-        "fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
+      <div
+        className={cn(
+          "fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
@@ -72,7 +79,9 @@ export function ManagerLayout() {
               <div className="w-8 h-8 bg-clinic-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">BC</span>
               </div>
-              <span className="font-semibold text-sidebar-foreground">Bem Cuidar</span>
+              <span className="font-semibold text-sidebar-foreground">
+                Bem Cuidar
+              </span>
             </div>
             <Button
               variant="ghost"
@@ -89,16 +98,16 @@ export function ManagerLayout() {
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
-              
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={cn(
                     "flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    isActive 
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   )}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -107,7 +116,10 @@ export function ManagerLayout() {
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <Badge variant="secondary" className="h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    <Badge
+                      variant="secondary"
+                      className="h-5 w-5 p-0 flex items-center justify-center text-xs"
+                    >
                       {item.badge}
                     </Badge>
                   )}
@@ -132,7 +144,7 @@ export function ManagerLayout() {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Button
                 variant="ghost"
@@ -140,21 +152,17 @@ export function ManagerLayout() {
                 onClick={toggleTheme}
                 className="h-8 w-8 p-0"
               >
-                {theme === 'dark' ? (
+                {theme === "dark" ? (
                   <Sun className="h-4 w-4" />
                 ) : (
                   <Moon className="h-4 w-4" />
                 )}
               </Button>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
+
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                 <Settings className="h-4 w-4" />
               </Button>
-              
+
               <Button
                 variant="ghost"
                 size="sm"
@@ -182,7 +190,7 @@ export function ManagerLayout() {
               >
                 <Menu className="h-4 w-4" />
               </Button>
-              
+
               <div>
                 <h1 className="text-lg font-semibold text-foreground">
                   Dashboard do Gestor

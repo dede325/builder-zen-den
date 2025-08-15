@@ -1,46 +1,65 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Download, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  BarChart3,
+  TrendingUp,
+  Download,
   Calendar,
   Users,
-  DollarSign
-} from 'lucide-react';
-import { 
-  RelatorioConsulta, 
-  DesempenhoMedico, 
-  ReceitaPeriodo, 
-  TaxaComparecimento 
-} from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
+  DollarSign,
+} from "lucide-react";
+import {
+  RelatorioConsulta,
+  DesempenhoMedico,
+  ReceitaPeriodo,
+  TaxaComparecimento,
+} from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
 
 export function RelatoriosManager() {
-  const [relatoriosConsulta, setRelatoriosConsulta] = useState<RelatorioConsulta[]>([]);
-  const [desempenhoMedicos, setDesempenhoMedicos] = useState<DesempenhoMedico[]>([]);
+  const [relatoriosConsulta, setRelatoriosConsulta] = useState<
+    RelatorioConsulta[]
+  >([]);
+  const [desempenhoMedicos, setDesempenhoMedicos] = useState<
+    DesempenhoMedico[]
+  >([]);
   const [receitaPeriodo, setReceitaPeriodo] = useState<ReceitaPeriodo[]>([]);
-  const [taxaComparecimento, setTaxaComparecimento] = useState<TaxaComparecimento[]>([]);
+  const [taxaComparecimento, setTaxaComparecimento] = useState<
+    TaxaComparecimento[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadRelatorios = async () => {
       try {
-        const [consultasData, medicosData, receitaData, taxaData] = await Promise.all([
-          ManagerDataService.getRelatoriosConsulta(),
-          ManagerDataService.getDesempenhoMedicos(),
-          ManagerDataService.getReceitaPeriodo(),
-          ManagerDataService.getTaxaComparecimento()
-        ]);
-        
+        const [consultasData, medicosData, receitaData, taxaData] =
+          await Promise.all([
+            ManagerDataService.getRelatoriosConsulta(),
+            ManagerDataService.getDesempenhoMedicos(),
+            ManagerDataService.getReceitaPeriodo(),
+            ManagerDataService.getTaxaComparecimento(),
+          ]);
+
         setRelatoriosConsulta(consultasData);
         setDesempenhoMedicos(medicosData);
         setReceitaPeriodo(receitaData);
         setTaxaComparecimento(taxaData);
       } catch (error) {
-        console.error('Erro ao carregar relatórios:', error);
+        console.error("Erro ao carregar relatórios:", error);
       } finally {
         setLoading(false);
       }
@@ -50,7 +69,7 @@ export function RelatoriosManager() {
   }, []);
 
   const handleExportPDF = () => {
-    console.log('Exportar PDF');
+    console.log("Exportar PDF");
   };
 
   if (loading) {
@@ -101,7 +120,9 @@ export function RelatoriosManager() {
               {relatoriosConsulta.map((relatorio) => (
                 <div key={relatorio.especialidade} className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium">{relatorio.especialidade}</span>
+                    <span className="font-medium">
+                      {relatorio.especialidade}
+                    </span>
                     <div className="text-right">
                       <span className="font-bold">{relatorio.total}</span>
                       <span className="text-sm text-muted-foreground ml-2">
@@ -110,8 +131,8 @@ export function RelatoriosManager() {
                     </div>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-2">
-                    <div 
-                      className="bg-primary h-2 rounded-full" 
+                    <div
+                      className="bg-primary h-2 rounded-full"
                       style={{ width: `${relatorio.percentual}%` }}
                     />
                   </div>
@@ -128,9 +149,7 @@ export function RelatoriosManager() {
               <Users className="h-5 w-5" />
               <span>Desempenho dos Médicos</span>
             </CardTitle>
-            <CardDescription>
-              Avaliação e produtividade médica
-            </CardDescription>
+            <CardDescription>Avaliação e produtividade médica</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -139,12 +158,16 @@ export function RelatoriosManager() {
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="font-medium">{medico.medicoNome}</h3>
-                      <p className="text-sm text-muted-foreground">{medico.especialidade}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {medico.especialidade}
+                      </p>
                     </div>
                     <div className="text-right">
                       <div className="flex items-center space-x-1">
                         <span className="text-yellow-500">★</span>
-                        <span className="font-bold">{medico.avaliacaoMedia.toFixed(1)}</span>
+                        <span className="font-bold">
+                          {medico.avaliacaoMedia.toFixed(1)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -165,9 +188,7 @@ export function RelatoriosManager() {
               <DollarSign className="h-5 w-5" />
               <span>Receita por Período</span>
             </CardTitle>
-            <CardDescription>
-              Evolução financeira mensal
-            </CardDescription>
+            <CardDescription>Evolução financeira mensal</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -175,17 +196,20 @@ export function RelatoriosManager() {
                 <div key={periodo.mes} className="border-b pb-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">
-                      {new Date(periodo.mes + '-01').toLocaleDateString('pt-BR', { 
-                        month: 'long', 
-                        year: 'numeric' 
-                      })}
+                      {new Date(periodo.mes + "-01").toLocaleDateString(
+                        "pt-BR",
+                        {
+                          month: "long",
+                          year: "numeric",
+                        },
+                      )}
                     </span>
                     <div className="flex items-center space-x-1">
                       <TrendingUp className="h-4 w-4 text-green-500" />
                       <span className="font-bold text-green-600">
-                        {periodo.lucro.toLocaleString('pt-BR', { 
-                          style: 'currency', 
-                          currency: 'BRL' 
+                        {periodo.lucro.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
                         })}
                       </span>
                     </div>
@@ -194,18 +218,18 @@ export function RelatoriosManager() {
                     <div>
                       <span className="text-muted-foreground">Receita</span>
                       <p className="font-medium text-green-600">
-                        {periodo.receita.toLocaleString('pt-BR', { 
-                          style: 'currency', 
-                          currency: 'BRL' 
+                        {periodo.receita.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
                         })}
                       </p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Despesas</span>
                       <p className="font-medium text-red-600">
-                        {periodo.despesas.toLocaleString('pt-BR', { 
-                          style: 'currency', 
-                          currency: 'BRL' 
+                        {periodo.despesas.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
                         })}
                       </p>
                     </div>
@@ -239,9 +263,9 @@ export function RelatoriosManager() {
                 <div key={taxa.mes} className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">
-                      {new Date(taxa.mes + '-01').toLocaleDateString('pt-BR', { 
-                        month: 'long', 
-                        year: 'numeric' 
+                      {new Date(taxa.mes + "-01").toLocaleDateString("pt-BR", {
+                        month: "long",
+                        year: "numeric",
                       })}
                     </span>
                     <span className="font-bold text-blue-600">
@@ -249,8 +273,8 @@ export function RelatoriosManager() {
                     </span>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-2">
-                    <div 
-                      className="bg-blue-600 h-2 rounded-full" 
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
                       style={{ width: `${taxa.taxa}%` }}
                     />
                   </div>

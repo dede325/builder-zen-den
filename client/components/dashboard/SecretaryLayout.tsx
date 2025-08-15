@@ -35,7 +35,7 @@ import {
   AlertTriangle,
   UserPlus,
   CalendarCheck,
-  Receipt
+  Receipt,
 } from "lucide-react";
 
 interface NavigationItem {

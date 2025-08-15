@@ -1,15 +1,21 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Shield, Eye, EyeOff } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Shield, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
-  const [email, setEmail] = useState('gestor@clinica.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState("gestor@clinica.com");
+  const [password, setPassword] = useState("123456");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -20,10 +26,10 @@ export default function Login() {
 
     // Simular autenticação
     setTimeout(() => {
-      if (email === 'gestor@clinica.com' && password === '123456') {
-        navigate('/manager');
+      if (email === "gestor@clinica.com" && password === "123456") {
+        navigate("/manager");
       } else {
-        alert('Credenciais inválidas');
+        alert("Credenciais inválidas");
       }
       setLoading(false);
     }, 1000);
@@ -36,7 +42,9 @@ export default function Login() {
           <div className="w-16 h-16 bg-clinic-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Shield className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard do Gestor</h1>
+          <h1 className="text-2xl font-bold text-foreground">
+            Dashboard do Gestor
+          </h1>
           <p className="text-muted-foreground">
             Acesse o painel administrativo da Clínica Bem Cuidar
           </p>
@@ -62,13 +70,13 @@ export default function Login() {
                   className="mt-1"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative mt-1">
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -91,14 +99,16 @@ export default function Login() {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? "Entrando..." : "Entrar"}
               </Button>
             </form>
 
             <Alert className="mt-4">
               <AlertDescription>
-                <strong>Credenciais de demonstração:</strong><br />
-                Email: gestor@clinica.com<br />
+                <strong>Credenciais de demonstração:</strong>
+                <br />
+                Email: gestor@clinica.com
+                <br />
                 Senha: 123456
               </AlertDescription>
             </Alert>

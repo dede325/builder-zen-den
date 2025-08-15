@@ -1,25 +1,44 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { 
-  MessageSquare, 
-  Search, 
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  MessageSquare,
+  Search,
   Plus,
   Send,
   Archive,
   Star,
   Clock,
-  Eye
-} from 'lucide-react';
-import { MensagemInterna } from '@shared/manager-types';
-import ManagerDataService from '@/services/managerData';
-import { cn } from '@/lib/utils';
+  Eye,
+} from "lucide-react";
+import { MensagemInterna } from "@shared/manager-types";
+import ManagerDataService from "@/services/managerData";
+import { cn } from "@/lib/utils";
 
 interface NovaMessagemProps {
   onSend: (mensagem: Partial<MensagemInterna>) => void;
@@ -28,11 +47,11 @@ interface NovaMessagemProps {
 
 function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
   const [formData, setFormData] = useState({
-    destinatarioId: '',
-    destinatarioNome: '',
-    assunto: '',
-    conteudo: '',
-    prioridade: 'normal' as MensagemInterna['prioridade']
+    destinatarioId: "",
+    destinatarioNome: "",
+    assunto: "",
+    conteudo: "",
+    prioridade: "normal" as MensagemInterna["prioridade"],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,18 +68,19 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
           Envie uma mensagem para outro usuário do sistema
         </DialogDescription>
       </DialogHeader>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label htmlFor="destinatario">Destinatário</Label>
-            <Select 
-              value={formData.destinatarioId} 
+            <Select
+              value={formData.destinatarioId}
               onValueChange={(value) => {
-                setFormData(prev => ({ 
-                  ...prev, 
+                setFormData((prev) => ({
+                  ...prev,
                   destinatarioId: value,
-                  destinatarioNome: value === 'm1' ? 'Dr. João Santos' : 'Enfermeira Carolina'
+                  destinatarioNome:
+                    value === "m1" ? "Dr. João Santos" : "Enfermeira Carolina",
                 }));
               }}
             >
@@ -75,9 +95,11 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
           </div>
           <div>
             <Label htmlFor="prioridade">Prioridade</Label>
-            <Select 
-              value={formData.prioridade} 
-              onValueChange={(value: MensagemInterna['prioridade']) => setFormData(prev => ({ ...prev, prioridade: value }))}
+            <Select
+              value={formData.prioridade}
+              onValueChange={(value: MensagemInterna["prioridade"]) =>
+                setFormData((prev) => ({ ...prev, prioridade: value }))
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -96,7 +118,9 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
           <Input
             id="assunto"
             value={formData.assunto}
-            onChange={(e) => setFormData(prev => ({ ...prev, assunto: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, assunto: e.target.value }))
+            }
             required
           />
         </div>
@@ -106,7 +130,9 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
             id="conteudo"
             rows={5}
             value={formData.conteudo}
-            onChange={(e) => setFormData(prev => ({ ...prev, conteudo: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, conteudo: e.target.value }))
+            }
             required
           />
         </div>
@@ -115,7 +141,12 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
             <Send className="h-4 w-4 mr-2" />
             Enviar Mensagem
           </Button>
-          <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            className="flex-1"
+          >
             Cancelar
           </Button>
         </div>
@@ -126,10 +157,14 @@ function NovaMensagem({ onSend, onClose }: NovaMessagemProps) {
 
 export function MensagensManager() {
   const [mensagens, setMensagens] = useState<MensagemInterna[]>([]);
-  const [filteredMensagens, setFilteredMensagens] = useState<MensagemInterna[]>([]);
+  const [filteredMensagens, setFilteredMensagens] = useState<MensagemInterna[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<'todas' | 'nao_lidas' | 'arquivadas'>('todas');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState<"todas" | "nao_lidas" | "arquivadas">(
+    "todas",
+  );
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -139,7 +174,7 @@ export function MensagensManager() {
         setMensagens(data);
         setFilteredMensagens(data);
       } catch (error) {
-        console.error('Erro ao carregar mensagens:', error);
+        console.error("Erro ao carregar mensagens:", error);
       } finally {
         setLoading(false);
       }
@@ -152,16 +187,17 @@ export function MensagensManager() {
     let filtered = mensagens;
 
     if (searchTerm) {
-      filtered = filtered.filter(msg =>
-        msg.assunto.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        msg.remetenteNome.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (msg) =>
+          msg.assunto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          msg.remetenteNome.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (filter === 'nao_lidas') {
-      filtered = filtered.filter(msg => !msg.lida);
-    } else if (filter === 'arquivadas') {
-      filtered = filtered.filter(msg => msg.arquivada);
+    if (filter === "nao_lidas") {
+      filtered = filtered.filter((msg) => !msg.lida);
+    } else if (filter === "arquivadas") {
+      filtered = filtered.filter((msg) => msg.arquivada);
     }
 
     setFilteredMensagens(filtered);
@@ -170,27 +206,27 @@ export function MensagensManager() {
   const handleSendMensagem = (novaMensagem: Partial<MensagemInterna>) => {
     const mensagem: MensagemInterna = {
       id: Date.now().toString(),
-      remetenteId: 'gestor1',
-      remetenteNome: 'Carlos Silva',
+      remetenteId: "gestor1",
+      remetenteNome: "Carlos Silva",
       dataEnvio: new Date().toISOString(),
       lida: false,
       arquivada: false,
-      ...novaMensagem
+      ...novaMensagem,
     } as MensagemInterna;
 
-    setMensagens(prev => [mensagem, ...prev]);
+    setMensagens((prev) => [mensagem, ...prev]);
   };
 
   const handleMarkAsRead = (id: string) => {
-    setMensagens(prev => prev.map(m => 
-      m.id === id ? { ...m, lida: true } : m
-    ));
+    setMensagens((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, lida: true } : m)),
+    );
   };
 
   const handleArchive = (id: string) => {
-    setMensagens(prev => prev.map(m => 
-      m.id === id ? { ...m, arquivada: !m.arquivada } : m
-    ));
+    setMensagens((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, arquivada: !m.arquivada } : m)),
+    );
   };
 
   return (
@@ -216,7 +252,9 @@ export function MensagensManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mensagens.length}</div>
-            <p className="text-xs text-muted-foreground">Mensagens no sistema</p>
+            <p className="text-xs text-muted-foreground">
+              Mensagens no sistema
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -225,7 +263,7 @@ export function MensagensManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {mensagens.filter(m => !m.lida).length}
+              {mensagens.filter((m) => !m.lida).length}
             </div>
             <p className="text-xs text-muted-foreground">Aguardando leitura</p>
           </CardContent>
@@ -236,9 +274,11 @@ export function MensagensManager() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-600">
-              {mensagens.filter(m => m.arquivada).length}
+              {mensagens.filter((m) => m.arquivada).length}
             </div>
-            <p className="text-xs text-muted-foreground">Mensagens arquivadas</p>
+            <p className="text-xs text-muted-foreground">
+              Mensagens arquivadas
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -259,7 +299,10 @@ export function MensagensManager() {
                 className="pl-10"
               />
             </div>
-            <Select value={filter} onValueChange={(value: any) => setFilter(value)}>
+            <Select
+              value={filter}
+              onValueChange={(value: any) => setFilter(value)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -284,22 +327,29 @@ export function MensagensManager() {
           ) : (
             <div className="space-y-4">
               {filteredMensagens.map((mensagem) => (
-                <div 
-                  key={mensagem.id} 
+                <div
+                  key={mensagem.id}
                   className={cn(
                     "border rounded-lg p-4 hover:bg-muted/50 transition-colors",
-                    !mensagem.lida && "bg-blue-50 dark:bg-blue-950/20 border-blue-200"
+                    !mensagem.lida &&
+                      "bg-blue-50 dark:bg-blue-950/20 border-blue-200",
                   )}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <h3 className="font-medium">{mensagem.assunto}</h3>
-                        <Badge variant={
-                          mensagem.prioridade === 'urgente' ? 'destructive' :
-                          mensagem.prioridade === 'alta' ? 'default' :
-                          mensagem.prioridade === 'normal' ? 'secondary' : 'outline'
-                        }>
+                        <Badge
+                          variant={
+                            mensagem.prioridade === "urgente"
+                              ? "destructive"
+                              : mensagem.prioridade === "alta"
+                                ? "default"
+                                : mensagem.prioridade === "normal"
+                                  ? "secondary"
+                                  : "outline"
+                          }
+                        >
                           {mensagem.prioridade}
                         </Badge>
                         {!mensagem.lida && (
@@ -309,12 +359,17 @@ export function MensagensManager() {
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">
-                        De: {mensagem.remetenteNome} | Para: {mensagem.destinatarioNome}
+                        De: {mensagem.remetenteNome} | Para:{" "}
+                        {mensagem.destinatarioNome}
                       </p>
-                      <p className="text-sm line-clamp-2">{mensagem.conteudo}</p>
+                      <p className="text-sm line-clamp-2">
+                        {mensagem.conteudo}
+                      </p>
                       <div className="flex items-center space-x-2 mt-2 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        <span>{new Date(mensagem.dataEnvio).toLocaleString('pt-BR')}</span>
+                        <span>
+                          {new Date(mensagem.dataEnvio).toLocaleString("pt-BR")}
+                        </span>
                       </div>
                     </div>
                     <div className="flex space-x-2">

@@ -35,7 +35,7 @@ import {
   Thermometer,
   Stethoscope,
   Pill,
-  UserCheck
+  UserCheck,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -223,9 +223,7 @@ export default function NurseLayout() {
                 <div className="font-semibold text-red-600 dark:text-red-400">
                   {urgentPatients}
                 </div>
-                <div className="text-red-600 dark:text-red-400">
-                  Urgentes
-                </div>
+                <div className="text-red-600 dark:text-red-400">Urgentes</div>
               </div>
             </div>
           </div>
