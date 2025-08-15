@@ -454,6 +454,30 @@ export default function Portal() {
   };
 
   // Dashboard statistics
+  // Helper functions
+  const getRoleDisplayName = (role?: UserRole): string => {
+    const roleNames = {
+      [UserRole.PATIENT]: "Paciente",
+      [UserRole.DOCTOR]: "Médico",
+      [UserRole.NURSE]: "Enfermeira",
+      [UserRole.ADMIN]: "Administrador",
+      [UserRole.RECEPTIONIST]: "Recepcionista",
+    };
+    return role ? roleNames[role] : "Usuário";
+  };
+
+  const hasPermission = (permission: Permission): boolean => {
+    return currentUserRole
+      ? PermissionManager.hasPermission(currentUserRole, permission)
+      : false;
+  };
+
+  const canAccessResource = (resource: string, action: string): boolean => {
+    return currentUserRole
+      ? PermissionManager.canAccessResource(currentUserRole, resource, action)
+      : false;
+  };
+
   const getDashboardStats = () => {
     const scheduledAppointments = appointments.filter(
       (a) => a.status === "scheduled",
