@@ -224,6 +224,16 @@ export default function Index() {
     }
   };
 
+  const handleSpecialtyClick = (specialty: SpecialtyInfo) => {
+    setSelectedSpecialty(specialty);
+    setIsSpecialtyModalOpen(true);
+  };
+
+  const closeSpecialtyModal = () => {
+    setIsSpecialtyModalOpen(false);
+    setSelectedSpecialty(null);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
