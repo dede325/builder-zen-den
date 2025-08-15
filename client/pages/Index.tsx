@@ -418,7 +418,7 @@ export default function Index() {
       icon: Activity,
       description: "Sistema digestivo",
       detailedDescription:
-        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, f��gado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
+        "A gastroenterologia trata das doenças do sistema digestivo, incluindo esôfago, estômago, intestinos, fígado, vesícula e pâncreas. Oferecemos diagnóstico e tratamento de diversas condições digestivas.",
       conditions: [
         "Gastrite",
         "Úlcera péptica",
@@ -925,7 +925,7 @@ export default function Index() {
       <section className="py-12 sm:py-16 lg:py-20 bg-clinic-light/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+            <h3 className="heading-medical text-2xl sm:text-3xl font-bold text-foreground mb-4">
               Por que escolher a Bem Cuidar?
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
