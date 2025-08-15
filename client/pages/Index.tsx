@@ -162,7 +162,7 @@ export default function Index() {
       detailedDescription:
         "A pediatria é a especialidade médica dedicada à assistência de crianças, adolescentes e jovens até os 18 anos. Nossos pediatras oferecem cuidados preventivos e curativos, acompanhando o crescimento e desenvolvimento saudável desde o nascimento.",
       conditions: [
-        "Infecções respiratórias",
+        "Infec��ões respiratórias",
         "Diarreias e gastroenterites",
         "Alergias",
         "Distúrbios do crescimento",
@@ -1099,7 +1099,7 @@ export default function Index() {
       <section id="sobre" className="py-12 sm:py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+            <h3 className="heading-medical text-2xl sm:text-3xl font-bold text-foreground mb-4">
               Sobre a Clínica Bem Cuidar
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
