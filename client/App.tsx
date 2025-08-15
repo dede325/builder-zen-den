@@ -47,35 +47,50 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/portal/*" element={<Portal />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/sobre" element={<Sobre />} />
-          <Route path="/exames" element={<Exames />} />
-          <Route path="/contato" element={<Contato />} />
-          <Route path="/equipe" element={<Equipe />} />
-          <Route path="/galeria" element={<Galeria />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/planos" element={<Planos />} />
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/portal/*" element={<Portal />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/sobre" element={<Sobre />} />
+            <Route path="/exames" element={<Exames />} />
+            <Route path="/contato" element={<Contato />} />
+            <Route path="/equipe" element={<Equipe />} />
+            <Route path="/galeria" element={<Galeria />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/planos" element={<Planos />} />
 
-          {/* Specialty Routes */}
-          <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
-          <Route path="/especialidades/pediatria" element={<Pediatria />} />
-          <Route
-            path="/especialidades/dermatologia"
-            element={<Dermatologia />}
-          />
+            {/* Manager Dashboard Routes */}
+            <Route path="/manager" element={<ManagerLayout />}>
+              <Route index element={<ManagerDashboard />} />
+              <Route path="consultas" element={<ConsultasManager />} />
+              <Route path="exames" element={<ExamesManager />} />
+              <Route path="financeiro" element={<FinanceiroManager />} />
+              <Route path="usuarios" element={<UsuariosManager />} />
+              <Route path="mensagens" element={<MensagensManager />} />
+              <Route path="relatorios" element={<RelatoriosManager />} />
+              <Route path="estoque" element={<EstoqueManager />} />
+              <Route path="perfil" element={<PerfilGestor />} />
+            </Route>
 
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+            {/* Specialty Routes */}
+            <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
+            <Route path="/especialidades/pediatria" element={<Pediatria />} />
+            <Route
+              path="/especialidades/dermatologia"
+              element={<Dermatologia />}
+            />
+
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
