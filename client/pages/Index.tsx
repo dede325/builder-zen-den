@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import SpecialtyModal, { SpecialtyInfo } from "@/components/SpecialtyModal";
 import EnhancedFooter from "@/components/EnhancedFooter";
-import FloatingActionButtons from "@/components/FloatingActionButtons";
+import EnhancedFloatingButtons from "@/components/EnhancedFloatingButtons";
 import SearchDialog from "@/components/SearchDialog";
 import Testimonials from "@/components/Testimonials";
 import Certifications from "@/components/Certifications";
@@ -425,7 +425,7 @@ export default function Index() {
         "Refluxo gastroesofágico",
         "Síndrome do intestino irritável",
         "Hepatite",
-        "Doen��a de Crohn",
+        "Doença de Crohn",
       ],
       procedures: [
         "Endoscopia digestiva",
