@@ -36,6 +36,7 @@ import {
   Loader2,
   Search,
 } from "lucide-react";
+import MessagingComponent from "@/components/messaging/MessagingComponent";
 
 interface ReceptionistDashboardProps {
   currentUser: any;
@@ -593,29 +594,7 @@ export default function ReceptionistDashboard({
         {/* Messages Tab */}
         <TabsContent value="messages" className="space-y-6">
           <h2 className="text-2xl font-bold">Mensagens Internas</h2>
-          <Card>
-            <CardContent className="p-8 text-center">
-              <MessageSquare className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
-                Comunicação Interna
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Comunique-se com médicos, enfermeiros e outros membros da equipe
-                para coordenar o atendimento e resolver questões
-                administrativas.
-              </p>
-              <div className="flex justify-center space-x-4">
-                <Button variant="outline">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contatar Médico
-                </Button>
-                <Button>
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Nova Mensagem
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <MessagingComponent />
         </TabsContent>
       </Tabs>
     </div>
