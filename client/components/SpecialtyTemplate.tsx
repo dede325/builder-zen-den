@@ -351,7 +351,18 @@ export default function SpecialtyTemplate({ specialty }: SpecialtyTemplateProps)
           </div>
 
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 Clínica Bem Cuidar. Todos os direitos reservados.</p>
+            <p>
+              &copy; 2024 Clínica Bem Cuidar. Desenvolvido por{' '}
+              <a
+                href="https://bestservices.ao"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-gray-100 font-semibold underline transition-colors"
+              >
+                Kaijhe
+              </a>
+              {' '}- Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </footer>
