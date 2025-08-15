@@ -243,9 +243,9 @@ export default function Index() {
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#inicio" className="text-foreground hover:text-primary transition-colors">Início</a>
               <a href="#especialidades" className="text-foreground hover:text-primary transition-colors">Especialidades</a>
-              <a href="#exames" className="text-foreground hover:text-primary transition-colors">Exames</a>
-              <a href="#sobre" className="text-foreground hover:text-primary transition-colors">Sobre</a>
-              <a href="#contato" className="text-foreground hover:text-primary transition-colors">Contato</a>
+              <Link to="/exames" className="text-foreground hover:text-primary transition-colors">Exames</Link>
+              <Link to="/sobre" className="text-foreground hover:text-primary transition-colors">Sobre</Link>
+              <Link to="/contato" className="text-foreground hover:text-primary transition-colors">Contato</Link>
               <Link to="/portal" className="bg-clinic-gradient text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">
                 Portal do Paciente
               </Link>
