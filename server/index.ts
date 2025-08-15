@@ -11,6 +11,7 @@ import { getProfile, updateProfile, getNotificationSettings, updateNotificationS
 import { getAppointments, createAppointment, updateAppointment, cancelAppointment } from "./routes/portal-appointments";
 import { getExamResults, markExamAsViewed, downloadExamResult, downloadExamFile, getExamStatistics } from "./routes/portal-exams";
 import { checkPermissions, getUserPermissions, getRolePermissions, validateAction } from "./routes/portal-permissions";
+import { getLoginHintsHandler } from "./routes/login-hints";
 
 export function createServer() {
   const app = express();
