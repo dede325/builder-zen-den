@@ -20,6 +20,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   success: boolean;
   patient?: Patient;
+  user?: User;
   token?: string;
   message?: string;
 }
