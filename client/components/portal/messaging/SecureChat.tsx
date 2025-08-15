@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   Send,
   Paperclip,
@@ -23,21 +23,21 @@ import {
   Info,
   Clock,
   Archive,
-} from 'lucide-react';
-import { formatDate } from '@/lib/locale-angola-portal';
-import { useAuthStore } from '@/store/auth-portal';
-import { offlineSyncManager } from '@/lib/offline-sync';
+} from "lucide-react";
+import { formatDate } from "@/lib/locale-angola-portal";
+import { useAuthStore } from "@/store/auth-portal";
+import { offlineSyncManager } from "@/lib/offline-sync";
 
 interface Message {
   id: string;
   senderId: string;
   senderName: string;
-  senderRole: 'patient' | 'doctor' | 'nurse' | 'admin';
+  senderRole: "patient" | "doctor" | "nurse" | "admin";
   content: string;
   timestamp: Date;
-  type: 'text' | 'file' | 'image' | 'voice' | 'system';
+  type: "text" | "file" | "image" | "voice" | "system";
   encrypted: boolean;
-  status: 'sending' | 'sent' | 'delivered' | 'read';
+  status: "sending" | "sent" | "delivered" | "read";
   urgent: boolean;
   attachment?: {
     name: string;
@@ -74,19 +74,20 @@ interface SecureChatProps {
 export default function SecureChat({
   conversationId,
   onConversationChange,
-  className = '',
+  className = "",
 }: SecureChatProps) {
   const { user } = useAuthStore();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [activeConversation, setActiveConversation] =
+    useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isEncrypted, setIsEncrypted] = useState(true);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ws = useRef<WebSocket | null>(null);
@@ -95,7 +96,7 @@ export default function SecureChat({
   useEffect(() => {
     initializeWebSocket();
     loadConversations();
-    
+
     return () => {
       if (ws.current) {
         ws.current.close();
@@ -118,110 +119,118 @@ export default function SecureChat({
   const initializeWebSocket = () => {
     const wsUrl = `wss://${window.location.host}/ws/chat`;
     ws.current = new WebSocket(wsUrl);
-    
+
     ws.current.onopen = () => {
-      console.log('[SecureChat] WebSocket connected');
+      console.log("[SecureChat] WebSocket connected");
       authenticateWebSocket();
     };
-    
+
     ws.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
       handleWebSocketMessage(data);
     };
-    
+
     ws.current.onclose = () => {
-      console.log('[SecureChat] WebSocket disconnected');
+      console.log("[SecureChat] WebSocket disconnected");
       // Attempt reconnection after 3 seconds
       setTimeout(initializeWebSocket, 3000);
     };
-    
+
     ws.current.onerror = (error) => {
-      console.error('[SecureChat] WebSocket error:', error);
+      console.error("[SecureChat] WebSocket error:", error);
     };
   };
 
   const authenticateWebSocket = () => {
     if (ws.current && user) {
-      ws.current.send(JSON.stringify({
-        type: 'authenticate',
-        token: user.id, // In real app, use proper JWT
-        userId: user.id,
-      }));
+      ws.current.send(
+        JSON.stringify({
+          type: "authenticate",
+          token: user.id, // In real app, use proper JWT
+          userId: user.id,
+        }),
+      );
     }
   };
 
   const handleWebSocketMessage = (data: any) => {
     switch (data.type) {
-      case 'new_message':
+      case "new_message":
         handleNewMessage(data.message);
         break;
-      case 'message_status':
+      case "message_status":
         updateMessageStatus(data.messageId, data.status);
         break;
-      case 'typing':
+      case "typing":
         handleTypingIndicator(data);
         break;
-      case 'user_online':
+      case "user_online":
         updateUserOnlineStatus(data.userId, true);
         break;
-      case 'user_offline':
+      case "user_offline":
         updateUserOnlineStatus(data.userId, false);
         break;
       default:
-        console.log('[SecureChat] Unknown message type:', data.type);
+        console.log("[SecureChat] Unknown message type:", data.type);
     }
   };
 
   const loadConversations = async () => {
     try {
       // Try to load from network first
-      const response = await fetch('/api/conversations', {
+      const response = await fetch("/api/conversations", {
         headers: {
-          'Authorization': `Bearer ${user?.id}`, // Use proper auth token
+          Authorization: `Bearer ${user?.id}`, // Use proper auth token
         },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setConversations(data.conversations);
       } else {
         // Load from offline storage
-        const offlineConversations = await offlineSyncManager.getOfflineData('message', user?.id);
+        const offlineConversations = await offlineSyncManager.getOfflineData(
+          "message",
+          user?.id,
+        );
         // Process offline data into conversations
         setConversations([]);
       }
     } catch (error) {
-      console.error('[SecureChat] Failed to load conversations:', error);
+      console.error("[SecureChat] Failed to load conversations:", error);
       // Load from offline storage as fallback
-      const offlineConversations = await offlineSyncManager.getOfflineData('message', user?.id);
+      const offlineConversations = await offlineSyncManager.getOfflineData(
+        "message",
+        user?.id,
+      );
       setConversations([]);
     }
   };
 
   const loadConversation = async (id: string) => {
     try {
-      const conversation = conversations.find(c => c.id === id);
+      const conversation = conversations.find((c) => c.id === id);
       if (conversation) {
         setActiveConversation(conversation);
-        
+
         // Load messages for this conversation
         const response = await fetch(`/api/conversations/${id}/messages`, {
           headers: {
-            'Authorization': `Bearer ${user?.id}`,
+            Authorization: `Bearer ${user?.id}`,
           },
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           const decryptedMessages = await decryptMessages(data.messages);
           setMessages(decryptedMessages);
           markMessagesAsRead(id);
         }
-        
+
         onConversationChange?.(conversation);
       }
     } catch (error) {
-      console.error('[SecureChat] Failed to load conversation:', error);
+      console.error("[SecureChat] Failed to load conversation:", error);
     }
   };
 
@@ -236,91 +245,105 @@ export default function SecureChat({
       senderRole: user.role,
       content: newMessage,
       timestamp: new Date(),
-      type: selectedFile ? getFileType(selectedFile) : 'text',
+      type: selectedFile ? getFileType(selectedFile) : "text",
       encrypted: isEncrypted,
-      status: 'sending',
+      status: "sending",
       urgent: false,
-      attachment: selectedFile ? {
-        name: selectedFile.name,
-        size: selectedFile.size,
-        type: selectedFile.type,
-        url: '', // Will be set after upload
-      } : undefined,
+      attachment: selectedFile
+        ? {
+            name: selectedFile.name,
+            size: selectedFile.size,
+            type: selectedFile.type,
+            url: "", // Will be set after upload
+          }
+        : undefined,
     };
 
     // Add message to UI immediately
-    setMessages(prev => [...prev, message]);
-    setNewMessage('');
+    setMessages((prev) => [...prev, message]);
+    setNewMessage("");
     setSelectedFile(null);
 
     try {
       // Encrypt message content if encryption is enabled
-      const encryptedContent = isEncrypted 
-        ? await encryptMessage(message.content, activeConversation.encryptionKey)
+      const encryptedContent = isEncrypted
+        ? await encryptMessage(
+            message.content,
+            activeConversation.encryptionKey,
+          )
         : message.content;
 
       // Upload file if present
-      let attachmentUrl = '';
+      let attachmentUrl = "";
       if (selectedFile) {
         attachmentUrl = await uploadFile(selectedFile);
       }
 
       // Send via WebSocket for real-time delivery
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-        ws.current.send(JSON.stringify({
-          type: 'send_message',
-          conversationId: activeConversation.id,
-          message: {
-            ...message,
-            content: encryptedContent,
-            attachment: message.attachment ? {
-              ...message.attachment,
-              url: attachmentUrl,
-            } : undefined,
-          },
-        }));
+        ws.current.send(
+          JSON.stringify({
+            type: "send_message",
+            conversationId: activeConversation.id,
+            message: {
+              ...message,
+              content: encryptedContent,
+              attachment: message.attachment
+                ? {
+                    ...message.attachment,
+                    url: attachmentUrl,
+                  }
+                : undefined,
+            },
+          }),
+        );
       }
 
       // Also send via API for persistence
-      const response = await fetch('/api/messages', {
-        method: 'POST',
+      const response = await fetch("/api/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.id}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.id}`,
         },
         body: JSON.stringify({
           conversationId: activeConversation.id,
           content: encryptedContent,
           type: message.type,
-          attachment: message.attachment ? {
-            ...message.attachment,
-            url: attachmentUrl,
-          } : undefined,
+          attachment: message.attachment
+            ? {
+                ...message.attachment,
+                url: attachmentUrl,
+              }
+            : undefined,
           encrypted: isEncrypted,
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        updateMessageStatus(message.id, 'sent');
+        updateMessageStatus(message.id, "sent");
       } else {
-        throw new Error('Failed to send message via API');
+        throw new Error("Failed to send message via API");
       }
-
     } catch (error) {
-      console.error('[SecureChat] Failed to send message:', error);
-      
+      console.error("[SecureChat] Failed to send message:", error);
+
       // Store message for offline sync
-      await offlineSyncManager.storeOfflineData('message', {
-        conversationId: activeConversation.id,
-        content: message.content,
-        type: message.type,
-        attachment: message.attachment,
-        encrypted: isEncrypted,
-        timestamp: message.timestamp,
-      }, 'high');
-      
-      updateMessageStatus(message.id, 'sent'); // Will sync when online
+      await offlineSyncManager.storeOfflineData(
+        "message",
+        {
+          conversationId: activeConversation.id,
+          content: message.content,
+          type: message.type,
+          attachment: message.attachment,
+          encrypted: isEncrypted,
+          timestamp: message.timestamp,
+        },
+        "high",
+      );
+
+      updateMessageStatus(message.id, "sent"); // Will sync when online
     }
   };
 
@@ -329,38 +352,42 @@ export default function SecureChat({
     const message = encryptedMessage.encrypted
       ? await decryptMessage(encryptedMessage)
       : encryptedMessage;
-    
-    setMessages(prev => [...prev, message]);
-    
+
+    setMessages((prev) => [...prev, message]);
+
     // Update conversation list
-    setConversations(prev => 
-      prev.map(conv => 
+    setConversations((prev) =>
+      prev.map((conv) =>
         conv.id === activeConversation?.id
           ? { ...conv, lastMessage: message, unreadCount: conv.unreadCount + 1 }
-          : conv
-      )
+          : conv,
+      ),
     );
-    
+
     // Show notification if not in focus
     if (document.hidden && message.senderId !== user?.id) {
       showNotification(message);
     }
   };
 
-  const updateMessageStatus = (messageId: string, status: Message['status']) => {
-    setMessages(prev =>
-      prev.map(msg =>
-        msg.id === messageId ? { ...msg, status } : msg
-      )
+  const updateMessageStatus = (
+    messageId: string,
+    status: Message["status"],
+  ) => {
+    setMessages((prev) =>
+      prev.map((msg) => (msg.id === messageId ? { ...msg, status } : msg)),
     );
   };
 
-  const handleTypingIndicator = (data: { userId: string; isTyping: boolean }) => {
-    setTypingUsers(prev => {
+  const handleTypingIndicator = (data: {
+    userId: string;
+    isTyping: boolean;
+  }) => {
+    setTypingUsers((prev) => {
       if (data.isTyping) {
         return prev.includes(data.userId) ? prev : [...prev, data.userId];
       } else {
-        return prev.filter(id => id !== data.userId);
+        return prev.filter((id) => id !== data.userId);
       }
     });
   };
@@ -368,12 +395,14 @@ export default function SecureChat({
   const startTyping = () => {
     if (!isTyping && ws.current && activeConversation) {
       setIsTyping(true);
-      ws.current.send(JSON.stringify({
-        type: 'typing',
-        conversationId: activeConversation.id,
-        isTyping: true,
-      }));
-      
+      ws.current.send(
+        JSON.stringify({
+          type: "typing",
+          conversationId: activeConversation.id,
+          isTyping: true,
+        }),
+      );
+
       // Stop typing after 3 seconds
       setTimeout(() => {
         stopTyping();
@@ -384,11 +413,13 @@ export default function SecureChat({
   const stopTyping = () => {
     if (isTyping && ws.current && activeConversation) {
       setIsTyping(false);
-      ws.current.send(JSON.stringify({
-        type: 'typing',
-        conversationId: activeConversation.id,
-        isTyping: false,
-      }));
+      ws.current.send(
+        JSON.stringify({
+          type: "typing",
+          conversationId: activeConversation.id,
+          isTyping: false,
+        }),
+      );
     }
   };
 
@@ -397,55 +428,61 @@ export default function SecureChat({
     if (file) {
       // Validate file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
-        alert('Arquivo muito grande. Máximo 10MB permitido.');
+        alert("Arquivo muito grande. Máximo 10MB permitido.");
         return;
       }
-      
+
       // Validate file type
       const allowedTypes = [
-        'image/jpeg', 'image/png', 'image/gif',
-        'application/pdf', 'text/plain',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+        "text/plain",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ];
-      
+
       if (!allowedTypes.includes(file.type)) {
-        alert('Tipo de arquivo não permitido.');
+        alert("Tipo de arquivo não permitido.");
         return;
       }
-      
+
       setSelectedFile(file);
     }
   };
 
   const uploadFile = async (file: File): Promise<string> => {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('encrypted', isEncrypted.toString());
-    
-    const response = await fetch('/api/upload', {
-      method: 'POST',
+    formData.append("file", file);
+    formData.append("encrypted", isEncrypted.toString());
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${user?.id}`,
+        Authorization: `Bearer ${user?.id}`,
       },
       body: formData,
     });
-    
+
     if (!response.ok) {
-      throw new Error('Failed to upload file');
+      throw new Error("Failed to upload file");
     }
-    
+
     const result = await response.json();
     return result.url;
   };
 
-  const getFileType = (file: File): Message['type'] => {
-    if (file.type.startsWith('image/')) return 'image';
-    if (file.type.startsWith('audio/')) return 'voice';
-    return 'file';
+  const getFileType = (file: File): Message["type"] => {
+    if (file.type.startsWith("image/")) return "image";
+    if (file.type.startsWith("audio/")) return "voice";
+    return "file";
   };
 
-  const encryptMessage = async (content: string, key: string): Promise<string> => {
+  const encryptMessage = async (
+    content: string,
+    key: string,
+  ): Promise<string> => {
     // In a real implementation, use Web Crypto API for AES-256-GCM encryption
     // This is a placeholder
     return btoa(content); // Simple base64 encoding for demo
@@ -455,36 +492,38 @@ export default function SecureChat({
     if (!message.encrypted || !activeConversation?.encryptionKey) {
       return message;
     }
-    
+
     try {
       // In a real implementation, use Web Crypto API for decryption
       const decryptedContent = atob(message.content); // Simple base64 decoding for demo
       return { ...message, content: decryptedContent };
     } catch (error) {
-      console.error('[SecureChat] Failed to decrypt message:', error);
-      return { ...message, content: '[Mensagem encriptada]' };
+      console.error("[SecureChat] Failed to decrypt message:", error);
+      return { ...message, content: "[Mensagem encriptada]" };
     }
   };
 
   const decryptMessages = async (messages: Message[]): Promise<Message[]> => {
-    return Promise.all(messages.map(msg => decryptMessage(msg)));
+    return Promise.all(messages.map((msg) => decryptMessage(msg)));
   };
 
   const markMessagesAsRead = async (conversationId: string) => {
     if (ws.current) {
-      ws.current.send(JSON.stringify({
-        type: 'mark_read',
-        conversationId,
-      }));
+      ws.current.send(
+        JSON.stringify({
+          type: "mark_read",
+          conversationId,
+        }),
+      );
     }
   };
 
   const showNotification = (message: Message) => {
-    if ('Notification' in window && Notification.permission === 'granted') {
+    if ("Notification" in window && Notification.permission === "granted") {
       new Notification(`Nova mensagem de ${message.senderName}`, {
-        body: message.type === 'text' ? message.content : 'Anexo enviado',
-        icon: '/icons/icon-192x192.png',
-        tag: 'new-message',
+        body: message.type === "text" ? message.content : "Anexo enviado",
+        icon: "/icons/icon-192x192.png",
+        tag: "new-message",
       });
     }
   };
@@ -494,29 +533,29 @@ export default function SecureChat({
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const updateUserOnlineStatus = (userId: string, online: boolean) => {
-    setConversations(prev =>
-      prev.map(conv => ({
+    setConversations((prev) =>
+      prev.map((conv) => ({
         ...conv,
-        participants: conv.participants.map(p =>
-          p.id === userId ? { ...p, online } : p
+        participants: conv.participants.map((p) =>
+          p.id === userId ? { ...p, online } : p,
         ),
-      }))
+      })),
     );
   };
 
-  const getMessageStatusIcon = (status: Message['status']) => {
+  const getMessageStatusIcon = (status: Message["status"]) => {
     switch (status) {
-      case 'sending':
+      case "sending":
         return <Clock className="h-3 w-3 text-gray-400" />;
-      case 'sent':
+      case "sent":
         return <CheckCheck className="h-3 w-3 text-gray-400" />;
-      case 'delivered':
+      case "delivered":
         return <CheckCheck className="h-3 w-3 text-blue-500" />;
-      case 'read':
+      case "read":
         return <CheckCheck className="h-3 w-3 text-green-500" />;
       default:
         return null;
@@ -524,7 +563,7 @@ export default function SecureChat({
   };
 
   const formatMessageTime = (timestamp: Date) => {
-    return formatDate(timestamp, 'time');
+    return formatDate(timestamp, "time");
   };
 
   if (!activeConversation) {
@@ -539,7 +578,9 @@ export default function SecureChat({
     );
   }
 
-  const otherParticipant = activeConversation.participants.find(p => p.id !== user?.id);
+  const otherParticipant = activeConversation.participants.find(
+    (p) => p.id !== user?.id,
+  );
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
@@ -550,14 +591,17 @@ export default function SecureChat({
             <Avatar className="h-10 w-10">
               <AvatarImage src={otherParticipant?.avatar} />
               <AvatarFallback>
-                {otherParticipant?.name.split(' ').map(n => n[0]).join('')}
+                {otherParticipant?.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </AvatarFallback>
             </Avatar>
             {otherParticipant?.online && (
               <div className="absolute -bottom-0 -right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
             )}
           </div>
-          
+
           <div>
             <h3 className="font-medium text-gray-900">
               {otherParticipant?.name}
@@ -577,7 +621,7 @@ export default function SecureChat({
         </div>
 
         <div className="flex items-center gap-2">
-          {otherParticipant?.role === 'doctor' && (
+          {otherParticipant?.role === "doctor" && (
             <>
               <Button variant="ghost" size="sm">
                 <Phone className="h-4 w-4" />
@@ -601,28 +645,28 @@ export default function SecureChat({
               key={message.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex ${message.senderId === user?.id ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.senderId === user?.id ? "justify-end" : "justify-start"}`}
             >
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                   message.senderId === user?.id
-                    ? 'bg-clinic-primary text-white'
-                    : 'bg-white text-gray-900 border'
+                    ? "bg-clinic-primary text-white"
+                    : "bg-white text-gray-900 border"
                 }`}
               >
                 {/* Message Content */}
-                {message.type === 'text' && (
+                {message.type === "text" && (
                   <p className="text-sm">{message.content}</p>
                 )}
-                
-                {message.type === 'file' && message.attachment && (
+
+                {message.type === "file" && message.attachment && (
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4" />
                     <span className="text-sm">{message.attachment.name}</span>
                   </div>
                 )}
-                
-                {message.type === 'image' && message.attachment && (
+
+                {message.type === "image" && message.attachment && (
                   <div className="space-y-2">
                     <img
                       src={message.attachment.url}
@@ -633,9 +677,13 @@ export default function SecureChat({
                 )}
 
                 {/* Message Info */}
-                <div className={`flex items-center justify-between mt-2 text-xs ${
-                  message.senderId === user?.id ? 'text-blue-100' : 'text-gray-500'
-                }`}>
+                <div
+                  className={`flex items-center justify-between mt-2 text-xs ${
+                    message.senderId === user?.id
+                      ? "text-blue-100"
+                      : "text-gray-500"
+                  }`}
+                >
                   <span>{formatMessageTime(message.timestamp)}</span>
                   {message.senderId === user?.id && (
                     <div className="flex items-center gap-1">
@@ -704,7 +752,7 @@ export default function SecureChat({
             className="hidden"
             accept="image/*,.pdf,.doc,.docx,.txt"
           />
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -722,7 +770,7 @@ export default function SecureChat({
               }}
               onBlur={stopTyping}
               onKeyPress={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   sendMessage();
                 }
@@ -730,7 +778,7 @@ export default function SecureChat({
               placeholder="Escreva uma mensagem..."
               className="pr-12"
             />
-            
+
             {isEncrypted && (
               <Shield className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-600" />
             )}

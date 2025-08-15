@@ -36,7 +36,7 @@
     transform: translateX(0);
     z-index: auto;
   }
-  
+
   .dashboard-sidebar.collapsed {
     width: 4rem; /* 16 in Tailwind */
     min-width: 4rem;
@@ -58,7 +58,7 @@
     margin-left: 18rem; /* Sidebar width */
     grid-column: 2;
   }
-  
+
   .dashboard-main.sidebar-collapsed {
     margin-left: 4rem; /* Collapsed sidebar width */
   }
@@ -150,7 +150,11 @@
 }
 
 .sidebar-nav-item.active {
-  background: linear-gradient(135deg, var(--clinic-primary), var(--clinic-secondary));
+  background: linear-gradient(
+    135deg,
+    var(--clinic-primary),
+    var(--clinic-secondary)
+  );
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -288,11 +292,11 @@
   .dashboard-content {
     padding: 1rem;
   }
-  
+
   .header-title {
     font-size: 1.125rem;
   }
-  
+
   .sidebar-nav-item {
     padding: 1rem 0.75rem;
   }
@@ -377,11 +381,11 @@
   .dashboard-header {
     display: none;
   }
-  
+
   .dashboard-main {
     margin-left: 0;
   }
-  
+
   .dashboard-content {
     padding: 0;
   }

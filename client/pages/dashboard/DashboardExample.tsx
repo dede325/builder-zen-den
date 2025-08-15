@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   TrendingUp,
   TrendingDown,
@@ -21,7 +21,7 @@ import {
   Eye,
   Download,
   Plus,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Mock data for demonstration
 const statsCards = [
@@ -37,7 +37,7 @@ const statsCards = [
   {
     title: "Consultas Hoje",
     value: "34",
-    change: "+5%", 
+    change: "+5%",
     trend: "up",
     icon: Calendar,
     color: "text-green-600",
@@ -47,7 +47,7 @@ const statsCards = [
     title: "Exames Pendentes",
     value: "89",
     change: "-8%",
-    trend: "down", 
+    trend: "down",
     icon: FileText,
     color: "text-orange-600",
     bgColor: "bg-orange-50 dark:bg-orange-900/20",
@@ -146,7 +146,7 @@ export default function DashboardExample() {
             Acompanhe o desempenho da clínica em tempo real
           </p>
         </div>
-        
+
         <div className="flex gap-3">
           <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
@@ -168,10 +168,13 @@ export default function DashboardExample() {
       >
         {statsCards.map((stat, index) => {
           const Icon = stat.icon;
-          const TrendIcon = stat.trend === 'up' ? TrendingUp : TrendingDown;
-          
+          const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
+
           return (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-shadow duration-300"
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -182,18 +185,30 @@ export default function DashboardExample() {
                       {stat.value}
                     </p>
                     <div className="flex items-center mt-2">
-                      <TrendIcon className={`h-4 w-4 mr-1 ${
-                        stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                      }`} />
-                      <span className={`text-sm font-medium ${
-                        stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                      }`}>
+                      <TrendIcon
+                        className={`h-4 w-4 mr-1 ${
+                          stat.trend === "up"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-medium ${
+                          stat.trend === "up"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
                         {stat.change}
                       </span>
-                      <span className="text-sm text-gray-500 ml-2">vs. mês anterior</span>
+                      <span className="text-sm text-gray-500 ml-2">
+                        vs. mês anterior
+                      </span>
                     </div>
                   </div>
-                  <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
+                  <div
+                    className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}
+                  >
                     <Icon className={`h-6 w-6 ${stat.color}`} />
                   </div>
                 </div>
@@ -223,13 +238,15 @@ export default function DashboardExample() {
               <div className="space-y-4">
                 {recentActivities.map((activity) => {
                   const Icon = activity.icon;
-                  
+
                   return (
                     <div
                       key={activity.id}
                       className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
-                      <div className={`w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-sm`}>
+                      <div
+                        className={`w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-sm`}
+                      >
                         <Icon className={`h-5 w-5 ${activity.color}`} />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -241,7 +258,9 @@ export default function DashboardExample() {
                         </p>
                         <div className="flex items-center mt-2">
                           <Clock className="h-3 w-3 text-gray-400 mr-1" />
-                          <span className="text-xs text-gray-500">{activity.time}</span>
+                          <span className="text-xs text-gray-500">
+                            {activity.time}
+                          </span>
                         </div>
                       </div>
                       <Button variant="ghost" size="sm">
@@ -279,8 +298,12 @@ export default function DashboardExample() {
                       <span className="font-medium text-gray-900 dark:text-white">
                         {appointment.time}
                       </span>
-                      <Badge 
-                        variant={appointment.status === 'confirmado' ? 'default' : 'secondary'}
+                      <Badge
+                        variant={
+                          appointment.status === "confirmado"
+                            ? "default"
+                            : "secondary"
+                        }
                         className="text-xs"
                       >
                         {appointment.status}
@@ -297,7 +320,7 @@ export default function DashboardExample() {
                     </p>
                   </div>
                 ))}
-                
+
                 <Button variant="outline" className="w-full text-sm mt-4">
                   Ver Todas as Consultas
                 </Button>
@@ -334,7 +357,7 @@ export default function DashboardExample() {
                 <Progress value={85} className="h-2" />
                 <p className="text-xs text-gray-500">Meta: 80%</p>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -347,7 +370,7 @@ export default function DashboardExample() {
                 <Progress value={60} className="h-2" />
                 <p className="text-xs text-gray-500">Meta: 15 min</p>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -375,31 +398,40 @@ export default function DashboardExample() {
         <Card className="text-center">
           <CardContent className="p-6">
             <MapPin className="h-8 w-8 text-blue-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-white">Localização</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              Localização
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              Av. 21 de Janeiro, Nº 351<br />
+              Av. 21 de Janeiro, Nº 351
+              <br />
               Benfica, Luanda, Angola
             </p>
           </CardContent>
         </Card>
-        
+
         <Card className="text-center">
           <CardContent className="p-6">
             <Phone className="h-8 w-8 text-green-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-white">Contacto</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              Contacto
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              +244 222 123 456<br />
+              +244 222 123 456
+              <br />
               +244 923 456 789
             </p>
           </CardContent>
         </Card>
-        
+
         <Card className="text-center">
           <CardContent className="p-6">
             <Mail className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900 dark:text-white">E-mail</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              E-mail
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              info@clinicabemcuidar.ao<br />
+              info@clinicabemcuidar.ao
+              <br />
               contato@clinicabemcuidar.ao
             </p>
           </CardContent>

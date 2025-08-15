@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ReactNode } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect, ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Menu,
   X,
@@ -27,8 +27,8 @@ import {
   WifiOff,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react';
-import { useAuthStore } from '@/store/auth';
+} from "lucide-react";
+import { useAuthStore } from "@/store/auth";
 
 interface NavigationItem {
   name: string;
@@ -72,7 +72,7 @@ export default function OptimizedDashboardLayout({
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
@@ -81,13 +81,13 @@ export default function OptimizedDashboardLayout({
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -96,21 +96,21 @@ export default function OptimizedDashboardLayout({
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
-    
+
     return () => clearInterval(timer);
   }, []);
 
   // Load dark mode preference
   useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setIsDarkMode(savedDarkMode);
-    document.documentElement.classList.toggle('dark', savedDarkMode);
+    document.documentElement.classList.toggle("dark", savedDarkMode);
   }, []);
 
   // Save dark mode preference
   useEffect(() => {
-    localStorage.setItem('darkMode', isDarkMode.toString());
-    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem("darkMode", isDarkMode.toString());
+    document.documentElement.classList.toggle("dark", isDarkMode);
   }, [isDarkMode]);
 
   // Close sidebar on route change (mobile)
@@ -126,8 +126,8 @@ export default function OptimizedDashboardLayout({
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleLogout = () => {
@@ -135,7 +135,7 @@ export default function OptimizedDashboardLayout({
       onLogout();
     } else {
       logout();
-      navigate('/portal');
+      navigate("/portal");
     }
   };
 
@@ -145,19 +145,21 @@ export default function OptimizedDashboardLayout({
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase();
   };
 
   const getCurrentPageTitle = () => {
-    const currentItem = navigation.find(item => item.href === location.pathname);
+    const currentItem = navigation.find(
+      (item) => item.href === location.pathname,
+    );
     return currentItem?.name || title;
   };
 
-  const sidebarWidth = isSidebarCollapsed ? 'w-16' : 'w-72';
-  const mainMargin = isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-72';
+  const sidebarWidth = isSidebarCollapsed ? "w-16" : "w-72";
+  const mainMargin = isSidebarCollapsed ? "lg:ml-16" : "lg:ml-72";
 
   if (!user) {
     return null;
@@ -181,7 +183,7 @@ export default function OptimizedDashboardLayout({
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 ${sidebarWidth} bg-white dark:bg-gray-800 shadow-xl transform transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex flex-col h-full">
@@ -190,7 +192,11 @@ export default function OptimizedDashboardLayout({
             {!isSidebarCollapsed && (
               <Link to="/" className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-clinic-gradient rounded-lg flex items-center justify-center">
-                  {HeaderIcon ? <HeaderIcon className="w-5 h-5 text-white" /> : <Shield className="w-5 h-5 text-white" />}
+                  {HeaderIcon ? (
+                    <HeaderIcon className="w-5 h-5 text-white" />
+                  ) : (
+                    <Shield className="w-5 h-5 text-white" />
+                  )}
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -258,12 +264,8 @@ export default function OptimizedDashboardLayout({
                       key={index}
                       className={`${stat.color} rounded p-2 text-center`}
                     >
-                      <div className="font-semibold">
-                        {stat.value}
-                      </div>
-                      <div className="truncate">
-                        {stat.label}
-                      </div>
+                      <div className="font-semibold">{stat.value}</div>
+                      <div className="truncate">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -281,10 +283,10 @@ export default function OptimizedDashboardLayout({
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-between'} px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group ${
+                  className={`flex items-center ${isSidebarCollapsed ? "justify-center" : "justify-between"} px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group ${
                     isActive
-                      ? 'bg-clinic-primary text-white shadow-lg'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? "bg-clinic-primary text-white shadow-lg"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                   onClick={() => setIsSidebarOpen(false)}
                   title={isSidebarCollapsed ? item.name : undefined}
@@ -292,17 +294,19 @@ export default function OptimizedDashboardLayout({
                   <div className="flex items-center space-x-3">
                     <Icon
                       className={`w-5 h-5 flex-shrink-0 ${
-                        isActive ? 'text-white' : item.color || 'text-gray-500'
+                        isActive ? "text-white" : item.color || "text-gray-500"
                       }`}
                     />
-                    {!isSidebarCollapsed && <span className="truncate">{item.name}</span>}
+                    {!isSidebarCollapsed && (
+                      <span className="truncate">{item.name}</span>
+                    )}
                   </div>
                   {!isSidebarCollapsed && item.badge && item.badge > 0 && (
                     <Badge
-                      variant={isActive ? 'secondary' : 'default'}
+                      variant={isActive ? "secondary" : "default"}
                       className="text-xs min-w-5 h-5"
                     >
-                      {item.badge > 99 ? '99+' : item.badge}
+                      {item.badge > 99 ? "99+" : item.badge}
                     </Badge>
                   )}
                 </Link>
@@ -321,7 +325,7 @@ export default function OptimizedDashboardLayout({
                     <WifiOff className="w-4 h-4 text-red-500" />
                   )}
                   <span className="text-gray-500 dark:text-gray-400">
-                    {isOnline ? 'Online' : 'Offline'}
+                    {isOnline ? "Online" : "Offline"}
                   </span>
                   <Shield className="w-4 h-4 text-green-500 ml-auto" />
                 </div>
@@ -365,12 +369,12 @@ export default function OptimizedDashboardLayout({
                 <div className="hidden lg:flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                   <Clock className="w-4 h-4 mr-1" />
                   <span>
-                    {currentTime.toLocaleDateString('pt-AO', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                      hour: '2-digit',
-                      minute: '2-digit',
+                    {currentTime.toLocaleDateString("pt-AO", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </span>
                 </div>
@@ -388,7 +392,7 @@ export default function OptimizedDashboardLayout({
                 size="sm"
                 onClick={toggleDarkMode}
                 className="p-2"
-                title={isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
+                title={isDarkMode ? "Modo Claro" : "Modo Escuro"}
               >
                 {isDarkMode ? (
                   <Sun className="w-4 h-4" />
@@ -398,11 +402,7 @@ export default function OptimizedDashboardLayout({
               </Button>
 
               {/* Notifications */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="relative p-2"
-              >
+              <Button variant="ghost" size="sm" className="relative p-2">
                 <Bell className="w-4 h-4" />
                 <Badge
                   variant="destructive"

@@ -92,18 +92,20 @@ export default function DoctorLayout() {
     {
       label: "Exames",
       value: pendingExams,
-      color: "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400",
+      color:
+        "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400",
     },
   ];
 
-  const rightHeaderContent = urgentMessages > 0 ? (
-    <div className="hidden lg:flex items-center space-x-2 px-3 py-1 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-      <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
-      <span className="text-xs font-medium text-red-600 dark:text-red-400">
-        {urgentMessages} urgente(s)
-      </span>
-    </div>
-  ) : null;
+  const rightHeaderContent =
+    urgentMessages > 0 ? (
+      <div className="hidden lg:flex items-center space-x-2 px-3 py-1 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
+        <span className="text-xs font-medium text-red-600 dark:text-red-400">
+          {urgentMessages} urgente(s)
+        </span>
+      </div>
+    ) : null;
 
   if (!user || user.role !== "doctor") {
     return null;

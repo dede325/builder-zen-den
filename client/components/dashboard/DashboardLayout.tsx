@@ -77,12 +77,14 @@ export default function DashboardLayout() {
     {
       label: "Consultas",
       value: pendingAppointments,
-      color: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400",
+      color:
+        "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400",
     },
     {
       label: "Exames",
       value: newExamResults,
-      color: "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
+      color:
+        "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
     },
   ];
 

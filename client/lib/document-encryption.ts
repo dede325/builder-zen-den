@@ -10,15 +10,21 @@ interface EncryptedDocument {
   originalSize: number;
   encryptedSize: number;
   mimeType: string;
-  category: 'medical_record' | 'exam_result' | 'prescription' | 'identity' | 'insurance' | 'consent';
+  category:
+    | "medical_record"
+    | "exam_result"
+    | "prescription"
+    | "identity"
+    | "insurance"
+    | "consent";
   uploadDate: Date;
   lastAccess?: Date;
   accessCount: number;
   patientId: string;
   doctorId?: string;
   encryptionMetadata: {
-    algorithm: 'AES-256-GCM';
-    keyDerivation: 'PBKDF2';
+    algorithm: "AES-256-GCM";
+    keyDerivation: "PBKDF2";
     iterations: number;
     salt: string;
     iv: string;
@@ -26,7 +32,7 @@ interface EncryptedDocument {
   accessLog: Array<{
     userId: string;
     userRole: string;
-    action: 'view' | 'download' | 'share' | 'delete';
+    action: "view" | "download" | "share" | "delete";
     timestamp: Date;
     ipAddress?: string;
   }>;
@@ -55,56 +61,57 @@ interface EncryptionKey {
 
 class DocumentEncryptionManager {
   private keyCache = new Map<string, EncryptionKey>();
-  private readonly algorithm = 'AES-256-GCM';
+  private readonly algorithm = "AES-256-GCM";
   private readonly keyDerivationIterations = 100000;
   private readonly maxFileSize = 50 * 1024 * 1024; // 50MB
-  
+
   // Initialize crypto subsystem
   async init(): Promise<void> {
     if (!window.crypto || !window.crypto.subtle) {
-      throw new Error('Web Crypto API not supported');
+      throw new Error("Web Crypto API not supported");
     }
-    
-    console.log('[DocumentEncryption] Encryption manager initialized');
+
+    console.log("[DocumentEncryption] Encryption manager initialized");
   }
 
   // Encrypt a file with AES-256-GCM
   async encryptFile(
-    file: File, 
-    patientId: string, 
-    category: EncryptedDocument['category'],
-    password?: string
+    file: File,
+    patientId: string,
+    category: EncryptedDocument["category"],
+    password?: string,
   ): Promise<{ encryptedData: ArrayBuffer; metadata: EncryptedDocument }> {
-    
     if (file.size > this.maxFileSize) {
-      throw new Error(`Arquivo muito grande. Máximo permitido: ${this.maxFileSize / 1024 / 1024}MB`);
+      throw new Error(
+        `Arquivo muito grande. Máximo permitido: ${this.maxFileSize / 1024 / 1024}MB`,
+      );
     }
 
     // Validate file type
     this.validateFileType(file, category);
-    
+
     // Generate encryption key
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
-    
+
     const derivedKey = await this.deriveKey(
-      password || this.generatePatientKey(patientId), 
-      salt
+      password || this.generatePatientKey(patientId),
+      salt,
     );
-    
+
     // Read file data
     const fileData = await this.readFileAsArrayBuffer(file);
-    
+
     // Encrypt the file
     const encryptedData = await window.crypto.subtle.encrypt(
       {
-        name: 'AES-GCM',
+        name: "AES-GCM",
         iv: iv,
       },
       derivedKey,
-      fileData
+      fileData,
     );
-    
+
     // Create metadata
     const metadata: EncryptedDocument = {
       id: this.generateDocumentId(),
@@ -117,8 +124,8 @@ class DocumentEncryptionManager {
       accessCount: 0,
       patientId,
       encryptionMetadata: {
-        algorithm: 'AES-256-GCM',
-        keyDerivation: 'PBKDF2',
+        algorithm: "AES-256-GCM",
+        keyDerivation: "PBKDF2",
         iterations: this.keyDerivationIterations,
         salt: this.arrayBufferToBase64(salt),
         iv: this.arrayBufferToBase64(iv),
@@ -127,156 +134,163 @@ class DocumentEncryptionManager {
       retention: this.getRetentionPolicy(category),
       permissions: {},
     };
-    
+
     // Log the encryption
-    this.logAccess(metadata, 'upload', 'system');
-    
+    this.logAccess(metadata, "upload", "system");
+
     return { encryptedData, metadata };
   }
 
   // Decrypt a file
   async decryptFile(
-    encryptedData: ArrayBuffer, 
-    metadata: EncryptedDocument, 
+    encryptedData: ArrayBuffer,
+    metadata: EncryptedDocument,
     password?: string,
-    userId?: string
+    userId?: string,
   ): Promise<Blob> {
-    
     // Check permissions
-    if (userId && !this.hasPermission(metadata, userId, 'view')) {
-      throw new Error('Acesso negado ao documento');
+    if (userId && !this.hasPermission(metadata, userId, "view")) {
+      throw new Error("Acesso negado ao documento");
     }
-    
+
     try {
       // Derive the key
       const salt = this.base64ToArrayBuffer(metadata.encryptionMetadata.salt);
       const iv = this.base64ToArrayBuffer(metadata.encryptionMetadata.iv);
-      
+
       const derivedKey = await this.deriveKey(
         password || this.generatePatientKey(metadata.patientId),
-        salt
+        salt,
       );
-      
+
       // Decrypt the data
       const decryptedData = await window.crypto.subtle.decrypt(
         {
-          name: 'AES-GCM',
+          name: "AES-GCM",
           iv: iv,
         },
         derivedKey,
-        encryptedData
+        encryptedData,
       );
-      
+
       // Log the access
       if (userId) {
-        this.logAccess(metadata, 'view', userId);
+        this.logAccess(metadata, "view", userId);
       }
-      
+
       // Create blob with original mime type
       return new Blob([decryptedData], { type: metadata.mimeType });
-      
     } catch (error) {
-      console.error('[DocumentEncryption] Decryption failed:', error);
-      throw new Error('Falha na desencriptação. Senha incorreta ou arquivo corrompido.');
+      console.error("[DocumentEncryption] Decryption failed:", error);
+      throw new Error(
+        "Falha na desencriptação. Senha incorreta ou arquivo corrompido.",
+      );
     }
   }
 
   // Upload encrypted document to server
   async uploadEncryptedDocument(
     encryptedData: ArrayBuffer,
-    metadata: EncryptedDocument
+    metadata: EncryptedDocument,
   ): Promise<string> {
-    
     const formData = new FormData();
-    const encryptedBlob = new Blob([encryptedData], { type: 'application/octet-stream' });
-    
-    formData.append('file', encryptedBlob, `${metadata.id}.encrypted`);
-    formData.append('metadata', JSON.stringify(metadata));
-    formData.append('category', metadata.category);
-    formData.append('patientId', metadata.patientId);
-    
-    const response = await fetch('/api/documents/upload', {
-      method: 'POST',
+    const encryptedBlob = new Blob([encryptedData], {
+      type: "application/octet-stream",
+    });
+
+    formData.append("file", encryptedBlob, `${metadata.id}.encrypted`);
+    formData.append("metadata", JSON.stringify(metadata));
+    formData.append("category", metadata.category);
+    formData.append("patientId", metadata.patientId);
+
+    const response = await fetch("/api/documents/upload", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${this.getAuthToken()}`,
-        'X-Document-Encrypted': 'true',
-        'X-Angola-Compliance': 'true',
+        Authorization: `Bearer ${this.getAuthToken()}`,
+        "X-Document-Encrypted": "true",
+        "X-Angola-Compliance": "true",
       },
       body: formData,
     });
-    
+
     if (!response.ok) {
       throw new Error(`Falha no upload: ${response.statusText}`);
     }
-    
+
     const result = await response.json();
     return result.documentId;
   }
 
   // Download and decrypt document
   async downloadDocument(
-    documentId: string, 
+    documentId: string,
     password?: string,
-    userId?: string
+    userId?: string,
   ): Promise<{ blob: Blob; metadata: EncryptedDocument }> {
-    
     // Get document metadata
-    const metadataResponse = await fetch(`/api/documents/${documentId}/metadata`, {
-      headers: {
-        'Authorization': `Bearer ${this.getAuthToken()}`,
+    const metadataResponse = await fetch(
+      `/api/documents/${documentId}/metadata`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.getAuthToken()}`,
+        },
       },
-    });
-    
+    );
+
     if (!metadataResponse.ok) {
-      throw new Error('Documento não encontrado');
+      throw new Error("Documento não encontrado");
     }
-    
+
     const metadata: EncryptedDocument = await metadataResponse.json();
-    
+
     // Check if document has expired
     if (this.isDocumentExpired(metadata)) {
-      throw new Error('Documento expirado e foi removido automaticamente');
+      throw new Error("Documento expirado e foi removido automaticamente");
     }
-    
+
     // Download encrypted file
     const fileResponse = await fetch(`/api/documents/${documentId}/download`, {
       headers: {
-        'Authorization': `Bearer ${this.getAuthToken()}`,
+        Authorization: `Bearer ${this.getAuthToken()}`,
       },
     });
-    
+
     if (!fileResponse.ok) {
-      throw new Error('Falha no download do documento');
+      throw new Error("Falha no download do documento");
     }
-    
+
     const encryptedData = await fileResponse.arrayBuffer();
-    
+
     // Decrypt the file
-    const decryptedBlob = await this.decryptFile(encryptedData, metadata, password, userId);
-    
+    const decryptedBlob = await this.decryptFile(
+      encryptedData,
+      metadata,
+      password,
+      userId,
+    );
+
     // Update access count and last access
     await this.updateDocumentAccess(documentId, userId);
-    
+
     return { blob: decryptedBlob, metadata };
   }
 
   // Share document with specific user
   async shareDocument(
-    documentId: string, 
-    targetUserId: string, 
-    permissions: Partial<EncryptedDocument['permissions'][string]>,
-    expiresInDays?: number
+    documentId: string,
+    targetUserId: string,
+    permissions: Partial<EncryptedDocument["permissions"][string]>,
+    expiresInDays?: number,
   ): Promise<void> {
-    
-    const expiresAt = expiresInDays 
+    const expiresAt = expiresInDays
       ? new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000)
       : undefined;
-    
+
     const response = await fetch(`/api/documents/${documentId}/share`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.getAuthToken()}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.getAuthToken()}`,
       },
       body: JSON.stringify({
         targetUserId,
@@ -290,19 +304,23 @@ class DocumentEncryptionManager {
         },
       }),
     });
-    
+
     if (!response.ok) {
-      throw new Error('Falha ao partilhar documento');
+      throw new Error("Falha ao partilhar documento");
     }
   }
 
   // Delete document (with audit trail)
-  async deleteDocument(documentId: string, userId: string, reason: string): Promise<void> {
+  async deleteDocument(
+    documentId: string,
+    userId: string,
+    reason: string,
+  ): Promise<void> {
     const response = await fetch(`/api/documents/${documentId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.getAuthToken()}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.getAuthToken()}`,
       },
       body: JSON.stringify({
         reason,
@@ -310,9 +328,9 @@ class DocumentEncryptionManager {
         timestamp: new Date().toISOString(),
       }),
     });
-    
+
     if (!response.ok) {
-      throw new Error('Falha ao eliminar documento');
+      throw new Error("Falha ao eliminar documento");
     }
   }
 
@@ -324,101 +342,140 @@ class DocumentEncryptionManager {
   }
 
   // Derive encryption key using PBKDF2
-  private async deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
+  private async deriveKey(
+    password: string,
+    salt: Uint8Array,
+  ): Promise<CryptoKey> {
     const encoder = new TextEncoder();
     const passwordBuffer = encoder.encode(password);
-    
+
     // Import the password as a key
     const keyMaterial = await window.crypto.subtle.importKey(
-      'raw',
+      "raw",
       passwordBuffer,
-      'PBKDF2',
+      "PBKDF2",
       false,
-      ['deriveBits', 'deriveKey']
+      ["deriveBits", "deriveKey"],
     );
-    
+
     // Derive the actual encryption key
     return window.crypto.subtle.deriveKey(
       {
-        name: 'PBKDF2',
+        name: "PBKDF2",
         salt: salt,
         iterations: this.keyDerivationIterations,
-        hash: 'SHA-256',
+        hash: "SHA-256",
       },
       keyMaterial,
-      { name: 'AES-GCM', length: 256 },
+      { name: "AES-GCM", length: 256 },
       false,
-      ['encrypt', 'decrypt']
+      ["encrypt", "decrypt"],
     );
   }
 
   // Validate file type based on category
-  private validateFileType(file: File, category: EncryptedDocument['category']): void {
-    const allowedTypes: Record<EncryptedDocument['category'], string[]> = {
+  private validateFileType(
+    file: File,
+    category: EncryptedDocument["category"],
+  ): void {
+    const allowedTypes: Record<EncryptedDocument["category"], string[]> = {
       medical_record: [
-        'application/pdf', 'text/plain', 'image/jpeg', 'image/png',
-        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        "application/pdf",
+        "text/plain",
+        "image/jpeg",
+        "image/png",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ],
       exam_result: [
-        'application/pdf', 'image/jpeg', 'image/png', 'image/tiff',
-        'application/dicom', 'text/plain'
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/tiff",
+        "application/dicom",
+        "text/plain",
       ],
       prescription: [
-        'application/pdf', 'image/jpeg', 'image/png', 'text/plain'
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "text/plain",
       ],
-      identity: [
-        'application/pdf', 'image/jpeg', 'image/png'
-      ],
-      insurance: [
-        'application/pdf', 'image/jpeg', 'image/png', 'text/plain'
-      ],
-      consent: [
-        'application/pdf', 'image/jpeg', 'image/png'
-      ],
+      identity: ["application/pdf", "image/jpeg", "image/png"],
+      insurance: ["application/pdf", "image/jpeg", "image/png", "text/plain"],
+      consent: ["application/pdf", "image/jpeg", "image/png"],
     };
-    
+
     const allowed = allowedTypes[category];
     if (!allowed.includes(file.type)) {
-      throw new Error(`Tipo de arquivo não permitido para a categoria ${category}`);
+      throw new Error(
+        `Tipo de arquivo não permitido para a categoria ${category}`,
+      );
     }
   }
 
   // Get retention policy based on document category
-  private getRetentionPolicy(category: EncryptedDocument['category']): EncryptedDocument['retention'] {
+  private getRetentionPolicy(
+    category: EncryptedDocument["category"],
+  ): EncryptedDocument["retention"] {
     const policies = {
-      medical_record: { retentionPeriod: 3650, autoDelete: true, legalBasis: 'Lei de Registos Médicos Angola' }, // 10 years
-      exam_result: { retentionPeriod: 2555, autoDelete: true, legalBasis: 'Normas Sanitárias Nacionais' }, // 7 years
-      prescription: { retentionPeriod: 1825, autoDelete: true, legalBasis: 'Regulamento Farmacêutico' }, // 5 years
-      identity: { retentionPeriod: 365, autoDelete: false, legalBasis: 'Lei 22/11 Proteção Dados' }, // 1 year
-      insurance: { retentionPeriod: 1095, autoDelete: true, legalBasis: 'Normas Seguradoras' }, // 3 years
-      consent: { retentionPeriod: 2555, autoDelete: false, legalBasis: 'Lei Consentimento Informado' }, // 7 years
+      medical_record: {
+        retentionPeriod: 3650,
+        autoDelete: true,
+        legalBasis: "Lei de Registos Médicos Angola",
+      }, // 10 years
+      exam_result: {
+        retentionPeriod: 2555,
+        autoDelete: true,
+        legalBasis: "Normas Sanitárias Nacionais",
+      }, // 7 years
+      prescription: {
+        retentionPeriod: 1825,
+        autoDelete: true,
+        legalBasis: "Regulamento Farmacêutico",
+      }, // 5 years
+      identity: {
+        retentionPeriod: 365,
+        autoDelete: false,
+        legalBasis: "Lei 22/11 Proteção Dados",
+      }, // 1 year
+      insurance: {
+        retentionPeriod: 1095,
+        autoDelete: true,
+        legalBasis: "Normas Seguradoras",
+      }, // 3 years
+      consent: {
+        retentionPeriod: 2555,
+        autoDelete: false,
+        legalBasis: "Lei Consentimento Informado",
+      }, // 7 years
     };
-    
+
     return policies[category];
   }
 
   // Check if user has permission for specific action
   private hasPermission(
-    metadata: EncryptedDocument, 
-    userId: string, 
-    action: keyof EncryptedDocument['permissions'][string]
+    metadata: EncryptedDocument,
+    userId: string,
+    action: keyof EncryptedDocument["permissions"][string],
   ): boolean {
     const userPermissions = metadata.permissions[userId];
     if (!userPermissions) return false;
-    
+
     // Check if permission has expired
     if (userPermissions.expiresAt && new Date() > userPermissions.expiresAt) {
       return false;
     }
-    
+
     return userPermissions[action] === true;
   }
 
   // Log document access for audit trail
   private logAccess(
-    metadata: EncryptedDocument, 
-    action: 'view' | 'download' | 'share' | 'delete' | 'upload', 
-    userId: string
+    metadata: EncryptedDocument,
+    action: "view" | "download" | "share" | "delete" | "upload",
+    userId: string,
   ): void {
     const logEntry = {
       userId,
@@ -427,11 +484,11 @@ class DocumentEncryptionManager {
       timestamp: new Date(),
       ipAddress: this.getClientIP(),
     };
-    
+
     metadata.accessLog.push(logEntry);
     metadata.lastAccess = new Date();
     metadata.accessCount++;
-    
+
     // Send to audit service
     this.sendAuditLog(metadata.id, logEntry);
   }
@@ -439,21 +496,26 @@ class DocumentEncryptionManager {
   // Check if document has expired based on retention policy
   private isDocumentExpired(metadata: EncryptedDocument): boolean {
     const expiryDate = new Date(metadata.uploadDate);
-    expiryDate.setDate(expiryDate.getDate() + metadata.retention.retentionPeriod);
-    
+    expiryDate.setDate(
+      expiryDate.getDate() + metadata.retention.retentionPeriod,
+    );
+
     return metadata.retention.autoDelete && new Date() > expiryDate;
   }
 
   // Update document access statistics
-  private async updateDocumentAccess(documentId: string, userId?: string): Promise<void> {
+  private async updateDocumentAccess(
+    documentId: string,
+    userId?: string,
+  ): Promise<void> {
     if (!userId) return;
-    
+
     try {
       await fetch(`/api/documents/${documentId}/access`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.getAuthToken()}`,
         },
         body: JSON.stringify({
           userId,
@@ -461,27 +523,27 @@ class DocumentEncryptionManager {
         }),
       });
     } catch (error) {
-      console.error('[DocumentEncryption] Failed to update access log:', error);
+      console.error("[DocumentEncryption] Failed to update access log:", error);
     }
   }
 
   // Send audit log to compliance service
   private async sendAuditLog(documentId: string, logEntry: any): Promise<void> {
     try {
-      await fetch('/api/audit/document-access', {
-        method: 'POST',
+      await fetch("/api/audit/document-access", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.getAuthToken()}`,
         },
         body: JSON.stringify({
           documentId,
           ...logEntry,
-          compliance: 'Lei 22/11 Angola',
+          compliance: "Lei 22/11 Angola",
         }),
       });
     } catch (error) {
-      console.error('[DocumentEncryption] Failed to send audit log:', error);
+      console.error("[DocumentEncryption] Failed to send audit log:", error);
     }
   }
 
@@ -497,7 +559,7 @@ class DocumentEncryptionManager {
 
   private arrayBufferToBase64(buffer: ArrayBuffer): string {
     const bytes = new Uint8Array(buffer);
-    let binary = '';
+    let binary = "";
     for (let i = 0; i < bytes.byteLength; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
@@ -518,26 +580,26 @@ class DocumentEncryptionManager {
   }
 
   private getAuthToken(): string {
-    const auth = localStorage.getItem('bem-cuidar-auth');
+    const auth = localStorage.getItem("bem-cuidar-auth");
     if (auth) {
       try {
         const parsed = JSON.parse(auth);
-        return parsed.state?.session?.access_token || '';
+        return parsed.state?.session?.access_token || "";
       } catch {
-        return '';
+        return "";
       }
     }
-    return '';
+    return "";
   }
 
   private getUserRole(userId: string): string {
     // Get from auth store or API
-    return 'unknown';
+    return "unknown";
   }
 
   private getClientIP(): string {
     // In a real implementation, this would be determined server-side
-    return 'unknown';
+    return "unknown";
   }
 }
 
