@@ -268,7 +268,7 @@ export default function Index() {
       icon: UserCheck,
       description: "Saúde da mulher",
       detailedDescription:
-        "A ginecologia e obstetrícia é a especialidade que cuida da saúde da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
+        "A ginecologia e obstetrícia é a especialidade que cuida da sa��de da mulher em todas as fases da vida. Oferecemos acompanhamento ginecológico, pré-natal, parto e cuidados pós-parto.",
       conditions: [
         "Infecções ginecológicas",
         "Distúrbios menstruais",
@@ -847,12 +847,13 @@ export default function Index() {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center slide-indicator-hover ${
                 index === currentSlide
                   ? "bg-white"
-                  : "bg-white/50 hover:bg-white/75"
+                  : "bg-white/50"
               }`}
               aria-label={`Ir para slide ${index + 1}`}
+              aria-current={index === currentSlide ? "true" : "false"}
             >
               <span className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
                 index === currentSlide
