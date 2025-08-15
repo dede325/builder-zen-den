@@ -987,7 +987,7 @@ export default function Index() {
       <section id="especialidades" className="py-12 sm:py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+            <h3 className="heading-medical text-2xl sm:text-3xl font-bold text-foreground mb-4">
               Nossas Especialidades
             </h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -1059,7 +1059,7 @@ export default function Index() {
                   Eletrocardiograma
                 </h4>
                 <p className="text-muted-foreground text-sm sm:text-base">
-                  Avaliação da atividade elétrica do coração
+                  Avaliação da atividade elétrica do coraç��o
                 </p>
               </CardContent>
             </Card>
