@@ -30,6 +30,19 @@ import Cardiologia from "./pages/specialties/Cardiologia";
 import Pediatria from "./pages/specialties/Pediatria";
 import Dermatologia from "./pages/specialties/Dermatologia";
 
+// Manager Dashboard
+import { ManagerLayout } from "./components/manager/ManagerLayout";
+import { ManagerDashboard } from "./components/manager/ManagerDashboard";
+import { ConsultasManager } from "./components/manager/ConsultasManager";
+import { ExamesManager } from "./components/manager/ExamesManager";
+import { FinanceiroManager } from "./components/manager/FinanceiroManager";
+import { UsuariosManager } from "./components/manager/UsuariosManager";
+import { MensagensManager } from "./components/manager/MensagensManager";
+import { RelatoriosManager } from "./components/manager/RelatoriosManager";
+import { EstoqueManager } from "./components/manager/EstoqueManager";
+import { PerfilGestor } from "./components/manager/PerfilGestor";
+import { ThemeProvider } from "next-themes";
+
 const queryClient = new QueryClient();
 
 const App = () => (
