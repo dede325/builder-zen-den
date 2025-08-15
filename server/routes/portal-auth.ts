@@ -23,13 +23,23 @@ export const handleLogin: RequestHandler = async (req, res) => {
 
     const { email, password } = validationResult.data;
 
-    // Simple authentication - in production, use proper password hashing
-    const patient = portalStorage.authenticatePatient(email, password);
-    
-    if (!patient) {
+    // Validate user credentials with proper role-based authentication
+    const isValidCredentials = validateUserCredentials(email, password);
+
+    if (!isValidCredentials) {
       return res.status(401).json({
         success: false,
         message: "E-mail ou senha incorretos"
+      });
+    }
+
+    // Get user data
+    const patient = portalStorage.authenticatePatient(email, password);
+
+    if (!patient) {
+      return res.status(401).json({
+        success: false,
+        message: "Usuário não encontrado"
       });
     }
 
