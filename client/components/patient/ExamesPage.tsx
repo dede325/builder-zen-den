@@ -6,19 +6,18 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  FileText, 
-  Download, 
-  Eye, 
-  Calendar, 
-  Search, 
+import {
+  FileText,
+  Download,
+  Eye,
+  Calendar,
+  Search,
   Filter,
   Clock,
   CheckCircle,
   AlertCircle,
   Stethoscope,
-  Image,
-  FileIcon
+  Image
 } from 'lucide-react';
 import { ExamePaciente, FiltroExames } from '@shared/patient-types';
 import PatientDataService from '@/services/patientData';
