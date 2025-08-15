@@ -267,7 +267,7 @@ export default function DashboardLayout() {
               id="mobile-menu-button"
               variant="ghost"
               size="sm"
-              className="lg:hidden p-2"
+              className="lg:hidden p-2 btn-hover-lift"
               onClick={() => setIsSidebarOpen(true)}
               aria-label="Abrir menu"
             >
