@@ -134,7 +134,7 @@ export default function Index() {
       icon: Heart,
       description: "Cuidados especializados do coração",
       detailedDescription:
-        "A cardiologia é a especialidade médica que se dedica ao diagnóstico e tratamento das doenças que acometem o cora��ão e o sistema cardiovascular. Nossa equipe de cardiologistas está preparada para oferecer cuidados completos desde a prevenção até o tratamento de condições cardíacas complexas.",
+        "A cardiologia é a especialidade médica que se dedica ao diagnóstico e tratamento das doenças que acometem o coração e o sistema cardiovascular. Nossa equipe de cardiologistas está preparada para oferecer cuidados completos desde a prevenção até o tratamento de condições cardíacas complexas.",
       conditions: [
         "Hipertensão arterial",
         "Insuficiência cardíaca",
@@ -935,9 +935,9 @@ export default function Index() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <Card className="text-center border-0 shadow-lg">
+            <Card className="card-medical-premium text-center">
               <CardContent className="pt-6 sm:pt-8 p-4 sm:p-6">
-                <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-clinic-gradient rounded-full flex items-center justify-center mx-auto mb-4 equipment-hover">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-semibold mb-2">
