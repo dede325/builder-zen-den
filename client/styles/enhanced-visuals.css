@@ -1,0 +1,580 @@
+/* Enhanced Visual Styles for Clínica Bem Cuidar */
+/* Modern, premium medical design system */
+
+/* ===== GLOBAL ENHANCEMENTS ===== */
+
+/* Smooth scrolling with enhanced behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Enhanced body with improved font rendering */
+body {
+  @apply antialiased text-rendering-optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== PREMIUM BUTTON STYLES ===== */
+
+/* Enhanced clinic-themed buttons */
+.btn-clinic-premium {
+  @apply relative overflow-hidden;
+  @apply bg-gradient-to-r from-clinic-primary via-clinic-secondary to-clinic-accent;
+  @apply text-white font-semibold;
+  @apply border-0 rounded-xl;
+  @apply shadow-lg hover:shadow-xl;
+  @apply transition-all duration-300 ease-in-out;
+  @apply focus:outline-none focus:ring-2 focus:ring-clinic-accent focus:ring-offset-2;
+}
+
+.btn-clinic-premium:hover {
+  @apply scale-105 shadow-2xl;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.btn-clinic-premium:active {
+  @apply scale-95;
+  transform: translateY(0) scale(0.95);
+}
+
+.btn-clinic-premium::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-r from-white/20 to-transparent;
+  @apply opacity-0 transition-opacity duration-300;
+  transform: translateX(-100%);
+}
+
+.btn-clinic-premium:hover::before {
+  @apply opacity-100;
+  animation: shimmer 0.6s ease-out;
+}
+
+/* Glassmorphism button variant */
+.btn-glass {
+  @apply relative;
+  @apply bg-white/20 backdrop-blur-md;
+  @apply border border-white/30;
+  @apply text-white font-medium;
+  @apply rounded-xl shadow-lg;
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:bg-white/30 hover:shadow-xl;
+  @apply focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent;
+}
+
+.btn-glass:hover {
+  @apply scale-105;
+  backdrop-filter: blur(20px);
+}
+
+/* ===== ENHANCED CARD STYLES ===== */
+
+/* Premium medical cards */
+.card-medical-premium {
+  @apply relative;
+  @apply bg-white/95 backdrop-blur-lg;
+  @apply border border-clinic-accent/20;
+  @apply rounded-2xl shadow-lg;
+  @apply transition-all duration-500 ease-in-out;
+  @apply hover:shadow-2xl hover:scale-[1.02];
+  @apply hover:border-clinic-accent/40;
+}
+
+.card-medical-premium::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-br from-clinic-primary/5 via-transparent to-clinic-secondary/5;
+  @apply rounded-2xl opacity-0;
+  @apply transition-opacity duration-300;
+}
+
+.card-medical-premium:hover::before {
+  @apply opacity-100;
+}
+
+/* Floating card effect */
+.card-floating {
+  @apply transform transition-all duration-500 ease-out;
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+.card-floating:hover {
+  animation-play-state: paused;
+  @apply scale-105 shadow-2xl;
+}
+
+/* ===== ENHANCED TEXT STYLES ===== */
+
+/* Premium headings with gradients */
+.heading-premium {
+  @apply font-bold leading-tight;
+  @apply bg-gradient-to-r from-clinic-primary via-clinic-secondary to-clinic-accent;
+  @apply bg-clip-text text-transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+.heading-medical {
+  @apply font-bold text-clinic-primary;
+  @apply relative;
+}
+
+.heading-medical::after {
+  content: '';
+  @apply absolute -bottom-2 left-0;
+  @apply w-12 h-1;
+  @apply bg-gradient-to-r from-clinic-accent to-clinic-secondary;
+  @apply rounded-full;
+}
+
+/* Enhanced text with better readability */
+.text-enhanced {
+  @apply leading-relaxed;
+  @apply text-gray-700;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+.text-medical {
+  @apply text-gray-600;
+  @apply leading-relaxed;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* ===== ENHANCED NAVIGATION ===== */
+
+/* Premium navigation bar */
+.nav-premium {
+  @apply relative;
+  @apply bg-white/95 backdrop-blur-xl;
+  @apply border-b border-clinic-accent/20;
+  @apply shadow-lg;
+  @apply transition-all duration-300;
+}
+
+.nav-premium.scrolled {
+  @apply bg-white/98 shadow-xl;
+  @apply border-b-clinic-accent/30;
+}
+
+/* Enhanced navigation items */
+.nav-item-premium {
+  @apply relative px-4 py-2 rounded-lg;
+  @apply font-medium text-gray-700;
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:text-clinic-primary hover:bg-clinic-light/30;
+  @apply focus:outline-none focus:ring-2 focus:ring-clinic-accent/50;
+}
+
+.nav-item-premium::before {
+  content: '';
+  @apply absolute bottom-0 left-1/2;
+  @apply w-0 h-0.5;
+  @apply bg-clinic-gradient;
+  @apply transition-all duration-300;
+  transform: translateX(-50%);
+}
+
+.nav-item-premium:hover::before,
+.nav-item-premium.active::before {
+  @apply w-full;
+}
+
+/* ===== ENHANCED SECTIONS ===== */
+
+/* Hero section enhancements */
+.hero-premium {
+  @apply relative overflow-hidden;
+  @apply min-h-screen;
+  @apply bg-gradient-to-br from-clinic-light/20 via-white to-clinic-secondary/10;
+}
+
+.hero-premium::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-r from-clinic-primary/5 to-clinic-secondary/5;
+  animation: heroGlow 10s ease-in-out infinite;
+}
+
+/* Section with enhanced spacing and styling */
+.section-premium {
+  @apply py-20 lg:py-32;
+  @apply relative overflow-hidden;
+}
+
+.section-premium::before {
+  content: '';
+  @apply absolute top-0 left-0 right-0;
+  @apply h-px;
+  @apply bg-gradient-to-r from-transparent via-clinic-accent/30 to-transparent;
+}
+
+/* ===== SPECIALTY CARDS ENHANCEMENT ===== */
+
+.specialty-card-premium {
+  @apply group relative;
+  @apply bg-white/90 backdrop-blur-sm;
+  @apply border border-clinic-accent/20;
+  @apply rounded-2xl p-6;
+  @apply shadow-lg hover:shadow-2xl;
+  @apply transition-all duration-500 ease-out;
+  @apply cursor-pointer;
+  @apply hover:scale-105 hover:border-clinic-accent/40;
+}
+
+.specialty-card-premium::before {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-br from-clinic-primary/5 via-transparent to-clinic-secondary/5;
+  @apply rounded-2xl opacity-0;
+  @apply transition-opacity duration-500;
+}
+
+.specialty-card-premium:hover::before {
+  @apply opacity-100;
+}
+
+.specialty-icon-premium {
+  @apply w-16 h-16;
+  @apply bg-gradient-to-br from-clinic-primary to-clinic-secondary;
+  @apply rounded-2xl shadow-lg;
+  @apply flex items-center justify-center;
+  @apply transition-all duration-500;
+  @apply group-hover:scale-110 group-hover:shadow-xl;
+  @apply group-hover:rotate-3;
+}
+
+.specialty-icon-premium svg {
+  @apply w-8 h-8 text-white;
+  @apply transition-all duration-300;
+  @apply group-hover:scale-110;
+}
+
+/* ===== FORM ENHANCEMENTS ===== */
+
+/* Premium form styling */
+.form-premium {
+  @apply space-y-6;
+}
+
+.form-group-premium {
+  @apply relative;
+}
+
+.input-premium {
+  @apply w-full;
+  @apply bg-white/90 backdrop-blur-sm;
+  @apply border border-clinic-accent/30;
+  @apply rounded-xl px-4 py-3;
+  @apply text-gray-700 placeholder:text-gray-400;
+  @apply transition-all duration-300;
+  @apply focus:outline-none focus:ring-2 focus:ring-clinic-accent/50 focus:border-clinic-accent;
+  @apply hover:border-clinic-accent/50 hover:shadow-md;
+}
+
+.input-premium:focus {
+  @apply bg-white shadow-lg;
+  transform: translateY(-1px);
+}
+
+.label-premium {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+  @apply flex items-center gap-2;
+}
+
+/* ===== ENHANCED ANIMATIONS ===== */
+
+/* Floating animation */
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+/* Gradient shift animation */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Hero glow animation */
+@keyframes heroGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Pulse glow animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(121, 203, 203, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(121, 203, 203, 0.6), 0 0 60px rgba(121, 203, 203, 0.4);
+  }
+}
+
+/* ===== ENHANCED HOVER STATES ===== */
+
+/* Medical equipment hover effect */
+.equipment-hover {
+  @apply transition-all duration-500 ease-out;
+  @apply hover:scale-110 hover:rotate-3;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+}
+
+.equipment-hover:hover {
+  filter: drop-shadow(0 20px 40px rgba(121, 203, 203, 0.3));
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Enhanced testimonial cards */
+.testimonial-premium {
+  @apply relative;
+  @apply bg-gradient-to-br from-white via-clinic-light/10 to-white;
+  @apply border border-clinic-accent/20;
+  @apply rounded-2xl p-8;
+  @apply shadow-lg hover:shadow-2xl;
+  @apply transition-all duration-500;
+  @apply hover:scale-105;
+}
+
+.testimonial-premium::before {
+  content: '"';
+  @apply absolute -top-4 -left-2;
+  @apply text-6xl font-bold;
+  @apply text-clinic-accent/30;
+  @apply leading-none;
+}
+
+/* ===== ENHANCED UTILITY CLASSES ===== */
+
+/* Premium shadows */
+.shadow-premium {
+  box-shadow: 
+    0 4px 20px rgba(121, 203, 203, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-premium-lg {
+  box-shadow: 
+    0 10px 40px rgba(121, 203, 203, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-premium-xl {
+  box-shadow: 
+    0 20px 60px rgba(121, 203, 203, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Premium borders */
+.border-premium {
+  @apply border border-clinic-accent/30;
+  border-image: linear-gradient(45deg, 
+    rgb(121, 203, 203), 
+    rgb(86, 98, 100), 
+    rgb(121, 203, 203)
+  ) 1;
+}
+
+/* Enhanced backdrop blur */
+.backdrop-premium {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+
+/* Mobile-first enhancements */
+@media (max-width: 640px) {
+  .card-medical-premium {
+    @apply mx-2 rounded-xl;
+  }
+  
+  .btn-clinic-premium {
+    @apply rounded-lg text-sm;
+    min-height: 44px;
+  }
+  
+  .specialty-card-premium {
+    @apply p-4 rounded-xl;
+  }
+  
+  .specialty-icon-premium {
+    @apply w-12 h-12 rounded-xl;
+  }
+}
+
+/* Tablet enhancements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-premium {
+    @apply min-h-[80vh];
+  }
+  
+  .section-premium {
+    @apply py-16 lg:py-24;
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1025px) {
+  .card-medical-premium:hover {
+    @apply scale-105;
+    transform: translateY(-8px) scale(1.05);
+  }
+  
+  .specialty-card-premium:hover {
+    transform: translateY(-10px) scale(1.05) rotateY(5deg);
+  }
+}
+
+/* ===== DARK MODE ENHANCEMENTS ===== */
+
+.dark .card-medical-premium {
+  @apply bg-gray-800/90 border-clinic-accent/30;
+}
+
+.dark .btn-clinic-premium {
+  @apply shadow-clinic-accent/20;
+}
+
+.dark .nav-premium {
+  @apply bg-gray-900/95 border-clinic-accent/30;
+}
+
+.dark .input-premium {
+  @apply bg-gray-800/90 border-clinic-accent/30 text-gray-200;
+}
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-clinic-premium {
+    @apply border-2 border-clinic-primary;
+  }
+  
+  .card-medical-premium {
+    @apply border-2 border-clinic-accent;
+  }
+  
+  .nav-item-premium:focus {
+    @apply outline-2 outline-clinic-primary;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .card-floating,
+  .equipment-hover,
+  .hero-premium::before {
+    animation: none !important;
+  }
+  
+  .card-medical-premium,
+  .specialty-card-premium,
+  .btn-clinic-premium {
+    transition: none !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  .hero-premium,
+  .nav-premium,
+  .btn-clinic-premium {
+    @apply text-black bg-white;
+  }
+  
+  .card-medical-premium {
+    @apply border border-gray-300 shadow-none;
+  }
+}
+
+/* ===== ENHANCED LOADING STATES ===== */
+
+.loading-premium {
+  @apply relative overflow-hidden;
+}
+
+.loading-premium::after {
+  content: '';
+  @apply absolute inset-0;
+  @apply bg-gradient-to-r from-transparent via-clinic-light/50 to-transparent;
+  animation: loadingShimmer 1.5s infinite linear;
+}
+
+@keyframes loadingShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Enhanced skeleton loading */
+.skeleton-premium {
+  @apply animate-pulse;
+  @apply bg-gradient-to-r from-clinic-light/30 via-clinic-light/50 to-clinic-light/30;
+  background-size: 200% 100%;
+  animation: skeletonGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonGlow {
+  0%, 100% {
+    background-position: 200% 0;
+  }
+  50% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== ENHANCED ERROR STATES ===== */
+
+.error-premium {
+  @apply border-red-300 bg-red-50;
+  @apply focus:border-red-500 focus:ring-red-500/20;
+}
+
+.success-premium {
+  @apply border-green-300 bg-green-50;
+  @apply focus:border-green-500 focus:ring-green-500/20;
+}
+
+.warning-premium {
+  @apply border-yellow-300 bg-yellow-50;
+  @apply focus:border-yellow-500 focus:ring-yellow-500/20;
+}
+
+console.log('[Styles] Enhanced visual styles loaded');
