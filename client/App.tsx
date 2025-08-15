@@ -22,6 +22,8 @@ import Exames from "./pages/Exames";
 import Contato from "./pages/Contato";
 import Equipe from "./pages/Equipe";
 import Galeria from "./pages/Galeria";
+import FAQ from "./pages/FAQ";
+import Planos from "./pages/Planos";
 
 // Specialty pages
 import Cardiologia from "./pages/specialties/Cardiologia";
@@ -45,6 +47,8 @@ const App = () => (
           <Route path="/contato" element={<Contato />} />
           <Route path="/equipe" element={<Equipe />} />
           <Route path="/galeria" element={<Galeria />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/planos" element={<Planos />} />
 
           {/* Specialty Routes */}
           <Route path="/especialidades/cardiologia" element={<Cardiologia />} />
