@@ -1363,7 +1363,7 @@ export default function Index() {
                       onChange={(e) =>
                         handleInputChange("name", e.target.value)
                       }
-                      className={`min-h-[44px] ${formErrors.name ? "border-red-500" : ""}`}
+                      className={`input-premium min-h-[44px] ${formErrors.name ? "error-premium" : ""}`}
                       disabled={isSubmitting}
                     />
                     {formErrors.name && (
